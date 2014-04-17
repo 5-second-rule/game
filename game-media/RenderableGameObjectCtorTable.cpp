@@ -9,7 +9,7 @@ RenderableGameObjectCtorTable::~RenderableGameObjectCtorTable() {
 }
 
 // Sample method
-static IHasWorldObject * makeRenderableCommonCold() {
+static IHasHandle * makeRenderableCommonCold() {
 	return nullptr;
 }
 

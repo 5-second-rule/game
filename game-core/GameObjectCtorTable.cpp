@@ -1,6 +1,6 @@
 #include "GameObjectCtorTable.h"
 
-#include "engine-core\IHasWorldObject.h"
+#include "engine-core\IHasHandle.h"
 #include "ObjectTypes.h"
 
 GameObjectCtorTable::GameObjectCtorTable() : ObjectCtorTable(10) {
@@ -12,7 +12,7 @@ GameObjectCtorTable::~GameObjectCtorTable() {
 }
 
 // Sample method
-static IHasWorldObject * makeCommonCold() {
+static IHasHandle * makeCommonCold() {
 	return nullptr;
 }
 
