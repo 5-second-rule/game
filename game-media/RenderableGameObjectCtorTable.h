@@ -5,11 +5,13 @@
 
 class GAMEMEDIADLL RenderableGameObjectCtorTable : public GameObjectCtorTable
 {
-protected:
-	virtual void initCtors();
-
 public:
+	int modelIndexes[GameObjectCtorTable::OBJECT_TYPE_COUNT];
+	int textureIndexes[GameObjectCtorTable::OBJECT_TYPE_COUNT];
+
 	RenderableGameObjectCtorTable();
 	~RenderableGameObjectCtorTable();
+
+	virtual void initCtors();
 };
 

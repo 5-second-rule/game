@@ -1,5 +1,5 @@
 #pragma once
 
 enum GAMECOREDLL ObjectTypes {
-	CommonCold = 0
+	Ecoli = 0
 };

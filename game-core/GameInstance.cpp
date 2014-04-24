@@ -1,11 +1,12 @@
 #include "GameInstance.h"
 #include "GameObjectCtorTable.h"
 
+GameInstance * GameInstance::globalInstance;
+
 GameInstance::GameInstance() {
 	this->initHasRun = false;
 	this->engineInstance = nullptr;
 }
-
 
 GameInstance::~GameInstance() {
 }
@@ -16,15 +17,39 @@ void GameInstance::init() {
 	}
 
 	this->initHasRun = true;
-	this->engineInstance = new EngineInstance(
-		this->makeWorld(),
-		this->makeCtorTable());
+	setGlobalInstance(this);
+
+	GameObjectCtorTable *ctors = this->makeCtorTable();
+	this->engineInstance = this->makeEngineInstance(ctors);
+	ctors->initCtors();
 }
 
-World * GameInstance::makeWorld() {
-	return new World();
+void GameInstance::run() {
+	if (!this->initHasRun) {
+		throw std::runtime_error("Need to call init() first.");
+	}
+
+	this->engineInstance->run();
 }
 
-ObjectCtorTable * GameInstance::makeCtorTable() {
+EngineInstance * GameInstance::makeEngineInstance(GameObjectCtorTable *ctors) {
+	return new EngineInstance(
+		new World(),
+		ctors);
+}
+
+GameObjectCtorTable * GameInstance::makeCtorTable() {
 	return new GameObjectCtorTable();
+}
+
+EngineInstance * GameInstance::getEngineInstance() {
+	return this->engineInstance;
+}
+
+void GameInstance::setGlobalInstance(GameInstance *instance){
+	globalInstance = instance;
+}
+
+GameInstance * GameInstance::getGlobalInstance() {
+	return globalInstance;
 }
