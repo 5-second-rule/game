@@ -17,5 +17,5 @@ static IHasHandle * makeCommonCold() {
 }
 
 void GameObjectCtorTable::initCtors() {
-	this->setCtor(ObjectTypes::CommonCold, makeCommonCold);
+	//this->setCtor(ObjectTypes::CommonCold, makeCommonCold);
 }
