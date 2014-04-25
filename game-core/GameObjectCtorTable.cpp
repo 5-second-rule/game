@@ -2,20 +2,19 @@
 
 #include "engine-core\IHasHandle.h"
 #include "ObjectTypes.h"
+#include "GameInstance.h"
 
-GameObjectCtorTable::GameObjectCtorTable() : ObjectCtorTable(10) {
+GameObjectCtorTable::GameObjectCtorTable() : ObjectCtorTable(OBJECT_TYPE_COUNT) {
 	this->initCtors();
 }
-
 
 GameObjectCtorTable::~GameObjectCtorTable() {
 }
 
-// Sample method
-static IHasHandle * makeCommonCold() {
+static IHasHandle * makeEcoli(void *thisObj) {
 	return nullptr;
 }
 
 void GameObjectCtorTable::initCtors() {
-	//this->setCtor(ObjectTypes::CommonCold, makeCommonCold);
+	this->setCtor(ObjectTypes::Ecoli, makeEcoli);
 }

@@ -5,11 +5,12 @@
 
 class GAMECOREDLL GameObjectCtorTable : public ObjectCtorTable
 {
-protected:
-	virtual void initCtors();
-
 public:
+	static const int OBJECT_TYPE_COUNT = 10;
+
 	GameObjectCtorTable();
 	~GameObjectCtorTable();
+
+	virtual void initCtors();
 };
 

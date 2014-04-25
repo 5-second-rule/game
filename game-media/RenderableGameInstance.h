@@ -3,16 +3,22 @@
 #include "game-media.h"
 #include "game-core/GameInstance.h"
 #include "engine-core/World.h"
-#include "engine-core/ObjectCtorTable.h"
+#include "engine-renderer/RenderingEngineInstance.h"
 
 class GAMEMEDIADLL RenderableGameInstance : public GameInstance
 {
+private:
+	void *appHandle;
+
 protected:
-	virtual World * makeWorld();
-	virtual ObjectCtorTable * makeCtorTable();
+	virtual GameObjectCtorTable * makeCtorTable();
+	virtual EngineInstance * makeEngineInstance(GameObjectCtorTable *ctors);
 
 public:
-	RenderableGameInstance();
+	RenderableGameInstance(void *appHandle);
 	~RenderableGameInstance();
+
+	static RenderableGameInstance * getGlobalInstance();
+	RenderingEngineInstance * getRenderingEngineInstance();
 };
 
