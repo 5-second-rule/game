@@ -14,7 +14,7 @@ private:
 
 protected:
 	virtual GameObjectCtorTable * makeCtorTable();
-	virtual EngineInstance * makeEngineInstance(GameObjectCtorTable *ctors);
+	virtual EngineInstance * makeEngineInstance(GameObjectCtorTable *ctors) = 0;
 
 public:
 	GameInstance();

@@ -32,12 +32,6 @@ void GameInstance::run() {
 	this->engineInstance->run();
 }
 
-EngineInstance * GameInstance::makeEngineInstance(GameObjectCtorTable *ctors) {
-	return new EngineInstance(
-		new World(),
-		ctors);
-}
-
 GameObjectCtorTable * GameInstance::makeCtorTable() {
 	return new GameObjectCtorTable();
 }

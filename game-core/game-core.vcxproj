@@ -80,6 +80,7 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameObjectCtorTable.h" />
     <ClInclude Include="ObjectTypes.h" />
+    <ClInclude Include="ServerGameInstance.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="StateMachine.h" />
   </ItemGroup>
@@ -87,6 +88,7 @@
     <ClCompile Include="GameInstance.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameObjectCtorTable.cpp" />
+    <ClCompile Include="ServerGameInstance.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
