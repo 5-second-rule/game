@@ -1,7 +1,7 @@
 // Server.cpp : Defines the entry point for the console application.
 //
-#include <iostream>
 #include <csignal>
+#include <iostream>
 
 #include "game-core/ServerGameInstance.h"
 
@@ -11,7 +11,7 @@ using namespace std;
 void SignalHandler( int signal );
 
 // constants
-const int dt = 3333; // delta time between loops
+const int dt = 33333; // delta time between loops in us
 
 //globals
 ServerGameInstance *gameInstance;
