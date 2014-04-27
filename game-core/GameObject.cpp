@@ -15,3 +15,8 @@ Handle GameObject::getHandle(){
 void GameObject::setHandle(Handle p_handle){
 	m_handle = p_handle;
 }
+
+enum ObjectTypes GameObject::getObjectType()
+{
+	return m_objectType;
+}
