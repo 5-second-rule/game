@@ -77,7 +77,6 @@
   <ItemGroup>
     <ClInclude Include="game-core.h" />
     <ClInclude Include="GameInstance.h" />
-    <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameObjectCtorTable.h" />
     <ClInclude Include="ObjectTypes.h" />
     <ClInclude Include="ServerGameInstance.h" />
@@ -86,7 +85,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameInstance.cpp" />
-    <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameObjectCtorTable.cpp" />
     <ClCompile Include="ServerGameInstance.cpp" />
   </ItemGroup>

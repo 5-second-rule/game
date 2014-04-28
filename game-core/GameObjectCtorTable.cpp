@@ -1,6 +1,7 @@
 #include "GameObjectCtorTable.h"
 
 #include "engine-core\IHasHandle.h"
+#include "engine-core\BaseObject.h"
 #include "ObjectTypes.h"
 #include "GameInstance.h"
 
@@ -10,22 +11,23 @@ GameObjectCtorTable::GameObjectCtorTable() : ObjectCtorTable( OBJECT_TYPE_COUNT 
 
 GameObjectCtorTable::~GameObjectCtorTable() {}
 
-static IHasHandle * makeEcoli( void *thisObj ) {
+static IHasHandle * makeEcoli(ObjectCtorTable *thisObj) {
+	return new BaseObject(ObjectTypes::Ecoli);
+}
+
+static IHasHandle * makeChickenPox(ObjectCtorTable *thisObj) {
 	return nullptr;
 }
 
-static IHasHandle * makeChickenPox( void *thisObj ) {
+static IHasHandle * makeSyphillis(ObjectCtorTable *thisObj) {
 	return nullptr;
 }
 
-static IHasHandle * makeSyphillis( void *thisObj ) {
-	return nullptr;
-}
-static IHasHandle * makeWhiteBlood( void *thisObj ) {
+static IHasHandle * makeWhiteBlood(ObjectCtorTable *thisObj) {
 	return nullptr;
 }
 
-static IHasHandle * makeRedBlood( void *thisObj ) {
+static IHasHandle * makeRedBlood(ObjectCtorTable *thisObj) {
 	return nullptr;
 }
 

@@ -10,10 +10,11 @@ RenderableGameObjectCtorTable::RenderableGameObjectCtorTable() {
 RenderableGameObjectCtorTable::~RenderableGameObjectCtorTable() {
 }
 
-static IHasHandle * makeRenderableEcoli(void *thisObj) {
+static IHasHandle * makeRenderableEcoli(ObjectCtorTable *thisObj) {
 	RenderableGameObjectCtorTable *table = (RenderableGameObjectCtorTable *)thisObj;
 
 	return new RenderableObject(
+		ObjectTypes::Ecoli,
 		RenderableGameInstance::getGlobalInstance()
 			->getRenderingEngineInstance()
 			->createModelFromIndex(
