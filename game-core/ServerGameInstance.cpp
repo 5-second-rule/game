@@ -2,8 +2,8 @@
 
 #include "engine-core/ServerEngineInstance.h"
 
-ServerGameInstance::ServerGameInstance(int minimumFrameTime) {
-	this->minimumFrameTime = minimumFrameTime;
+ServerGameInstance::ServerGameInstance(float frameTime) {
+	this->frameTime = frameTime;
 }
 
 ServerGameInstance::~ServerGameInstance() {
@@ -13,7 +13,7 @@ EngineInstance * ServerGameInstance::makeEngineInstance(GameObjectCtorTable *cto
 	return new ServerEngineInstance(
 		new World(),
 		ctors,
-		this->minimumFrameTime);
+		this->frameTime);
 }
 
 void ServerGameInstance::stop() {
