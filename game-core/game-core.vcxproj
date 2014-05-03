@@ -40,7 +40,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>$(SolutionDir);$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)../engine/</IncludePath>
-    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDir)../engine/debug</LibraryPath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDir)../engine/Debug</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -54,7 +54,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);engine-core.lib;</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);engine-core.lib;Common.lib</AdditionalDependencies>
     </Link>
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>
@@ -77,16 +77,26 @@
   <ItemGroup>
     <ClInclude Include="game-core.h" />
     <ClInclude Include="GameInstance.h" />
+    <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameObjectCtorTable.h" />
+    <ClInclude Include="MovingObject.h" />
     <ClInclude Include="ObjectTypes.h" />
+    <ClInclude Include="RigidBody.h" />
     <ClInclude Include="ServerGameInstance.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="StateMachine.h" />
+    <ClInclude Include="SteeringBehavior.h" />
+    <ClInclude Include="Transformation.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameInstance.cpp" />
+    <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameObjectCtorTable.cpp" />
+    <ClCompile Include="MovingObject.cpp" />
+    <ClCompile Include="RigidBody.cpp" />
     <ClCompile Include="ServerGameInstance.cpp" />
+    <ClCompile Include="SteeringBehavior.cpp" />
+    <ClCompile Include="Transformation.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
