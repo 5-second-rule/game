@@ -18,14 +18,14 @@ SteeringBehavior::~SteeringBehavior()
 }
 
 Vector4 SteeringBehavior::seek(Vector4 &p_targetPos){
-	Vector4 desiredDirection = Utility::normalize(p_targetPos - m_owner->body->position);
+	Vector4 desiredDirection = Utility::normalize(p_targetPos - m_owner->m_body->m_position);
 	Vector4 desiredVelocity = desiredDirection * m_owner->m_max_speed;
 	
 	return desiredVelocity - m_owner->m_velocity;
 }
 
 Vector4 SteeringBehavior::flee(Vector4 &p_targetPos){
-	Vector4 desiredDirection = normalize(m_owner->body->position - p_targetPos);
+	Vector4 desiredDirection = normalize(m_owner->m_body->m_position - p_targetPos);
 	Vector4 desiredVelocity = desiredDirection * m_owner->m_max_speed;
 
 	return desiredVelocity - m_owner->m_velocity;
@@ -36,7 +36,7 @@ Vector4 SteeringBehavior::arrive(Vector4 &p_targetPos, Deceleration deceleration
 	Vector4 desiredVelocity;
 	float dist, speed;
 
-	toTarget = p_targetPos - m_owner->body->position;
+	toTarget = p_targetPos - m_owner->m_body->m_position;
 
 	dist = toTarget.length();
 
@@ -59,15 +59,15 @@ Vector4 SteeringBehavior::pursuit(Handle *p_evader_handle){
 
 	tmp = m_owner->world->get(p_evader_handle);
 	if (evader = dynamic_cast<MovingObject*>(tmp)){
-		toEvader = evader->body->position - m_owner->body->position;
+		toEvader = evader->m_body->m_position - m_owner->m_body->m_position;
 		relativeHeading = evader->heading().dot(m_owner->heading());
 
 		if (toEvader.dot(m_owner->heading()) > 0 && relativeHeading < -0.95){
-			return this->seek(evader->body->position);
+			return this->seek(evader->m_body->m_position);
 		}
 
 		look_ahead_time = toEvader.length() / (m_owner->m_max_speed + evader->speed());
-		return seek(evader->body->position + evader->m_velocity * look_ahead_time);
+		return seek(evader->m_body->m_position + evader->m_velocity * look_ahead_time);
 	}
 	else {
 		pursuitOff();
@@ -83,9 +83,9 @@ Vector4 SteeringBehavior::evade(Handle *p_pursuer_handle){
 
 	tmp = m_owner->world->get(p_pursuer_handle);
 	if (pursuer = dynamic_cast<MovingObject*>(tmp)){
-		toPursuer = pursuer->body->position - m_owner->body->position;
+		toPursuer = pursuer->m_body->m_position - m_owner->m_body->m_position;
 		look_ahead_time = toPursuer.length() / (m_owner->m_max_speed + pursuer->speed());
-		return flee(pursuer->body->position + pursuer->m_velocity * look_ahead_time);
+		return flee(pursuer->m_body->m_position + pursuer->m_velocity * look_ahead_time);
 	}
 	else {
 		evadeOff();
@@ -106,9 +106,9 @@ Vector4 SteeringBehavior::wander(){
 														m_owner->heading(),
 														m_owner->side(),
 														m_owner->top(),
-														m_owner->body->position);
+														m_owner->m_body->m_position);
 
-	return target - m_owner->body->position;
+	return target - m_owner->m_body->m_position;
 }
 
 

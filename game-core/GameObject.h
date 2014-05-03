@@ -5,10 +5,10 @@
 #include "..\..\engine\engine-core\World.h"
 #include "RigidBody.h"
 
-class GAMECOREDLL GameObject
+class GAMECOREDLL GameObject : public BaseObject
 {
 protected:
-	RigidBody* body;
+	RigidBody* m_body;
 	World* world;
 
 public:
@@ -17,5 +17,6 @@ public:
 	RigidBody* getBody();
 	Vector4 side();
 	Vector4 top();
+	virtual bool onEvent(Event event);
 };
 

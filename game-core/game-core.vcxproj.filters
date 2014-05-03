@@ -51,6 +51,9 @@
     <ClInclude Include="GameInstance.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="RedBloodCell.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameObjectCtorTable.cpp">
@@ -75,6 +78,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GameInstance.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RedBloodCell.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

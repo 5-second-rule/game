@@ -81,6 +81,7 @@
     <ClInclude Include="GameObjectCtorTable.h" />
     <ClInclude Include="MovingObject.h" />
     <ClInclude Include="ObjectTypes.h" />
+    <ClInclude Include="RedBloodCell.h" />
     <ClInclude Include="RigidBody.h" />
     <ClInclude Include="ServerGameInstance.h" />
     <ClInclude Include="State.h" />
@@ -93,6 +94,7 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameObjectCtorTable.cpp" />
     <ClCompile Include="MovingObject.cpp" />
+    <ClCompile Include="RedBloodCell.cpp" />
     <ClCompile Include="RigidBody.cpp" />
     <ClCompile Include="ServerGameInstance.cpp" />
     <ClCompile Include="SteeringBehavior.cpp" />
