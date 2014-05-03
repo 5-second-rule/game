@@ -6,13 +6,13 @@
 class GAMECOREDLL ServerGameInstance : public GameInstance
 {
 private:
-	int minimumFrameTime;
+	float frameTime;
 
 protected:
 	virtual EngineInstance * makeEngineInstance(GameObjectCtorTable *ctors);
 
 public:
-	ServerGameInstance(int minimumFrameTime);
+	ServerGameInstance(float frameTime);
 	~ServerGameInstance();
 
 	void stop();

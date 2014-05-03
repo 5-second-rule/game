@@ -11,6 +11,7 @@ private:
 	void *appHandle;
 
 protected:
+	Event* inputTranslator(Transmission::Input::Key key, Transmission::Input::KeyState state);
 	virtual GameObjectCtorTable * makeCtorTable();
 	virtual EngineInstance * makeEngineInstance(GameObjectCtorTable *ctors);
 

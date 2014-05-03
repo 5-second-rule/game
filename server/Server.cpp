@@ -11,7 +11,7 @@ using namespace std;
 void SignalHandler( int signal );
 
 // constants
-const int dt = 33333; // delta time between loops in us
+const float DT = 1.0f / 30.0f; // delta time between loops in sec
 
 //globals
 ServerGameInstance *gameInstance;
@@ -19,7 +19,7 @@ ServerGameInstance *gameInstance;
 int main(int argc, char* argv[])
 {
 	cout << "Initializing Server... Please Wait!\n";
-	gameInstance = new ServerGameInstance(dt);
+	gameInstance = new ServerGameInstance(DT);
 	gameInstance->init();
 
 	signal( SIGINT, SignalHandler );
