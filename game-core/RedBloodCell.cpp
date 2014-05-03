@@ -3,7 +3,7 @@
 
 RedBloodCell::RedBloodCell()
 {
-	m_stateMachine = new StateMachine<RedBloodCell>(this);
+	m_state_machine = new StateMachine<RedBloodCell>(this);
 }
 
 
@@ -12,7 +12,7 @@ RedBloodCell::~RedBloodCell()
 }
 
 bool RedBloodCell::onEvent(Event event){
-	m_state_machine->
+	//m_state_machine->
 	return MovingObject::onEvent(event);
 }
 

@@ -27,7 +27,8 @@ public:
 	void setGlobalState(State<type>* s) { m_GlobalState = s; }
 	void setPreviousState(State<type>* s){ m_PreviousState = s; }
 	void  Update()const; // Call this to update the Finity State Machine
-	bool handleMessage(const Telegram& msg)const;
+	//bool handleMessage(const Telegram& msg)const;
+	bool handleMessage( )const;
 	void  ChangeState(State<type>* pNewState); // Change to a new state
 	void  RevertToPreviousState() { //change state back to the previous state
 		ChangeState(m_PreviousState); 
@@ -46,7 +47,7 @@ public:
 };
 
 template< class type >
-void StateMachine<type>::update()const
+void StateMachine<type>::Update()const
 {
 	// If a global state exists, call its execute method, else do nothing
 	if (m_GlobalState)   m_GlobalState->Execute(m_Owner);
@@ -73,9 +74,12 @@ void StateMachine<type>::ChangeState(State<type>* pNewState)
 	m_CurrentState->Enter(m_Owner);
 }
 
+//template< class type >
+//bool StateMachine<type>::handleMessage(const Telegram& msg)const
 template< class type >
-bool StateMachine<type>::handleMessage(const Telegram& msg)const
+bool StateMachine<type>::handleMessage( )const
 {
+	/*
 	//first see if the current state is valid and that it can handle
 	//the message
 	if (m_pCurrentState && m_pCurrentState->onMessage(m_pOwner, msg))
@@ -89,6 +93,7 @@ bool StateMachine<type>::handleMessage(const Telegram& msg)const
 	{
 		return true;
 	}
+	*/
 
 	return false;
 }

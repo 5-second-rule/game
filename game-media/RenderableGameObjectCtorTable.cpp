@@ -25,7 +25,7 @@ static IHasHandle * makeRenderableEcoli(ObjectCtorTable *thisObj) {
 }
 
 void RenderableGameObjectCtorTable::initCtors() {
-	RenderingEngineInstance *engine = 
+	RenderingEngine *engine = 
 		RenderableGameInstance::getGlobalInstance()
 			->getRenderingEngineInstance();
 
