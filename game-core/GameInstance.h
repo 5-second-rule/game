@@ -29,7 +29,7 @@ public:
 	static void setGlobalInstance(GameInstance *instance);
 	static GameInstance * getGlobalInstance();
 
-	void init();
+	virtual void init();
 	void run();
 	Engine * getEngineInstance();
 

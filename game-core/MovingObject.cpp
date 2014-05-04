@@ -3,7 +3,7 @@
 #include "MovingObject.h"
 
 using namespace std;
-MovingObject::MovingObject()
+MovingObject::MovingObject() : GameObject(0)
 {
 	Utility::configInstance()->getValue("default_friction", m_friction);
 	Utility::configInstance()->getValue("default_max_speed", m_max_speed);

@@ -12,6 +12,12 @@ RenderableGameInstance::~RenderableGameInstance()
 {
 }
 
+void RenderableGameInstance::init() {
+	GameInstance::init();
+	//this->getEngineInstance()->waitForConnection();
+	this->getEngineInstance()->registerPlayer(true);
+}
+
 Event* RenderableGameInstance::inputTranslator(Transmission::Input::Key key, Transmission::Input::KeyState state) {
 	Event* evt = nullptr;
 	switch (key) {
@@ -55,7 +61,7 @@ Event* RenderableGameInstance::inputTranslator(Transmission::Input::Key key, Tra
 		case (Transmission::Input::Key::KEY_9): break;
 		case (Transmission::Input::Key::A): 
 			if( state == Transmission::Input::KeyState::STATE_DOWN ) {
-				evt = new MoveEvent( 0, 0, MoveDirection::LEFT );
+				evt = new MoveEvent(this->getEngineInstance()->getLocalPlayerGuid(0), 0, MoveDirection::LEFT );
 			}
 			break; 
 																	
@@ -63,7 +69,7 @@ Event* RenderableGameInstance::inputTranslator(Transmission::Input::Key key, Tra
 		case (Transmission::Input::Key::C): break;
 		case (Transmission::Input::Key::D): 
 			if( state == Transmission::Input::KeyState::STATE_DOWN ) {
-				evt = new MoveEvent( 0, 0, MoveDirection::RIGHT );
+				evt = new MoveEvent(this->getEngineInstance()->getLocalPlayerGuid(0), 0, MoveDirection::RIGHT);
 			}
 			break;
 		case (Transmission::Input::Key::E): break;
@@ -82,7 +88,7 @@ Event* RenderableGameInstance::inputTranslator(Transmission::Input::Key key, Tra
 		case (Transmission::Input::Key::R): break;
 		case (Transmission::Input::Key::S): 
 			if( state == Transmission::Input::KeyState::STATE_DOWN ) {
-				evt = new MoveEvent( 0, 0, MoveDirection::DOWN );
+				evt = new MoveEvent(this->getEngineInstance()->getLocalPlayerGuid(0), 0, MoveDirection::DOWN);
 			}
 			break;
 		case (Transmission::Input::Key::T): break;
@@ -90,7 +96,7 @@ Event* RenderableGameInstance::inputTranslator(Transmission::Input::Key key, Tra
 		case (Transmission::Input::Key::V): break;
 		case (Transmission::Input::Key::W): 
 			if( state == Transmission::Input::KeyState::STATE_DOWN ) {
-				evt = new MoveEvent( 0, 0, MoveDirection::UP );
+				evt = new MoveEvent(this->getEngineInstance()->getLocalPlayerGuid(0), 0, MoveDirection::UP);
 			}
 			break;
 		case (Transmission::Input::Key::X): break;

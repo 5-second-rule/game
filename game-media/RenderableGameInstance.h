@@ -21,5 +21,7 @@ public:
 
 	static RenderableGameInstance * getGlobalInstance();
 	RenderingEngine * getRenderingEngineInstance();
+
+	virtual void init();
 };
 
