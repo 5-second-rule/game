@@ -8,7 +8,7 @@ class RedBloodCell : public MovingObject
 public:
 	RedBloodCell();
 	~RedBloodCell();
-	bool onMessage(Telegram msg);
+	bool onMessage(Event* msg);
 	void update(float dt);
 };
 

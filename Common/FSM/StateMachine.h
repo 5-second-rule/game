@@ -15,7 +15,7 @@
 #include <string>
 
 #include "State.h"
-#include "../Messaging/Telegram.h"
+#include "engine-core/Event.h"
 
 
 template <class entity_type>
@@ -60,18 +60,18 @@ public:
     if (m_pCurrentState) m_pCurrentState->execute(m_pOwner);
   }
 
-  bool  HandleMessage(const Telegram& msg)const
+  bool  HandleMessage(const Event& evt)const
   {
     //first see if the current state is valid and that it can handle
     //the message
-    if (m_pCurrentState && m_pCurrentState->onMessage(m_pOwner, msg))
+    if (m_pCurrentState && m_pCurrentState->onMessage(m_pOwner, evt))
     {
       return true;
     }
   
     //if not, and if a global state has been implemented, send 
     //the message to the global state
-    if (m_pGlobalState && m_pGlobalState->onMessage(m_pOwner, msg))
+    if (m_pGlobalState && m_pGlobalState->onMessage(m_pOwner, evt))
     {
       return true;
     }

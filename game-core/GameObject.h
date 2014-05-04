@@ -18,6 +18,6 @@ public:
 	GameObject();
 	~GameObject();
 	RigidBody* getBody();
-	virtual bool onMessage(Telegram event);
+	virtual bool onMessage(Event* evt);
 };
 

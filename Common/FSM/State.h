@@ -9,7 +9,7 @@
 //  Author: Mat Buckland (fup@ai-junkie.com)
 //
 //------------------------------------------------------------------------
-struct Telegram;
+#include "engine-core/Event.h"
 
 template <class entity_type>
 class State
@@ -29,7 +29,7 @@ public:
 
   //this executes if the agent receives a message from the 
   //message dispatcher
-  virtual bool onMessage(entity_type*, const Telegram&)=0;
+  virtual bool onMessage(entity_type*, const Event&)=0;
 };
 
 #endif

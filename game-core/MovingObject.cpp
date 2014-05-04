@@ -39,10 +39,10 @@ void MovingObject::applyForce(Vector4 force){
 	m_force += force;
 }
 
-bool MovingObject::onMessage(Telegram msg){
-	if (stateMachine->HandleMessage(msg))
+bool MovingObject::onMessage(Event* evt){
+	if (stateMachine->HandleMessage(*evt))
 		return true;
-	return GameObject::onMessage(msg);
+	return GameObject::onMessage(evt);
 }
 
 void MovingObject::update(float dt){

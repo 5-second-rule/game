@@ -11,10 +11,10 @@ RedBloodCell::~RedBloodCell()
 {
 }
 
-bool RedBloodCell::onMessage(Telegram msg){
-	if (m_state_machine->HandleMessage(msg))
+bool RedBloodCell::onMessage(Event* evt) {
+	if (m_state_machine->HandleMessage(*evt))
 		return true;
-	return MovingObject::onMessage(msg);
+	return MovingObject::onMessage(evt);
 }
 
 void RedBloodCell::update(float dt){

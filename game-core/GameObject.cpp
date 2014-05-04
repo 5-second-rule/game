@@ -10,17 +10,10 @@ GameObject::GameObject() : BaseObject(0) {
 GameObject::~GameObject() {
 }
 
-bool GameObject::onEvent( Event event ) {
-	//TODO implement
+bool GameObject::onMessage( Event* evt ) {
 	return false;
 }
 
-Vector4 GameObject::side() {
-	//TODO implement
-	return Vector4();
-}
-
-Vector4 GameObject::top() {
-	//TODO implement
-	return Vector4();
+RigidBody* GameObject::getBody() {
+	return nullptr;
 }

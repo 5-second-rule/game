@@ -11,10 +11,13 @@ ServerGameInstance::~ServerGameInstance() {
 }
 
 Engine * ServerGameInstance::makeEngineInstance(GameObjectCtorTable *ctors) {
-	return new ServerEngine(
+	Engine* eng  = new ServerEngine(
 		new World(),
 		ctors,
 		this->frameTime);
+	eng->delegate = this;
+
+	return eng;
 }
 
 void ServerGameInstance::stop() {

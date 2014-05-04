@@ -34,7 +34,7 @@ public:
 	void applyForce(Vector4 force);
 	virtual void print();
 	virtual void update(float dt);
-	virtual bool onMessage(Telegram msg);
+	virtual bool onMessage(Event* evt);
 
 };
 

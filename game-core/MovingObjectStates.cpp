@@ -3,8 +3,8 @@
 Move::Move(){}
 
 Move* Move::instance(){
-	static Move moveState;
-	return &moveState;
+	//static Move moveState;
+	return nullptr;//&moveState;
 }
 
 bool Move::onMessage(MovingObject* object, const Telegram &msg){
