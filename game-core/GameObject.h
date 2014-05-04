@@ -14,8 +14,10 @@ protected:
 	RigidBody* m_body;
 	World* world;
 
+	virtual void handleEvent(Event *evt);
+
 public:
-	GameObject();
+	GameObject(int objectType);
 	~GameObject();
 	RigidBody* getBody();
 	virtual bool onMessage(Event* evt);
