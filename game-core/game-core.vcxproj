@@ -89,6 +89,7 @@
     <ClInclude Include="RedBloodCell.h" />
     <ClInclude Include="RigidBody.h" />
     <ClInclude Include="ServerGameInstance.h" />
+    <ClInclude Include="ShootEvent.h" />
     <ClInclude Include="SteeringBehavior.h" />
     <ClInclude Include="Transformation.h" />
   </ItemGroup>
@@ -102,6 +103,7 @@
     <ClCompile Include="RedBloodCell.cpp" />
     <ClCompile Include="RigidBody.cpp" />
     <ClCompile Include="ServerGameInstance.cpp" />
+    <ClCompile Include="ShootEvent.cpp" />
     <ClCompile Include="SteeringBehavior.cpp" />
     <ClCompile Include="Transformation.cpp" />
   </ItemGroup>

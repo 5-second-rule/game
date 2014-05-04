@@ -1,5 +1,6 @@
 #include "RenderableGameInstance.h"
 #include "game-core/MoveEvent.h"
+#include "game-core/ShootEvent.h"
 #include "RenderableGameObjectCtorTable.h"
 #include "engine-renderer/RenderableWorld.h"
 
@@ -37,7 +38,11 @@ Event* RenderableGameInstance::inputTranslator(Transmission::Input::Key key, Tra
 		case (Transmission::Input::Key::PAUSE): break;
 		case (Transmission::Input::Key::CAPSLOCK): break;
 		case (Transmission::Input::Key::ESC): break;
-		case (Transmission::Input::Key::SPACE): break;
+		case (Transmission::Input::Key::SPACE): 
+			if( state == Transmission::Input::KeyState::STATE_DOWN ) {
+				evt = new ShootEvent( this->getEngineInstance()->getLocalPlayerGuid( 0 ) );
+			}
+			break;
 		case (Transmission::Input::Key::PAGE_UP): break;
 		case (Transmission::Input::Key::PAGE_DOWN): break;
 		case (Transmission::Input::Key::END): break;
@@ -61,7 +66,7 @@ Event* RenderableGameInstance::inputTranslator(Transmission::Input::Key key, Tra
 		case (Transmission::Input::Key::KEY_9): break;
 		case (Transmission::Input::Key::A): 
 			if( state == Transmission::Input::KeyState::STATE_DOWN ) {
-				evt = new MoveEvent(this->getEngineInstance()->getLocalPlayerGuid(0), 0, MoveDirection::LEFT );
+				evt = new MoveEvent(this->getEngineInstance()->getLocalPlayerGuid(0), MoveDirection::LEFT );
 			}
 			break; 
 																	
@@ -69,26 +74,34 @@ Event* RenderableGameInstance::inputTranslator(Transmission::Input::Key key, Tra
 		case (Transmission::Input::Key::C): break;
 		case (Transmission::Input::Key::D): 
 			if( state == Transmission::Input::KeyState::STATE_DOWN ) {
-				evt = new MoveEvent(this->getEngineInstance()->getLocalPlayerGuid(0), 0, MoveDirection::RIGHT);
+				evt = new MoveEvent(this->getEngineInstance()->getLocalPlayerGuid(0), MoveDirection::RIGHT);
 			}
 			break;
 		case (Transmission::Input::Key::E): break;
 		case (Transmission::Input::Key::F): break;
 		case (Transmission::Input::Key::G): break;
 		case (Transmission::Input::Key::H): break;
-		case (Transmission::Input::Key::I): break;
+		case (Transmission::Input::Key::I): 
+			if( state == Transmission::Input::KeyState::STATE_DOWN ) {
+				evt = new MoveEvent( this->getEngineInstance()->getLocalPlayerGuid( 0 ), MoveDirection::FORWARD );
+			}
+			break;
 		case (Transmission::Input::Key::J): break;
 		case (Transmission::Input::Key::K): break;
 		case (Transmission::Input::Key::L): break;
 		case (Transmission::Input::Key::M): break;
 		case (Transmission::Input::Key::N): break;
-		case (Transmission::Input::Key::O): break;
+		case (Transmission::Input::Key::O): 
+			if( state == Transmission::Input::KeyState::STATE_DOWN ) {
+				evt = new MoveEvent( this->getEngineInstance()->getLocalPlayerGuid( 0 ), MoveDirection::BACK );
+			}
+			break;
 		case (Transmission::Input::Key::P): break;
 		case (Transmission::Input::Key::Q): break;
 		case (Transmission::Input::Key::R): break;
 		case (Transmission::Input::Key::S): 
 			if( state == Transmission::Input::KeyState::STATE_DOWN ) {
-				evt = new MoveEvent(this->getEngineInstance()->getLocalPlayerGuid(0), 0, MoveDirection::DOWN);
+				evt = new MoveEvent(this->getEngineInstance()->getLocalPlayerGuid(0), MoveDirection::DOWN);
 			}
 			break;
 		case (Transmission::Input::Key::T): break;
@@ -96,7 +109,7 @@ Event* RenderableGameInstance::inputTranslator(Transmission::Input::Key key, Tra
 		case (Transmission::Input::Key::V): break;
 		case (Transmission::Input::Key::W): 
 			if( state == Transmission::Input::KeyState::STATE_DOWN ) {
-				evt = new MoveEvent(this->getEngineInstance()->getLocalPlayerGuid(0), 0, MoveDirection::UP);
+				evt = new MoveEvent(this->getEngineInstance()->getLocalPlayerGuid(0), MoveDirection::UP);
 			}
 			break;
 		case (Transmission::Input::Key::X): break;

@@ -1,5 +1,6 @@
 #include "ServerGameInstance.h"
 #include "MoveEvent.h"
+#include "ShootEvent.h"
 
 #include "engine-core/ServerEngine.h"
 
@@ -24,18 +25,15 @@ void ServerGameInstance::stop() {
 	dynamic_cast<ServerEngine *>(this->getEngineInstance())->stop();
 }
 
-void ServerGameInstance::HandleAction( ActionEvent* evt ) {
-		// send update to GameObject
-}
-
-ActionEvent* ServerGameInstance::MakeActionEvent( int actionType, unsigned int playerGuid, size_t index, const char* data ) {
+ActionEvent* ServerGameInstance::MakeActionEvent( int actionType, unsigned int playerGuid, const char* data ) {
 	ActionEvent* evt = nullptr;
 	
 	switch( ActionType( actionType ) ) {
 		case ActionType::MOVE:
-			evt = new MoveEvent( playerGuid, index, *(reinterpret_cast<const MoveDirection*>(data)) );
+			evt = new MoveEvent( playerGuid, *(reinterpret_cast<const MoveDirection*>(data)) );
 			break;
 		case ActionType::SHOOT:
+			evt = new ShootEvent( playerGuid );
 			break;
 		case ActionType::USE:
 			break;

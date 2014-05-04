@@ -2,21 +2,11 @@
 #include "game-core.h"
 #include "engine-core/ActionEvent.h"
 
-enum class MoveDirection {
-	UP,
-	DOWN,
-	LEFT,
-	RIGHT,
-	FORWARD,
-	BACK
-};
-
-class GAMECOREDLL MoveEvent : public ActionEvent {
+class GAMECOREDLL ShootEvent : public ActionEvent {
 public:
-	MoveDirection direction;
 
-	MoveEvent( unsigned int playerGuid, MoveDirection direction );
-	~MoveEvent();
+	ShootEvent( unsigned int playerGuid );
+	~ShootEvent();
 
 	virtual void reserveSize( BufferBuilder *buffer );
 	virtual void fillBuffer( BufferBuilder *buffer );

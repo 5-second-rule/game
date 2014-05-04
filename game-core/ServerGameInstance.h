@@ -17,7 +17,6 @@ public:
 
 	void stop();
 
-	virtual void ServerGameInstance::HandleAction( ActionEvent* evt );
-	virtual ActionEvent* MakeActionEvent( int actionType, unsigned int playerGuid, size_t index, const char* data );
+	virtual ActionEvent* MakeActionEvent( int actionType, unsigned int playerGuid, const char* data );
 };
 

@@ -66,6 +66,12 @@
     <ClInclude Include="..\Common\FSM\StateMachine.h">
       <Filter>States</Filter>
     </ClInclude>
+    <ClInclude Include="MoveEvent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ShootEvent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameObjectCtorTable.cpp">
@@ -99,6 +105,9 @@
       <Filter>States</Filter>
     </ClCompile>
     <ClCompile Include="MoveEvent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ShootEvent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
