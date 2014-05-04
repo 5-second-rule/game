@@ -75,18 +75,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Common\FSM\State.h" />
+    <ClInclude Include="..\Common\FSM\StateMachine.h" />
     <ClInclude Include="game-core.h" />
     <ClInclude Include="GameInstance.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameObjectCtorTable.h" />
+    <ClInclude Include="MessageType.h" />
     <ClInclude Include="MoveEvent.h" />
     <ClInclude Include="MovingObject.h" />
+    <ClInclude Include="MovingObjectStates.h" />
     <ClInclude Include="ObjectTypes.h" />
     <ClInclude Include="RedBloodCell.h" />
     <ClInclude Include="RigidBody.h" />
     <ClInclude Include="ServerGameInstance.h" />
-    <ClInclude Include="State.h" />
-    <ClInclude Include="StateMachine.h" />
     <ClInclude Include="SteeringBehavior.h" />
     <ClInclude Include="Transformation.h" />
   </ItemGroup>
@@ -96,6 +98,7 @@
     <ClCompile Include="GameObjectCtorTable.cpp" />
     <ClCompile Include="MoveEvent.cpp" />
     <ClCompile Include="MovingObject.cpp" />
+    <ClCompile Include="MovingObjectStates.cpp" />
     <ClCompile Include="RedBloodCell.cpp" />
     <ClCompile Include="RigidBody.cpp" />
     <ClCompile Include="ServerGameInstance.cpp" />
