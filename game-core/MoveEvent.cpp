@@ -23,6 +23,7 @@ void MoveEvent::fillBuffer( BufferBuilder *buffer ) {
 
 
 void MoveEvent::deserialize( BufferReader& buffer ) {
-	const struct EventHeader *hdr = reinterpret_cast<const struct EventHeader *>(buffer.getPointer());
+	ActionEvent::deserialize( buffer );
+	this->direction = *reinterpret_cast<const MoveDirection*>(buffer.getPointer());
 	buffer.finished( sizeof( struct EventHeader ) );
 }
