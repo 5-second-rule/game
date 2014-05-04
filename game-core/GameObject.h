@@ -1,8 +1,11 @@
 #pragma once
 
-#include "game-core.h"
+#include "..\Common\Messaging\Telegram.h"
+
 #include "..\..\engine\engine-core\BaseObject.h"
 #include "..\..\engine\engine-core\World.h"
+
+#include "game-core.h"
 #include "RigidBody.h"
 
 class GAMECOREDLL GameObject : public BaseObject
@@ -15,8 +18,6 @@ public:
 	GameObject();
 	~GameObject();
 	RigidBody* getBody();
-	Vector4 side();
-	Vector4 top();
-	virtual bool onEvent(Event event);
+	virtual bool onMessage(Telegram event);
 };
 

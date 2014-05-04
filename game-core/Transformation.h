@@ -9,6 +9,11 @@ class GAMECOREDLL Transformation
 public:
 	Transformation();
 	~Transformation();
+
+	//--------------------- PointToWorldSpace --------------------------------
+	//
+	//  Transforms a point from the agent's local space into world space
+	//------------------------------------------------------------------------
 	static Vector4 pointToWorldSpace(const Vector4 &point,
 		const Vector4 &agent_heading,
 		const Vector4 &agend_side,

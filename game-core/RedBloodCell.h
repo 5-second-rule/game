@@ -1,6 +1,6 @@
 #pragma once
+
 #include "MovingObject.h"
-#include "StateMachine.h"
 
 class RedBloodCell : public MovingObject
 {
@@ -8,7 +8,7 @@ class RedBloodCell : public MovingObject
 public:
 	RedBloodCell();
 	~RedBloodCell();
-	bool onEvent(Event event);
+	bool onMessage(Telegram msg);
 	void update(float dt);
 };
 

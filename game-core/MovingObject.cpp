@@ -8,6 +8,9 @@ MovingObject::MovingObject()
 	Utility::configInstance()->getValue("default_friction", m_friction);
 	Utility::configInstance()->getValue("default_max_speed", m_max_speed);
 	Utility::configInstance()->getValue("default_max_force", m_max_force);
+
+	stateMachine = new StateMachine<MovingObject>(this);
+	stateMachine->SetCurrentState(Move::instance());
 }
 
 
@@ -20,13 +23,26 @@ Vector4 MovingObject::heading(){
 	return normalize(m_velocity);
 }
 
+Vector4 MovingObject::top(){
+	return Vector4(0, 0, 1);
+}
+
+Vector4 MovingObject::side(){
+	return Vector4(0, 1, 0);
+}
+
 float MovingObject::speed(){
 	return m_velocity.length();
 }
 
-bool MovingObject::onEvent(Event event){
-	
-	return GameObject::onEvent(event);
+void MovingObject::applyForce(Vector4 force){
+	m_force += force;
+}
+
+bool MovingObject::onMessage(Telegram msg){
+	if (stateMachine->HandleMessage(msg))
+		return true;
+	return GameObject::onMessage(msg);
 }
 
 void MovingObject::update(float dt){

@@ -3,7 +3,7 @@
 
 RedBloodCell::RedBloodCell()
 {
-	m_stateMachine = new StateMachine<RedBloodCell>(this);
+	m_state_machine = new StateMachine<RedBloodCell>(this);
 }
 
 
@@ -11,9 +11,10 @@ RedBloodCell::~RedBloodCell()
 {
 }
 
-bool RedBloodCell::onEvent(Event event){
-	m_state_machine->
-	return MovingObject::onEvent(event);
+bool RedBloodCell::onMessage(Telegram msg){
+	if (m_state_machine->HandleMessage(msg))
+		return true;
+	return MovingObject::onMessage(msg);
 }
 
 void RedBloodCell::update(float dt){
