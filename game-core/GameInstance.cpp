@@ -1,6 +1,7 @@
 #include "GameInstance.h"
 #include "GameObjectCtorTable.h"
 
+
 GameInstance * GameInstance::globalInstance;
 
 GameInstance::GameInstance() {
@@ -36,7 +37,7 @@ GameObjectCtorTable * GameInstance::makeCtorTable() {
 	return new GameObjectCtorTable();
 }
 
-EngineInstance * GameInstance::getEngineInstance() {
+Engine * GameInstance::getEngineInstance() {
 	return this->engineInstance;
 }
 
@@ -46,4 +47,14 @@ void GameInstance::setGlobalInstance(GameInstance *instance){
 
 GameInstance * GameInstance::getGlobalInstance() {
 	return globalInstance;
+}
+
+void GameInstance::HandleAction( ActionEvent* evt ) {
+	// might be some work to do at this layer but mostly it will be handled
+	// in ServerGameInstance
+}
+
+
+ActionEvent* GameInstance::MakeActionEvent( int actionType, unsigned int playerGuid, size_t index, const char* data ) {
+	return nullptr;
 }

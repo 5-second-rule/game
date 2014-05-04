@@ -1,20 +1,26 @@
 #pragma once
 
 #include "game-core.h"
-#include "engine-core/EngineInstance.h"
+#include "engine-core/Engine.h"
 #include "engine-core/World.h"
 #include "GameObjectCtorTable.h"
 
-class GAMECOREDLL GameInstance
+GAMECOREDLL enum class ActionType {
+	MOVE,
+	USE,
+	SHOOT
+};
+
+class GAMECOREDLL GameInstance : public IEngineInstanceDelegate
 {
 private:
 	static GameInstance *globalInstance;
-	EngineInstance *engineInstance;
+	Engine *engineInstance;
 	bool initHasRun;
 
 protected:
 	virtual GameObjectCtorTable * makeCtorTable();
-	virtual EngineInstance * makeEngineInstance(GameObjectCtorTable *ctors) = 0;
+	virtual Engine * makeEngineInstance(GameObjectCtorTable *ctors) = 0;
 
 public:
 	GameInstance();
@@ -25,6 +31,11 @@ public:
 
 	void init();
 	void run();
-	EngineInstance * getEngineInstance();
+	Engine * getEngineInstance();
+
+	// IEngineInstanceDelegate Methods
+	virtual void HandleAction( ActionEvent* evt );
+	virtual ActionEvent* MakeActionEvent( int actionType, unsigned int playerGuid, size_t index, const char* data );
+
 };
 

@@ -120,8 +120,8 @@ Event* RenderableGameInstance::inputTranslator(Transmission::Input::Key key, Tra
 	return nullptr;
 }
 
-EngineInstance * RenderableGameInstance::makeEngineInstance(GameObjectCtorTable *ctors) {
-	return new RenderingEngineInstance(
+Engine * RenderableGameInstance::makeEngineInstance(GameObjectCtorTable *ctors) {
+	return new RenderingEngine(
 		new RenderableWorld(), 
 		ctors,
 		this->appHandle);
@@ -142,7 +142,7 @@ RenderableGameInstance * RenderableGameInstance::getGlobalInstance() {
 	return renderableInstance;
 }
 
-RenderingEngineInstance * RenderableGameInstance::getRenderingEngineInstance() {
-	return dynamic_cast<RenderingEngineInstance *>(this->getEngineInstance());
+RenderingEngine * RenderableGameInstance::getRenderingEngineInstance() {
+	return dynamic_cast<RenderingEngine *>(this->getEngineInstance());
 }
 
