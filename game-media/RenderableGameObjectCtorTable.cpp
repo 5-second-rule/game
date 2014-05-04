@@ -1,6 +1,6 @@
 #include "RenderableGameObjectCtorTable.h"
 #include "game-core/ObjectTypes.h"
-#include "engine-renderer/RenderableObject.h";
+#include "engine-renderer/RenderableObject.h"
 
 #include "RenderableGameInstance.h"
 

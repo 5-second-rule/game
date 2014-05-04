@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.30324.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "client", "client\client.vcxproj", "{E6E773DD-B283-4630-9E60-D3B5CA015446}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -15,6 +15,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "server", "server\server.vcx
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "game-core", "game-core\game-core.vcxproj", "{CF61AD8F-BC58-4EFE-A741-8AF01915DE72}"
+	ProjectSection(ProjectDependencies) = postProject
+		{AA00E1FE-B197-4A20-AC31-779FE1501EF5} = {AA00E1FE-B197-4A20-AC31-779FE1501EF5}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "game-media", "game-media\game-media.vcxproj", "{B579B983-7FE3-4C6B-8EE5-2ACBAA13DC65}"
 	ProjectSection(ProjectDependencies) = postProject

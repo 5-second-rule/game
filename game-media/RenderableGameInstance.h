@@ -5,13 +5,13 @@
 #include "engine-core/World.h"
 #include "engine-renderer/RenderingEngine.h"
 
-class GAMEMEDIADLL RenderableGameInstance : public GameInstance
+class GAMEMEDIADLL RenderableGameInstance : public GameInstance, IRenderingEngineDelegate
 {
 private:
 	void *appHandle;
 
 protected:
-	Event* inputTranslator(Transmission::Input::Key key, Transmission::Input::KeyState state);
+	virtual Event* inputTranslator(Transmission::Input::Key key, Transmission::Input::KeyState state);
 	virtual GameObjectCtorTable * makeCtorTable();
 	virtual Engine * makeEngineInstance(GameObjectCtorTable *ctors);
 

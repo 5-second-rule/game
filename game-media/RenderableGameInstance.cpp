@@ -121,10 +121,13 @@ Event* RenderableGameInstance::inputTranslator(Transmission::Input::Key key, Tra
 }
 
 Engine * RenderableGameInstance::makeEngineInstance(GameObjectCtorTable *ctors) {
-	return new RenderingEngine(
+	
+	RenderingEngine* eng = new RenderingEngine(
 		new RenderableWorld(), 
 		ctors,
 		this->appHandle);
+	eng->renderingDelegate = this;
+	return eng;
 }
 
 GameObjectCtorTable * RenderableGameInstance::makeCtorTable() {
