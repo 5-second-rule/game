@@ -16,6 +16,7 @@ RenderableGameInstance::~RenderableGameInstance()
 void RenderableGameInstance::init() {
 	GameInstance::init();
 	//this->getEngineInstance()->waitForConnection();
+	this->getRenderingEngineInstance()->waitForServer();
 	this->getEngineInstance()->registerPlayer(true);
 }
 
