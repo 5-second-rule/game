@@ -56,7 +56,7 @@ private:
 
 	bool accumulateForce(Vector4 &RunningTot, Vector4 ForceToAdd);
 public:
-	SteeringBehavior();
+	SteeringBehavior(MovingObject*);
 	~SteeringBehavior();
 	Vector4 calculate();
 	Vector4 calculatePrioritized();
@@ -67,10 +67,12 @@ public:
 	void arriveOn();
 	void pursuitOn(Handle *p_preyHandle);
 	void evadeOn(Handle *p_predatorHandle);
+	void wanderOn();
 	void seekOff();
 	void fleeOff();
 	void arriveOff();
 	void pursuitOff();
 	void evadeOff();
+	void wanderOff();
 };
 

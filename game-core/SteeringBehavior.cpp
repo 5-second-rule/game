@@ -3,13 +3,15 @@
 #include "SteeringBehavior.h"
 
 
-SteeringBehavior::SteeringBehavior() :m_behavior(BehaviorType::none)
+SteeringBehavior::SteeringBehavior(MovingObject *owner) :m_behavior(BehaviorType::none)
 {
-	assert(Utility::configInstance()->getValue("deceleration_tweaker", k_deceleration_tweaker) && "Fail to load the configuration configurationTweaker at SteeringBehavior::SteeringBehavior()");
-	Utility::configInstance()->getValue("wander_radius", m_wander_radius);
-	Utility::configInstance()->getValue("wander_distance", m_wander_distance);
-	Utility::configInstance()->getValue("time_tick", k_time_elapsed);
+	assert(Utility::configInstance()->getValue("deceleration_tweaker", k_deceleration_tweaker));
+	assert(Utility::configInstance()->getValue("time_tick", k_time_elapsed));
+	assert(Utility::configInstance()->getValue("wander_radius", m_wander_radius));
+	assert(Utility::configInstance()->getValue("wander_distance", m_wander_distance));
+	assert(Utility::configInstance()->getValue("wander_weight", m_wander_weight));
 
+	m_owner = owner;
 }
 
 
@@ -94,21 +96,23 @@ Vector4 SteeringBehavior::evade(Handle *p_pursuer_handle){
 }
 
 Vector4 SteeringBehavior::wander(){
-	m_wander_target += Vector4(RandomClamped() * k_time_elapsed,
-		RandomClamped() * k_time_elapsed,
-		RandomClamped() * k_time_elapsed);
+	m_wander_target += Vector4((float)RandomClamped() * k_time_elapsed,
+		(float)RandomClamped() * k_time_elapsed,
+		(float)RandomClamped() * k_time_elapsed);
 
 	m_wander_target = Utility::normalize(m_wander_target);
 	m_wander_target *= m_wander_radius;
-
 	Vector4 target = m_wander_target + Vector4(m_wander_distance, 0, 0);
-	target = Transformation::pointToWorldSpace(target,
-														m_owner->heading(),
+	if (VERBOSITY >= 10 && m_owner->getWorld()->isTick(30))
+		cout << "target local: " << target.toString() << "\t" << m_owner->m_body->m_position.toString() << endl;
+	/*target = Transformation::pointToWorldSpace(target,
+														m_owner->front(),
 														m_owner->side(),
 														m_owner->top(),
-														m_owner->m_body->m_position);
-
-	return target - m_owner->m_body->m_position;
+														m_owner->m_body->m_position);*/
+	if (VERBOSITY >= 10 && m_owner->getWorld()->isTick(30))
+		cout << "target global: " << target.toString() << endl;
+	return target;
 }
 
 
@@ -164,7 +168,7 @@ Vector4 SteeringBehavior::calculatePrioritized(){
 	Vector4 force;
 
 	if (On(BehaviorType::wander)){
-		force = wander() * m_wander_weight;
+		accumulateForce(force, wander() * m_wander_weight);
 	}
 	if (On(BehaviorType::arrive)){
 
@@ -202,6 +206,10 @@ void SteeringBehavior::evadeOn(Handle *p_pursuer_handle){
 	m_target_agent = p_pursuer_handle;
 }
 
+void SteeringBehavior::wanderOn(){
+	m_behavior = BehaviorType::wander;
+}
+
 void SteeringBehavior::seekOff(){
 	if (On(BehaviorType::seek))
 		m_behavior ^= BehaviorType::seek;
@@ -225,4 +233,9 @@ void SteeringBehavior::pursuitOff(){
 void SteeringBehavior::evadeOff(){
 	if (On(BehaviorType::evade))
 		m_behavior ^= BehaviorType::evade;
+}
+
+void SteeringBehavior::wanderOff(){
+	if (On(BehaviorType::wander))
+		m_behavior ^= BehaviorType::wander;
 }

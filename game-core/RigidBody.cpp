@@ -1,9 +1,9 @@
 #include "RigidBody.h"
-
+#include <cassert>
 
 RigidBody::RigidBody()
 {
-	Utility::configInstance()->getValue("default_mass", m_mass);
+	assert(Utility::configInstance()->getValue("default_mass", m_mass));
 }
 
 

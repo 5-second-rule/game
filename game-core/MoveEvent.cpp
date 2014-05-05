@@ -1,5 +1,6 @@
 #include "MoveEvent.h"
 #include "GameInstance.h"
+#include "ActionType.h"
 
 MoveEvent::MoveEvent( unsigned int playerGuid, MoveDirection direction ) : ActionEvent(playerGuid) {
 	this->direction = direction;

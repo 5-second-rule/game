@@ -16,8 +16,8 @@
     <Filter Include="States">
       <UniqueIdentifier>{fdd6a8de-e314-43aa-bb81-1bbafd66066f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Messages">
-      <UniqueIdentifier>{664fc271-fca6-43fe-a3a6-6646191946a1}</UniqueIdentifier>
+    <Filter Include="Types">
+      <UniqueIdentifier>{5bff2223-e64a-42fc-a14b-0ae676b8f1ca}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -57,9 +57,6 @@
     <ClInclude Include="MovingObjectStates.h">
       <Filter>States</Filter>
     </ClInclude>
-    <ClInclude Include="MessageType.h">
-      <Filter>Messages</Filter>
-    </ClInclude>
     <ClInclude Include="..\Common\FSM\State.h">
       <Filter>States</Filter>
     </ClInclude>
@@ -71,6 +68,9 @@
     </ClInclude>
     <ClInclude Include="ShootEvent.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ActionType.h">
+      <Filter>Types</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -110,5 +110,14 @@
     <ClCompile Include="ShootEvent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+    <None Include="..\Debug\resources\Config.ini">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\Debug\resources\ConfigTemplate.ini">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

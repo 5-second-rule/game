@@ -3,14 +3,16 @@
 #include "MovingObject.h"
 
 using namespace std;
-MovingObject::MovingObject() : GameObject(0)
+MovingObject::MovingObject(int objectType) : GameObject(objectType)
 {
-	Utility::configInstance()->getValue("default_friction", m_friction);
-	Utility::configInstance()->getValue("default_max_speed", m_max_speed);
-	Utility::configInstance()->getValue("default_max_force", m_max_force);
+	assert(Utility::configInstance()->getValue("default_friction", m_friction));
+	assert(Utility::configInstance()->getValue("default_max_speed", m_max_speed));
+	assert(Utility::configInstance()->getValue("default_max_force", m_max_force));
 
-	stateMachine = new StateMachine<MovingObject>(this);
-	stateMachine->SetCurrentState(Move::instance());
+	state_machine = new StateMachine<MovingObject>(this);
+	steering_behavior = new SteeringBehavior(this);
+	steering_behavior->wanderOn();
+	state_machine->SetCurrentState(Move::instance());
 }
 
 
@@ -21,6 +23,10 @@ MovingObject::~MovingObject()
 
 Vector4 MovingObject::heading(){
 	return normalize(m_velocity);
+}
+
+Vector4 MovingObject::front(){
+	return Vector4(1, 0, 0);
 }
 
 Vector4 MovingObject::top(){
@@ -39,18 +45,26 @@ void MovingObject::applyForce(Vector4 force){
 	m_force += force;
 }
 
-bool MovingObject::onMessage(Event* evt){
-	if (stateMachine->HandleMessage(*evt))
+bool MovingObject::handleEvent(Event* evt){
+	if (state_machine->handleEvent(evt))
 		return true;
-	return GameObject::onMessage(evt);
+	return GameObject::handleEvent(evt);
 }
 
 void MovingObject::update(float dt){
+	GameObject::update(dt);
 	Vector4 acceleration;
 	m_body->m_position += m_velocity * dt;
 	acceleration = m_force * (1 / m_body->m_mass);
-	m_force = -m_velocity * m_friction;
+	m_force = steering_behavior->calculate() - m_velocity * m_friction;
 	m_velocity += acceleration*dt;
+	position[0] = m_body->m_position.get(0);
+	position[1] = m_body->m_position.get(1);
+	position[2] = m_body->m_position.get(2);
+
+	if (VERBOSITY >= 10 && m_world->isTick(30)){
+		print();
+	}
 }
 
 void MovingObject::print(){

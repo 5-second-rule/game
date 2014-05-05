@@ -5,3 +5,5 @@
 #else
 #define GAMECOREDLL __declspec(dllimport)
 #endif
+
+#define VERBOSITY 10

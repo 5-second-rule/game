@@ -60,18 +60,18 @@ public:
     if (m_pCurrentState) m_pCurrentState->execute(m_pOwner);
   }
 
-  bool  HandleMessage(const Event& evt)const
+  bool  handleEvent(Event* evt)const
   {
     //first see if the current state is valid and that it can handle
     //the message
-    if (m_pCurrentState && m_pCurrentState->onMessage(m_pOwner, evt))
+    if (m_pCurrentState && m_pCurrentState->handleEvent(m_pOwner, evt))
     {
       return true;
     }
   
     //if not, and if a global state has been implemented, send 
     //the message to the global state
-    if (m_pGlobalState && m_pGlobalState->onMessage(m_pOwner, evt))
+    if (m_pGlobalState && m_pGlobalState->handleEvent(m_pOwner, evt))
     {
       return true;
     }

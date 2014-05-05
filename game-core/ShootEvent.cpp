@@ -1,4 +1,5 @@
 #include "ShootEvent.h"
+#include "ActionType.h"
 #include "GameInstance.h"
 
 ShootEvent::ShootEvent( unsigned int playerGuid ) : ActionEvent( playerGuid ) {

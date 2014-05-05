@@ -5,12 +5,6 @@
 #include "engine-core/World.h"
 #include "GameObjectCtorTable.h"
 
-GAMECOREDLL enum class ActionType {
-	MOVE,
-	USE,
-	SHOOT
-};
-
 class GAMECOREDLL GameInstance : public IEngineInstanceDelegate
 {
 private:

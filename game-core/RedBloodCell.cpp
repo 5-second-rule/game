@@ -1,7 +1,7 @@
 #include "RedBloodCell.h"
 
 
-RedBloodCell::RedBloodCell()
+RedBloodCell::RedBloodCell() : MovingObject(ObjectTypes::RedBlood)
 {
 	m_state_machine = new StateMachine<RedBloodCell>(this);
 }
@@ -11,10 +11,10 @@ RedBloodCell::~RedBloodCell()
 {
 }
 
-bool RedBloodCell::onMessage(Event* evt) {
-	if (m_state_machine->HandleMessage(*evt))
+bool RedBloodCell::handleEvent(Event* evt) {
+	if (m_state_machine->handleEvent(evt))
 		return true;
-	return MovingObject::onMessage(evt);
+	return MovingObject::handleEvent(evt);
 }
 
 void RedBloodCell::update(float dt){

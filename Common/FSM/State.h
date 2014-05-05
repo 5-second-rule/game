@@ -29,7 +29,7 @@ public:
 
   //this executes if the agent receives a message from the 
   //message dispatcher
-  virtual bool onMessage(entity_type*, const Event&)=0;
+  virtual bool handleEvent(entity_type*, Event*)=0;
 };
 
 #endif

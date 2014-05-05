@@ -20,21 +20,21 @@ private:
 	float m_friction;
 	float m_max_speed;
 	float m_max_force;
-	StateMachine<MovingObject> *stateMachine;
+	StateMachine<MovingObject> *state_machine;
 	SteeringBehavior* steering_behavior;
 
 public:
-	MovingObject();
+	MovingObject(int objectType);
 	~MovingObject();
 	// Heading(), side() and top() should return a base of the object local space
 	Vector4 heading(); // A normalized vector giving the direction the object is heading
+	Vector4 front();
 	Vector4 side();
 	Vector4 top();
 	float speed();
 	void applyForce(Vector4 force);
 	virtual void print();
 	virtual void update(float dt);
-	virtual bool onMessage(Event* evt);
-
+	virtual bool handleEvent(Event* evt);
 };
 

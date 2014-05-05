@@ -1,6 +1,7 @@
 #include "ServerGameInstance.h"
 #include "MoveEvent.h"
 #include "ShootEvent.h"
+#include "ActionType.h"
 
 #include "engine-core/ServerEngine.h"
 

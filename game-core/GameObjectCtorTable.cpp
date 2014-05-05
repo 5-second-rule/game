@@ -1,7 +1,7 @@
 #include "GameObjectCtorTable.h"
 
 #include "engine-core\IHasHandle.h"
-#include "GameObject.h"
+#include "RedBloodCell.h"
 #include "ObjectTypes.h"
 #include "GameInstance.h"
 
@@ -12,7 +12,7 @@ GameObjectCtorTable::GameObjectCtorTable() : ObjectCtorTable( OBJECT_TYPE_COUNT 
 GameObjectCtorTable::~GameObjectCtorTable() {}
 
 static IHasHandle * makeEcoli(ObjectCtorTable *thisObj) {
-	return new GameObject(ObjectTypes::Ecoli);
+	return new MovingObject(ObjectTypes::Ecoli);
 }
 
 static IHasHandle * makeChickenPox(ObjectCtorTable *thisObj) {

@@ -14,12 +14,11 @@ protected:
 	RigidBody* m_body;
 	World* world;
 
-	virtual void handleEvent(Event *evt);
-
+	virtual bool handleEvent(Event *evt);
+	void update(float dt);
 public:
 	GameObject(int objectType);
 	~GameObject();
 	RigidBody* getBody();
-	virtual bool onMessage(Event* evt);
 };
 

@@ -10,32 +10,40 @@ Transformation::~Transformation()
 }
 
 Vector4 Transformation::pointToWorldSpace(const Vector4 &point,
-	const Vector4 &agent_heading,
+	const Vector4 &agent_front,
 	const Vector4 &agent_side,
 	const Vector4 &agent_top,
 	const Vector4 &agent_position){
-	Matrix4 matTransformation;
-	float **m = rotationMatrix(agent_heading, agent_side, agent_top);
-	m[3][0] = point.x(); m[3][1] = point.y(); m[3][2] = point.z();
+	Vector4 tmp(point);
+	tmp.set(3, 1);
 
-	for (int i = 0; i < 4; ++i)
-	for (int j = 0; j < 4; ++j)
-		matTransformation.set(i, j, m[i][j]);
-
-	return matTransformation.multiply(point);
+	Matrix4 matTransformation = Matrix4::identity();
+	matTransformation = matTransformation * rotationMatrix(agent_front, agent_side, agent_top);
+	matTransformation = matTransformation * translationMatrix(agent_position);
+	return matTransformation.multiply(tmp);
 }
 
-float **Transformation::rotationMatrix(const Vector4 &i,
+Matrix4& Transformation::rotationMatrix(const Vector4 &i,
 	const Vector4 &j,
 	const Vector4 &k){
-	float **m = new float*[4];
-	for (int a = 0; a < 4; ++a)
-		m[a] = new float[4];
-	m[0][0] = i.x(); m[0][1] = i.y(); m[0][2] = i.z(); m[0][3] = 0;
-	m[0][0] = j.x(); m[0][1] = j.y(); m[0][2] = j.z(); m[0][3] = 0;
-	m[0][0] = k.x(); m[0][1] = k.y(); m[0][2] = k.z(); m[0][3] = 0;
-	m[0][0] = 0; m[0][1] = 0; m[0][2] = 0; m[0][3] = 1;
+	float m[4][4] = { { 0 } };
 
-	return m;
+	m[0][0] = i.x(); m[0][1] = j.x(); m[0][2] = k.x(); m[0][3] = 0;
+	m[1][0] = i.y(); m[1][1] = j.y(); m[1][2] = k.y(); m[1][3] = 0;
+	m[2][0] = i.z(); m[2][1] = j.z(); m[2][2] = k.z(); m[2][3] = 0;
+	m[3][0] = 0; m[3][1] = 0; m[3][2] = 0; m[3][3] = 1;
+
+	return Matrix4(m);
+}
+
+Matrix4& Transformation::translationMatrix(const Vector4 &origin){
+	float m[4][4] = { { 0 } };
+
+	m[0][0] = m[1][1] = m[2][2] = m[3][3] = 1;
+	m[0][3] = -origin[0];
+	m[1][3] = -origin[1];
+	m[2][3] = -origin[2];
+
+	return Matrix4(m);
 }
 

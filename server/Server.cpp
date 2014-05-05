@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include "game-core/ServerGameInstance.h"
+#include "../engine/engine-core/ConfigSettings.h"
 
 using namespace std;
 
@@ -21,11 +22,11 @@ int main(int argc, char* argv[])
 	cout << "Initializing Server... Please Wait!\n";
 	gameInstance = new ServerGameInstance(DT);
 	gameInstance->init();
-
 	signal( SIGINT, SignalHandler );
 	signal( SIGTERM, SignalHandler );
 
 	cout << "Server Running...\n\n";
+
 	gameInstance->run();
 	
 	cout << "Server is Stopping...\n\n";

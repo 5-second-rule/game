@@ -5,6 +5,8 @@
 
 #include "MovingObject.h"
 #include "Transformation.h"
+#include "MoveEvent.h"
+#include "ActionType.h"
 
 class MovingObject;
 
@@ -15,7 +17,7 @@ private:
 	Stop();
 public:
 	static Stop* instance();
-	bool onMessage(MovingObject *object, const Telegram&);
+	bool handleEvent(MovingObject *object, Event* evt);
 	void enter(MovingObject *object);
 	void execute(MovingObject *object);
 	void exit(MovingObject *object);
@@ -39,7 +41,7 @@ private:
 	Move();
 public:
 	static Move* instance();
-	bool onMessage(MovingObject *object, const Telegram&);
+	bool handleEvent(MovingObject *object, Event* evt);
 	void enter(MovingObject *object);
 	void execute(MovingObject *object);
 	void exit(MovingObject *object);

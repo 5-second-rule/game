@@ -1,6 +1,7 @@
 #pragma once
 
 #include "MovingObject.h"
+#include "ObjectTypes.h"
 
 class RedBloodCell : public MovingObject
 {
@@ -8,7 +9,7 @@ class RedBloodCell : public MovingObject
 public:
 	RedBloodCell();
 	~RedBloodCell();
-	bool onMessage(Event* msg);
+	bool handleEvent(Event* msg);
 	void update(float dt);
 };
 

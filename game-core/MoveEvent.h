@@ -3,12 +3,12 @@
 #include "engine-core/ActionEvent.h"
 
 enum class MoveDirection {
-	UP,
-	DOWN,
-	LEFT,
-	RIGHT,
-	FORWARD,
-	BACK
+	UP = 0,
+	DOWN = 1,
+	LEFT = 2,
+	RIGHT = 3,
+	FORWARD = 4 ,
+	BACK = 5
 };
 
 class GAMECOREDLL MoveEvent : public ActionEvent {
