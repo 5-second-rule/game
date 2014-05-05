@@ -10,15 +10,15 @@ MoveEvent::MoveEvent( unsigned int playerGuid, MoveDirection direction ) : Actio
 MoveEvent::~MoveEvent() {}
 
 
-void MoveEvent::reserveSize( BufferBuilder *buffer ) {
+void MoveEvent::reserveSize( IReserve& buffer ) {
 	ActionEvent::reserveSize( buffer );
-	buffer->reserve( sizeof( this->direction ) );
+	buffer.reserve( sizeof( this->direction ) );
 }
 
-void MoveEvent::fillBuffer( BufferBuilder *buffer ) {
+void MoveEvent::fillBuffer( IFill& buffer ) {
 	ActionEvent::fillBuffer( buffer );
-	*reinterpret_cast<MoveDirection*>(buffer->getPointer()) = this->direction;
-	buffer->pop();
+	*reinterpret_cast<MoveDirection*>(buffer.getPointer()) = this->direction;
+	buffer.filled();
 }
 
 

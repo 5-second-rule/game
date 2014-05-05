@@ -8,7 +8,7 @@ public:
 	ShootEvent( unsigned int playerGuid );
 	~ShootEvent();
 
-	virtual void reserveSize( BufferBuilder *buffer );
-	virtual void fillBuffer( BufferBuilder *buffer );
+	virtual void reserveSize( IReserve& buffer );
+	virtual void fillBuffer( IFill& buffer );
 	virtual void deserialize( BufferReader& buffer );
 };
