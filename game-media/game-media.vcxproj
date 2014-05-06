@@ -76,10 +76,12 @@
     <ClInclude Include="game-media.h" />
     <ClInclude Include="RenderableGameInstance.h" />
     <ClInclude Include="RenderableGameObjectCtorTable.h" />
+    <ClInclude Include="RenderableMovingObject.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RenderableGameInstance.cpp" />
     <ClCompile Include="RenderableGameObjectCtorTable.cpp" />
+    <ClCompile Include="RenderableMovingObject.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

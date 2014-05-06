@@ -24,5 +24,10 @@ public:
 	GameObject(int objectType);
 	~GameObject();
 	RigidBody* getBody();
+
+	virtual void reserveSize(IReserve&);
+	virtual void fillBuffer(IFill&);
+
+	virtual void deserialize(BufferReader& buffer);
 };
 

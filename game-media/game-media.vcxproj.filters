@@ -24,12 +24,18 @@
     <ClInclude Include="RenderableGameInstance.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="RenderableMovingObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RenderableGameObjectCtorTable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="RenderableGameInstance.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderableMovingObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

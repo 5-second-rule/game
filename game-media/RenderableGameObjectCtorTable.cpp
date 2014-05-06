@@ -2,6 +2,8 @@
 #include "game-core/ObjectTypes.h"
 #include "engine-renderer/RenderableObject.h"
 
+#include "RenderableMovingObject.h"
+
 #include "RenderableGameInstance.h"
 
 RenderableGameObjectCtorTable::RenderableGameObjectCtorTable() {
@@ -13,7 +15,7 @@ RenderableGameObjectCtorTable::~RenderableGameObjectCtorTable() {
 static IHasHandle * makeRenderableEcoli(ObjectCtorTable *thisObj) {
 	RenderableGameObjectCtorTable *table = (RenderableGameObjectCtorTable *)thisObj;
 
-	return new RenderableObject(
+	return new RenderableMovingObject(
 		ObjectTypes::Ecoli,
 		RenderableGameInstance::getGlobalInstance()
 			->getRenderingEngineInstance()
