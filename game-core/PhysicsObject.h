@@ -8,7 +8,7 @@
 #include "game-core.h"
 #include "RigidBody.h"
 
-class GAMECOREDLL GameObject : public BaseObject
+class GAMECOREDLL PhysicsObject : public BaseObject
 {
 protected:
 	RigidBody* m_body;
@@ -21,8 +21,8 @@ protected:
 	virtual bool handleEvent(Event *evt);
 	void update(float dt);
 public:
-	GameObject(int objectType);
-	~GameObject();
+	PhysicsObject(int objectType);
+	~PhysicsObject();
 	RigidBody* getBody();
 
 	virtual void reserveSize(IReserve&);

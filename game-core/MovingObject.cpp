@@ -3,7 +3,7 @@
 #include "MovingObject.h"
 
 using namespace std;
-MovingObject::MovingObject(int objectType) : GameObject(objectType)
+MovingObject::MovingObject(int objectType) : PhysicsObject(objectType)
 {
 	assert(Utility::configInstance()->getValue("default_friction", m_friction));
 	assert(Utility::configInstance()->getValue("default_max_speed", m_max_speed));
@@ -48,11 +48,11 @@ void MovingObject::applyForce(Vector4 force){
 bool MovingObject::handleEvent(Event* evt){
 	if (state_machine->handleEvent(evt))
 		return true;
-	return GameObject::handleEvent(evt);
+	return PhysicsObject::handleEvent(evt);
 }
 
 void MovingObject::update(float dt){
-	GameObject::update(dt);
+	PhysicsObject::update(dt);
 	Vector4 acceleration;
 	m_body->m_position += m_velocity * dt;
 	acceleration = m_force * (1 / m_body->m_mass);

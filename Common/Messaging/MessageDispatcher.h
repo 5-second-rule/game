@@ -15,7 +15,7 @@
 #include <string>
 
 #include "Telegram.h"
-#include "..\..\game-core\GameObject.h"
+#include "..\..\game-core\PhysicsObject.h"
 
 //to make life easier...
 #define Dispatcher MessageDispatcher::Instance()
@@ -38,7 +38,7 @@ private:
   //this method is utilized by DispatchMsg or DispatchDelayedMessages.
   //This method calls the message handling member function of the receiving
   //entity, pReceiver, with the newly created telegram
-  void Discharge(GameObject* pReceiver, const Telegram& msg);
+  void Discharge(PhysicsObject* pReceiver, const Telegram& msg);
 
   MessageDispatcher(){}
 

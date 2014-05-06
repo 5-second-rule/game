@@ -1,34 +1,34 @@
-#include "GameObject.h"
+#include "PhysicsObject.h"
 #include "GameInstance.h"
 #include "MoveEvent.h"
 
-GameObject::GameObject(int objectType) : BaseObject(objectType) {
+PhysicsObject::PhysicsObject(int objectType) : BaseObject(objectType) {
 	m_body = new RigidBody();
 	world = nullptr;
 }
 
 
-GameObject::~GameObject() {
+PhysicsObject::~PhysicsObject() {
 }
 
-RigidBody* GameObject::getBody() {
+RigidBody* PhysicsObject::getBody() {
 	return nullptr;
 }
 
-void GameObject::update(float dt){
+void PhysicsObject::update(float dt){
 	BaseObject::update(dt);
 }
 
-bool GameObject::handleEvent(Event * evt) {
+bool PhysicsObject::handleEvent(Event * evt) {
 	return BaseObject::handleEvent(evt);
 }
 
-void GameObject::reserveSize(IReserve& buffer) {
+void PhysicsObject::reserveSize(IReserve& buffer) {
 	BaseObject::reserveSize(buffer);
 	buffer.reserve(sizeof(float[3]) * 2);
 }
 
-void GameObject::fillBuffer(IFill& buffer) {
+void PhysicsObject::fillBuffer(IFill& buffer) {
 	BaseObject::fillBuffer(buffer);
 	char* buf = buffer.getPointer();
 	
@@ -38,7 +38,7 @@ void GameObject::fillBuffer(IFill& buffer) {
 	buffer.filled();
 }
 
-void GameObject::deserialize(BufferReader& reader) {
+void PhysicsObject::deserialize(BufferReader& reader) {
 	BaseObject::deserialize(reader);
 
 	const char* buf = reader.getPointer();

@@ -4,14 +4,14 @@
 #include "..\Common\FSM\StateMachine.h"
 
 #include "game-core.h"
-#include "GameObject.h"
+#include "PhysicsObject.h"
 #include "MovingObjectStates.h"
 #include "SteeringBehavior.h"
 
 class GAMECOREDLL SteeringBehavior;
 
 using namespace Utility;
-class GAMECOREDLL MovingObject : public GameObject
+class GAMECOREDLL MovingObject : public PhysicsObject
 {
 	friend class SteeringBehavior;
 private:
