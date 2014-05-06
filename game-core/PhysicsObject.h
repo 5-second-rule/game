@@ -12,7 +12,6 @@ class GAMECOREDLL PhysicsObject : public BaseObject
 {
 protected:
 	RigidBody* m_body;
-	World* world;
 
 	float position[3];
 	float force[3];

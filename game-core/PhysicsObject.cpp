@@ -4,7 +4,6 @@
 
 PhysicsObject::PhysicsObject(int objectType) : BaseObject(objectType) {
 	m_body = new RigidBody();
-	world = nullptr;
 }
 
 
