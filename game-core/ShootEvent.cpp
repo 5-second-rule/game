@@ -2,9 +2,9 @@
 #include "ActionType.h"
 #include "GameInstance.h"
 
-ShootEvent::ShootEvent( unsigned int playerGuid ) : ActionEvent( playerGuid ) {
-	this->actionType = static_cast<int>(ActionType::SHOOT);
-}
+ShootEvent::ShootEvent(unsigned int playerGuid)
+	: ActionEvent(playerGuid, static_cast<int>(ShootEvent::ACTIONTYPE) )
+{}
 
 ShootEvent::~ShootEvent() {}
 

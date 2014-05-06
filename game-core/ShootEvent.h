@@ -1,9 +1,11 @@
 #pragma once
 #include "game-core.h"
 #include "engine-core/ActionEvent.h"
+#include "ActionType.h"
 
 class GAMECOREDLL ShootEvent : public ActionEvent {
 public:
+	static const ActionType ACTIONTYPE = ActionType::SHOOT;
 
 	ShootEvent( unsigned int playerGuid );
 	~ShootEvent();

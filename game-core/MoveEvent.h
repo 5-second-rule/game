@@ -1,6 +1,7 @@
 #pragma once
 #include "game-core.h"
 #include "engine-core/ActionEvent.h"
+#include "ActionType.h"
 
 enum class MoveDirection {
 	UP = 0,
@@ -13,6 +14,9 @@ enum class MoveDirection {
 
 class GAMECOREDLL MoveEvent : public ActionEvent {
 public:
+
+	static const ActionType ACTIONTYPE = ActionType::MOVE;
+
 	MoveDirection direction;
 
 	MoveEvent( unsigned int playerGuid, MoveDirection direction );

@@ -17,7 +17,7 @@ bool Move::handleEvent(MovingObject* object, Event *evt){
 	if (actionEvt == nullptr)
 		return false;
 
-	switch (ActionType(actionEvt->actionType)) {
+	switch (ActionType(actionEvt->getActionType())) {
 	case ActionType::MOVE: {
 		MoveEvent *moveEvent = dynamic_cast<MoveEvent *>(evt);
 		if (moveEvent == nullptr)

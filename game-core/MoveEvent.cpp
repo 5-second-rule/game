@@ -1,10 +1,10 @@
 #include "MoveEvent.h"
 #include "GameInstance.h"
-#include "ActionType.h"
 
-MoveEvent::MoveEvent( unsigned int playerGuid, MoveDirection direction ) : ActionEvent(playerGuid) {
+MoveEvent::MoveEvent( unsigned int playerGuid, MoveDirection direction )
+	: ActionEvent(playerGuid, static_cast<int>(MoveEvent::ACTIONTYPE))
+{
 	this->direction = direction;
-	this->actionType = static_cast<int>(ActionType::MOVE);
 }
 
 
