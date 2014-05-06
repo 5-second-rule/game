@@ -2,7 +2,7 @@
 #include "GameInstance.h"
 #include "MoveEvent.h"
 
-GameObject::GameObject(int objectType) : BaseObject() {
+GameObject::GameObject(int objectType) : BaseObject(objectType) {
 	m_body = new RigidBody();
 	world = nullptr;
 }

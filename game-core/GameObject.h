@@ -14,6 +14,10 @@ protected:
 	RigidBody* m_body;
 	World* world;
 
+	float position[3];
+	float force[3];
+
+
 	virtual bool handleEvent(Event *evt);
 	void update(float dt);
 public:
