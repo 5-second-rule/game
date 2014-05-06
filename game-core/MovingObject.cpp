@@ -62,9 +62,6 @@ void MovingObject::update(float dt){
 	position[1] = m_body->m_position.get(1);
 	position[2] = m_body->m_position.get(2);
 
-	if (VERBOSITY >= 10 && m_world->isTick(30)){
-		print();
-	}
 }
 
 void MovingObject::print(){

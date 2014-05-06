@@ -47,17 +47,13 @@ bool Move::handleEvent(MovingObject* object, Event *evt){
 			break;
 		}
 
-		if (object->getWorld()->isTick(30)){
-			cout << "Before: " << force.toString();
-		}
+
 		forceToApply = force; Transformation::pointToWorldSpace(force,
 			object->front(),
 			object->side(),
 			object->top(),
 			Vector4(0,0,0));
-		if (object->getWorld()->isTick(30)){
-			cout << "After: " << forceToApply.toString();
-		}
+
 		object->applyForce(forceToApply);
 		return true;
 		break;
