@@ -102,7 +102,7 @@ Vector4 SteeringBehavior::wander(){
 
 	m_wander_target = Utility::normalize(m_wander_target);
 	m_wander_target *= m_wander_radius;
-	Vector4 target = m_wander_target + Vector4(m_wander_distance, 0, 0);
+	Vector4 target = m_wander_target + Vector4(0, 0, m_wander_distance);
 	if (VERBOSITY >= 10 && m_owner->getWorld()->isTick(30))
 		cout << "target local: " << target.toString() << "\t" << m_owner->m_body->m_position.toString() << endl;
 	/*target = Transformation::pointToWorldSpace(target,

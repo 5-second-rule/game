@@ -26,22 +26,22 @@ bool Move::handleEvent(MovingObject* object, Event *evt){
 
 		switch (moveEvent->direction) {
 		case MoveDirection::UP:
-			force.set(0, 0, forceModule);
-			break;
-		case MoveDirection::DOWN:
-			force.set(0, 0, -forceModule);
-			break;
-		case MoveDirection::RIGHT:
 			force.set(0, forceModule, 0);
 			break;
-		case MoveDirection::LEFT:
+		case MoveDirection::DOWN:
 			force.set(0, -forceModule, 0);
 			break;
-		case MoveDirection::FORWARD:
+		case MoveDirection::RIGHT:
 			force.set(forceModule, 0, 0);
 			break;
-		case MoveDirection::BACK:
+		case MoveDirection::LEFT:
 			force.set(-forceModule, 0, 0);
+			break;
+		case MoveDirection::FORWARD:
+			force.set(0, 0, forceModule);
+			break;
+		case MoveDirection::BACK:
+			force.set(0, 0, -forceModule);
 			break;
 		default:
 			break;
