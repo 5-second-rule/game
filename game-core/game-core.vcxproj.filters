@@ -13,9 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="States">
-      <UniqueIdentifier>{fdd6a8de-e314-43aa-bb81-1bbafd66066f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Types">
       <UniqueIdentifier>{5bff2223-e64a-42fc-a14b-0ae676b8f1ca}</UniqueIdentifier>
     </Filter>
@@ -70,7 +67,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ClassDiagram.cd" />
     <None Include="..\Debug\resources\Config.ini">
       <Filter>Resource Files</Filter>
     </None>

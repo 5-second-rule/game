@@ -1,5 +1,8 @@
 #include "MovingObject.h"
 
+#include "MoveEvent.h"
+#include "ActionType.h"
+
 #define MAX_SPEED 100
 #define MAX_FORCE 100
 
@@ -26,9 +29,37 @@ void MovingObject::applyForce(const Vector4& force){
 	this->force += force;
 }
 
-bool MovingObject::handleEvent(Event* evt){
-	//TODO - handle MoveEvents
-	return true;
+bool MovingObject::handleEvent(Event *evt){
+
+	ActionEvent *actionEvt = Event::cast<ActionEvent>(evt);
+	if (actionEvt == nullptr)
+		return false;
+
+	switch (ActionType(actionEvt->getActionType())) {
+	case ActionType::MOVE:
+	{
+		MoveEvent *moveEvent = ActionEvent::cast<MoveEvent>(actionEvt);
+		if (moveEvent == nullptr)
+			return false;
+
+		const float MOVE_FORCE = 10.0f;
+
+		Vector4 force(moveEvent->direction.x * MOVE_FORCE,
+			moveEvent->direction.y * MOVE_FORCE,
+			moveEvent->direction.z * MOVE_FORCE
+			);
+
+		this->applyForce(force);
+		return true;
+		break;
+	}
+	case ActionType::SHOOT:
+		//TODO: create projectile and set it in motion
+		break;
+	default:
+		break;
+	}
+	return false;
 }
 
 void MovingObject::update(float dt){
