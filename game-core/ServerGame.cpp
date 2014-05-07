@@ -31,7 +31,7 @@ ActionEvent* ServerGame::MakeActionEvent( int actionType, unsigned int playerGui
 	
 	switch( ActionType( actionType ) ) {
 		case ActionType::MOVE:
-			evt = new MoveEvent( playerGuid, *(reinterpret_cast<const MoveDirection*>(data)) );
+			evt = new MoveEvent(playerGuid, *(reinterpret_cast<const MoveEvent::MoveDirection*>(data)));
 			break;
 		case ActionType::SHOOT:
  			evt = new ShootEvent( playerGuid );
