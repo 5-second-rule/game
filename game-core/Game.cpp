@@ -1,6 +1,8 @@
 #include "Game.h"
-#include "GameObjectCtorTable.h"
 
+#include "GameObjectCtorTable.h"
+#include "ActionType.h"
+#include "MoveEvent.h"
 
 Game * Game::globalInstance;
 
@@ -50,5 +52,9 @@ Game * Game::getGlobalInstance() {
 }
 
 ActionEvent* Game::MakeActionEvent( int actionType, unsigned int playerGuid, const char* data ) {
-	return nullptr;
+	switch (ActionType(actionType)) {
+	case ActionType::MOVE:
+		return new MoveEvent(playerGuid, data);
+		break;
+	}
 }

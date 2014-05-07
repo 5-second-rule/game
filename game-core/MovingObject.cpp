@@ -11,7 +11,9 @@ const float MovingObject::max_force = MAX_FORCE;
 
 MovingObject::MovingObject(int objectType)
 	: BaseObject(objectType)
-{}
+{
+	
+}
 
 
 MovingObject::~MovingObject() {}

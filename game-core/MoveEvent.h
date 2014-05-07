@@ -16,6 +16,7 @@ public:
 	MoveDirection direction;
 
 	MoveEvent( unsigned int playerGuid, MoveDirection direction );
+	MoveEvent(unsigned int playerGuid, const char* data);
 	~MoveEvent();
 
 	virtual void reserveSize( IReserve& buffer );

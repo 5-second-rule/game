@@ -7,6 +7,12 @@ MoveEvent::MoveEvent( unsigned int playerGuid, MoveDirection direction )
 	this->direction = direction;
 }
 
+MoveEvent::MoveEvent(unsigned int playerGuid, const char* data)
+	: ActionEvent(playerGuid, static_cast<int>(MoveEvent::ACTIONTYPE))
+{
+	this->direction = *reinterpret_cast<const MoveDirection*>(data);
+}
+
 
 MoveEvent::~MoveEvent() {}
 
