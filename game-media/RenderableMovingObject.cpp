@@ -10,6 +10,6 @@ RenderableMovingObject::RenderableMovingObject(int type, Transmission::Model* mo
 RenderableMovingObject::~RenderableMovingObject() {}
 
 void RenderableMovingObject::render() {
-	this->setPosition(this->position);
+	this->setPosition(this->position.getPointer());
 	RenderableObject::render();
 }

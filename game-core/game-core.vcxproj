@@ -47,14 +47,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>
-      </AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)../common/</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_IS_GAME_CORE;_WINDLL;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);engine-core.lib;Common.lib</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);engine-core.lib</AdditionalDependencies>
     </Link>
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>
@@ -75,37 +74,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\Common\FSM\State.h" />
-    <ClInclude Include="..\Common\FSM\StateMachine.h" />
     <ClInclude Include="ActionType.h" />
     <ClInclude Include="game-core.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="PhysicsObject.h" />
     <ClInclude Include="GameObjectCtorTable.h" />
     <ClInclude Include="MoveEvent.h" />
     <ClInclude Include="MovingObject.h" />
-    <ClInclude Include="MovingObjectStates.h" />
     <ClInclude Include="ObjectTypes.h" />
-    <ClInclude Include="RedBloodCell.h" />
-    <ClInclude Include="RigidBody.h" />
     <ClInclude Include="ServerGame.h" />
     <ClInclude Include="ShootEvent.h" />
-    <ClInclude Include="SteeringBehavior.h" />
-    <ClInclude Include="Transformation.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp" />
-    <ClCompile Include="PhysicsObject.cpp" />
     <ClCompile Include="GameObjectCtorTable.cpp" />
     <ClCompile Include="MoveEvent.cpp" />
     <ClCompile Include="MovingObject.cpp" />
-    <ClCompile Include="MovingObjectStates.cpp" />
-    <ClCompile Include="RedBloodCell.cpp" />
-    <ClCompile Include="RigidBody.cpp" />
     <ClCompile Include="ServerGame.cpp" />
     <ClCompile Include="ShootEvent.cpp" />
-    <ClCompile Include="SteeringBehavior.cpp" />
-    <ClCompile Include="Transformation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Debug\resources\Config.ini" />

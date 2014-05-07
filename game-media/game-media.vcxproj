@@ -49,6 +49,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_IS_GAME_MEDIA;_WINDLL;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BrowseInformation>true</BrowseInformation>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\common\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

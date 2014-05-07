@@ -1,6 +1,6 @@
 #include "ShootEvent.h"
 #include "ActionType.h"
-#include "GameInstance.h"
+#include "Game.h"
 
 ShootEvent::ShootEvent(unsigned int playerGuid)
 	: ActionEvent(playerGuid, static_cast<int>(ShootEvent::ACTIONTYPE) )

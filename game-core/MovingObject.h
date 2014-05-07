@@ -1,40 +1,50 @@
 #pragma once
-
-#include "..\Common\Messaging\Telegram.h"
-#include "..\Common\FSM\StateMachine.h"
-
 #include "game-core.h"
-#include "PhysicsObject.h"
-#include "MovingObjectStates.h"
-#include "SteeringBehavior.h"
 
-class GAMECOREDLL SteeringBehavior;
+#include "engine-core/BaseObject.h"
 
-using namespace Utility;
-class GAMECOREDLL MovingObject : public PhysicsObject
+
+#include "common/Vector4.h"
+#include "common/Matrix4.h"
+using namespace Common;
+
+struct MovingObjectData {
+	float position[3];
+	float velocity[3];
+	float force[3];
+	float friction;
+	float mass;
+};
+
+class GAMECOREDLL MovingObject : public BaseObject
 {
-	friend class SteeringBehavior;
-private:
-	Vector4 m_velocity;
-	Vector4 m_force;
-	float m_friction;
-	float m_max_speed;
-	float m_max_force;
-	StateMachine<MovingObject> *state_machine;
-	SteeringBehavior* steering_behavior;
+protected:
+	Vector4 position;
+	Vector4 velocity;
+	Vector4 force;
+	
+	float friction;
+	float mass;
+
+	static const float max_speed;
+	static const float max_force;
 
 public:
 	MovingObject(int objectType);
 	~MovingObject();
-	// Heading(), side() and top() should return a base of the object local space
+
 	Vector4 heading(); // A normalized vector giving the direction the object is heading
-	Vector4 front();
-	Vector4 side();
-	Vector4 top();
 	float speed();
-	void applyForce(Vector4 force);
-	virtual void print();
+
+	void applyForce(const Vector4& force);
+
 	virtual void update(float dt);
 	virtual bool handleEvent(Event* evt);
+
+	// ISerializable Methods
+	virtual void reserveSize(IReserve&);
+	virtual void fillBuffer(IFill&);
+
+	virtual void deserialize(BufferReader& buffer);
 };
 
