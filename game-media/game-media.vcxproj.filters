@@ -21,10 +21,10 @@
     <ClInclude Include="game-media.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RenderableGameInstance.h">
+    <ClInclude Include="RenderableMovingObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RenderableMovingObject.h">
+    <ClInclude Include="RenderableGame.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -32,10 +32,10 @@
     <ClCompile Include="RenderableGameObjectCtorTable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="RenderableGameInstance.cpp">
+    <ClCompile Include="RenderableMovingObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="RenderableMovingObject.cpp">
+    <ClCompile Include="RenderableGame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

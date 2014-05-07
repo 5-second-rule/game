@@ -2,7 +2,7 @@
 
 #include "SteeringBehavior.h"
 
-#include "GameInstance.h"
+#include "Game.h"
 
 
 SteeringBehavior::SteeringBehavior(MovingObject *owner) : m_behavior(BehaviorType::none)
@@ -61,7 +61,7 @@ Vector4 SteeringBehavior::pursuit(Handle *p_evader_handle){
 	Vector4 toEvader;
 	float relativeHeading, look_ahead_time;
 
-	tmp = GameInstance::getGlobalInstance()->getEngineInstance()->world->get(p_evader_handle);
+	tmp = Game::getGlobalInstance()->getEngineInstance()->world->get(p_evader_handle);
 	if (evader = dynamic_cast<MovingObject*>(tmp)){
 		toEvader = evader->m_body->m_position - m_owner->m_body->m_position;
 		relativeHeading = evader->heading().dot(m_owner->heading());
@@ -85,7 +85,7 @@ Vector4 SteeringBehavior::evade(Handle *p_pursuer_handle){
 	Vector4 toPursuer;
 	float look_ahead_time;
 
-	tmp = GameInstance::getGlobalInstance()->getEngineInstance()->world->get(p_pursuer_handle);
+	tmp = Game::getGlobalInstance()->getEngineInstance()->world->get(p_pursuer_handle);
 	if (pursuer = dynamic_cast<MovingObject*>(tmp)){
 		toPursuer = pursuer->m_body->m_position - m_owner->m_body->m_position;
 		look_ahead_time = toPursuer.length() / (m_owner->m_max_speed + pursuer->speed());

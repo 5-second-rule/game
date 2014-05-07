@@ -1,18 +1,18 @@
-#include "ServerGameInstance.h"
+#include "ServerGame.h"
 #include "MoveEvent.h"
 #include "ShootEvent.h"
 #include "ActionType.h"
 
 #include "engine-core/ServerEngine.h"
 
-ServerGameInstance::ServerGameInstance(float frameTime) {
+ServerGame::ServerGame(float frameTime) {
 	this->frameTime = frameTime;
 }
 
-ServerGameInstance::~ServerGameInstance() {
+ServerGame::~ServerGame() {
 }
 
-Engine * ServerGameInstance::makeEngineInstance(GameObjectCtorTable *ctors) {
+Engine * ServerGame::makeEngineInstance(GameObjectCtorTable *ctors) {
 	Engine* eng  = new ServerEngine(
 		new World(),
 		ctors,
@@ -22,11 +22,11 @@ Engine * ServerGameInstance::makeEngineInstance(GameObjectCtorTable *ctors) {
 	return eng;
 }
 
-void ServerGameInstance::stop() {
+void ServerGame::stop() {
 	dynamic_cast<ServerEngine *>(this->getEngineInstance())->stop();
 }
 
-ActionEvent* ServerGameInstance::MakeActionEvent( int actionType, unsigned int playerGuid, const char* data ) {
+ActionEvent* ServerGame::MakeActionEvent( int actionType, unsigned int playerGuid, const char* data ) {
 	ActionEvent* evt = nullptr;
 	
 	switch( ActionType( actionType ) ) {

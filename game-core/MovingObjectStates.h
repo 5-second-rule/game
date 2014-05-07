@@ -10,7 +10,7 @@
 
 class MovingObject;
 
-using namespace Game;
+using namespace MsgGame;
 class Stop : public State<MovingObject>
 {
 private:

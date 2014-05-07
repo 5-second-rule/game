@@ -23,7 +23,7 @@ Vector4 Transformation::pointToWorldSpace(const Vector4 &point,
 	return matTransformation.multiply(tmp);
 }
 
-Matrix4& Transformation::rotationMatrix(const Vector4 &i,
+Matrix4 Transformation::rotationMatrix(const Vector4 &i,
 	const Vector4 &j,
 	const Vector4 &k){
 	float m[4][4] = { { 0 } };
@@ -36,7 +36,7 @@ Matrix4& Transformation::rotationMatrix(const Vector4 &i,
 	return Matrix4(m);
 }
 
-Matrix4& Transformation::translationMatrix(const Vector4 &origin){
+Matrix4 Transformation::translationMatrix(const Vector4 &origin){
 	float m[4][4] = { { 0 } };
 
 	m[0][0] = m[1][1] = m[2][2] = m[3][3] = 1;

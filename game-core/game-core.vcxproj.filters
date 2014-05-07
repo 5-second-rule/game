@@ -30,9 +30,6 @@
     <ClInclude Include="game-core.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ServerGameInstance.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="MovingObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -43,9 +40,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SteeringBehavior.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GameInstance.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RedBloodCell.h">
@@ -72,12 +66,15 @@
     <ClInclude Include="PhysicsObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ServerGame.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameObjectCtorTable.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ServerGameInstance.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MovingObject.cpp">
@@ -90,9 +87,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SteeringBehavior.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GameInstance.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="RedBloodCell.cpp">
@@ -108,6 +102,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PhysicsObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ServerGame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

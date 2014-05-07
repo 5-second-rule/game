@@ -3,7 +3,7 @@
 #include <csignal>
 #include <iostream>
 
-#include "game-core/ServerGameInstance.h"
+#include "game-core/ServerGame.h"
 #include "../engine/engine-core/ConfigSettings.h"
 
 using namespace std;
@@ -15,12 +15,12 @@ void SignalHandler( int signal );
 const float DT = 1.0f / 30.0f; // delta time between loops in sec
 
 //globals
-ServerGameInstance *gameInstance;
+ServerGame *gameInstance;
 
 int main(int argc, char* argv[])
 {
 	cout << "Initializing Server... Please Wait!\n";
-	gameInstance = new ServerGameInstance(DT);
+	gameInstance = new ServerGame(DT);
 	gameInstance->init();
 	signal( SIGINT, SignalHandler );
 	signal( SIGTERM, SignalHandler );

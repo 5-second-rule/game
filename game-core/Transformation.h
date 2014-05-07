@@ -20,9 +20,9 @@ public:
 		const Vector4 &agend_top,
 		const Vector4 &agent_position);
 
-	static Matrix4& rotationMatrix(const Vector4 &i,
+	static Matrix4 rotationMatrix(const Vector4 &i,
 		const Vector4 &j,
 		const Vector4 &k);
 
-	static Matrix4& translationMatrix(const Vector4 &origin);
+	static Matrix4 translationMatrix(const Vector4 &origin);
 };

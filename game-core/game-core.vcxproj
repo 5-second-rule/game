@@ -79,7 +79,7 @@
     <ClInclude Include="..\Common\FSM\StateMachine.h" />
     <ClInclude Include="ActionType.h" />
     <ClInclude Include="game-core.h" />
-    <ClInclude Include="GameInstance.h" />
+    <ClInclude Include="Game.h" />
     <ClInclude Include="PhysicsObject.h" />
     <ClInclude Include="GameObjectCtorTable.h" />
     <ClInclude Include="MoveEvent.h" />
@@ -88,13 +88,13 @@
     <ClInclude Include="ObjectTypes.h" />
     <ClInclude Include="RedBloodCell.h" />
     <ClInclude Include="RigidBody.h" />
-    <ClInclude Include="ServerGameInstance.h" />
+    <ClInclude Include="ServerGame.h" />
     <ClInclude Include="ShootEvent.h" />
     <ClInclude Include="SteeringBehavior.h" />
     <ClInclude Include="Transformation.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GameInstance.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="PhysicsObject.cpp" />
     <ClCompile Include="GameObjectCtorTable.cpp" />
     <ClCompile Include="MoveEvent.cpp" />
@@ -102,7 +102,7 @@
     <ClCompile Include="MovingObjectStates.cpp" />
     <ClCompile Include="RedBloodCell.cpp" />
     <ClCompile Include="RigidBody.cpp" />
-    <ClCompile Include="ServerGameInstance.cpp" />
+    <ClCompile Include="ServerGame.cpp" />
     <ClCompile Include="ShootEvent.cpp" />
     <ClCompile Include="SteeringBehavior.cpp" />
     <ClCompile Include="Transformation.cpp" />

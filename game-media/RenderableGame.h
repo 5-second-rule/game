@@ -1,11 +1,11 @@
 #pragma once
 
 #include "game-media.h"
-#include "game-core/GameInstance.h"
+#include "game-core/Game.h"
 #include "engine-core/World.h"
 #include "engine-renderer/RenderingEngine.h"
 
-class GAMEMEDIADLL RenderableGameInstance : public GameInstance, IRenderingEngineDelegate
+class GAMEMEDIADLL RenderableGame : public Game, IRenderingEngineDelegate
 {
 private:
 	void *appHandle;
@@ -16,10 +16,10 @@ protected:
 	virtual Engine * makeEngineInstance(GameObjectCtorTable *ctors);
 
 public:
-	RenderableGameInstance(void *appHandle);
-	~RenderableGameInstance();
+	RenderableGame(void *appHandle);
+	~RenderableGame();
 
-	static RenderableGameInstance * getGlobalInstance();
+	static RenderableGame * getGlobalInstance();
 	RenderingEngine * getRenderingEngineInstance();
 
 	virtual void init();

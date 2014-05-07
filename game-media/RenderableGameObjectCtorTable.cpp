@@ -4,7 +4,7 @@
 
 #include "RenderableMovingObject.h"
 
-#include "RenderableGameInstance.h"
+#include "RenderableGame.h"
 
 RenderableGameObjectCtorTable::RenderableGameObjectCtorTable() {
 }
@@ -17,7 +17,7 @@ static IHasHandle * makeRenderableEcoli(ObjectCtorTable *thisObj) {
 
 	return new RenderableMovingObject(
 		ObjectTypes::Ecoli,
-		RenderableGameInstance::getGlobalInstance()
+		RenderableGame::getGlobalInstance()
 			->getRenderingEngineInstance()
 			->createModelFromIndex(
 				table->modelIndexes[ObjectTypes::Ecoli],
@@ -28,7 +28,7 @@ static IHasHandle * makeRenderableEcoli(ObjectCtorTable *thisObj) {
 
 void RenderableGameObjectCtorTable::initCtors() {
 	RenderingEngine *engine = 
-		RenderableGameInstance::getGlobalInstance()
+		RenderableGame::getGlobalInstance()
 			->getRenderingEngineInstance();
 
 	this->modelIndexes[ObjectTypes::Ecoli] = engine->loadModel("resources/ecoli6_nomedia.fbx");

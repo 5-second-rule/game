@@ -1,26 +1,26 @@
-#include "RenderableGameInstance.h"
+#include "RenderableGame.h"
 #include "game-core/MoveEvent.h"
 #include "game-core/ShootEvent.h"
 #include "RenderableGameObjectCtorTable.h"
 #include "engine-renderer/RenderableWorld.h"
 
-RenderableGameInstance::RenderableGameInstance(void *appHandle)
+RenderableGame::RenderableGame(void *appHandle)
 {
 	this->appHandle = appHandle;
 }
 
-RenderableGameInstance::~RenderableGameInstance()
+RenderableGame::~RenderableGame()
 {
 }
 
-void RenderableGameInstance::init() {
-	GameInstance::init();
+void RenderableGame::init() {
+	Game::init();
 	//this->getEngineInstance()->waitForConnection();
 	this->getRenderingEngineInstance()->waitForServer();
 	this->getEngineInstance()->registerPlayer(true);
 }
 
-Event* RenderableGameInstance::inputTranslator(Transmission::Input::Key key, Transmission::Input::KeyState state) {
+Event* RenderableGame::inputTranslator(Transmission::Input::Key key, Transmission::Input::KeyState state) {
 	Event* evt = nullptr;
 	switch (key) {
 		case (Transmission::Input::Key::MOUSE_LMB) : break;
@@ -154,7 +154,7 @@ Event* RenderableGameInstance::inputTranslator(Transmission::Input::Key key, Tra
 	return evt;
 }
 
-Engine * RenderableGameInstance::makeEngineInstance(GameObjectCtorTable *ctors) {
+Engine * RenderableGame::makeEngineInstance(GameObjectCtorTable *ctors) {
 	
 	RenderingEngine* eng = new RenderingEngine(
 		new RenderableWorld(), 
@@ -164,13 +164,13 @@ Engine * RenderableGameInstance::makeEngineInstance(GameObjectCtorTable *ctors) 
 	return eng;
 }
 
-GameObjectCtorTable * RenderableGameInstance::makeCtorTable() {
+GameObjectCtorTable * RenderableGame::makeCtorTable() {
 	return new RenderableGameObjectCtorTable();
 }
 
-RenderableGameInstance * RenderableGameInstance::getGlobalInstance() {
-	RenderableGameInstance *renderableInstance =
-		dynamic_cast<RenderableGameInstance *>(GameInstance::getGlobalInstance());
+RenderableGame * RenderableGame::getGlobalInstance() {
+	RenderableGame *renderableInstance =
+		dynamic_cast<RenderableGame *>(Game::getGlobalInstance());
 
 	if (renderableInstance == nullptr) {
 		throw std::runtime_error("Game instance isn't a rendering version.");
@@ -179,7 +179,7 @@ RenderableGameInstance * RenderableGameInstance::getGlobalInstance() {
 	return renderableInstance;
 }
 
-RenderingEngine * RenderableGameInstance::getRenderingEngineInstance() {
+RenderingEngine * RenderableGame::getRenderingEngineInstance() {
 	return dynamic_cast<RenderingEngine *>(this->getEngineInstance());
 }
 

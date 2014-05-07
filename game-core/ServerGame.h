@@ -1,9 +1,9 @@
 #pragma once
 
 #include "game-core.h"
-#include "GameInstance.h"
+#include "Game.h"
 
-class GAMECOREDLL ServerGameInstance : public GameInstance
+class GAMECOREDLL ServerGame : public Game
 {
 private:
 	float frameTime;
@@ -12,8 +12,8 @@ protected:
 	virtual Engine * makeEngineInstance(GameObjectCtorTable *ctors);
 
 public:
-	ServerGameInstance(float frameTime);
-	~ServerGameInstance();
+	ServerGame(float frameTime);
+	~ServerGame();
 
 	void stop();
 

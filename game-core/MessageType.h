@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Game{
+namespace MsgGame{
 
 	enum MessageType{
 		none,
@@ -18,5 +18,5 @@ namespace Game{
 
 class MoveMessage{
 public:
-	Game::Direction dir;
+	MsgGame::Direction dir;
 };
