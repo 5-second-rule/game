@@ -1,9 +1,8 @@
 #pragma once
 #include "game-core.h"
-#include "..\..\engine\Common\4D\Vector4.h"
-#include "..\..\engine\Common\4D\Matrix4.h"
+#include "../../common/common/4D/Matrix4.h"
 
-using namespace Utility;
+using namespace Common;
 class GAMECOREDLL Transformation
 {
 public:

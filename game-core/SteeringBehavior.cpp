@@ -20,14 +20,14 @@ SteeringBehavior::~SteeringBehavior()
 }
 
 Vector4 SteeringBehavior::seek(Vector4 &p_targetPos){
-	Vector4 desiredDirection = Utility::normalize(p_targetPos - m_owner->m_body->m_position);
+	Vector4 desiredDirection = Common::Vector4::normalize(p_targetPos - m_owner->m_body->m_position);
 	Vector4 desiredVelocity = desiredDirection * m_owner->m_max_speed;
 	
 	return desiredVelocity - m_owner->m_velocity;
 }
 
 Vector4 SteeringBehavior::flee(Vector4 &p_targetPos){
-	Vector4 desiredDirection = normalize(m_owner->m_body->m_position - p_targetPos);
+	Vector4 desiredDirection = Common::Vector4::normalize(m_owner->m_body->m_position - p_targetPos);
 	Vector4 desiredVelocity = desiredDirection * m_owner->m_max_speed;
 
 	return desiredVelocity - m_owner->m_velocity;
@@ -100,7 +100,7 @@ Vector4 SteeringBehavior::wander(){
 		(float)RandomClamped() * k_time_elapsed,
 		(float)RandomClamped() * k_time_elapsed);
 
-	m_wander_target = Utility::normalize(m_wander_target);
+	m_wander_target = Common::Vector4::normalize(m_wander_target);
 	m_wander_target *= m_wander_radius;
 	Vector4 target = m_wander_target + Vector4(m_wander_distance, 0, 0);
 	if (VERBOSITY >= 10 && m_owner->getWorld()->isTick(30))
@@ -150,7 +150,7 @@ bool SteeringBehavior::accumulateForce(Vector4 &RunningTot,
 	else
 	{
 		//add it to the steering force
-		RunningTot += (Utility::normalize(ForceToAdd) * MagnitudeRemaining);
+		RunningTot += (Common::Vector4::normalize(ForceToAdd) * MagnitudeRemaining);
 	}
 
 	return true;

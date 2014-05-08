@@ -1,8 +1,6 @@
 #pragma once
 
-#include "..\Common\FSM\State.h"
-#include "..\Common\Messaging\Telegram.h"
-
+#include "State.h"
 #include "MovingObject.h"
 #include "Transformation.h"
 #include "MoveEvent.h"
@@ -29,7 +27,7 @@ private:
 	Break();
 public:
 	static Break* instance();
-	bool onMessage(MovingObject *object, Telegram msg);
+	bool onEvent(MovingObject *object, Evennt evt);
 	void enter(MovingObject *object);
 	void execute(MovingObject *object);
 	void exit(MovingObject *object);

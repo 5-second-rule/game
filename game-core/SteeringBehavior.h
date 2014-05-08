@@ -1,8 +1,9 @@
 #pragma once
 
-#include "..\..\engine\engine-core\ConfigSettings.h"
-#include "..\..\engine\Common\4D\Vector4.h"
-#include "..\..\engine\Common\misc\utils.h"
+#include "../../common/common/4D/Matrix4.h"
+#include "../../engine/engine-core/ConfigSettings.h"
+
+#include "../../common/common/misc/utils.h"
 #include "game-core.h"
 #include "Transformation.h"
 #include "MovingObject.h"
@@ -19,7 +20,7 @@ enum BehaviorType{
 	evade = 0x20
 };
 
-using namespace Utility;
+using namespace Common;
 class GAMECOREDLL SteeringBehavior
 {
 private:

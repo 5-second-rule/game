@@ -22,7 +22,7 @@ MovingObject::~MovingObject()
 
 
 Vector4 MovingObject::heading(){
-	return normalize(m_velocity);
+	return Common::Vector4::normalize(m_velocity);
 }
 
 Vector4 MovingObject::front(){

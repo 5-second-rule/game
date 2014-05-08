@@ -1,7 +1,5 @@
 #pragma once
 
-#include "..\Common\Messaging\Telegram.h"
-
 #include "..\..\engine\engine-core\BaseObject.h"
 #include "..\..\engine\engine-core\World.h"
 

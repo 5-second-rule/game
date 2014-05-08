@@ -1,16 +1,16 @@
 #pragma once
 
-#include "..\Common\Messaging\Telegram.h"
-#include "..\Common\FSM\StateMachine.h"
+#include "../../common/common/4D/Matrix4.h"
 
 #include "game-core.h"
 #include "GameObject.h"
+#include "StateMachine.h"
 #include "MovingObjectStates.h"
 #include "SteeringBehavior.h"
 
 class GAMECOREDLL SteeringBehavior;
 
-using namespace Utility;
+using namespace Common;
 class GAMECOREDLL MovingObject : public GameObject
 {
 	friend class SteeringBehavior;

@@ -17,7 +17,7 @@ Vector4 Transformation::pointToWorldSpace(const Vector4 &point,
 	Vector4 tmp(point);
 	tmp.set(3, 1);
 
-	Matrix4 matTransformation = Matrix4::identity();
+	Matrix4 matTransformation(agent_front, agent_side, agent_top, agent_position);
 	matTransformation = matTransformation * rotationMatrix(agent_front, agent_side, agent_top);
 	matTransformation = matTransformation * translationMatrix(agent_position);
 	return matTransformation.multiply(tmp);
