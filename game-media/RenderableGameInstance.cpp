@@ -48,8 +48,8 @@ std::vector<Event *>  RenderableGameInstance::inputTranslator(InputAdapter *inpu
 		dir.z = rightStickMagnitude*rightStickInfo.first.y();
 
 		// Trigger Examples -- values [0.0, 1.0]
-		dir.z = inputAdapter->getAnalogTriggerValue(Transmission::Input::Key::GAMEPAD_LEFT_TRIGGER);
-		dir.z = inputAdapter->getAnalogTriggerValue(Transmission::Input::Key::GAMEPAD_RIGHT_TRIGGER);
+		dir.z -= inputAdapter->getAnalogTriggerValue(Transmission::Input::Key::GAMEPAD_LEFT_TRIGGER);
+		dir.z += inputAdapter->getAnalogTriggerValue(Transmission::Input::Key::GAMEPAD_RIGHT_TRIGGER);
 
 		// Button Examples -- KeyState::STATE_UP or KeyState::STATE_DOWN
 		if (inputAdapter->getKeyState(Transmission::Input::Key::GAMEPAD_A) == down) {
