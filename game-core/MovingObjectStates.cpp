@@ -23,29 +23,9 @@ bool Move::handleEvent(MovingObject* object, Event *evt){
 		if (moveEvent == nullptr)
 			return false;
 		assert(configInstance()->getValue("move_force", forceModule));
-
-		switch (moveEvent->direction) {
-		case MoveDirection::UP:
-			force.set(0, 0, forceModule);
-			break;
-		case MoveDirection::DOWN:
-			force.set(0, 0, -forceModule);
-			break;
-		case MoveDirection::RIGHT:
-			force.set(0, forceModule, 0);
-			break;
-		case MoveDirection::LEFT:
-			force.set(0, -forceModule, 0);
-			break;
-		case MoveDirection::FORWARD:
-			force.set(forceModule, 0, 0);
-			break;
-		case MoveDirection::BACK:
-			force.set(-forceModule, 0, 0);
-			break;
-		default:
-			break;
-		}
+		force.set(moveEvent->direction.x * forceModule,
+			      moveEvent->direction.y * forceModule,
+			      moveEvent->direction.z * forceModule);
 
 		if (object->getWorld()->isTick(30)){
 			cout << "Before: " << force.toString();

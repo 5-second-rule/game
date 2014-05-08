@@ -8,11 +8,11 @@ ShootEvent::ShootEvent( unsigned int playerGuid ) : ActionEvent( playerGuid ) {
 
 ShootEvent::~ShootEvent() {}
 
-void ShootEvent::reserveSize( BufferBuilder *buffer ) {
+void ShootEvent::reserveSize( IReserve& buffer ) {
 	ActionEvent::reserveSize( buffer );
 }
 
-void ShootEvent::fillBuffer( BufferBuilder *buffer ) {
+void ShootEvent::fillBuffer( IFill& buffer ) {
 	ActionEvent::fillBuffer( buffer );
 }
 
