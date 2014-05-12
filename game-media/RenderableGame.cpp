@@ -90,7 +90,6 @@ std::vector<Event *>  RenderableGame::inputTranslator(InputAdapter *inputAdapter
 			dir.z += 1;
 		}
 
-			}
 		if (inputAdapter->getKeyState(Transmission::Input::Key::O) == down) {
 			dir.z -= 1;
 		}
@@ -103,8 +102,8 @@ std::vector<Event *>  RenderableGame::inputTranslator(InputAdapter *inputAdapter
 			dir.y += 1;
 		}
 	}
-	
-	if (dir.x != 0 || dir.y != 0 || dir.z != 0) {
+
+if (dir.x != 0 || dir.y != 0 || dir.z != 0) {
 		inputEventVector.emplace_back(new MoveEvent(this->getEngineInstance()->getLocalPlayerGuid(0), dir));
 	}
 	return inputEventVector;
