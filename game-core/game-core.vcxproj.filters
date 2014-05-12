@@ -72,12 +72,4 @@
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="..\Debug\resources\Config.ini">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="..\Debug\resources\ConfigTemplate.ini">
-      <Filter>Resource Files</Filter>
-    </None>
-  </ItemGroup>
 </Project>
