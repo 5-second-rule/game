@@ -7,8 +7,6 @@ cp ../engine/Debug/*.dll ../game/Debug
 cp ../rendering-framework/Debug/*.cso ../engine/Debug
 cp ../engine/Debug/*.cso ../game/Debug/resources/
 
-cp ..\engine\engine-core\Config.ini .\Debug\resources
-
 cp ../rendering-framework/SampleApp/*.fbx ../engine/SampleApp/
 cp ../rendering-framework/SampleApp/*.dds ../engine/SampleApp/
 
