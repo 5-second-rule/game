@@ -19,6 +19,10 @@ static IHasHandle * makeSyphillis( ConstructorTable<IHasHandle> *thisObj, Args* 
 	return new MovingObject( ObjectTypes::Syphillis );;
 }
 
+static IHasHandle * makeMalaria( ConstructorTable<IHasHandle> *thisObj, Args* arg ) {
+	return new MovingObject( ObjectTypes::Malaria );;
+}
+
 static IHasHandle * makeWhiteBlood( ConstructorTable<IHasHandle> *thisObj, Args* arg ) {
 	return new MovingObject( ObjectTypes::WhiteBlood );;
 }
@@ -31,6 +35,7 @@ void GameObjectCtorTable::initCtors() {
 	this->setConstructor( ObjectTypes::Ecoli, makeEcoli );
 	this->setConstructor( ObjectTypes::ChickenPox, makeChickenPox );
 	this->setConstructor( ObjectTypes::Syphillis, makeSyphillis );
+	this->setConstructor( ObjectTypes::Malaria, makeMalaria );
 	this->setConstructor( ObjectTypes::WhiteBlood, makeWhiteBlood );
 	this->setConstructor( ObjectTypes::RedBlood, makeRedBlood );
 }
