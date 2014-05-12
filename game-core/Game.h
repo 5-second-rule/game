@@ -1,11 +1,11 @@
 #pragma once
 
 #include "game-core.h"
+#include "GameObjectCtorTable.h"
 #include "engine-core/Engine.h"
 #include "engine-core/World.h"
-#include "GameObjectCtorTable.h"
 
-class GAMECOREDLL Game : public IEngineInstanceDelegate
+class GAMECOREDLL Game
 {
 private:
 	static Game *globalInstance;
@@ -14,8 +14,7 @@ private:
 	bool initialized;
 
 protected:
-	virtual GameObjectCtorTable * makeCtorTable();
-	virtual Engine * makeEngineInstance(GameObjectCtorTable *ctors) = 0;
+	virtual Engine * makeEngineInstance(ConstructorTable<IHasHandle> *objectCtors, ConstructorTable<ActionEvent>* eventCtors) = 0;
 
 public:
 	Game();
@@ -24,10 +23,9 @@ public:
 	static void setGlobalInstance(Game *instance);
 	static Game * getGlobalInstance();
 
+	virtual GameObjectCtorTable * makeCtorTable();
+
 	virtual void init();
 	void run();
 	Engine * getEngineInstance();
-
-	// IEngineInstanceDelegate Methods
-	virtual ActionEvent* MakeActionEvent( int actionType, unsigned int playerGuid, const char* data );
 };

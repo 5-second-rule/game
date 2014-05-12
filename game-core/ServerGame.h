@@ -9,14 +9,12 @@ private:
 	float frameTime;
 
 protected:
-	virtual Engine * makeEngineInstance(GameObjectCtorTable *ctors);
+	virtual Engine * makeEngineInstance( ConstructorTable<IHasHandle> *objectCtors, ConstructorTable<ActionEvent>* eventCtors );
 
 public:
 	ServerGame(float frameTime);
 	~ServerGame();
 
 	void stop();
-
-	virtual ActionEvent* MakeActionEvent( int actionType, unsigned int playerGuid, const char* data );
 };
 

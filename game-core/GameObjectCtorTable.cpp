@@ -3,36 +3,34 @@
 #include "MovingObject.h"
 #include "ObjectTypes.h"
 
-GameObjectCtorTable::GameObjectCtorTable() : ObjectCtorTable( OBJECT_TYPE_COUNT ) {
-	this->initCtors();
-}
+GameObjectCtorTable::GameObjectCtorTable() : ConstructorTable<IHasHandle>( OBJECT_TYPE_COUNT ) {}
 
 GameObjectCtorTable::~GameObjectCtorTable() {}
 
-static IHasHandle * makeEcoli(ObjectCtorTable *thisObj) {
+static IHasHandle * makeEcoli( ConstructorTable<IHasHandle> *thisObj, Args* arg ) {
 	return new MovingObject(ObjectTypes::Ecoli);
 }
 
-static IHasHandle * makeChickenPox(ObjectCtorTable *thisObj) {
-	return nullptr;
+static IHasHandle * makeChickenPox( ConstructorTable<IHasHandle> *thisObj, Args* arg ) {
+	return new MovingObject( ObjectTypes::ChickenPox );;
 }
 
-static IHasHandle * makeSyphillis(ObjectCtorTable *thisObj) {
-	return nullptr;
+static IHasHandle * makeSyphillis( ConstructorTable<IHasHandle> *thisObj, Args* arg ) {
+	return new MovingObject( ObjectTypes::Syphillis );;
 }
 
-static IHasHandle * makeWhiteBlood(ObjectCtorTable *thisObj) {
-	return nullptr;
+static IHasHandle * makeWhiteBlood( ConstructorTable<IHasHandle> *thisObj, Args* arg ) {
+	return new MovingObject( ObjectTypes::WhiteBlood );;
 }
 
-static IHasHandle * makeRedBlood(ObjectCtorTable *thisObj) {
-	return nullptr;
+static IHasHandle * makeRedBlood( ConstructorTable<IHasHandle> *thisObj, Args* arg ) {
+	return new MovingObject( ObjectTypes::RedBlood );;
 }
 
 void GameObjectCtorTable::initCtors() {
-	this->setCtor( ObjectTypes::Ecoli, makeEcoli );
-	this->setCtor( ObjectTypes::ChickenPox, makeChickenPox );
-	this->setCtor( ObjectTypes::Syphillis, makeSyphillis );
-	this->setCtor( ObjectTypes::WhiteBlood, makeWhiteBlood );
-	this->setCtor( ObjectTypes::RedBlood, makeRedBlood );
+	this->setConstructor( ObjectTypes::Ecoli, makeEcoli );
+	this->setConstructor( ObjectTypes::ChickenPox, makeChickenPox );
+	this->setConstructor( ObjectTypes::Syphillis, makeSyphillis );
+	this->setConstructor( ObjectTypes::WhiteBlood, makeWhiteBlood );
+	this->setConstructor( ObjectTypes::RedBlood, makeRedBlood );
 }

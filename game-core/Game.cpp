@@ -1,6 +1,7 @@
 #include "Game.h"
 
 #include "GameObjectCtorTable.h"
+#include "ActionEventCtorTable.h"
 #include "ActionType.h"
 #include "MoveEvent.h"
 
@@ -22,9 +23,11 @@ void Game::init() {
 	this->initialized = true;
 	setGlobalInstance(this);
 
-	GameObjectCtorTable *ctors = this->makeCtorTable();
-	this->engineInstance = this->makeEngineInstance(ctors);
-	ctors->initCtors();
+	GameObjectCtorTable* objectCtors = this->makeCtorTable();
+	ActionEventCtorTable* eventCtors = new ActionEventCtorTable();
+	this->engineInstance = this->makeEngineInstance(objectCtors, eventCtors);
+	objectCtors->initCtors();
+	eventCtors->initCtors();
 }
 
 void Game::run() {
@@ -33,10 +36,6 @@ void Game::run() {
 	}
 
 	this->engineInstance->run();
-}
-
-GameObjectCtorTable * Game::makeCtorTable() {
-	return new GameObjectCtorTable();
 }
 
 Engine * Game::getEngineInstance() {
@@ -51,10 +50,7 @@ Game * Game::getGlobalInstance() {
 	return globalInstance;
 }
 
-ActionEvent* Game::MakeActionEvent( int actionType, unsigned int playerGuid, const char* data ) {
-	switch (ActionType(actionType)) {
-	case ActionType::MOVE:
-		return new MoveEvent(playerGuid, data);
-		break;
-	}
+
+GameObjectCtorTable * Game::makeCtorTable() {
+	return new GameObjectCtorTable();
 }

@@ -12,8 +12,7 @@ private:
 
 protected:
 	virtual std::vector<Event *> inputTranslator(InputAdapter *inputAdapter);
-	virtual GameObjectCtorTable * makeCtorTable();
-	virtual Engine * makeEngineInstance(GameObjectCtorTable *ctors);
+	virtual Engine * makeEngineInstance( ConstructorTable<IHasHandle> *objectCtors, ConstructorTable<ActionEvent>* eventCtors );
 
 public:
 	RenderableGame(void *appHandle);
@@ -21,6 +20,8 @@ public:
 
 	static RenderableGame * getGlobalInstance();
 	RenderingEngine * getRenderingEngineInstance();
+
+	virtual GameObjectCtorTable * makeCtorTable();
 
 	virtual void init();
 };

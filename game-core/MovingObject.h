@@ -42,8 +42,8 @@ public:
 	virtual bool handleEvent(Event* evt);
 
 	// ISerializable Methods
-	virtual void reserveSize(IReserve&);
-	virtual void fillBuffer(IFill&);
+	virtual void reserveSize(IReserve&) const;
+	virtual void fillBuffer(IFill&) const;
 
 	virtual void deserialize(BufferReader& buffer);
 };

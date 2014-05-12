@@ -66,18 +66,15 @@ std::vector<Event *>  RenderableGame::inputTranslator(InputAdapter *inputAdapter
 	return inputEventVector;
 }
 
-Engine * RenderableGame::makeEngineInstance(GameObjectCtorTable *ctors) {
+Engine * RenderableGame::makeEngineInstance( ConstructorTable<IHasHandle> *objectCtors, ConstructorTable<ActionEvent>* eventCtors ) {
 	
 	RenderingEngine* eng = new RenderingEngine(
 		new RenderableWorld(), 
-		ctors,
+		objectCtors,
+		eventCtors,
 		this->appHandle);
 	eng->renderingDelegate = this;
 	return eng;
-}
-
-GameObjectCtorTable * RenderableGame::makeCtorTable() {
-	return new RenderableGameObjectCtorTable();
 }
 
 RenderableGame * RenderableGame::getGlobalInstance() {
@@ -93,5 +90,10 @@ RenderableGame * RenderableGame::getGlobalInstance() {
 
 RenderingEngine * RenderableGame::getRenderingEngineInstance() {
 	return dynamic_cast<RenderingEngine *>(this->getEngineInstance());
+}
+
+
+GameObjectCtorTable * RenderableGame::makeCtorTable() {
+	return new RenderableGameObjectCtorTable();
 }
 

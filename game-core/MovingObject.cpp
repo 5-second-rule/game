@@ -12,7 +12,8 @@ const float MovingObject::max_force = MAX_FORCE;
 MovingObject::MovingObject(int objectType)
 	: BaseObject(objectType)
 {
-	
+	this->mass = .1f;
+	this->friction = .1f;
 }
 
 
@@ -44,7 +45,7 @@ bool MovingObject::handleEvent(Event *evt){
 		if (moveEvent == nullptr)
 			return false;
 
-		const float MOVE_FORCE = 10.0f;
+		const float MOVE_FORCE = .3f;
 
 		Vector4 force(moveEvent->direction.x * MOVE_FORCE,
 			moveEvent->direction.y * MOVE_FORCE,
@@ -76,12 +77,12 @@ void MovingObject::update(float dt){
 
 }
 
-void MovingObject::reserveSize(IReserve& buffer) {
+void MovingObject::reserveSize(IReserve& buffer) const {
 	BaseObject::reserveSize(buffer);
 	buffer.reserve(sizeof(MovingObjectData));
 }
 
-void MovingObject::fillBuffer(IFill& buffer) {
+void MovingObject::fillBuffer(IFill& buffer) const {
 	BaseObject::fillBuffer(buffer);
 	MovingObjectData* data = reinterpret_cast<MovingObjectData*>(buffer.getPointer());
 

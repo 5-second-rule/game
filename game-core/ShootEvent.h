@@ -10,7 +10,7 @@ public:
 	ShootEvent( unsigned int playerGuid );
 	~ShootEvent();
 
-	virtual void reserveSize( IReserve& buffer );
-	virtual void fillBuffer( IFill& buffer );
+	virtual void reserveSize( IReserve& buffer ) const;
+	virtual void fillBuffer( IFill& buffer ) const;
 	virtual void deserialize( BufferReader& buffer );
 };
