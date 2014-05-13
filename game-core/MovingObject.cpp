@@ -3,6 +3,8 @@
 #include "MoveEvent.h"
 #include "ActionType.h"
 
+#include "ObjectTypes.h"
+
 #define MAX_SPEED 100
 #define MAX_FORCE 100
 
@@ -121,4 +123,34 @@ void MovingObject::deserialize(BufferReader& reader) {
 
 Vector4 MovingObject::getPosition() {
 	return this->position;
+}
+
+Vector4* MovingObject::getGroupingParameter() {
+	return &this->position;
+}
+
+bool MovingObject::collidesWith(ICollidable* target) {
+	BoundingSphere bs = target->getBounds();
+	BoundingSphere me = this->getBounds();
+
+	float distance = (me.radius + bs.radius);
+	return ((bs.position - me.position).lengthSquared() <= distance * distance);
+}
+
+void MovingObject::handleCollision(ICollidable* target) {
+	BoundingSphere bs = target->getBounds();
+	BoundingSphere me = this->getBounds();
+
+	Vector4 direction = me.position - bs.position;
+	float distance = bs.radius + me.radius - direction.length();
+
+	this->position += Vector4::normalize(direction) * distance;
+}
+
+BoundingSphere MovingObject::getBounds() {
+	return{ this->position, 6.0f };
+}
+
+unsigned int MovingObject::getPriority() {
+	return static_cast<unsigned int>(CollisionPriorities::Object);
 }

@@ -12,3 +12,8 @@ enum GAMECOREDLL ObjectTypes
 	MagicSchoolBus,
 	Track
 };
+
+enum class GAMECOREDLL CollisionPriorities {
+	Track,
+	Object
+};

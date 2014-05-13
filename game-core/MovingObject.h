@@ -2,6 +2,7 @@
 #include "game-core.h"
 
 #include "engine-core/BaseObject.h"
+#include "engine-core/ICollidable.h"
 
 
 #include "common/Vector4.h"
@@ -16,7 +17,7 @@ struct MovingObjectData {
 	float mass;
 };
 
-class GAMECOREDLL MovingObject : public BaseObject
+class GAMECOREDLL MovingObject : public BaseObject, public ICollidable
 {
 protected:
 	Vector4 position;
@@ -47,5 +48,13 @@ public:
 	virtual void fillBuffer(IFill&) const;
 
 	virtual void deserialize(BufferReader& buffer);
+
+	// ICollidable Methods
+	Vector4* getGroupingParameter();
+	bool collidesWith(ICollidable* target);
+	void handleCollision(ICollidable* target);
+	BoundingSphere getBounds();
+	unsigned int getPriority();
+
 };
 
