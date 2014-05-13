@@ -12,7 +12,7 @@ ServerGame::ServerGame(float frameTime) {
 ServerGame::~ServerGame() {
 }
 
-Engine * ServerGame::makeEngineInstance( ConstructorTable<IHasHandle> *objectCtors, ConstructorTable<ActionEvent>* eventCtors ) {
+Engine * ServerGame::makeEngineInstance( ConstructorTable<BaseObject> *objectCtors, ConstructorTable<ActionEvent>* eventCtors ) {
 
 	Engine* eng  = new ServerEngine(
 		new World(),

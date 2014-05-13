@@ -2,9 +2,9 @@
 
 #include "game-core.h"
 #include "engine-core/ConstructorTable.h"
-#include "engine-core/IHasHandle.h"
+#include "engine-core/BaseObject.h"
 
-class GAMECOREDLL GameObjectCtorTable : public ConstructorTable<IHasHandle>
+class GAMECOREDLL GameObjectCtorTable : public ConstructorTable<BaseObject>
 {
 public:
 	static const int OBJECT_TYPE_COUNT = 10;

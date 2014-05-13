@@ -9,7 +9,7 @@ private:
 	float frameTime;
 
 protected:
-	virtual Engine * makeEngineInstance( ConstructorTable<IHasHandle> *objectCtors, ConstructorTable<ActionEvent>* eventCtors );
+	virtual Engine * makeEngineInstance( ConstructorTable<BaseObject> *objectCtors, ConstructorTable<ActionEvent>* eventCtors );
 
 public:
 	ServerGame(float frameTime);

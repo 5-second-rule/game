@@ -14,7 +14,7 @@ private:
 	bool initialized;
 
 protected:
-	virtual Engine * makeEngineInstance(ConstructorTable<IHasHandle> *objectCtors, ConstructorTable<ActionEvent>* eventCtors) = 0;
+	virtual Engine * makeEngineInstance(ConstructorTable<BaseObject> *objectCtors, ConstructorTable<ActionEvent>* eventCtors) = 0;
 
 public:
 	Game();

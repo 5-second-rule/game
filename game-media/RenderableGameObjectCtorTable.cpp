@@ -10,7 +10,7 @@ RenderableGameObjectCtorTable::RenderableGameObjectCtorTable() {}
 
 RenderableGameObjectCtorTable::~RenderableGameObjectCtorTable() {}
 
-static IHasHandle * makeRenderableEcoli( ConstructorTable<IHasHandle> *thisObj, Args* arg ) {
+static BaseObject * makeRenderableEcoli(ConstructorTable<BaseObject> *thisObj) {
 	RenderableGameObjectCtorTable *table = (RenderableGameObjectCtorTable *)thisObj;
 
 	return new RenderableMovingObject(
@@ -24,7 +24,7 @@ static IHasHandle * makeRenderableEcoli( ConstructorTable<IHasHandle> *thisObj, 
 		);
 }
 
-static IHasHandle * makeRenderableChickenPox( ConstructorTable<IHasHandle> *thisObj, Args* arg ) {
+static BaseObject * makeRenderableChickenPox(ConstructorTable<BaseObject> *thisObj) {
 	RenderableGameObjectCtorTable *table = (RenderableGameObjectCtorTable *)thisObj;
 
 	return new RenderableMovingObject(
@@ -39,7 +39,7 @@ static IHasHandle * makeRenderableChickenPox( ConstructorTable<IHasHandle> *this
 		);
 }
 
-static IHasHandle * makeRenderableSyphillis( ConstructorTable<IHasHandle> *thisObj, Args* arg ) {
+static BaseObject * makeRenderableSyphillis(ConstructorTable<BaseObject> *thisObj) {
 	RenderableGameObjectCtorTable *table = (RenderableGameObjectCtorTable *)thisObj;
 
 	return new RenderableMovingObject(
@@ -54,7 +54,7 @@ static IHasHandle * makeRenderableSyphillis( ConstructorTable<IHasHandle> *thisO
 		);
 }
 
-static IHasHandle * makeRenderableMalaria( ConstructorTable<IHasHandle> *thisObj, Args* arg ) {
+static BaseObject * makeRenderableMalaria(ConstructorTable<BaseObject> *thisObj) {
 	RenderableGameObjectCtorTable *table = (RenderableGameObjectCtorTable *)thisObj;
 
 	return new RenderableMovingObject(
@@ -69,7 +69,7 @@ static IHasHandle * makeRenderableMalaria( ConstructorTable<IHasHandle> *thisObj
 		);
 }
 
-static IHasHandle * makeRenderableWhiteBlood( ConstructorTable<IHasHandle> *thisObj, Args* arg ) {
+static BaseObject * makeRenderableWhiteBlood(ConstructorTable<BaseObject> *thisObj) {
 	RenderableGameObjectCtorTable *table = (RenderableGameObjectCtorTable *)thisObj;
 
 	return new RenderableMovingObject(
@@ -83,7 +83,7 @@ static IHasHandle * makeRenderableWhiteBlood( ConstructorTable<IHasHandle> *this
 		);
 }
 
-static IHasHandle * makeRenderableRedBlood( ConstructorTable<IHasHandle> *thisObj, Args* arg ) {
+static BaseObject * makeRenderableRedBlood(ConstructorTable<BaseObject> *thisObj) {
 	RenderableGameObjectCtorTable *table = (RenderableGameObjectCtorTable *)thisObj;
 
 	return new RenderableMovingObject(

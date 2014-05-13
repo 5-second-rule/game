@@ -3,31 +3,31 @@
 #include "MovingObject.h"
 #include "ObjectTypes.h"
 
-GameObjectCtorTable::GameObjectCtorTable() : ConstructorTable<IHasHandle>( OBJECT_TYPE_COUNT ) {}
+GameObjectCtorTable::GameObjectCtorTable() : ConstructorTable<BaseObject>( OBJECT_TYPE_COUNT ) {}
 
 GameObjectCtorTable::~GameObjectCtorTable() {}
 
-static IHasHandle * makeEcoli( ConstructorTable<IHasHandle> *thisObj, Args* arg ) {
+static BaseObject * makeEcoli(ConstructorTable<BaseObject> *thisObj) {
 	return new MovingObject(ObjectTypes::Ecoli);
 }
 
-static IHasHandle * makeChickenPox( ConstructorTable<IHasHandle> *thisObj, Args* arg ) {
+static BaseObject * makeChickenPox(ConstructorTable<BaseObject> *thisObj) {
 	return new MovingObject( ObjectTypes::ChickenPox );;
 }
 
-static IHasHandle * makeSyphillis( ConstructorTable<IHasHandle> *thisObj, Args* arg ) {
+static BaseObject * makeSyphillis(ConstructorTable<BaseObject> *thisObj) {
 	return new MovingObject( ObjectTypes::Syphillis );;
 }
 
-static IHasHandle * makeMalaria( ConstructorTable<IHasHandle> *thisObj, Args* arg ) {
+static BaseObject * makeMalaria(ConstructorTable<BaseObject> *thisObj) {
 	return new MovingObject( ObjectTypes::Malaria );;
 }
 
-static IHasHandle * makeWhiteBlood( ConstructorTable<IHasHandle> *thisObj, Args* arg ) {
+static BaseObject * makeWhiteBlood(ConstructorTable<BaseObject> *thisObj) {
 	return new MovingObject( ObjectTypes::WhiteBlood );;
 }
 
-static IHasHandle * makeRedBlood( ConstructorTable<IHasHandle> *thisObj, Args* arg ) {
+static BaseObject * makeRedBlood(ConstructorTable<BaseObject> *thisObj) {
 	return new MovingObject( ObjectTypes::RedBlood );;
 }
 

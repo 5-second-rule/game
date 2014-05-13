@@ -7,16 +7,16 @@ ActionEventCtorTable::ActionEventCtorTable() : ConstructorTable<ActionEvent>(EVE
 
 ActionEventCtorTable::~ActionEventCtorTable() {}
 
-static ActionEvent * makeMoveEvent( ConstructorTable<ActionEvent> *thisObj, Args* arg ) {
+static ActionEvent * makeMoveEvent( ConstructorTable<ActionEvent> *thisObj) {
 
 	return new MoveEvent( 0, nullptr );
 }
 
-static ActionEvent * makeShootEvent( ConstructorTable<ActionEvent> *thisObj, Args* arg ) {
+static ActionEvent * makeShootEvent( ConstructorTable<ActionEvent> *thisObj ) {
 	return new ShootEvent( 0 );
 }
 
-static ActionEvent * makeUseEvent( ConstructorTable<ActionEvent> *thisObj, Args* arg ) {
+static ActionEvent * makeUseEvent( ConstructorTable<ActionEvent> *thisObj) {
 	return nullptr;
 }
 

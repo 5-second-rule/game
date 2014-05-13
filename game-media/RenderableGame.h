@@ -12,7 +12,7 @@ private:
 
 protected:
 	virtual std::vector<Event *> inputTranslator(InputAdapter *inputAdapter);
-	virtual Engine * makeEngineInstance( ConstructorTable<IHasHandle> *objectCtors, ConstructorTable<ActionEvent>* eventCtors );
+	virtual Engine * makeEngineInstance( ConstructorTable<BaseObject> *objectCtors, ConstructorTable<ActionEvent>* eventCtors );
 
 public:
 	RenderableGame(void *appHandle);

@@ -109,7 +109,7 @@ if (dir.x != 0 || dir.y != 0 || dir.z != 0) {
 	return inputEventVector;
 }
 
-Engine * RenderableGame::makeEngineInstance( ConstructorTable<IHasHandle> *objectCtors, ConstructorTable<ActionEvent>* eventCtors ) {
+Engine * RenderableGame::makeEngineInstance( ConstructorTable<BaseObject> *objectCtors, ConstructorTable<ActionEvent>* eventCtors ) {
 	
 	RenderingEngine* eng = new RenderingEngine(
 		new RenderableWorld(), 
