@@ -1,74 +1,120 @@
-#include <iostream>
-
 #include "MovingObject.h"
 
-using namespace std;
-MovingObject::MovingObject(int objectType) : GameObject(objectType)
-{
-	assert(Utility::configInstance()->getValue("default_friction", m_friction));
-	assert(Utility::configInstance()->getValue("default_max_speed", m_max_speed));
-	assert(Utility::configInstance()->getValue("default_max_force", m_max_force));
+#include "MoveEvent.h"
+#include "ActionType.h"
 
-	state_machine = new StateMachine<MovingObject>(this);
-	steering_behavior = new SteeringBehavior(this);
-	steering_behavior->wanderOn();
-	state_machine->SetCurrentState(Move::instance());
+#define MAX_SPEED 100
+#define MAX_FORCE 100
+
+const float MovingObject::max_speed = MAX_SPEED;
+const float MovingObject::max_force = MAX_FORCE;
+
+MovingObject::MovingObject(int objectType)
+	: BaseObject(objectType)
+{
+	this->mass = .1f;
+	this->friction = .1f;
 }
 
 
-MovingObject::~MovingObject()
-{
-}
+MovingObject::~MovingObject() {}
 
 
 Vector4 MovingObject::heading(){
-	return normalize(m_velocity);
-}
-
-Vector4 MovingObject::front(){
-	return Vector4(1, 0, 0);
-}
-
-Vector4 MovingObject::top(){
-	return Vector4(0, 0, 1);
-}
-
-Vector4 MovingObject::side(){
-	return Vector4(0, 1, 0);
+	return Vector4::normalize(this->velocity);
 }
 
 float MovingObject::speed(){
-	return m_velocity.length();
+	return this->velocity.length();
 }
 
-void MovingObject::applyForce(Vector4 force){
-	m_force += force;
+void MovingObject::applyForce(const Vector4& force){
+	this->force += force;
 }
 
-bool MovingObject::handleEvent(Event* evt){
-	if (state_machine->handleEvent(evt))
+bool MovingObject::handleEvent(Event *evt){
+
+	ActionEvent *actionEvt = Event::cast<ActionEvent>(evt);
+	if (actionEvt == nullptr)
+		return false;
+
+	switch (ActionType(actionEvt->getActionType())) {
+	case ActionType::MOVE:
+	{
+		MoveEvent *moveEvent = ActionEvent::cast<MoveEvent>(actionEvt);
+		if (moveEvent == nullptr)
+			return false;
+
+		const float MOVE_FORCE = .3f;
+
+		Vector4 force(moveEvent->direction.x * MOVE_FORCE,
+			moveEvent->direction.y * MOVE_FORCE,
+			moveEvent->direction.z * MOVE_FORCE
+			);
+
+		this->applyForce(force);
 		return true;
-	return GameObject::handleEvent(evt);
+		break;
+	}
+	case ActionType::SHOOT:
+		//TODO: create projectile and set it in motion
+		break;
+	default:
+		break;
+	}
+	return false;
 }
 
 void MovingObject::update(float dt){
-	GameObject::update(dt);
-	Vector4 acceleration;
-	m_body->m_position += m_velocity * dt;
-	acceleration = m_force * (1 / m_body->m_mass);
-	m_force = steering_behavior->calculate() - m_velocity * m_friction;
-	m_velocity += acceleration*dt;
-	position[0] = m_body->m_position.get(0);
-	position[1] = m_body->m_position.get(1);
-	position[2] = m_body->m_position.get(2);
+	BaseObject::update(dt);
 
-	if (VERBOSITY >= 10 && m_world->isTick(30)){
-		print();
-	}
+	this->position += this->velocity * dt;
+
+	Vector4 acceleration = force * (1 / this->mass);
+	this->force = -(this->velocity * this->friction);
+
+	this->velocity += acceleration*dt;
+
 }
 
-void MovingObject::print(){
-	cout << "Position: " << m_body->m_position.toString() << endl;
-	cout << "Speed: " << m_velocity.length() << endl;
-	cout << "Force: " << m_force.toString() << endl;
+void MovingObject::reserveSize(IReserve& buffer) const {
+	BaseObject::reserveSize(buffer);
+	buffer.reserve(sizeof(MovingObjectData));
+}
+
+void MovingObject::fillBuffer(IFill& buffer) const {
+	BaseObject::fillBuffer(buffer);
+	MovingObjectData* data = reinterpret_cast<MovingObjectData*>(buffer.getPointer());
+
+	data->position[0] = this->position[0];
+	data->position[1] = this->position[1];
+	data->position[2] = this->position[2];
+
+	data->velocity[0] = this->velocity[0];
+	data->velocity[1] = this->velocity[1];
+	data->velocity[2] = this->velocity[2];
+
+	data->force[0] = this->force[0];
+	data->force[1] = this->force[1];
+	data->force[2] = this->force[2];
+
+	data->friction = friction;
+	data->mass = mass;
+
+	buffer.filled();
+}
+
+void MovingObject::deserialize(BufferReader& reader) {
+	BaseObject::deserialize(reader);
+
+	const MovingObjectData* data = reinterpret_cast<const MovingObjectData*>(reader.getPointer());
+
+	this->position = Common::Point(data->position[0], data->position[1], data->position[2]);
+	this->velocity = Common::Vector(data->velocity[0], data->velocity[1], data->velocity[2]);
+	this->force = Common::Vector(data->force[0], data->force[1], data->force[2]);
+
+	this->friction = data->friction;
+	this->mass = data->mass;
+
+	reader.finished(sizeof(MovingObjectData));
 }

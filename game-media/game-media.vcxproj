@@ -49,6 +49,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_IS_GAME_MEDIA;_WINDLL;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BrowseInformation>true</BrowseInformation>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\common\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -74,12 +75,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="game-media.h" />
-    <ClInclude Include="RenderableGameInstance.h" />
+    <ClInclude Include="RenderableGame.h" />
     <ClInclude Include="RenderableGameObjectCtorTable.h" />
+    <ClInclude Include="RenderableMovingObject.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="RenderableGameInstance.cpp" />
+    <ClCompile Include="RenderableGame.cpp" />
     <ClCompile Include="RenderableGameObjectCtorTable.cpp" />
+    <ClCompile Include="RenderableMovingObject.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
