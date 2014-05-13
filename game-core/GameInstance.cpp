@@ -5,6 +5,7 @@
 GameInstance * GameInstance::globalInstance;
 
 GameInstance::GameInstance() {
+	assert(ConfigSettings::configInstance()->getValue("default_fluid_density", m_fluid_density));
 	this->initHasRun = false;
 	this->engineInstance = nullptr;
 }

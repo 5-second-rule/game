@@ -1,6 +1,8 @@
+#pragma once
+
 #include "game-core.h"
 
-GAMECOREDLL enum class ActionType {
+enum GAMECOREDLL ActionType {
 	MOVE,
 	USE,
 	SHOOT

@@ -23,5 +23,6 @@ public:
 	RenderingEngine * getRenderingEngineInstance();
 
 	virtual void init();
+	void handleTerminal();
 };
 

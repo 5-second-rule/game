@@ -3,6 +3,7 @@ mkdir -Force ../game/Debug/resources
 
 cp ../rendering-framework/Debug/*.dll ../engine/Debug
 cp ../engine/Debug/*.dll ../game/Debug
+cp ../common/Debug/*.dll ../game/Debug
 
 cp ../rendering-framework/Debug/*.cso ../engine/Debug
 cp ../engine/Debug/*.cso ../game/Debug
@@ -12,6 +13,8 @@ cp ../rendering-framework/SampleApp/*.dds ../engine/SampleApp/
 
 cp ../rendering-framework/SampleApp/*.fbx ../game/Debug/resources/
 cp ../rendering-framework/SampleApp/*.dds ../game/Debug/resources/
+
+cp ../engine/engine-core/*.ini ../game/Debug/resources
 
 # Release Prep
 #mkdir -Force ../game/Release/resources

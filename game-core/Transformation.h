@@ -1,8 +1,6 @@
 #pragma once
 #include "game-core.h"
-#include "../../common/common/4D/Matrix4.h"
 
-using namespace Common;
 class GAMECOREDLL Transformation
 {
 public:
@@ -13,15 +11,36 @@ public:
 	//
 	//  Transforms a point from the agent's local space into world space
 	//------------------------------------------------------------------------
-	static Vector4 pointToWorldSpace(const Vector4 &point,
-		const Vector4 &agent_heading,
-		const Vector4 &agend_side,
-		const Vector4 &agend_top,
-		const Vector4 &agent_position);
+	static Vector4 pointToWorldSpace(Vector4 &point,
+		Vector4 &agent_side,
+		Vector4 &agend_top,
+		Vector4 &agend_heading,
+		Vector4 &agent_position);
 
-	static Matrix4& rotationMatrix(const Vector4 &i,
-		const Vector4 &j,
-		const Vector4 &k);
+	//--------------------- vectorToWorldSpace --------------------------------
+	//
+	//  Transforms a vector from the agent's local space into world space
+	//------------------------------------------------------------------------
+	static Vector4 vectorToWorldSpace(Vector4 &vec,
+		Vector4 &AgentSide,
+		Vector4 &AgentTop,
+		Vector4 &AgentHeading);
 
-	static Matrix4& translationMatrix(const Vector4 &origin);
+	//--------------------- pointToLocalSpace --------------------------------
+	//
+	//  Transforms a point into world space to agent's local space
+	//------------------------------------------------------------------------
+	static Vector4 pointToLocalSpace(Vector4 &point,
+		Vector4 &agent_side,
+		Vector4 &agend_top,
+		Vector4 &agend_heading,
+		Vector4 &agent_position);
+
+	//--------------------- VectorToLocalSpace --------------------------------
+	//
+	//------------------------------------------------------------------------
+	static Vector4 vectorToLocalSpace(Vector4 &vec,
+		Vector4 &AgentSide,
+		Vector4 &AgentTop,
+		Vector4 &AgentHeading);
 };

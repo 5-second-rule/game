@@ -1,5 +1,6 @@
 #pragma once
 
+#include "game-core.h"
 #include "State.h"
 #include "MovingObject.h"
 #include "Transformation.h"
@@ -8,7 +9,18 @@
 
 class MovingObject;
 
-using namespace Game;
+class GAMECOREDLL Move : public State<MovingObject>
+{
+private:
+	Move();
+public:
+	static Move* instance();
+	bool handleEvent(MovingObject *object, Event* evt);
+	void enter(MovingObject *object);
+	void execute(MovingObject *object);
+	void exit(MovingObject *object);
+};
+
 class Stop : public State<MovingObject>
 {
 private:
@@ -27,23 +39,13 @@ private:
 	Break();
 public:
 	static Break* instance();
-	bool onEvent(MovingObject *object, Evennt evt);
+	bool onEvent(MovingObject *object, Event evt);
 	void enter(MovingObject *object);
 	void execute(MovingObject *object);
 	void exit(MovingObject *object);
 };
 
-class Move : public State<MovingObject>
-{
-private:
-	Move();
-public:
-	static Move* instance();
-	bool handleEvent(MovingObject *object, Event* evt);
-	void enter(MovingObject *object);
-	void execute(MovingObject *object);
-	void exit(MovingObject *object);
-};
+
 
 
 

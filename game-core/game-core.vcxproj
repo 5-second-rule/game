@@ -59,6 +59,10 @@
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>
     </Bscmake>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -75,23 +79,27 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\Common\FSM\State.h" />
-    <ClInclude Include="..\Common\FSM\StateMachine.h" />
     <ClInclude Include="ActionType.h" />
+    <ClInclude Include="BehaviorType.h" />
     <ClInclude Include="game-core.h" />
     <ClInclude Include="GameInstance.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameObjectCtorTable.h" />
+    <ClInclude Include="IFollowPath.h" />
     <ClInclude Include="MoveEvent.h" />
     <ClInclude Include="MovingObject.h" />
     <ClInclude Include="MovingObjectStates.h" />
     <ClInclude Include="ObjectTypes.h" />
+    <ClInclude Include="Path.h" />
     <ClInclude Include="RedBloodCell.h" />
     <ClInclude Include="RigidBody.h" />
     <ClInclude Include="ServerGameInstance.h" />
     <ClInclude Include="ShootEvent.h" />
+    <ClInclude Include="State.h" />
+    <ClInclude Include="StateMachine.h" />
     <ClInclude Include="SteeringBehavior.h" />
     <ClInclude Include="Transformation.h" />
+    <ClInclude Include="TypeDefinition.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameInstance.cpp" />
@@ -100,6 +108,7 @@
     <ClCompile Include="MoveEvent.cpp" />
     <ClCompile Include="MovingObject.cpp" />
     <ClCompile Include="MovingObjectStates.cpp" />
+    <ClCompile Include="Path.cpp" />
     <ClCompile Include="RedBloodCell.cpp" />
     <ClCompile Include="RigidBody.cpp" />
     <ClCompile Include="ServerGameInstance.cpp" />

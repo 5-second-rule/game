@@ -95,3 +95,6 @@ RenderingEngine * RenderableGameInstance::getRenderingEngineInstance() {
 	return dynamic_cast<RenderingEngine *>(this->getEngineInstance());
 }
 
+void RenderableGameInstance::handleTerminal(){
+
+}

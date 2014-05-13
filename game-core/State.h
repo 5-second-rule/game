@@ -1,5 +1,4 @@
-#ifndef STATE_H
-#define STATE_H
+#pragma once
 //------------------------------------------------------------------------
 //
 //  Name:   State.h
@@ -31,5 +30,3 @@ public:
   //message dispatcher
   virtual bool handleEvent(entity_type*, Event*)=0;
 };
-
-#endif

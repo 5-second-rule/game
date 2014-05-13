@@ -14,9 +14,9 @@
 #include <cassert>
 #include <string>
 
-#include "State.h"
 #include "engine-core/Event.h"
 
+#include "State.h"
 
 template <class entity_type>
 class StateMachine
