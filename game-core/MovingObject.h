@@ -35,6 +35,7 @@ public:
 
 	Vector4 heading(); // A normalized vector giving the direction the object is heading
 	float speed();
+	Vector4 getPosition();
 
 	void applyForce(const Vector4& force);
 

@@ -3,6 +3,7 @@
 #include "game-core/ShootEvent.h"
 #include "RenderableGameObjectCtorTable.h"
 #include "engine-renderer/RenderableWorld.h"
+#include "TrackingCameraHandler.h"
 
 RenderableGame::RenderableGame(void *appHandle)
 {
@@ -115,7 +116,8 @@ Engine * RenderableGame::makeEngineInstance( ConstructorTable<BaseObject> *objec
 		new RenderableWorld(), 
 		objectCtors,
 		eventCtors,
-		this->appHandle);
+		this->appHandle,
+		new TrackingCameraHandler());
 	eng->renderingDelegate = this;
 	return eng;
 }

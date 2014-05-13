@@ -78,8 +78,7 @@ static BaseObject * makeRenderableWhiteBlood(ConstructorTable<BaseObject> *thisO
 		->getRenderingEngineInstance()
 		->createModelFromIndex(
 		table->modelIndexes[ObjectTypes::WhiteBlood],
-		table->textureIndexes[ObjectTypes::WhiteBlood]
-		)
+		table->textureIndexes[ObjectTypes::WhiteBlood] )
 		);
 }
 
@@ -92,8 +91,20 @@ static BaseObject * makeRenderableRedBlood(ConstructorTable<BaseObject> *thisObj
 		->getRenderingEngineInstance()
 		->createModelFromIndex(
 		table->modelIndexes[ObjectTypes::RedBlood],
-		table->textureIndexes[ObjectTypes::RedBlood]
-		)
+		table->textureIndexes[ObjectTypes::RedBlood] )
+		);
+}
+
+static BaseObject * makeRenderableTrack(ConstructorTable<BaseObject> *thisObj) {
+	RenderableGameObjectCtorTable *table = (RenderableGameObjectCtorTable *)thisObj;
+
+	return new RenderableMovingObject(
+		ObjectTypes::Track,
+		RenderableGame::getGlobalInstance()
+		->getRenderingEngineInstance()
+		->createModelFromIndex(
+		table->modelIndexes[ObjectTypes::Track],
+		table->textureIndexes[ObjectTypes::Track] )
 		);
 }
 
@@ -125,7 +136,9 @@ void RenderableGameObjectCtorTable::initCtors() {
 
 	this->modelIndexes[ObjectTypes::RedBlood] = engine->loadModel( "resources/ecoli6_nomedia.fbx" );
 	this->textureIndexes[ObjectTypes::RedBlood] = engine->loadTexture( "resources/Wood.dds" );
-	
+
+	this->modelIndexes[ObjectTypes::Track] = engine->loadModel("resources/track.obj", false);
+	this->textureIndexes[ObjectTypes::Track] = engine->loadTexture("resources/bloodCell_TXTR.dds");
 
 	this->setConstructor(ObjectTypes::Ecoli, makeRenderableEcoli);
 	this->setConstructor( ObjectTypes::ChickenPox, makeRenderableChickenPox );
@@ -133,4 +146,5 @@ void RenderableGameObjectCtorTable::initCtors() {
 	this->setConstructor( ObjectTypes::Malaria, makeRenderableMalaria );
 	this->setConstructor( ObjectTypes::WhiteBlood, makeRenderableWhiteBlood );
 	this->setConstructor( ObjectTypes::RedBlood, makeRenderableRedBlood );
+	this->setConstructor(ObjectTypes::Track, makeRenderableTrack);
 }

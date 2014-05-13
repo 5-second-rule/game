@@ -23,10 +23,10 @@ void Game::init() {
 	this->initialized = true;
 	setGlobalInstance(this);
 
-	GameObjectCtorTable* objectCtors = this->makeCtorTable();
+	this->objectCtors = this->makeCtorTable();
 	ActionEventCtorTable* eventCtors = new ActionEventCtorTable();
-	this->engineInstance = this->makeEngineInstance(objectCtors, eventCtors);
-	objectCtors->initCtors();
+	this->engineInstance = this->makeEngineInstance(this->objectCtors, eventCtors);
+	this->objectCtors->initCtors();
 	eventCtors->initCtors();
 }
 

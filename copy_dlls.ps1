@@ -9,9 +9,11 @@ cp ../engine/Debug/*.cso ../game/Debug/resources/
 
 cp ../rendering-framework/SampleApp/*.fbx ../engine/SampleApp/
 cp ../rendering-framework/SampleApp/*.dds ../engine/SampleApp/
+cp ../rendering-framework/SampleApp/*.obj ../engine/SampleApp/
 
 cp ../rendering-framework/SampleApp/*.fbx ../game/Debug/resources/
 cp ../rendering-framework/SampleApp/*.dds ../game/Debug/resources/
+cp ../rendering-framework/SampleApp/*.obj ../game/Debug/resources/
 
 # Release Prep
 #mkdir -Force ../game/Release/resources

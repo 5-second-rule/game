@@ -1,7 +1,5 @@
 #include "ServerGame.h"
-#include "MoveEvent.h"
-#include "ShootEvent.h"
-#include "ActionType.h"
+#include "ObjectTypes.h"
 
 #include "engine-core/ServerEngine.h"
 
@@ -25,4 +23,13 @@ Engine * ServerGame::makeEngineInstance( ConstructorTable<BaseObject> *objectCto
 
 void ServerGame::stop() {
 	dynamic_cast<ServerEngine *>(this->getEngineInstance())->stop();
+}
+
+void ServerGame::init() {
+	Game::init();
+
+	// HACK, wait to load when game screen up?
+	IHasHandle *track = this->objectCtors->invoke(ObjectTypes::Track);
+	this->getEngineInstance()->getWorld()->allocateHandle(track, HandleType::GLOBAL);
+	this->getEngineInstance()->getWorld()->insert(track);
 }

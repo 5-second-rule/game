@@ -9,5 +9,6 @@ enum GAMECOREDLL ObjectTypes
 	Malaria,
 	WhiteBlood,
 	RedBlood,
-	MagicSchoolBus
+	MagicSchoolBus,
+	Track
 };

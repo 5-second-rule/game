@@ -45,7 +45,7 @@ bool MovingObject::handleEvent(Event *evt){
 		if (moveEvent == nullptr)
 			return false;
 
-		const float MOVE_FORCE = .3f;
+		const float MOVE_FORCE = 10.0f;
 
 		Vector4 force(moveEvent->direction.x * MOVE_FORCE,
 			moveEvent->direction.y * MOVE_FORCE,
@@ -117,4 +117,8 @@ void MovingObject::deserialize(BufferReader& reader) {
 	this->mass = data->mass;
 
 	reader.finished(sizeof(MovingObjectData));
+}
+
+Vector4 MovingObject::getPosition() {
+	return this->position;
 }

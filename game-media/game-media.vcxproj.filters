@@ -27,6 +27,9 @@
     <ClInclude Include="RenderableGameObjectCtorTable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="TrackingCameraHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RenderableGameObjectCtorTable.cpp">
@@ -36,6 +39,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="RenderableGame.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TrackingCameraHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
