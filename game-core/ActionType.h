@@ -2,7 +2,7 @@
 
 #include "game-core.h"
 
-enum GAMECOREDLL ActionType {
+GAMECOREDLL enum class ActionType {
 	MOVE,
 	USE,
 	SHOOT

@@ -1,9 +1,7 @@
-#include <iostream>
-
 #include "MovingObject.h"
 
 using namespace std;
-MovingObject::MovingObject(int objectType) : GameObject(objectType)
+MovingObject::MovingObject(int objectType) : BaseObject(objectType)
 {
 	assert(ConfigSettings::configInstance()->getValue("default_drag_coefficient", m_drag_coefficient));
 	assert(ConfigSettings::configInstance()->getValue("default_max_speed", m_max_speed));
@@ -27,8 +25,11 @@ MovingObject::~MovingObject()
 }
 
 
+MovingObject::~MovingObject() {}
+
+
 Vector4 MovingObject::heading(){
-	return Common::Vector4::normalize(m_velocity);
+	return Vector4::normalize(this->velocity);
 }
 
 Vector4 MovingObject::front(){
@@ -49,7 +50,7 @@ Vector4 MovingObject::side(){
 float MovingObject::speed(){
 	return m_velocity.length();
 }
-
+	
 void MovingObject::applyForce(Vector4 &force){
 	m_tick_force += force;
 }
@@ -85,10 +86,49 @@ void MovingObject::update(float dt){
 		m_body->m_top.normalize();
 	}
 
+
 	// Reset the forces to the next update
 	m_force.set(0, 0, 0, 0);
 	m_tick_force.set(0, 0, 0, 0);
 	GameObject::update(dt);
+}
+
+void MovingObject::fillBuffer(IFill& buffer) const {
+	BaseObject::fillBuffer(buffer);
+	MovingObjectData* data = reinterpret_cast<MovingObjectData*>(buffer.getPointer());
+
+	data->position[0] = this->position[0];
+	data->position[1] = this->position[1];
+	data->position[2] = this->position[2];
+
+	data->velocity[0] = this->velocity[0];
+	data->velocity[1] = this->velocity[1];
+	data->velocity[2] = this->velocity[2];
+
+	data->force[0] = this->force[0];
+	data->force[1] = this->force[1];
+	data->force[2] = this->force[2];
+
+	data->friction = friction;
+	data->mass = mass;
+
+	buffer.filled();
+
+}
+
+void MovingObject::deserialize(BufferReader& reader) {
+	BaseObject::deserialize(reader);
+
+	const MovingObjectData* data = reinterpret_cast<const MovingObjectData*>(reader.getPointer());
+
+	this->position = Common::Point(data->position[0], data->position[1], data->position[2]);
+	this->velocity = Common::Vector(data->velocity[0], data->velocity[1], data->velocity[2]);
+	this->force = Common::Vector(data->force[0], data->force[1], data->force[2]);
+
+	this->friction = data->friction;
+	this->mass = data->mass;
+
+	reader.finished(sizeof(MovingObjectData));
 }
 
 string MovingObject::toString(){

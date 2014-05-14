@@ -1,18 +1,18 @@
 #include "ShootEvent.h"
 #include "ActionType.h"
-#include "GameInstance.h"
+#include "Game.h"
 
-ShootEvent::ShootEvent( unsigned int playerGuid ) : ActionEvent( playerGuid ) {
-	this->actionType = static_cast<int>(ActionType::SHOOT);
-}
+ShootEvent::ShootEvent(unsigned int playerGuid)
+	: ActionEvent(playerGuid, static_cast<int>(ShootEvent::ACTIONTYPE) )
+{}
 
 ShootEvent::~ShootEvent() {}
 
-void ShootEvent::reserveSize( IReserve& buffer ) {
+void ShootEvent::reserveSize( IReserve& buffer ) const {
 	ActionEvent::reserveSize( buffer );
 }
 
-void ShootEvent::fillBuffer( IFill& buffer ) {
+void ShootEvent::fillBuffer( IFill& buffer ) const {
 	ActionEvent::fillBuffer( buffer );
 }
 

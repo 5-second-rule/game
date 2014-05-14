@@ -51,6 +51,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <BrowseInformation>true</BrowseInformation>
+      <AdditionalIncludeDirectories>$(SolutionDir)../common/</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
