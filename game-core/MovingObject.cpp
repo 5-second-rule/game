@@ -3,94 +3,63 @@
 using namespace std;
 MovingObject::MovingObject(int objectType) : BaseObject(objectType)
 {
-	assert(ConfigSettings::configInstance()->getValue("default_drag_coefficient", m_drag_coefficient));
-	assert(ConfigSettings::configInstance()->getValue("default_max_speed", m_max_speed));
-	assert(ConfigSettings::configInstance()->getValue("default_max_force", m_max_force));
+	assert(ConfigSettings::config->getValue("default_drag_coefficient", drag_coefficient));
+	assert(ConfigSettings::config->getValue("default_max_speed", max_speed));
+	assert(ConfigSettings::config->getValue("default_max_force", max_force));
+	assert(ConfigSettings::config->getValue("default_mass", mass));
 
-	m_state_machine = new StateMachine<MovingObject>(this);
-	m_state_machine->SetCurrentState(Move::instance());
-
-	m_path = Path::instance();
-	setCurrentWayPoint(m_path->begin());
-	m_path->loopOn();
-	m_path->print();
-	createAI();
-	m_steering_behavior->followPathOn();
-	//m_steering_behavior->wanderOn();
+	state_machine = new StateMachine<MovingObject>(this);
+	state_machine->setCurrentState(Move::instance());
+	steering_behavior = nullptr;
+	path = Path::instance();
+	setCurrentWayPoint(path->begin());
+	path->loopOn();
 }
-
-
-MovingObject::~MovingObject()
-{
-}
-
 
 MovingObject::~MovingObject() {}
-
-
-Vector4 MovingObject::heading(){
-	return Vector4::normalize(this->velocity);
-}
-
-Vector4 MovingObject::front(){
-	return Vector4(0, 0, 1);
-	//return m_body->m_heading;
-}
-
-Vector4 MovingObject::top(){
-	return Vector4(0, 1, 0);
-	//return m_body->m_top;
-}
-
-Vector4 MovingObject::side(){
-	return Vector4(1, 0, 0);
-	//return m_body->m_side;
-}
-
-float MovingObject::speed(){
-	return m_velocity.length();
-}
 	
 void MovingObject::applyForce(Vector4 &force){
-	m_tick_force += force;
+	tick_force += force;
 }
 
 bool MovingObject::handleEvent(Event* evt){
-	if (m_state_machine->handleEvent(evt))
+	if (state_machine->handleEvent(evt))
 		return true;
-	return GameObject::handleEvent(evt);
+	return false;
 }
 
 void MovingObject::update(float dt){
-	Vector4 acceleration;
+	state_machine->update();
 
-	if (m_steering_behavior)
-		m_force += m_steering_behavior->calculate();
-	m_force -= m_velocity * m_drag_coefficient;
-	m_force += m_tick_force;
-	acceleration = m_force * (1 / m_body->m_mass);
-	m_velocity += acceleration*dt;
-	m_body->m_position += m_velocity * dt;
+	// Update de physics
+	if (this->steering_behavior)
+		force += steering_behavior->calculate();
+	force -= velocity * drag_coefficient;
+	force += tick_force;
+	Vector4 acceleration = force * (1 / this->mass);
+	velocity += acceleration*dt;
+	this->position += velocity * dt;
 
-	position[0] = m_body->m_position.get(0);
-	position[1] = m_body->m_position.get(1);
-	position[2] = m_body->m_position.get(2);
+	if (velocity.length() > 0.00001){
+		// Update the object local space base
+		heading = velocity;
+		side = Vector4::perp(heading);
+		top = Vector4::cross(heading, side);
 
-	if (m_velocity.length() > 0.00001){
-		m_body->m_heading = m_velocity;
-		m_body->m_side = Vector4::perp(m_body->m_heading);
-		m_body->m_top = Vector4::cross(m_body->m_heading, m_body->m_side);
-
-		m_body->m_heading.normalize();
-		m_body->m_side.normalize();
-		m_body->m_top.normalize();
+		heading.normalize();
+		side.normalize();
+		top.normalize();
 	}
 
-
 	// Reset the forces to the next update
-	m_force.set(0, 0, 0, 0);
-	m_tick_force.set(0, 0, 0, 0);
-	GameObject::update(dt);
+	force.set(0, 0, 0, 0);
+	tick_force.set(0, 0, 0, 0);
+	BaseObject::update(dt);
+}
+
+void MovingObject::reserveSize(IReserve& buffer) const {
+	BaseObject::reserveSize(buffer);
+	buffer.reserve(sizeof(MovingObjectData));
 }
 
 void MovingObject::fillBuffer(IFill& buffer) const {
@@ -109,7 +78,7 @@ void MovingObject::fillBuffer(IFill& buffer) const {
 	data->force[1] = this->force[1];
 	data->force[2] = this->force[2];
 
-	data->friction = friction;
+	data->drag_coefficient = drag_coefficient;
 	data->mass = mass;
 
 	buffer.filled();
@@ -125,87 +94,117 @@ void MovingObject::deserialize(BufferReader& reader) {
 	this->velocity = Common::Vector(data->velocity[0], data->velocity[1], data->velocity[2]);
 	this->force = Common::Vector(data->force[0], data->force[1], data->force[2]);
 
-	this->friction = data->friction;
+	this->drag_coefficient = data->drag_coefficient;
 	this->mass = data->mass;
 
 	reader.finished(sizeof(MovingObjectData));
 }
 
+void MovingObject::createAI(){
+	steering_behavior = new SteeringBehavior(this);
+}
+
+void MovingObject::setDragCoeff(float p_drag_coefficient){
+	drag_coefficient = p_drag_coefficient;
+}
+
+void MovingObject::setMaxSpeed(float p_max_speed){
+	max_speed = p_max_speed;
+}
+
+void MovingObject::setMaxForce(float p_max_force){
+	max_force = p_max_force;
+}
+
+void MovingObject::setTickForce(float x, float y, float z){
+	tick_force.set(x, y, z, 0);
+}
+
+void MovingObject::setForce(float x, float y, float z){
+	force.set(x, y, z, 0);
+}
+
+void MovingObject::setPursuit(Handle &pray){
+	if (steering_behavior == nullptr)
+		createAI();
+	steering_behavior->pursuitOn(pray);
+}
+
+void MovingObject::setEvade(Handle &predator){
+	if (steering_behavior == nullptr)
+		createAI();
+	steering_behavior->pursuitOn(predator);
+}
+
+void MovingObject::setOnSteeringBehavior(BehaviorType behavior){
+	if (steering_behavior == nullptr)
+		createAI();
+	if (behavior == BehaviorType::arrive)
+		steering_behavior->arriveOn();
+	else if (behavior == BehaviorType::flee)
+		steering_behavior->fleeOn();
+	else if (behavior == BehaviorType::seek)
+		steering_behavior->seekOn();
+	else if (behavior == BehaviorType::wander)
+		steering_behavior->wanderOn();
+}
+
+void MovingObject::setOffSteeringBehavior(BehaviorType behavior){
+	if (steering_behavior == nullptr)
+		createAI();
+	if (behavior == BehaviorType::arrive)
+		steering_behavior->arriveOff();
+	else if (behavior == BehaviorType::flee)
+		steering_behavior->fleeOff();
+	else if (behavior == BehaviorType::seek)
+		steering_behavior->seekOff();
+	else if (behavior == BehaviorType::wander)
+		steering_behavior->wanderOff();
+}
+
+void MovingObject::setTag(bool tag){
+	this->tagged = tag;
+}
+
+Vector4 MovingObject::getHeading(){
+	return Vector4::normalize(this->velocity);
+}
+
+Vector4 MovingObject::getFront(){
+	return Vector4(0, 0, 1);
+	//return heading;
+}
+
+Vector4 MovingObject::getTop(){
+	return Vector4(0, 1, 0);
+	//return top;
+}
+
+Vector4 MovingObject::getSide(){
+	return Vector4(1, 0, 0);
+	//return side;
+}
+
+Vector4 MovingObject::getPosition(){
+	return position;
+}
+
+bool MovingObject::isTagged(){
+	return tagged;
+}
+
+float MovingObject::speed(){
+	return velocity.length();
+}
+
 string MovingObject::toString(){
 	stringstream buffer;
-	buffer << GameObject::toString() << endl;
-	buffer << "Speed: " << m_velocity.length() << endl;
-	buffer << "Force: " << m_force.toString();
+	buffer << this->getHandle().toString() << endl;
+	buffer << "Speed: " << velocity.length() << endl;
+	buffer << "Force: " << force.toString();
 	return buffer.str();
 }
 
 void MovingObject::print(){
 	cout << toString();
-}
-
-void MovingObject::createAI(){
-	m_steering_behavior = new SteeringBehavior(this);
-}
-
-void MovingObject::setDragCoeff(float p_drag_coefficient){
-	m_drag_coefficient = p_drag_coefficient;
-}
-
-void MovingObject::setMaxSpeed(float p_max_speed){
-	m_max_speed = p_max_speed;
-}
-
-void MovingObject::setMaxForce(float p_max_force){
-	m_max_force = p_max_force;
-}
-
-void MovingObject::setPursuit(Handle *pray){
-	if (m_steering_behavior == nullptr)
-		createAI();
-	m_steering_behavior->pursuitOn(pray);
-}
-
-void MovingObject::setEvade(Handle *predator){
-	if (m_steering_behavior == nullptr)
-		createAI();
-	m_steering_behavior->pursuitOn(predator);
-}
-
-void MovingObject::setOnSteeringBehavior(BehaviorType behavior){
-	if (m_steering_behavior == nullptr)
-		createAI();
-	if (behavior == BehaviorType::arrive)
-		m_steering_behavior->arriveOn();
-	else if (behavior == BehaviorType::flee)
-		m_steering_behavior->fleeOn();
-	else if (behavior == BehaviorType::seek)
-		m_steering_behavior->seekOn();
-	else if (behavior == BehaviorType::wander)
-		m_steering_behavior->wanderOn();
-}
-
-void MovingObject::setOffSteeringBehavior(BehaviorType behavior){
-	if (m_steering_behavior == nullptr)
-		createAI();
-	if (behavior == BehaviorType::arrive)
-		m_steering_behavior->arriveOff();
-	else if (behavior == BehaviorType::flee)
-		m_steering_behavior->fleeOff();
-	else if (behavior == BehaviorType::seek)
-		m_steering_behavior->seekOff();
-	else if (behavior == BehaviorType::wander)
-		m_steering_behavior->wanderOff();
-}
-
-WayPoint MovingObject::getCurrentWayPoint(){
-	return m_current_way_point;
-}
-
-void MovingObject::setCurrentWayPoint(WayPoint p){
-	m_current_way_point = p;
-}
-
-void MovingObject::setNextWayPoint(){
-	cout << "changed";
-	m_path->setNextWayPoint(this);
 }

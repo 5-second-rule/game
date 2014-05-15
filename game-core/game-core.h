@@ -11,11 +11,12 @@
 #include <vector>
 #include <algorithm>
 
-#include "../../engine/engine-core/ConfigSettings.h"
+#include "engine-core/ConfigSettings.h"
 
-#include "../../common/common/common.h"
-#include "../../common/common/4D/Matrix4.h"
-#include "../../common/common/misc/utils.h"
+#include "common/common.h"
+#include "common/4D/Transformation.h"
+#include "common/Matrix4.h"
+#include "common/misc/utils.h"
 
 #include "TypeDefinition.h"
 

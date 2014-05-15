@@ -3,7 +3,6 @@
 #include "game-core.h"
 #include "State.h"
 #include "MovingObject.h"
-#include "Transformation.h"
 #include "MoveEvent.h"
 #include "ActionType.h"
 

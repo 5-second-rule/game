@@ -5,6 +5,9 @@
 #include "engine-core/Engine.h"
 #include "engine-core/World.h"
 
+#define getWorld() (((Game::getGlobalInstance())->getEngineInstance())->getWorld())
+#define getObject(handle) ((getWorld())->get(handle))
+
 class GAMECOREDLL Game
 {
 private:

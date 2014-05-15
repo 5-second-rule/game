@@ -2,8 +2,7 @@
 
 
 #include "game-core.h"
-#include "GameInstance.h"
-#include "Transformation.h"
+#include "Game.h"
 #include "MovingObject.h"
 #include "BehaviorType.h"
 
@@ -23,40 +22,42 @@ private:
 	float k_time_elapsed;
 
 	// Arrive parameters
-	float m_deceleration_tweaker;
+	float deceleration_tweaker;
 
 	// Wander parameters
-	float m_wander_radius;
-	float m_wander_distance;
-	float m_wander_jitter;
+	float wander_radius;
+	float wander_distance;
+	float wander_jitter;
 
 	// Follow path parameters
-	float m_way_point_seek_distance;
-	float m_way_point_seek_distance_sq;
+	float way_point_seek_distance;
+	float way_point_seek_distance_sq;
 
 	// Caculate prioritized parameters (weights)
-	float m_weight_wander;
-	float m_weight_follow_path;
+	float weight_wander;
+	float weight_follow_path;
 
 	// Steering behavior attributes
-	Vector4 m_target_point;
-	Vector4 m_wander_target;
+	Vector4 target_point;
+	Handle target_agent1;
+	Handle target_agent2;
+	Vector4 wander_target;
 
 	// Offset pursuit attributes
-	Vector4 m_offset;
+	Vector4 offset;
 
 	// Active behaviors
-	int m_behavior;
+	int behavior;
 
-	Vector4 m_steering_force;
-	Handle *m_target_agent;
-	MovingObject *m_owner;
+	Vector4 steering_force;
+	Handle target_agent;
+	MovingObject *owner;
 
 	Vector4 seek(Vector4 &p_point);
 	Vector4 flee(Vector4 &p_point);
 	Vector4 arrive(Vector4 &p_point, Deceleration deceleration = slow);
-	Vector4 pursuit(Handle *p_prey_handle);
-	Vector4 evade(Handle *p_predator_handle);
+	Vector4 pursuit(Handle &p_prey_handle);
+	Vector4 evade(Handle &p_predator_handle);
 	Vector4 wander();
 
 	//------------------------------- FollowPath -----------------------------
@@ -73,7 +74,7 @@ private:
 	//  Produces a steering force that keeps a vehicle at a specified offset
 	//  from a leader vehicle
 	//------------------------------------------------------------------------
-	Vector4 offsetPursuit(Handle *p_leader, Vector4 &offset);
+	Vector4 offsetPursuit(Handle &p_leader, Vector4 &offset);
 
 	//---------------------------- Separation --------------------------------
 	//
@@ -94,7 +95,6 @@ private:
 	//  center of mass of the agents in its immediate area
 	//------------------------------------------------------------------------
 	Vector4 cohesion(const std::vector<Handle> &neighbors);
-	Vector4 flocking();
 
 	Vector4 calculatePrioritized();
 
@@ -117,11 +117,11 @@ public:
 	void seekOn();
 	void fleeOn();
 	void arriveOn();
-	void pursuitOn(Handle *p_preyHandle);
-	void evadeOn(Handle *p_predatorHandle);
+	void pursuitOn(Handle &p_preyHandle);
+	void evadeOn(Handle &p_predatorHandle);
 	void wanderOn();
 	void followPathOn();
-	void offsetPursuitOn(Handle *p_leader, const Vector4 p_offset);
+	void offsetPursuitOn(Handle &p_leader, const Vector4 p_offset);
 	void seekOff();
 	void fleeOff();
 	void arriveOff();

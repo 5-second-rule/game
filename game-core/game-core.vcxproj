@@ -39,8 +39,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir);$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)../engine/</IncludePath>
-    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDir)Debug;$(SolutionDir)../engine/Debug</LibraryPath>
+    <IncludePath>$(SolutionDir);$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)../engine/;$(SolutionDir)../common/</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDir)Debug;$(SolutionDir)../engine/Debug;$(SolutionDir)../common/Debug;</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -54,7 +54,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);engine-core.lib;Common.lib</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);engine-core.lib;../../common/Debug/common.lib</AdditionalDependencies>
     </Link>
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>
@@ -79,11 +79,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ActionEventCtorTable.h" />
     <ClInclude Include="ActionType.h" />
     <ClInclude Include="BehaviorType.h" />
     <ClInclude Include="game-core.h" />
-    <ClInclude Include="GameInstance.h" />
-    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="Game.h" />
     <ClInclude Include="GameObjectCtorTable.h" />
     <ClInclude Include="IFollowPath.h" />
     <ClInclude Include="MoveEvent.h" />
@@ -91,34 +91,27 @@
     <ClInclude Include="MovingObjectStates.h" />
     <ClInclude Include="ObjectTypes.h" />
     <ClInclude Include="Path.h" />
-    <ClInclude Include="RedBloodCell.h" />
-    <ClInclude Include="RigidBody.h" />
-    <ClInclude Include="ServerGameInstance.h" />
+    <ClInclude Include="ServerGame.h" />
     <ClInclude Include="ShootEvent.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="StateMachine.h" />
     <ClInclude Include="SteeringBehavior.h" />
-    <ClInclude Include="Transformation.h" />
     <ClInclude Include="TypeDefinition.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GameInstance.cpp" />
-    <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="ActionEventCtorTable.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObjectCtorTable.cpp" />
+    <ClCompile Include="IFollowPath.cpp" />
     <ClCompile Include="MoveEvent.cpp" />
     <ClCompile Include="MovingObject.cpp" />
     <ClCompile Include="MovingObjectStates.cpp" />
     <ClCompile Include="Path.cpp" />
-    <ClCompile Include="RedBloodCell.cpp" />
-    <ClCompile Include="RigidBody.cpp" />
-    <ClCompile Include="ServerGameInstance.cpp" />
+    <ClCompile Include="ServerGame.cpp" />
     <ClCompile Include="ShootEvent.cpp" />
     <ClCompile Include="SteeringBehavior.cpp" />
-    <ClCompile Include="Transformation.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Debug\resources\Config.ini" />
-    <None Include="..\Debug\resources\ConfigTemplate.ini" />
     <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

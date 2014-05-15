@@ -56,7 +56,8 @@ PathContainer Path::createRandomPath(int NumWaypoints,
 
 	for (int i = 0; i<NumWaypoints; ++i)
 	{
-		float RadialDist = (float)RandInRange(smaller*0.2f, smaller);
+		//float RadialDist = (float)RandInRange(smaller*0.2f, smaller);
+		float RadialDist = 0.0f;
 
 		Vector4 temp(RadialDist, 0.0f, 0.0f);
 
