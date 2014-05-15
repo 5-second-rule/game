@@ -18,6 +18,9 @@
     <Filter Include="Interface">
       <UniqueIdentifier>{70d92f45-9826-4922-8ff5-3fdbf288afc7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{469c01b1-c2e5-4c80-9567-9e3809655a73}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameObjectCtorTable.h">
@@ -112,5 +115,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
+    <None Include="Config.ini">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="ConfigTemplate.ini">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

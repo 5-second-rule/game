@@ -14,7 +14,7 @@ cp ../rendering-framework/SampleApp/*.dds ../engine/SampleApp/
 cp ../rendering-framework/SampleApp/*.fbx ../game/Debug/resources/
 cp ../rendering-framework/SampleApp/*.dds ../game/Debug/resources/
 
-cp ../engine/engine-core/*.ini ../game/Debug/resources
+cp ../game/game-core/*.ini ../game/Debug/resources
 
 # Release Prep
 #mkdir -Force ../game/Release/resources

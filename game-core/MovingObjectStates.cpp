@@ -22,7 +22,7 @@ bool Move::handleEvent(MovingObject* object, Event *evt){
 		MoveEvent *moveEvent = dynamic_cast<MoveEvent *>(evt);
 		if (moveEvent == nullptr)
 			return false;
-		assert(ConfigSettings::configInstance()->getValue("move_force", forceModule));
+		assert(ConfigSettings::config->getValue("move_force", forceModule));
 		force.set(moveEvent->direction.x * forceModule,
 			      moveEvent->direction.y * forceModule,
 			      moveEvent->direction.z * forceModule);
