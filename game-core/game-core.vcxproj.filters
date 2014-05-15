@@ -9,16 +9,21 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="States">
+      <UniqueIdentifier>{fdd6a8de-e314-43aa-bb81-1bbafd66066f}</UniqueIdentifier>
     </Filter>
     <Filter Include="Types">
       <UniqueIdentifier>{5bff2223-e64a-42fc-a14b-0ae676b8f1ca}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Interface">
+      <UniqueIdentifier>{70d92f45-9826-4922-8ff5-3fdbf288afc7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{469c01b1-c2e5-4c80-9567-9e3809655a73}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ObjectTypes.h">
+    <ClInclude Include="GameObjectCtorTable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="game-core.h">
@@ -26,6 +31,12 @@
     </ClInclude>
     <ClInclude Include="MovingObject.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SteeringBehavior.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MovingObjectStates.h">
+      <Filter>States</Filter>
     </ClInclude>
     <ClInclude Include="MoveEvent.h">
       <Filter>Header Files</Filter>
@@ -36,22 +47,49 @@
     <ClInclude Include="ActionType.h">
       <Filter>Types</Filter>
     </ClInclude>
-    <ClInclude Include="Game.h">
+    <ClInclude Include="State.h">
+      <Filter>States</Filter>
+    </ClInclude>
+    <ClInclude Include="StateMachine.h">
+      <Filter>States</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectTypes.h">
+      <Filter>Types</Filter>
+    </ClInclude>
+    <ClInclude Include="BehaviorType.h">
+      <Filter>Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Path.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TypeDefinition.h">
+      <Filter>Types</Filter>
     </ClInclude>
     <ClInclude Include="ServerGame.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameObjectCtorTable.h">
+    <ClInclude Include="Game.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IFollowPath.h">
+      <Filter>Interface</Filter>
     </ClInclude>
     <ClInclude Include="ActionEventCtorTable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="GameObjectCtorTable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="MovingObject.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SteeringBehavior.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MovingObjectStates.cpp">
+      <Filter>States</Filter>
     </ClCompile>
     <ClCompile Include="MoveEvent.cpp">
       <Filter>Source Files</Filter>
@@ -59,17 +97,29 @@
     <ClCompile Include="ShootEvent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Game.cpp">
+    <ClCompile Include="Path.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ServerGame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GameObjectCtorTable.cpp">
+    <ClCompile Include="Game.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="IFollowPath.cpp">
+      <Filter>Interface</Filter>
     </ClCompile>
     <ClCompile Include="ActionEventCtorTable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+    <None Include="Config.ini">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="ConfigTemplate.ini">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
