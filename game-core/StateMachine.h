@@ -36,9 +36,9 @@ public:
 	void setPreviousState(State<entity_type>* s);
 
 	// Get methods
-	State<entity_type>* getCurrentState();  const{ return m_current_state; }
-	State<entity_type>* getGlobalState();   const{ return m_global_state; }
-	State<entity_type>* getPreviousState(); const{ return m_previous_state; }
+	State<entity_type>* getCurrentState() const;
+	State<entity_type>* getGlobalState() const;
+	State<entity_type>* getPreviousState() const;
 
 	void  update() const;
 	bool  handleEvent(Event* evt) const;
