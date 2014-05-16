@@ -1,5 +1,13 @@
 #pragma once
-
+//------------------------------------------------------------------------
+//
+//  Name:   State.h
+//
+//  Desc:   abstract base class to define an interface for a state
+//
+//  Author: Mat Buckland (fup@ai-junkie.com)
+//
+//------------------------------------------------------------------------
 #include "engine-core/Event.h"
 
 template <class entity_type>

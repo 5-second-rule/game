@@ -2,14 +2,6 @@
 
 Path::Path() : m_looped(false)
 {
-	createRandomPath(40, 0, 0, 0, 100, 100, 100);
-	vector<Vector4> v;
-	v.push_back(Vector4(0, 0, 5));
-	v.push_back(Vector4(0, 0, 10));
-	v.push_back(Vector4(5, 0, 10));
-	v.push_back(Vector4(10, 0, 40));
-	v.push_back(Vector4(-10, 30, 32));
-	set(v);
 }
 
 Path* Path::instance(){

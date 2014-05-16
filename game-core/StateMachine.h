@@ -1,5 +1,14 @@
 #pragma once
-
+//------------------------------------------------------------------------
+//
+//  Name:   StateMachine.h
+//
+//  Desc:   State machine class. Inherit from this class and create some 
+//          states to give your agents FSM functionality
+//
+//  Author: Mat Buckland (fup@ai-junkie.com)
+//
+//------------------------------------------------------------------------
 #include <cassert>
 #include <string>
 
@@ -27,9 +36,9 @@ public:
 	void setPreviousState(State<entity_type>* s);
 
 	// Get methods
-	State<entity_type>* getCurrentState()  const{ return m_current_state; }
-	State<entity_type>* getGlobalState()   const{ return m_global_state; }
-	State<entity_type>* getPreviousState() const{ return m_previous_state; }
+	State<entity_type>* getCurrentState();  const{ return m_current_state; }
+	State<entity_type>* getGlobalState();   const{ return m_global_state; }
+	State<entity_type>* getPreviousState(); const{ return m_previous_state; }
 
 	void  update() const;
 	bool  handleEvent(Event* evt) const;
@@ -64,6 +73,21 @@ void StateMachine<entity_type>::setGlobalState(State<entity_type>* s){
 template <class entity_type>
 void StateMachine<entity_type>::setPreviousState(State<entity_type>* s){
 	m_previous_state = s;
+}
+
+template <class entity_type>
+State<entity_type>* StateMachine<entity_type>::getCurrentState() const{
+	return m_current_state;
+}
+
+template <class entity_type>
+State<entity_type>* StateMachine<entity_type>::getGlobalState() const{
+	return m_global_state;
+}
+
+template <class entity_type>
+State<entity_type>* StateMachine<entity_type>::getPreviousState() const{
+	return m_previous_state;
 }
 
 template <class entity_type>
