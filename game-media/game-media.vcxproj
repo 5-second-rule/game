@@ -78,12 +78,14 @@
     <ClInclude Include="RenderableGame.h" />
     <ClInclude Include="RenderableGameObjectCtorTable.h" />
     <ClInclude Include="RenderableMovingObject.h" />
+    <ClInclude Include="RenderableStaticObject.h" />
     <ClInclude Include="TrackingCameraHandler.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RenderableGame.cpp" />
     <ClCompile Include="RenderableGameObjectCtorTable.cpp" />
     <ClCompile Include="RenderableMovingObject.cpp" />
+    <ClCompile Include="RenderableStaticObject.cpp" />
     <ClCompile Include="TrackingCameraHandler.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

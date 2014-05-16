@@ -1,8 +1,8 @@
 #include "RenderableGameObjectCtorTable.h"
 #include "game-core/ObjectTypes.h"
-#include "engine-renderer/RenderableObject.h"
 
 #include "RenderableMovingObject.h"
+#include "RenderableStaticObject.h"
 
 #include "RenderableGame.h"
 
@@ -98,7 +98,7 @@ static BaseObject * makeRenderableRedBlood(ConstructorTable<BaseObject> *thisObj
 static BaseObject * makeRenderableTrack(ConstructorTable<BaseObject> *thisObj) {
 	RenderableGameObjectCtorTable *table = (RenderableGameObjectCtorTable *)thisObj;
 
-	return new RenderableMovingObject(
+	return new RenderableStaticObject(
 		ObjectTypes::Track,
 		RenderableGame::getGlobalInstance()
 		->getRenderingEngineInstance()

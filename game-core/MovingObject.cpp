@@ -137,18 +137,27 @@ bool MovingObject::collidesWith(ICollidable* target) {
 	return ((bs.position - me.position).lengthSquared() <= distance * distance);
 }
 
-void MovingObject::handleCollision(ICollidable* target) {
-	BoundingSphere bs = target->getBounds();
+void MovingObject::handleCollision(BoundingSphere bs, float dt) {
 	BoundingSphere me = this->getBounds();
 
-	Vector4 direction = me.position - bs.position;
-	float distance = bs.radius + me.radius - direction.length();
+	//Vector4 direction = me.position - bs.position;
+	//float distance = bs.radius + me.radius - direction.length();
 
-	this->position += Vector4::normalize(direction) * distance;
+	//v1 = (u1 * (m1-m2) + 2 * m2 * u2 ) / (m1 + m2)
+
+
+	Vector4 n1 = me.velocity * (me.mass - bs.mass);
+	Vector4 n2 = bs.velocity * (2 * bs.mass);
+	Vector4 numerator = n1 + n2;
+	float denominator = me.mass + bs.mass;
+
+	this->velocity = numerator * (1.0f / denominator);
+
+	
 }
 
 BoundingSphere MovingObject::getBounds() {
-	return{ this->position, 6.0f };
+	return{ this->position, this->velocity, 6.0f, this->mass };
 }
 
 unsigned int MovingObject::getPriority() {

@@ -52,7 +52,7 @@ public:
 	// ICollidable Methods
 	Vector4* getGroupingParameter();
 	bool collidesWith(ICollidable* target);
-	void handleCollision(ICollidable* target);
+	void handleCollision(BoundingSphere bs, float dt);
 	BoundingSphere getBounds();
 	unsigned int getPriority();
 
