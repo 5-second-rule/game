@@ -36,7 +36,6 @@ private:
 	float max_speed;
 	float max_force;
 	StateMachine<MovingObject> *state_machine;
-	SteeringBehavior* steering_behavior;
 	bool tagged;
 
 protected:
@@ -52,7 +51,6 @@ public:
 	Vector4 getTop();
 	float speed();
 	void applyForce(Vector4 &force);
-	void createAI();
 	virtual void update(float dt);
 	virtual bool handleEvent(Event* evt);
 
@@ -72,12 +70,6 @@ public:
 	virtual void deserialize(BufferReader& reader);
 	virtual void reserveSize(IReserve&) const;
 	virtual void fillBuffer(IFill&) const;
-
-	// Steering Behavior methods
-	void setOnSteeringBehavior(BehaviorType);
-	void setOffSteeringBehavior(BehaviorType);
-	void setPursuit(Handle &pray);
-	void setEvade(Handle &predator);
 
 	// Debug
 	virtual string toString();

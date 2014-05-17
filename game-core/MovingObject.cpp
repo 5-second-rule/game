@@ -10,10 +10,6 @@ MovingObject::MovingObject(int objectType) : BaseObject(objectType)
 
 	state_machine = new StateMachine<MovingObject>(this);
 	state_machine->setCurrentState(Move::instance());
-	steering_behavior = nullptr;
-	path = Path::instance();
-	setCurrentWayPoint(path->begin());
-	path->loopOn();
 }
 
 MovingObject::~MovingObject() {}
@@ -32,8 +28,6 @@ void MovingObject::update(float dt){
 	state_machine->update();
 
 	// Update de physics
-	if (this->steering_behavior)
-		force += steering_behavior->calculate();
 	force -= velocity * drag_coefficient;
 	force += tick_force;
 	Vector4 acceleration = force * (1 / this->mass);
@@ -100,10 +94,6 @@ void MovingObject::deserialize(BufferReader& reader) {
 	reader.finished(sizeof(MovingObjectData));
 }
 
-void MovingObject::createAI(){
-	steering_behavior = new SteeringBehavior(this);
-}
-
 void MovingObject::setDragCoeff(float p_drag_coefficient){
 	drag_coefficient = p_drag_coefficient;
 }
@@ -124,44 +114,6 @@ void MovingObject::setForce(float x, float y, float z){
 	force.set(x, y, z, 0);
 }
 
-void MovingObject::setPursuit(Handle &pray){
-	if (steering_behavior == nullptr)
-		createAI();
-	steering_behavior->pursuitOn(pray);
-}
-
-void MovingObject::setEvade(Handle &predator){
-	if (steering_behavior == nullptr)
-		createAI();
-	steering_behavior->pursuitOn(predator);
-}
-
-void MovingObject::setOnSteeringBehavior(BehaviorType behavior){
-	if (steering_behavior == nullptr)
-		createAI();
-	if (behavior == BehaviorType::arrive)
-		steering_behavior->arriveOn();
-	else if (behavior == BehaviorType::flee)
-		steering_behavior->fleeOn();
-	else if (behavior == BehaviorType::seek)
-		steering_behavior->seekOn();
-	else if (behavior == BehaviorType::wander)
-		steering_behavior->wanderOn();
-}
-
-void MovingObject::setOffSteeringBehavior(BehaviorType behavior){
-	if (steering_behavior == nullptr)
-		createAI();
-	if (behavior == BehaviorType::arrive)
-		steering_behavior->arriveOff();
-	else if (behavior == BehaviorType::flee)
-		steering_behavior->fleeOff();
-	else if (behavior == BehaviorType::seek)
-		steering_behavior->seekOff();
-	else if (behavior == BehaviorType::wander)
-		steering_behavior->wanderOff();
-}
-
 void MovingObject::setTag(bool tag){
 	this->tagged = tag;
 }
@@ -171,16 +123,19 @@ Vector4 MovingObject::getHeading(){
 }
 
 Vector4 MovingObject::getFront(){
+	// TODO
 	return Vector4(0, 0, 1);
 	//return heading;
 }
 
 Vector4 MovingObject::getTop(){
+	// TODO
 	return Vector4(0, 1, 0);
 	//return top;
 }
 
 Vector4 MovingObject::getSide(){
+	// TODO
 	return Vector4(1, 0, 0);
 	//return side;
 }

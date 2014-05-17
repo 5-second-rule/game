@@ -76,6 +76,7 @@
   <ItemGroup>
     <ClInclude Include="ActionEventCtorTable.h" />
     <ClInclude Include="ActionType.h" />
+    <ClInclude Include="AutonomousObject.h" />
     <ClInclude Include="BehaviorType.h" />
     <ClInclude Include="game-core.h" />
     <ClInclude Include="Game.h" />
@@ -95,6 +96,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ActionEventCtorTable.cpp" />
+    <ClCompile Include="AutonomousObject.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObjectCtorTable.cpp" />
     <ClCompile Include="IFollowPath.cpp" />
