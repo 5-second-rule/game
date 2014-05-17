@@ -1,6 +1,8 @@
 #include "MovingObject.h"
 
 using namespace std;
+using namespace Common;
+
 MovingObject::MovingObject(int objectType) : BaseObject(objectType)
 {
 	assert(ConfigSettings::config->getValue("default_drag_coefficient", drag_coefficient));
@@ -142,6 +144,18 @@ Vector4 MovingObject::getSide(){
 
 Vector4 MovingObject::getPosition(){
 	return position;
+}
+
+Vector4 MovingObject::getVelocity(){
+	return velocity;
+}
+
+float MovingObject::getMaxForce(){
+	return max_force;
+}
+
+float MovingObject::getMaxSpeed(){
+	return max_speed;
 }
 
 bool MovingObject::isTagged(){

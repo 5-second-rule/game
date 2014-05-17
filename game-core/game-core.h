@@ -21,5 +21,3 @@
 #include "TypeDefinition.h"
 
 const int VERBOSITY = 10;
-using namespace Common;
-using namespace std;

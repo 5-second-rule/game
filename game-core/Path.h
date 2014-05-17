@@ -10,16 +10,8 @@ class GAMECOREDLL Path
 	PathContainer m_path;
 	bool m_looped;
 
-
 	Path();
 
-	PathContainer createRandomPath(int NumWaypoints,
-		float MinX,
-		float MinY,
-		float MinZ,
-		float MaxX,
-		float MaxY,
-		float MaxZ);
 	void set(PathContainer new_path);
 	void set(const Path& path);
 	void clear();
@@ -29,7 +21,7 @@ public:
 	static Path* instance();
 
 	WayPoint begin();
-	Vector4 currentWayPoint(IFollowPath*);
+	Common::Vector4 currentWayPoint(IFollowPath*);
 	void setNextWayPoint(IFollowPath*);
 	void loopOn();
 	void loopOff();

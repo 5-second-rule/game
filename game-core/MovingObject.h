@@ -23,34 +23,33 @@ class GAMECOREDLL MovingObject :
 	public BaseObject,
 	public IFollowPath
 {
-	friend class SteeringBehavior;
 	friend class State<MovingObject>;
 private:
-	Vector4 force;
-	Vector4 tick_force;
-	Vector4 heading;
-	Vector4 top;
-	Vector4 side;
+	Common::Vector4 force;
+	Common::Vector4 tick_force;
+	Common::Vector4 heading;
+	Common::Vector4 top;
+	Common::Vector4 side;
 	float mass;
 	float drag_coefficient;
-	float max_speed;
-	float max_force;
 	StateMachine<MovingObject> *state_machine;
 	bool tagged;
 
 protected:
-	Vector4 velocity;
-	Vector4 position;
+	Common::Vector4 velocity;
+	Common::Vector4 position;
+	float max_speed;
+	float max_force;
 public:
 	MovingObject(int objectType);
 	~MovingObject();
 	// Heading(), side() and top() should return a base of the object local space
-	Vector4 getHeading(); // A normalized vector giving the direction the object is heading
-	Vector4 getFront();
-	Vector4 getSide();
-	Vector4 getTop();
+	Common::Vector4 getHeading(); // A normalized vector giving the direction the object is heading
+	Common::Vector4 getFront();
+	Common::Vector4 getSide();
+	Common::Vector4 getTop();
 	float speed();
-	void applyForce(Vector4 &force);
+	void applyForce(Common::Vector4 &force);
 	virtual void update(float dt);
 	virtual bool handleEvent(Event* evt);
 
@@ -63,7 +62,10 @@ public:
 	void setTag(bool tag);
 
 	// Get Methods
-	Vector4 getPosition();
+	Common::Vector4 getPosition();
+	Common::Vector4 getVelocity();
+	float getMaxSpeed();
+	float getMaxForce();
 	bool isTagged();
 
 	// ISerializable Methods
@@ -72,6 +74,6 @@ public:
 	virtual void fillBuffer(IFill&) const;
 
 	// Debug
-	virtual string toString();
+	virtual std::string toString();
 	virtual void print();
 };

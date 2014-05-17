@@ -27,44 +27,11 @@ void Path::loopOff(){
 	m_looped = false;
 }
 
-PathContainer Path::createRandomPath(int NumWaypoints,
-	float MinX,
-	float MinY,
-	float MinZ,
-	float MaxX,
-	float MaxY,
-	float MaxZ)
-{
-	m_path.clear();
-
-	float midX = (MaxX + MinX) / 2.0f;
-	float midY = (MaxY + MinY) / 2.0f;
-	float midZ = (MaxZ + MinZ) / 2.0f;
-
-	float smaller = min(midX, min(midY, midZ));
-
-	float spacing = TwoPi / (float)NumWaypoints;
-
-	for (int i = 0; i<NumWaypoints; ++i)
-	{
-		//float RadialDist = (float)RandInRange(smaller*0.2f, smaller);
-		float RadialDist = 0.0f;
-
-		Vector4 temp(RadialDist, 0.0f, 0.0f);
-
-		temp = Common::rotateAroundOrigin(temp, i*spacing);
-		temp += Vector4(midX, midY, midZ, 0);
-
-		m_path.push_back(temp);
-	}
-	return m_path;
-}
-
 bool Path::finished(IFollowPath *p_agent){
 	return !(p_agent->getCurrentWayPoint() != m_path.end());
 }
 
-Vector4 Path::currentWayPoint(IFollowPath *p_agent){
+Common::Vector4 Path::currentWayPoint(IFollowPath *p_agent){
 	return *(p_agent->getCurrentWayPoint());
 }
 

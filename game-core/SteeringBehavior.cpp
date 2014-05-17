@@ -1,5 +1,7 @@
 #include "SteeringBehavior.h"
 
+using namespace Common;
+
 SteeringBehavior::SteeringBehavior(MovingObject *owner) :behavior(BehaviorType::none)
 {
 	assert(ConfigSettings::config->getValue("time_tick", k_time_elapsed));
@@ -20,26 +22,26 @@ SteeringBehavior::~SteeringBehavior()
 {
 }
 
-Vector4 SteeringBehavior::seek(Vector4 &p_targetPos){
-	Vector4 desiredDirection = Common::Vector4::normalize(p_targetPos - owner->position);
-	Vector4 desiredVelocity = desiredDirection * owner->max_speed;
+Vector4 SteeringBehavior::seek(Vector4 &p_targetPosition){
+	Vector4 desiredDirection = Common::Vector4::normalize(p_targetPosition - owner->getPosition());
+	Vector4 desiredVelocity = desiredDirection * owner->getMaxSpeed();
 
 	return desiredVelocity;
 }
 
-Vector4 SteeringBehavior::flee(Vector4 &p_targetPos){
-	Vector4 desiredDirection = Common::Vector4::normalize(owner->position - p_targetPos);
-	Vector4 desiredVelocity = desiredDirection * owner->max_speed;
+Vector4 SteeringBehavior::flee(Vector4 &p_targetPosition){
+	Vector4 desiredDirection = Common::Vector4::normalize(owner->getPosition() - p_targetPosition);
+	Vector4 desiredVelocity = desiredDirection * owner->getMaxSpeed();
 
-	return desiredVelocity - owner->velocity;
+	return desiredVelocity - owner->getVelocity();
 }
 
-Vector4 SteeringBehavior::arrive(Vector4 &p_targetPos, Deceleration deceleration){
+Vector4 SteeringBehavior::arrive(Vector4 &p_targetPosition, Deceleration deceleration){
 	Vector4 toTarget;
 	Vector4 desiredVelocity;
 	float dist, speed;
 
-	toTarget = p_targetPos - owner->position;
+	toTarget = p_targetPosition - owner->getPosition();
 
 	dist = toTarget.length();
 
@@ -49,7 +51,7 @@ Vector4 SteeringBehavior::arrive(Vector4 &p_targetPos, Deceleration deceleration
 		//min(speed, object->getMaxVelocity());
 		desiredVelocity = toTarget * (speed / dist);
 
-		return desiredVelocity - owner->velocity;
+		return desiredVelocity - owner->getVelocity();
 	}
 	return Vector4(0, 0, 0, 0);
 }
@@ -62,15 +64,15 @@ Vector4 SteeringBehavior::pursuit(Handle &p_evader_handle){
 
 	tmp = getObject(p_evader_handle);
 	if (evader = dynamic_cast<MovingObject*>(tmp)){
-		toEvader = evader->position - owner->position;
+		toEvader = evader->getPosition() - owner->getPosition();
 		relativeHeading = evader->getHeading().dot(owner->getHeading());
 
 		if (toEvader.dot(owner->getHeading()) > 0 && relativeHeading < -0.95){
-			return this->seek(evader->position);
+			return this->seek(evader->getPosition());
 		}
 
-		look_ahead_time = toEvader.length() / (owner->max_speed + evader->speed());
-		return seek(evader->position + evader->velocity * look_ahead_time);
+		look_ahead_time = toEvader.length() / (owner->getMaxSpeed() + evader->speed());
+		return seek(evader->getPosition() + evader->getVelocity() * look_ahead_time);
 	}
 	else {
 		pursuitOff();
@@ -86,9 +88,9 @@ Vector4 SteeringBehavior::evade(Handle &p_pursuer_handle){
 
 	tmp = getObject(p_pursuer_handle);
 	if (pursuer = dynamic_cast<MovingObject*>(tmp)){
-		toPursuer = pursuer->position - owner->position;
-		look_ahead_time = toPursuer.length() / (owner->max_speed + pursuer->speed());
-		return flee(pursuer->position + pursuer->velocity * look_ahead_time);
+		toPursuer = pursuer->getPosition() - owner->getPosition();
+		look_ahead_time = toPursuer.length() / (owner->getMaxSpeed() + pursuer->speed());
+		return flee(pursuer->getPosition() + pursuer->getVelocity() * look_ahead_time);
 	}
 	else {
 		evadeOff();
@@ -117,22 +119,22 @@ Vector4 SteeringBehavior::wander(){
 		Vector4(1, 0, 0),
 		Vector4(0, 1, 0),
 		Vector4(0, 0, 1),
-		owner->position);
-	return target - owner->position;
+		owner->getPosition());
+	return target - owner->getPosition();
 }
 
 
 Vector4 SteeringBehavior::followPath() {
 	// Move to next target if close enough to current target (working in
 	// distance squared space)
-	if (distanceSquared(*owner->current_way_point, owner->position) <
+	if (distanceSquared(*owner->current_way_point, owner->getPosition()) <
 		way_point_seek_distance_sq)
 	{
 		owner->setNextWayPoint();
 		cout << "new point: " << owner->current_way_point->toString() << endl;
 	}
 	if (getWorld()->isTick(60)){
-		cout << distanceSquared(*owner->current_way_point, owner->position) << endl;
+		cout << distanceSquared(*owner->current_way_point, owner->getPosition()) << endl;
 	}
 
 	if (!owner->path->finished(owner)) {
@@ -157,17 +159,17 @@ Vector4 SteeringBehavior::offsetPursuit(Handle &p_leader, Vector4 &offset) {
 		leader->getSide(),
 		leader->getTop(),
 		leader->getFront(),
-		leader->position);
+		leader->getPosition());
 
-	Vector4 ToOffset = WorldOffsetPos - owner->position;
+	Vector4 ToOffset = WorldOffsetPos - owner->getPosition();
 
 	// The lookahead time is propotional to the distance between the leader
 	// and the pursuer; and is inversely proportional to the sum of both
 	// agent's velocities
-	float LookAheadTime = ToOffset.length() / (owner->max_speed + leader->speed());
+	float LookAheadTime = ToOffset.length() / (owner->getMaxSpeed() + leader->speed());
 
 	// Arrive at the predicted future position of the offset
-	return arrive(WorldOffsetPos + leader->velocity * LookAheadTime, fast);
+	return arrive(WorldOffsetPos + leader->getVelocity() * LookAheadTime, fast);
 }
 
 
@@ -276,7 +278,7 @@ bool SteeringBehavior::accumulateForce(Vector4 &RunningTot,
 	float MagnitudeSoFar = RunningTot.length();
 
 	// Calculate how much steering force remains to be used by this vehicle
-	float MagnitudeRemaining = owner->max_force - MagnitudeSoFar;
+	float MagnitudeRemaining = owner->getMaxForce() - MagnitudeSoFar;
 
 	// Return false if there is no more force left to use
 	if (MagnitudeRemaining <= 0.0) return false;
