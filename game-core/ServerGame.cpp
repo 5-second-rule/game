@@ -42,7 +42,7 @@ void ServerGame::handleCmd(){
 	cmd_mtx.lock();
 	while (getline(cmd_buffer, str)){
 		cmd->handleCmd(str);
-		cout << endl << ">>";
+		cout << endl << ">> ";
 	}
 	cmd_buffer.clear();
 	cmd_mtx.unlock();
