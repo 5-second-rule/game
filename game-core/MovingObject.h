@@ -3,9 +3,7 @@
 
 #include "engine-core/BaseObject.h"
 
-
-#include "common/Vector4.h"
-#include "common/Matrix4.h"
+#include "../../common/common/Matrix4.h"
 using namespace Common;
 
 struct MovingObjectData {
@@ -40,6 +38,8 @@ public:
 
 	virtual void update(float dt);
 	virtual bool handleEvent(Event* evt);
+
+	void setPos(float x, float y, float z);
 
 	// ISerializable Methods
 	virtual void reserveSize(IReserve&) const;

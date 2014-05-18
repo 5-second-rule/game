@@ -118,3 +118,9 @@ void MovingObject::deserialize(BufferReader& reader) {
 
 	reader.finished(sizeof(MovingObjectData));
 }
+
+void MovingObject::setPos(float x, float y, float z){
+	position.set(0, x);
+	position.set(1, y);
+	position.set(2, z);
+}

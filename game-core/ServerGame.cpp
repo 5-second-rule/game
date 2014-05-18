@@ -7,6 +7,8 @@
 
 ServerGame::ServerGame(float frameTime) {
 	this->frameTime = frameTime;
+
+	cmd = new CommandLine(this, &cmd_mtx, &cmd_buffer);
 }
 
 ServerGame::~ServerGame() {
@@ -15,7 +17,7 @@ ServerGame::~ServerGame() {
 Engine * ServerGame::makeEngineInstance( ConstructorTable<BaseObject> *objectCtors, ConstructorTable<ActionEvent>* eventCtors ) {
 
 	Engine* eng  = new ServerEngine(
-		new World(),
+		new GameWorld(this),
 		objectCtors,
 		eventCtors,
 		this->frameTime);
@@ -23,6 +25,25 @@ Engine * ServerGame::makeEngineInstance( ConstructorTable<BaseObject> *objectCto
 	return eng;
 }
 
+void ServerGame::run(){
+	Game::run();
+}
+
+void ServerGame::update(){
+	handleCmd();
+}
+
 void ServerGame::stop() {
 	dynamic_cast<ServerEngine *>(this->getEngineInstance())->stop();
+}
+
+void ServerGame::handleCmd(){
+	std::string str;
+	cmd_mtx.lock();
+	while (getline(cmd_buffer, str)){
+		cmd->handleCmd(str);
+		cout << endl << ">>";
+	}
+	cmd_buffer.clear();
+	cmd_mtx.unlock();
 }
