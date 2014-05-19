@@ -15,6 +15,8 @@ struct MovingObjectData {
 	float force[3];
 	float friction;
 	float mass;
+	float trackNormal[3];
+	int trackIndex;
 };
 
 class GAMECOREDLL MovingObject : public BaseObject, public ICollidable
@@ -23,12 +25,17 @@ protected:
 	Vector4 position;
 	Vector4 velocity;
 	Vector4 force;
+	Vector4 trackNormal;
+	float trackVelocity;
 	
 	float friction;
 	float mass;
 
 	static const float max_speed;
 	static const float max_force;
+
+	int trackIndex;
+	bool followTrack;
 
 public:
 	MovingObject(int objectType);
@@ -37,6 +44,8 @@ public:
 	Vector4 heading(); // A normalized vector giving the direction the object is heading
 	float speed();
 	Vector4 getPosition();
+	Vector4 getTrackNormal();
+	int getTrackIndex();
 
 	void applyForce(const Vector4& force);
 

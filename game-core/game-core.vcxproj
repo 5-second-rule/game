@@ -85,6 +85,7 @@
     <ClInclude Include="ServerGame.h" />
     <ClInclude Include="ShootEvent.h" />
     <ClInclude Include="StaticObject.h" />
+    <ClInclude Include="TrackPath.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ActionEventCtorTable.cpp" />
@@ -95,6 +96,7 @@
     <ClCompile Include="ServerGame.cpp" />
     <ClCompile Include="ShootEvent.cpp" />
     <ClCompile Include="StaticObject.cpp" />
+    <ClCompile Include="TrackPath.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

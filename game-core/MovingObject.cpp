@@ -5,6 +5,8 @@
 
 #include "ObjectTypes.h"
 
+#include "Game.h"
+
 #define MAX_SPEED 100
 #define MAX_FORCE 100
 
@@ -16,6 +18,9 @@ MovingObject::MovingObject(int objectType)
 {
 	this->mass = .1f;
 	this->friction = .1f;
+	this->trackIndex = 0;
+	this->followTrack = true;
+	this->trackVelocity = 1000;
 }
 
 
@@ -32,6 +37,14 @@ float MovingObject::speed(){
 
 void MovingObject::applyForce(const Vector4& force){
 	this->force += force;
+}
+
+Vector4 MovingObject::getTrackNormal() {
+	return this->trackNormal;
+}
+
+int MovingObject::getTrackIndex() {
+	return this->trackIndex;
 }
 
 bool MovingObject::handleEvent(Event *evt){
@@ -70,6 +83,24 @@ bool MovingObject::handleEvent(Event *evt){
 void MovingObject::update(float dt){
 	BaseObject::update(dt);
 
+	if (followTrack) {
+		TrackPath *track = Game::getGlobalInstance()->getTrackPath();
+		float toTraverse = this->trackVelocity * dt;
+		float traversed = 0;
+		int oldTrackIndex = trackIndex;
+
+		while (traversed < toTraverse) {
+			float nextTrackIndex = (trackIndex + 1) % track->nodes.size();
+			traversed += (track->nodes[nextTrackIndex].point - track->nodes[trackIndex].point).length();
+			trackIndex = nextTrackIndex;
+		}
+
+		Vector4 diff = track->nodes[trackIndex].point - track->nodes[oldTrackIndex].point;
+		
+		this->position += diff;
+		this->trackNormal = track->nodes[trackIndex].normal;
+	}
+	
 	this->position += this->velocity * dt;
 
 	Vector4 acceleration = force * (1 / this->mass);
@@ -103,6 +134,12 @@ void MovingObject::fillBuffer(IFill& buffer) const {
 	data->friction = friction;
 	data->mass = mass;
 
+	data->trackNormal[0] = this->trackNormal[0];
+	data->trackNormal[1] = this->trackNormal[1];
+	data->trackNormal[2] = this->trackNormal[2];
+
+	data->trackIndex = this->trackIndex;
+
 	buffer.filled();
 }
 
@@ -117,6 +154,10 @@ void MovingObject::deserialize(BufferReader& reader) {
 
 	this->friction = data->friction;
 	this->mass = data->mass;
+
+	this->trackNormal = Common::Vector(data->trackNormal[0], data->trackNormal[1], data->trackNormal[2]);
+	
+	this->trackIndex = data->trackIndex;
 
 	reader.finished(sizeof(MovingObjectData));
 }

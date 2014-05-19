@@ -51,6 +51,9 @@
     <ClInclude Include="StaticObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="TrackPath.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MovingObject.cpp">
@@ -75,6 +78,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="StaticObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TrackPath.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

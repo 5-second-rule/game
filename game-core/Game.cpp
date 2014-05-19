@@ -23,6 +23,8 @@ void Game::init() {
 	this->initialized = true;
 	setGlobalInstance(this);
 
+	this->track = TrackPath::fromFile("resources/track.path");
+
 	this->objectCtors = this->makeCtorTable();
 	ActionEventCtorTable* eventCtors = new ActionEventCtorTable();
 	this->engineInstance = this->makeEngineInstance(this->objectCtors, eventCtors);
@@ -50,7 +52,10 @@ Game * Game::getGlobalInstance() {
 	return globalInstance;
 }
 
-
 GameObjectCtorTable * Game::makeCtorTable() {
 	return new GameObjectCtorTable();
+}
+
+TrackPath * Game::getTrackPath() {
+	return this->track;
 }
