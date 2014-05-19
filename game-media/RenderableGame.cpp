@@ -117,7 +117,9 @@ Engine * RenderableGame::makeEngineInstance( ConstructorTable<BaseObject> *objec
 		new RenderableWorld(), 
 		objectCtors,
 		eventCtors,
-		this->appHandle);
+		this->appHandle,
+		"resources\\defaultVertex.cso",
+		"resources\\defaultPixel.cso");
 	eng->renderingDelegate = this;
 	return eng;
 }
