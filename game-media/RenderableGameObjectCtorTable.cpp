@@ -19,8 +19,9 @@ static BaseObject * makeRenderableEcoli(ConstructorTable<BaseObject> *thisObj) {
 			->getRenderingEngineInstance()
 			->createModelFromIndex(
 				table->modelIndexes[ObjectTypes::Ecoli],
-				table->textureIndexes[ObjectTypes::Ecoli]
-			)
+				table->textureIndexes[ObjectTypes::Ecoli],
+				table->vertexShaderIndexes[ObjectTypes::Ecoli],
+				table->pixelShaderIndexes[ObjectTypes::Ecoli])
 		);
 }
 
@@ -116,8 +117,10 @@ void RenderableGameObjectCtorTable::initCtors() {
 	RenderingEngine *engine = 
 		RenderableGame::getGlobalInstance()->getRenderingEngineInstance();
 
-	this->modelIndexes[ObjectTypes::Ecoli] = engine->loadModel("resources/ecoli6_nomedia.fbx");
-	this->textureIndexes[ObjectTypes::Ecoli] = engine->loadTexture("resources/Wood.dds");
+	this->modelIndexes[ObjectTypes::Ecoli] = engine->loadModel( "resources/ecoliii.fbx" );
+	this->textureIndexes[ObjectTypes::Ecoli] = engine->loadTexture( "resources/ecolizzz_TXTR.dds" );
+	this->vertexShaderIndexes[ObjectTypes::Ecoli] = engine->loadVertexShader( "resources/vertexTentacle.cso" );
+	this->pixelShaderIndexes[ObjectTypes::Ecoli] = engine->loadPixelShader("resources/pixel.cso");
 
 	this->modelIndexes[ObjectTypes::ChickenPox] = engine->loadModel( "resources/herpes2.fbx" );
 	this->textureIndexes[ObjectTypes::ChickenPox] = engine->loadTexture( "resources/herpes_3_TXTR.dds" );
