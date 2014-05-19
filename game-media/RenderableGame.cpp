@@ -17,6 +17,8 @@ void RenderableGame::init() {
 	Game::init();
 	//this->getEngineInstance()->waitForConnection();
 	this->getRenderingEngineInstance()->waitForServer();
+	int index = this->getRenderingEngineInstance()->loadSound( "resources/soundtrack.wav" );
+	this->getRenderingEngineInstance()->playSound( index, true );
 	this->getEngineInstance()->registerPlayer(true);
 }
 
