@@ -104,7 +104,10 @@ static BaseObject * makeRenderableTrack(ConstructorTable<BaseObject> *thisObj) {
 		->getRenderingEngineInstance()
 		->createModelFromIndex(
 		table->modelIndexes[ObjectTypes::Track],
-		table->textureIndexes[ObjectTypes::Track] )
+		table->textureIndexes[ObjectTypes::Track],
+		table->bumpIndexes[ObjectTypes::Track],
+		table->vertexShaderIndexes[ObjectTypes::Track],
+		table->pixelShaderIndexes[ObjectTypes::Track])
 		);
 }
 
@@ -137,8 +140,11 @@ void RenderableGameObjectCtorTable::initCtors() {
 	this->modelIndexes[ObjectTypes::RedBlood] = engine->loadModel( "resources/ecoli6_nomedia.fbx" );
 	this->textureIndexes[ObjectTypes::RedBlood] = engine->loadTexture( "resources/Wood.dds" );
 
-	this->modelIndexes[ObjectTypes::Track] = engine->loadModel("resources/track.obj", false);
+	this->modelIndexes[ObjectTypes::Track] = engine->loadModel("resources/track.trk", false);
 	this->textureIndexes[ObjectTypes::Track] = engine->loadTexture("resources/bloodCell_TXTR.dds");
+	this->bumpIndexes[ObjectTypes::Track] = engine->loadBumpMap("resources/bloodCellBump.dds");
+	this->vertexShaderIndexes[ObjectTypes::Track] = engine->loadVertexShader("resources/vertexTrack.cso");
+	this->pixelShaderIndexes[ObjectTypes::Track] = engine->loadPixelShader("resources/pixelBump.cso");
 
 	this->setConstructor(ObjectTypes::Ecoli, makeRenderableEcoli);
 	this->setConstructor( ObjectTypes::ChickenPox, makeRenderableChickenPox );

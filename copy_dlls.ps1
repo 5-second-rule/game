@@ -5,6 +5,9 @@ cp ../rendering-framework/Debug/*.dll ../engine/Debug
 cp ../engine/Debug/*.dll ../game/Debug
 
 cp ../rendering-framework/Debug/*.cso ../engine/Debug
+cp ../rendering-framework/Debug/defaultVertex.cso ../game/Debug
+cp ../rendering-framework/Debug/defaultPixel.cso ../game/Debug
+
 cp ../engine/Debug/*.cso ../game/Debug/resources/
 
 cp ../rendering-framework/SampleApp/*.fbx ../engine/SampleApp/
