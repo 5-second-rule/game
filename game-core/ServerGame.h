@@ -5,18 +5,13 @@
 
 #include "game-core.h"
 #include "Game.h"
-#include "GameWorld.h"
 #include "CommandLine.h"
-
-class GAMECOREDLL CommandLine;
-class GAMECOREDLL GameWorld;
 
 class GAMECOREDLL ServerGame : public Game
 {
 private:
 	float frameTime;
-	CommandLine *cmd;
-	std::stringstream cmd_buffer;
+	Handle *cmd;
 protected:
 	virtual Engine * makeEngineInstance( ConstructorTable<BaseObject> *objectCtors, ConstructorTable<ActionEvent>* eventCtors );
 

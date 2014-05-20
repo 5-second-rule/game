@@ -1,22 +1,54 @@
 #include "CommandLine.h"
-#include "CmdException.h"
 
 using namespace std;
 
-CommandLine::CommandLine(ServerGame* owner, std::mutex *cmd_mtx, std::stringstream *cmd_buffer)
-{
-	this->owner = owner;
-	input_thread = new std::thread(&cmdLoop, cmd_mtx, cmd_buffer);
+// Command Line Exception
+CmdException::CmdException(const string &message, bool inclSysMsg) : userMessage(message) {
+	if (inclSysMsg) {
+		userMessage.append(": ");
+		userMessage.append(strerror(errno));
+	}
 }
 
+CmdException::~CmdException() _NOEXCEPT{}
+
+const char *CmdException::what() const _NOEXCEPT{
+	return userMessage.c_str();
+}
+
+CommandLine::CommandLine(std::istream *input, std::ostream *output) : BaseObject(ObjectTypes::Cmd)
+{
+	this->input = input;
+	this->output = output;
+	input_thread = new std::thread(&cmdLoop, this->input, this->output, &cmd_mtx, &cmd_buffer);
+}
 
 CommandLine::~CommandLine()
 {
 }
 
-void CommandLine::cmdLoop(std::mutex *cmd_mtx, std::stringstream *cmd_buffer){
+void CommandLine::update(float dt){
+	readCmd();
+}
+
+bool CommandLine::handleEvent(Event *evt){
+	return false;
+}
+
+void CommandLine::readCmd(){
 	std::string str;
-	while (getline(std::cin, str)){
+	cmd_mtx.lock();
+	while (getline(cmd_buffer, str)){
+		handleCmd(str);
+		*output << endl << ">> ";
+	}
+	cmd_buffer.clear();
+	cmd_mtx.unlock();
+}
+
+void CommandLine::cmdLoop(istream *input, ostream *output, mutex *cmd_mtx, stringstream *cmd_buffer){
+	std::string str;
+	while (getline(*input, str)){
 		cmd_mtx->lock();
 		(*cmd_buffer) << str << endl;
 		cmd_mtx->unlock();
@@ -69,15 +101,15 @@ void CommandLine::invalidCommand(){
 }
 
 MovingObject *CommandLine::findObjectById(int id){
-	Handle h = getWorld()->findObjectById(id);
+	Handle h = getWorld()->getGlobalObjectByIndex(id);
 
 	if (h.id == -1)
-		throw CmdException("Object did not find!");
+		throw CmdException("Object did not find!", false);
 
 	MovingObject *obj = (MovingObject*)getObject(h);
 
 	if (obj == nullptr)
-		throw CmdException("Null pointer exception!");
+		throw CmdException("Null pointer exception!", false);
 
 	return obj;
 }
@@ -96,7 +128,7 @@ void CommandLine::set(std::stringstream &buffer){
 			obj->setPos(x, y, z);
 		}
 		catch (CmdException e){
-			cout << e.msg << endl;
+			cout << e.what() << endl;
 			printHelp();
 		}
 	}
@@ -118,7 +150,7 @@ void CommandLine::print(stringstream &buffer){
 			cout << obj->toString() << endl;
 		}
 		catch (CmdException e){
-			cout << e.msg << endl;
+			cout << e.what() << endl;
 			printHelp();
 		}
 	}

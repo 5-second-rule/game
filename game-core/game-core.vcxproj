@@ -76,12 +76,10 @@
   <ItemGroup>
     <ClInclude Include="ActionEventCtorTable.h" />
     <ClInclude Include="ActionType.h" />
-    <ClInclude Include="CmdException.h" />
     <ClInclude Include="CommandLine.h" />
     <ClInclude Include="game-core.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObjectCtorTable.h" />
-    <ClInclude Include="GameWorld.h" />
     <ClInclude Include="MoveEvent.h" />
     <ClInclude Include="MovingObject.h" />
     <ClInclude Include="ObjectTypes.h" />
@@ -90,11 +88,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ActionEventCtorTable.cpp" />
-    <ClCompile Include="CmdException.cpp" />
     <ClCompile Include="CommandLine.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObjectCtorTable.cpp" />
-    <ClCompile Include="GameWorld.cpp" />
     <ClCompile Include="MoveEvent.cpp" />
     <ClCompile Include="MovingObject.cpp" />
     <ClCompile Include="ServerGame.cpp" />
