@@ -18,6 +18,8 @@ void RenderableGame::init() {
 	Game::init();
 	//this->getEngineInstance()->waitForConnection();
 	this->getRenderingEngineInstance()->waitForServer();
+	int index = this->getRenderingEngineInstance()->loadSound( "resources/soundtrack.wav" );
+	this->getRenderingEngineInstance()->playSound( index, true );
 	this->getEngineInstance()->registerPlayer(true);
 }
 
@@ -117,7 +119,10 @@ Engine * RenderableGame::makeEngineInstance( ConstructorTable<BaseObject> *objec
 		objectCtors,
 		eventCtors,
 		this->appHandle,
-		new TrackingCameraHandler());
+		new TrackingCameraHandler(),
+		"resources\\defaultVertex.cso",
+		"resources\\defaultPixel.cso");
+
 	eng->renderingDelegate = this;
 	return eng;
 }
