@@ -18,9 +18,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ObjectTypes.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="game-core.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -48,6 +45,12 @@
     <ClInclude Include="ActionEventCtorTable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CommandLine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectTypes.h">
+      <Filter>Types</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MovingObject.cpp">
@@ -69,6 +72,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ActionEventCtorTable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CommandLine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

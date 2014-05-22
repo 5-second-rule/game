@@ -23,6 +23,10 @@ Engine * ServerGame::makeEngineInstance( ConstructorTable<BaseObject> *objectCto
 	return eng;
 }
 
+void ServerGame::run(){
+	Game::run();
+}
+
 void ServerGame::stop() {
 	dynamic_cast<ServerEngine *>(this->getEngineInstance())->stop();
 }

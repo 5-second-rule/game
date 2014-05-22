@@ -39,15 +39,15 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir);$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)../engine/</IncludePath>
-    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDir)Debug;$(SolutionDir)../engine/Debug</LibraryPath>
+    <IncludePath>$(SolutionDir);$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)../engine/;$(SolutionDir)../common/</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDir)Debug;$(SolutionDir)../engine/Debug;$(SolutionDir)../common/Debug</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)../common/</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)../common/;</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_IS_GAME_CORE;_WINDLL;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BrowseInformation>true</BrowseInformation>
     </ClCompile>
@@ -76,6 +76,7 @@
   <ItemGroup>
     <ClInclude Include="ActionEventCtorTable.h" />
     <ClInclude Include="ActionType.h" />
+    <ClInclude Include="CommandLine.h" />
     <ClInclude Include="game-core.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObjectCtorTable.h" />
@@ -87,6 +88,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ActionEventCtorTable.cpp" />
+    <ClCompile Include="CommandLine.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObjectCtorTable.cpp" />
     <ClCompile Include="MoveEvent.cpp" />
