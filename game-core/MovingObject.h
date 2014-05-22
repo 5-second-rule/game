@@ -3,7 +3,8 @@
 
 #include "engine-core/BaseObject.h"
 
-#include "../../common/common/Matrix4.h"
+#include "common/Matrix4.h"
+
 using namespace Common;
 
 struct MovingObjectData {
