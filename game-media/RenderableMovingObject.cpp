@@ -16,10 +16,13 @@ void RenderableMovingObject::render() {
 	if (this->heading != Vector4()) {
 		// flatten heading into the XZ plane, and rotate that much in y.	
 		Vector4 headingXZ = Vector(this->heading.x(), 0.0f, this->heading.z());
-		float angle = Vector4::angle(headingXZ, Vector(0, 0, 1)) * (float)(180.0f / M_PI);
-		angle *= this->heading.x() / abs(this->heading.x());
+		float angle = Vector4::angle(headingXZ, Vector(0, 0, -1)) * (float)(180.0f / M_PI);
 
-		this->setRotation(Vector4(0.0f, angle, 0.0f));
+		if (this->heading.x() != 0) {
+			angle *= this->heading.x() / abs(this->heading.x());
+		}
+
+		this->setRotation(Vector4(0.0f, -angle, 0.0f));
 	}
 	RenderableObject::render();
 }
