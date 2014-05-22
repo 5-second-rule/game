@@ -17,6 +17,6 @@ void TrackingCameraHandler::updateFor(IHasHandle *playerObject) {
 	if (gameObject != nullptr) {
 		PathNode node = Game::getGlobalInstance()->getTrackPath()->nodes[gameObject->getTrackIndex()];
 		this->position = node.point - (node.normal * (30 - node.distanceTo(gameObject->getPosition())));
-		this->lookAt = gameObject->getPosition();
+		this->lookAt = gameObject->getPosition() + ((node.point - gameObject->getPosition()) * 0.5);
 	}
 }

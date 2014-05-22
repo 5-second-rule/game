@@ -3,6 +3,7 @@
 #include "MovingObject.h"
 #include "ObjectTypes.h"
 #include "StaticObject.h"
+#include "Tube.h"
 
 GameObjectCtorTable::GameObjectCtorTable() : ConstructorTable<BaseObject>( OBJECT_TYPE_COUNT ) {}
 
@@ -33,7 +34,7 @@ static BaseObject * makeRedBlood(ConstructorTable<BaseObject> *thisObj) {
 }
 
 static BaseObject * makeTrack(ConstructorTable<BaseObject> *thisObj) {
-	return new StaticObject(ObjectTypes::Track);
+	return new Tube();
 }
 
 void GameObjectCtorTable::initCtors() {

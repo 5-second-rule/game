@@ -7,7 +7,7 @@
 
 #include "Game.h"
 
-#define MAX_SPEED 100
+#define MAX_SPEED 50
 #define MAX_FORCE 100
 
 const float MovingObject::max_speed = MAX_SPEED;
@@ -58,8 +58,8 @@ bool MovingObject::handleEvent(Event *evt){
 		if (moveEvent == nullptr)
 			return false;
 
-		const float MOVE_FORCE = 7.0f;
-		const float ROT_SCALE = 0.1f;
+		const float MOVE_FORCE = 5.0f;
+		const float ROT_SCALE = 0.05f;
 
 		//rotate sideways
 		this->heading = Matrix4::rotate(this->up, moveEvent->direction.x * ROT_SCALE) * heading;
@@ -166,13 +166,14 @@ Vector4 MovingObject::getPosition() {
 }
 
 Vector4 MovingObject::getGroupingParameter() const {
-	return this->position;
+	return Vector(0.0f, 0.0f, (float)this->trackIndex);
 }
 
 bool MovingObject::collidesWith(const ICollidable* target) const {
 	std::shared_ptr<const Bounds> bounds = target->getBounds();
 
 	if (bounds->type == BoundsType::Sphere) {
+		std::cout << "Wall Check" << std::endl;
 		std::shared_ptr<const BoundingSphere> bs = std::static_pointer_cast<const BoundingSphere>(bounds);
 		std::shared_ptr<const BoundingSphere> me = std::static_pointer_cast<const BoundingSphere>(this->getBounds());
 
@@ -183,10 +184,10 @@ bool MovingObject::collidesWith(const ICollidable* target) const {
 }
 
 void MovingObject::handleCollision(std::shared_ptr<const Bounds> bounds, float dt) {
+	std::shared_ptr<const BoundingSphere> me = std::static_pointer_cast<const BoundingSphere>(this->getBounds());
 
 	if (bounds->type == BoundsType::Sphere) {
 		std::shared_ptr<const BoundingSphere> bs = std::static_pointer_cast<const BoundingSphere>(bounds);
-		std::shared_ptr<const BoundingSphere> me = std::static_pointer_cast<const BoundingSphere>(this->getBounds());
 
 		Vector4 n1 = me->velocity * (me->mass - bs->mass);
 		Vector4 n2 = bs->velocity * (2 * bs->mass);
@@ -194,13 +195,25 @@ void MovingObject::handleCollision(std::shared_ptr<const Bounds> bounds, float d
 		float denominator = me->mass + bs->mass;
 
 		this->velocity = numerator * (1.0f / denominator);
+	} else {
+		TrackPath *track = Game::getGlobalInstance()->getTrackPath();
+
+		Vector4 trackPos = track->nodes[this->trackIndex].point - this->position;
+		Vector4 wallNormal = Vector4::normalize(trackPos);
+
+		float mag = this->velocity.dot(-wallNormal);
+		this->velocity += wallNormal * (1.7f * mag);
+
+		//TODO: replace 100 with track radius
+		this->position = track->nodes[this->trackIndex].point - (wallNormal * (100.0f - me->radius));
 	}
 	
 }
 
 std::shared_ptr<const Bounds> MovingObject::getBounds() const {
-	BoundingSphere* bounds = new BoundingSphere;
+	BoundingSphere* bounds = new BoundingSphere();
 
+	assert(bounds->type == BoundsType::Sphere);
 	bounds->position = this->position;
 	bounds->velocity = this->velocity;
 	bounds->radius = 5.0f;
