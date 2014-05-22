@@ -1,80 +1,56 @@
 #include "MovingObject.h"
 
-#include "MoveEvent.h"
-#include "ActionType.h"
+using namespace std;
+using namespace Common;
 
-#define MAX_SPEED 100
-#define MAX_FORCE 100
-
-const float MovingObject::max_speed = MAX_SPEED;
-const float MovingObject::max_force = MAX_FORCE;
-
-MovingObject::MovingObject(int objectType)
-	: BaseObject(objectType)
+MovingObject::MovingObject(int objectType) : BaseObject(objectType)
 {
-	this->mass = .1f;
-	this->friction = .1f;
-}
+	assert(ConfigSettings::config->getValue("default_drag_coefficient", drag_coefficient));
+	assert(ConfigSettings::config->getValue("default_max_speed", max_speed));
+	assert(ConfigSettings::config->getValue("default_max_force", max_force));
+	assert(ConfigSettings::config->getValue("default_mass", mass));
 
+	state_machine = new StateMachine<MovingObject>(this);
+	state_machine->setCurrentState(Move::instance());
+}
 
 MovingObject::~MovingObject() {}
 
-
-Vector4 MovingObject::heading(){
-	return Vector4::normalize(this->velocity);
+void MovingObject::applyForce(Vector4 &force){
+	tick_force += force;
 }
 
-float MovingObject::speed(){
-	return this->velocity.length();
-}
-
-void MovingObject::applyForce(const Vector4& force){
-	this->force += force;
-}
-
-bool MovingObject::handleEvent(Event *evt){
-
-	ActionEvent *actionEvt = Event::cast<ActionEvent>(evt);
-	if (actionEvt == nullptr)
-		return false;
-
-	switch (ActionType(actionEvt->getActionType())) {
-	case ActionType::MOVE:
-	{
-		MoveEvent *moveEvent = ActionEvent::cast<MoveEvent>(actionEvt);
-		if (moveEvent == nullptr)
-			return false;
-
-		const float MOVE_FORCE = .3f;
-
-		Vector4 force(moveEvent->direction.x * MOVE_FORCE,
-			moveEvent->direction.y * MOVE_FORCE,
-			moveEvent->direction.z * MOVE_FORCE
-			);
-
-		this->applyForce(force);
+bool MovingObject::handleEvent(Event* evt){
+	if (state_machine->handleEvent(evt))
 		return true;
-		break;
-	}
-	case ActionType::SHOOT:
-		//TODO: create projectile and set it in motion
-		break;
-	default:
-		break;
-	}
 	return false;
 }
 
 void MovingObject::update(float dt){
-	BaseObject::update(dt);
+	state_machine->update();
 
-	this->position += this->velocity * dt;
-
+	// Update de physics
+	force -= velocity * drag_coefficient;
+	force += tick_force;
 	Vector4 acceleration = force * (1 / this->mass);
-	this->force = -(this->velocity * this->friction);
+	velocity += acceleration*dt;
+	this->position += velocity * dt;
 
-	this->velocity += acceleration*dt;
+	if (velocity.length() > 0.00001){
+		// Update the object local space base
+		heading = velocity;
+		side = Vector4::perp(heading);
+		top = Vector4::cross(heading, side);
 
+		heading.normalize();
+		side.normalize();
+		top.normalize();
+}
+
+	// Reset the forces to the next update
+	force.set(0, 0, 0, 0);
+	tick_force.set(0, 0, 0, 0);
+	BaseObject::update(dt);
 }
 
 void MovingObject::reserveSize(IReserve& buffer) const {
@@ -98,10 +74,11 @@ void MovingObject::fillBuffer(IFill& buffer) const {
 	data->force[1] = this->force[1];
 	data->force[2] = this->force[2];
 
-	data->friction = friction;
+	data->drag_coefficient = drag_coefficient;
 	data->mass = mass;
 
 	buffer.filled();
+
 }
 
 void MovingObject::deserialize(BufferReader& reader) {
@@ -113,7 +90,7 @@ void MovingObject::deserialize(BufferReader& reader) {
 	this->velocity = Common::Vector(data->velocity[0], data->velocity[1], data->velocity[2]);
 	this->force = Common::Vector(data->force[0], data->force[1], data->force[2]);
 
-	this->friction = data->friction;
+	this->drag_coefficient = data->drag_coefficient;
 	this->mass = data->mass;
 
 	reader.finished(sizeof(MovingObjectData));
@@ -123,4 +100,86 @@ void MovingObject::setPos(float x, float y, float z){
 	position.set(0, x);
 	position.set(1, y);
 	position.set(2, z);
+}
+
+void MovingObject::setDragCoeff(float p_drag_coefficient){
+	drag_coefficient = p_drag_coefficient;
+}
+
+void MovingObject::setMaxSpeed(float p_max_speed){
+	max_speed = p_max_speed;
+}
+
+void MovingObject::setMaxForce(float p_max_force){
+	max_force = p_max_force;
+}
+
+void MovingObject::setTickForce(float x, float y, float z){
+	tick_force.set(x, y, z, 0);
+}
+
+void MovingObject::setForce(float x, float y, float z){
+	force.set(x, y, z, 0);
+}
+
+void MovingObject::setTag(bool tag){
+	this->tagged = tag;
+}
+
+Vector4 MovingObject::getHeading(){
+	return Vector4::normalize(this->velocity);
+}
+
+Vector4 MovingObject::getFront(){
+	// TODO
+	return Vector4(0, 0, 1);
+	//return heading;
+}
+
+Vector4 MovingObject::getTop(){
+	// TODO
+	return Vector4(0, 1, 0);
+	//return top;
+}
+
+Vector4 MovingObject::getSide(){
+	// TODO
+	return Vector4(1, 0, 0);
+	//return side;
+}
+
+Vector4 MovingObject::getPosition(){
+	return position;
+}
+
+Vector4 MovingObject::getVelocity(){
+	return velocity;
+}
+
+float MovingObject::getMaxForce(){
+	return max_force;
+}
+
+float MovingObject::getMaxSpeed(){
+	return max_speed;
+}
+
+bool MovingObject::isTagged(){
+	return tagged;
+}
+
+float MovingObject::speed(){
+	return velocity.length();
+}
+
+string MovingObject::toString(){
+	stringstream buffer;
+	buffer << this->getHandle().toString() << endl;
+	buffer << "Speed: " << velocity.length() << endl;
+	buffer << "Force: " << force.toString();
+	return buffer.str();
+}
+
+void MovingObject::print(){
+	cout << toString();
 }
