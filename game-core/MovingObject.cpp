@@ -19,7 +19,7 @@ MovingObject::MovingObject(int objectType)
 	this->up = Vector(0.0f, 1.0f, 0.0f);
 	this->heading = Vector(0.0f, 0.0f, 1.0f);
 	this->mass = .1f;
-	this->friction = .1f;
+	this->friction = .2f;
 	this->trackIndex = 0;
 	this->followTrack = false;
 	this->trackVelocity = 1000;
@@ -58,16 +58,19 @@ bool MovingObject::handleEvent(Event *evt){
 		if (moveEvent == nullptr)
 			return false;
 
-		const float MOVE_FORCE = 10.0f;
+		const float MOVE_FORCE = 7.0f;
 		const float ROT_SCALE = 0.1f;
 
-		std::cout << "heading:"; this->heading.print();
-		std::cout << "up:"; this->up.print();
-
+		//rotate sideways
 		this->heading = Matrix4::rotate(this->up, moveEvent->direction.x * ROT_SCALE) * heading;
+
+		//rotate up and down
+		Matrix4 rot = Matrix4::rotate(Vector4::cross(up, heading), moveEvent->direction.z * ROT_SCALE);
+		this->heading = rot * heading;
+		this->up = rot * up;
+
 		this->force = heading * moveEvent->direction.y * MOVE_FORCE;
 
-		
 		this->applyForce(force);
 		return true;
 		break;
