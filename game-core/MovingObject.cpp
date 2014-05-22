@@ -21,7 +21,7 @@ MovingObject::MovingObject(int objectType)
 	this->mass = .1f;
 	this->friction = .2f;
 	this->trackIndex = 0;
-	this->followTrack = false;
+	this->followTrack = true;
 	this->trackVelocity = 1000;
 }
 
@@ -86,23 +86,6 @@ bool MovingObject::handleEvent(Event *evt){
 
 void MovingObject::update(float dt){
 	BaseObject::update(dt);
-
-	if (followTrack) {
-		TrackPath *track = Game::getGlobalInstance()->getTrackPath();
-		float toTraverse = this->trackVelocity * dt;
-		float traversed = 0;
-		int oldTrackIndex = trackIndex;
-
-		while (traversed < toTraverse) {
-			float nextTrackIndex = (trackIndex + 1) % track->nodes.size();
-			traversed += (track->nodes[nextTrackIndex].point - track->nodes[trackIndex].point).length();
-			trackIndex = nextTrackIndex;
-		}
-
-		Vector4 diff = track->nodes[trackIndex].point - track->nodes[oldTrackIndex].point;
-		
-		this->position += diff;
-	}
 	
 	this->position += this->velocity * dt;
 
@@ -111,6 +94,14 @@ void MovingObject::update(float dt){
 
 	this->velocity += acceleration*dt;
 
+	if (followTrack) {
+		TrackPath *track = Game::getGlobalInstance()->getTrackPath();
+		this->trackIndex = track->locateIndex(this->position, this->trackIndex);
+
+		const float TRACK_FORCE = 20.0f;
+		Vector4 force = track->nodes[this->trackIndex].normal * TRACK_FORCE;
+		this->applyForce(force);
+	}
 }
 
 void MovingObject::reserveSize(IReserve& buffer) const {

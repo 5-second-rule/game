@@ -9,8 +9,8 @@ struct GAMECOREDLL PathNode {
 	Common::Vector4 point;
 	Common::Vector4 normal;
 
-	Common::Vector4 getPlane() {
-		return this->point + this->normal;
+	float distanceTo(Common::Vector4 otherPoint) {
+		return this->normal.dot(otherPoint - this->point);
 	};
 };
 

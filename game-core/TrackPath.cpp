@@ -16,7 +16,12 @@ TrackPath::~TrackPath()
 
 int TrackPath::locateIndex(Vector4 realPosition, int lastIndex) {
 	PathNode lastNode = this->nodes[lastIndex];
-	int direction = realPosition.dot(lastNode.getPlane()) > 0 ? 1 : -1;
+	float lastDistance = lastNode.distanceTo(realPosition);
+	int direction = lastDistance > 0 ? 1 : -1;
+
+	if (lastDistance == 0){
+		return lastIndex;
+	}
 
 	// TODO make more binary rather than linear
 	int directionHere = direction;
@@ -24,9 +29,10 @@ int TrackPath::locateIndex(Vector4 realPosition, int lastIndex) {
 
 	do {
 		// add size to handle negative wrap around
-		index = (this->nodes.size() + lastIndex + direction) % this->nodes.size();
+		index = (this->nodes.size() + index + direction) % this->nodes.size();
 		PathNode node = this->nodes[index];
-		directionHere = realPosition.dot(node.getPlane()) > 0 ? 1 : -1;
+		float dot = node.distanceTo(realPosition);
+		directionHere = dot > 0 ? 1 : -1;
 	} while (direction == directionHere);
 
 	return index;
