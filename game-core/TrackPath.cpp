@@ -3,6 +3,7 @@
 #include <fstream>
 #include <stdexcept>
 using namespace std;
+using namespace Common;
 
 TrackPath::TrackPath()
 {
@@ -11,6 +12,24 @@ TrackPath::TrackPath()
 
 TrackPath::~TrackPath()
 {
+}
+
+int TrackPath::locateIndex(Vector4 realPosition, int lastIndex) {
+	PathNode lastNode = this->nodes[lastIndex];
+	int direction = realPosition.dot(lastNode.getPlane()) > 0 ? 1 : -1;
+
+	// TODO make more binary rather than linear
+	int directionHere = direction;
+	int index = lastIndex;
+
+	do {
+		// add size to handle negative wrap around
+		index = (this->nodes.size() + lastIndex + direction) % this->nodes.size();
+		PathNode node = this->nodes[index];
+		directionHere = realPosition.dot(node.getPlane()) > 0 ? 1 : -1;
+	} while (direction == directionHere);
+
+	return index;
 }
 
 TrackPath * TrackPath::fromFile(char *file) {
