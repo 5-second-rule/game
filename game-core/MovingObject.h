@@ -59,11 +59,11 @@ public:
 	virtual void deserialize(BufferReader& buffer);
 
 	// ICollidable Methods
-	Vector4* getGroupingParameter();
-	bool collidesWith(ICollidable* target);
-	void handleCollision(BoundingSphere bs, float dt);
-	BoundingSphere getBounds();
-	unsigned int getPriority();
+	Common::Vector4 getGroupingParameter() const;
+	bool collidesWith(const ICollidable*) const;
+	void handleCollision(std::shared_ptr<const Bounds>, float dt);
+	std::shared_ptr<const Bounds> getBounds() const;
+	unsigned int getPriority() const;
 
 };
 

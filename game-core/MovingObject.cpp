@@ -19,7 +19,7 @@ MovingObject::MovingObject(int objectType)
 	this->mass = .1f;
 	this->friction = .1f;
 	this->trackIndex = 0;
-	this->followTrack = true;
+	this->followTrack = false;
 	this->trackVelocity = 1000;
 }
 
@@ -166,41 +166,50 @@ Vector4 MovingObject::getPosition() {
 	return this->position;
 }
 
-Vector4* MovingObject::getGroupingParameter() {
-	return &this->position;
+Vector4 MovingObject::getGroupingParameter() const {
+	return this->position;
 }
 
-bool MovingObject::collidesWith(ICollidable* target) {
-	BoundingSphere bs = target->getBounds();
-	BoundingSphere me = this->getBounds();
+bool MovingObject::collidesWith(const ICollidable* target) const {
+	std::shared_ptr<const Bounds> bounds = target->getBounds();
 
-	float distance = (me.radius + bs.radius);
-	return ((bs.position - me.position).lengthSquared() <= distance * distance);
+	if (bounds->type == BoundsType::Sphere) {
+		std::shared_ptr<const BoundingSphere> bs = std::static_pointer_cast<const BoundingSphere>(bounds);
+		std::shared_ptr<const BoundingSphere> me = std::static_pointer_cast<const BoundingSphere>(this->getBounds());
+
+		float distance = (me->radius + bs->radius);
+		return ((bs->position - me->position).lengthSquared() <= distance * distance);
+	}
+	else return false;
 }
 
-void MovingObject::handleCollision(BoundingSphere bs, float dt) {
-	BoundingSphere me = this->getBounds();
+void MovingObject::handleCollision(std::shared_ptr<const Bounds> bounds, float dt) {
 
-	//Vector4 direction = me.position - bs.position;
-	//float distance = bs.radius + me.radius - direction.length();
+	if (bounds->type == BoundsType::Sphere) {
+		std::shared_ptr<const BoundingSphere> bs = std::static_pointer_cast<const BoundingSphere>(bounds);
+		std::shared_ptr<const BoundingSphere> me = std::static_pointer_cast<const BoundingSphere>(this->getBounds());
 
-	//v1 = (u1 * (m1-m2) + 2 * m2 * u2 ) / (m1 + m2)
+		Vector4 n1 = me->velocity * (me->mass - bs->mass);
+		Vector4 n2 = bs->velocity * (2 * bs->mass);
+		Vector4 numerator = n1 + n2;
+		float denominator = me->mass + bs->mass;
 
-
-	Vector4 n1 = me.velocity * (me.mass - bs.mass);
-	Vector4 n2 = bs.velocity * (2 * bs.mass);
-	Vector4 numerator = n1 + n2;
-	float denominator = me.mass + bs.mass;
-
-	this->velocity = numerator * (1.0f / denominator);
-
+		this->velocity = numerator * (1.0f / denominator);
+	}
 	
 }
 
-BoundingSphere MovingObject::getBounds() {
-	return{ this->position, this->velocity, 6.0f, this->mass };
+std::shared_ptr<const Bounds> MovingObject::getBounds() const {
+	BoundingSphere* bounds = new BoundingSphere;
+
+	bounds->position = this->position;
+	bounds->velocity = this->velocity;
+	bounds->radius = 5.0f;
+	bounds->mass = this->mass;
+
+	return shared_ptr<const Bounds>(bounds);
 }
 
-unsigned int MovingObject::getPriority() {
+unsigned int MovingObject::getPriority() const {
 	return static_cast<unsigned int>(CollisionPriorities::Object);
 }
