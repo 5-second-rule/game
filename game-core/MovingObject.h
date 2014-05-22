@@ -10,22 +10,28 @@
 using namespace Common;
 
 struct MovingObjectData {
+	float up[3];
+	float heading[3];
+
 	float position[3];
 	float velocity[3];
 	float force[3];
+
 	float friction;
 	float mass;
-	float trackNormal[3];
+
 	int trackIndex;
 };
 
 class GAMECOREDLL MovingObject : public BaseObject, public ICollidable
 {
 protected:
+	Vector4 up;
+	Vector4 heading;
+
 	Vector4 position;
 	Vector4 velocity;
 	Vector4 force;
-	Vector4 trackNormal;
 	float trackVelocity;
 	
 	float friction;
@@ -41,10 +47,9 @@ public:
 	MovingObject(int objectType);
 	~MovingObject();
 
-	Vector4 heading(); // A normalized vector giving the direction the object is heading
+	Vector4 getHeading(); // A normalized vector giving the direction the object is heading
 	float speed();
 	Vector4 getPosition();
-	Vector4 getTrackNormal();
 	int getTrackIndex();
 
 	void applyForce(const Vector4& force);

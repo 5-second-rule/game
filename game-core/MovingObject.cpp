@@ -16,6 +16,8 @@ const float MovingObject::max_force = MAX_FORCE;
 MovingObject::MovingObject(int objectType)
 	: BaseObject(objectType)
 {
+	this->up = Vector(0.0f, 1.0f, 0.0f);
+	this->heading = Vector(0.0f, 0.0f, 1.0f);
 	this->mass = .1f;
 	this->friction = .1f;
 	this->trackIndex = 0;
@@ -27,8 +29,8 @@ MovingObject::MovingObject(int objectType)
 MovingObject::~MovingObject() {}
 
 
-Vector4 MovingObject::heading(){
-	return Vector4::normalize(this->velocity);
+Vector4 MovingObject::getHeading(){
+	return heading;
 }
 
 float MovingObject::speed(){
@@ -37,10 +39,6 @@ float MovingObject::speed(){
 
 void MovingObject::applyForce(const Vector4& force){
 	this->force += force;
-}
-
-Vector4 MovingObject::getTrackNormal() {
-	return this->trackNormal;
 }
 
 int MovingObject::getTrackIndex() {
@@ -61,12 +59,15 @@ bool MovingObject::handleEvent(Event *evt){
 			return false;
 
 		const float MOVE_FORCE = 10.0f;
+		const float ROT_SCALE = 0.1f;
 
-		Vector4 force(moveEvent->direction.x * MOVE_FORCE,
-			moveEvent->direction.y * MOVE_FORCE,
-			moveEvent->direction.z * MOVE_FORCE
-			);
+		std::cout << "heading:"; this->heading.print();
+		std::cout << "up:"; this->up.print();
 
+		this->heading = Matrix4::rotate(this->up, moveEvent->direction.x * ROT_SCALE) * heading;
+		this->force = heading * moveEvent->direction.y * MOVE_FORCE;
+
+		
 		this->applyForce(force);
 		return true;
 		break;
@@ -98,7 +99,6 @@ void MovingObject::update(float dt){
 		Vector4 diff = track->nodes[trackIndex].point - track->nodes[oldTrackIndex].point;
 		
 		this->position += diff;
-		this->trackNormal = track->nodes[trackIndex].normal;
 	}
 	
 	this->position += this->velocity * dt;
@@ -119,6 +119,14 @@ void MovingObject::fillBuffer(IFill& buffer) const {
 	BaseObject::fillBuffer(buffer);
 	MovingObjectData* data = reinterpret_cast<MovingObjectData*>(buffer.getPointer());
 
+	data->up[0] = this->up[0];
+	data->up[1] = this->up[1];
+	data->up[2] = this->up[2];
+
+	data->heading[0] = this->heading[0];
+	data->heading[1] = this->heading[1];
+	data->heading[2] = this->heading[2];
+
 	data->position[0] = this->position[0];
 	data->position[1] = this->position[1];
 	data->position[2] = this->position[2];
@@ -134,10 +142,6 @@ void MovingObject::fillBuffer(IFill& buffer) const {
 	data->friction = friction;
 	data->mass = mass;
 
-	data->trackNormal[0] = this->trackNormal[0];
-	data->trackNormal[1] = this->trackNormal[1];
-	data->trackNormal[2] = this->trackNormal[2];
-
 	data->trackIndex = this->trackIndex;
 
 	buffer.filled();
@@ -148,14 +152,15 @@ void MovingObject::deserialize(BufferReader& reader) {
 
 	const MovingObjectData* data = reinterpret_cast<const MovingObjectData*>(reader.getPointer());
 
+	this->up = Common::Vector(data->up[0], data->up[1], data->up[2]);
+	this->heading = Common::Vector(data->heading[0], data->heading[1], data->heading[2]);
+
 	this->position = Common::Point(data->position[0], data->position[1], data->position[2]);
 	this->velocity = Common::Vector(data->velocity[0], data->velocity[1], data->velocity[2]);
 	this->force = Common::Vector(data->force[0], data->force[1], data->force[2]);
 
 	this->friction = data->friction;
 	this->mass = data->mass;
-
-	this->trackNormal = Common::Vector(data->trackNormal[0], data->trackNormal[1], data->trackNormal[2]);
 	
 	this->trackIndex = data->trackIndex;
 
