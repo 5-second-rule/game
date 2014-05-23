@@ -88,7 +88,7 @@ void CommandLine::handleCmd(std::string cmd){
 		set(buffer);
 	}
 	else if (str == "list-objects") {
-		*output << getWorld()->listObjects() << endl;
+		*output << m_getWorld()->listObjects() << endl;
 	}
 	else if (str == "print" || str == "p") {
 		print(buffer);
@@ -172,12 +172,12 @@ void CommandLine::helpCmd(stringstream &buffer){
 }
 
 MovingObject *CommandLine::findObjectByIndex(int id){
-	Handle handle = getWorld()->getGlobalObjectByIndex(id);
+	Handle handle = m_getWorld()->getGlobalObjectByIndex(id);
 
 	if (handle.id == -1)
 		throw CmdException("Object did not find!", false);
 
-	MovingObject *obj = dynamic_cast<MovingObject*>(getObject(handle));
+	MovingObject *obj = dynamic_cast<MovingObject*>(m_getObject(handle));
 
 	if (obj == nullptr)
 		throw CmdException("Null pointer exception!", false);
@@ -196,7 +196,7 @@ MovingObject *CommandLine::translateObject(std::string str){
 		obj = findObjectByIndex(id);
 	}
 	else {
-		obj = dynamic_cast<MovingObject*>(getObject(dictionary[str]));
+		obj = dynamic_cast<MovingObject*>(m_getObject(dictionary[str]));
 		if (obj == nullptr)
 			throw CmdException("Null pointer exception!", false);
 	}
@@ -319,8 +319,8 @@ void CommandLine::createObject(std::stringstream &buffer){
 
 		if (param["type"] == "autonomous"){
 			obj = new AutonomousObject(toObjectType(param["object_type"]));
-			getWorld()->allocateHandle(obj, HandleType::GLOBAL);
-			getWorld()->insert(obj);
+			m_getWorld()->allocateHandle(obj, HandleType::GLOBAL);
+			m_getWorld()->insert(obj);
 		}
 		else {
 			throw CmdException("Fail to expecify object type to be created!", false);
@@ -377,8 +377,6 @@ void CommandLine::runFile(stringstream &buffer){
 	readFile(str);
 }
 
-
-
 bool CommandLine::validObjectType(string name){
 	if (name == "ecoli" || name == "chickenpox" || name == "syphillis" ||
 		name == "malaria" || name == "whiteblood" || name == "redblood"){
@@ -431,18 +429,18 @@ string CommandLine::toString(int a){
 	return buffer.str();
 }
 
+string CommandLine::toString(float f){
+	stringstream buffer;
+	buffer << f;
+	return buffer.str();
+}
+
 float CommandLine::toFloat(string f){
 	stringstream buffer;
 	float tmp;
 	buffer << f;
 	buffer >> tmp;
 	return tmp;
-}
-
-string CommandLine::toString(float f){
-	stringstream buffer;
-	buffer << f;
-	return buffer.str();
 }
 
 char CommandLine::toLowerChar(char c){

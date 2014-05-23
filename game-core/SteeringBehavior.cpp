@@ -62,7 +62,7 @@ Vector4 SteeringBehavior::pursuit(Handle &p_evader_handle){
 	Vector4 toEvader;
 	float relativeHeading, look_ahead_time;
 
-	tmp = getObject(p_evader_handle);
+	tmp = m_getObject(p_evader_handle);
 	if (evader = dynamic_cast<MovingObject*>(tmp)){
 		toEvader = evader->getPosition() - owner->getPosition();
 		relativeHeading = evader->getHeading().dot(owner->getHeading());
@@ -86,7 +86,7 @@ Vector4 SteeringBehavior::evade(Handle &p_pursuer_handle){
 	Vector4 toPursuer;
 	float look_ahead_time;
 
-	tmp = getObject(p_pursuer_handle);
+	tmp = m_getObject(p_pursuer_handle);
 	if (pursuer = dynamic_cast<MovingObject*>(tmp)){
 		toPursuer = pursuer->getPosition() - owner->getPosition();
 		look_ahead_time = toPursuer.length() / (owner->getMaxSpeed() + pursuer->speed());
@@ -143,7 +143,7 @@ Vector4 SteeringBehavior::followPath() {
 }
 
 Vector4 SteeringBehavior::offsetPursuit(Handle &p_leader, Vector4 &offset) {
-	MovingObject* leader = dynamic_cast<MovingObject*> getObject(p_leader);
+	MovingObject* leader = dynamic_cast<MovingObject*>(m_getObject(p_leader));
 
 	if (leader == nullptr) {
 		// Leader does not exist anymore
@@ -153,9 +153,9 @@ Vector4 SteeringBehavior::offsetPursuit(Handle &p_leader, Vector4 &offset) {
 
 	// calculate the offset's position in world space
 	Vector4 WorldOffsetPos = Transformation::pointToWorldSpace(offset,
-		leader->getSide(),
-		leader->getTop(),
-		leader->getFront(),
+		Vector4(1, 0, 0),
+		Vector4(0, 1, 0),
+		Vector4(0, 0, 1),
 		leader->getPosition());
 
 	Vector4 ToOffset = WorldOffsetPos - owner->getPosition();
@@ -176,12 +176,12 @@ Vector4 SteeringBehavior::separation(const std::vector<Handle> &neighbors)
 
 	for (unsigned int a = 0; a<neighbors.size(); ++a)
 	{
-		MovingObject *neighbor = (MovingObject*)getObject(neighbors[a]);
+		MovingObject *neighbor = dynamic_cast<MovingObject*>(m_getObject(neighbors[a]));
 		// Make sure this agent isn't included in the calculations and that
 		// the agent being examined is close enough. ***also make sure it doesn't
 		// include the evade target ***
 		if ((neighbor != nullptr) && (neighbor != owner) && neighbor->isTagged() &&
-			(neighbor != getObject(target_agent1)))
+			(neighbor != m_getObject(target_agent1)))
 		{
 			Vector4 ToAgent = owner->getPosition() - neighbor->getPosition();
 
@@ -205,12 +205,12 @@ Vector4 SteeringBehavior::alignment(const std::vector<Handle> &neighbors)
 	//iterate through all the tagged vehicles and sum their heading vectors  
 	for (unsigned int a = 0; a<neighbors.size(); ++a)
 	{
-		MovingObject* neighbor = (MovingObject*)getObject(neighbors[a]);
+		MovingObject* neighbor = dynamic_cast<MovingObject*>(m_getObject(neighbors[a]));
 		//make sure *this* agent isn't included in the calculations and that
 		//the agent being examined  is close enough ***also make sure it doesn't
 		//include any evade target ***
 		if ((neighbor != nullptr) && (neighbor != owner) && neighbor->isTagged() &&
-			(neighbor != getObject(target_agent1)))
+			(neighbor != m_getObject(target_agent1)))
 		{
 			AverageHeading += neighbor->getHeading();
 
@@ -240,12 +240,12 @@ Vector4 SteeringBehavior::cohesion(const std::vector<Handle> &neighbors)
 	// Iterate through the neighbors and sum up all the position vectors
 	for (unsigned int a = 0; a<neighbors.size(); ++a)
 	{
-		MovingObject *neighbor = (MovingObject*)getObject(neighbors[a]);
+		MovingObject *neighbor = dynamic_cast<MovingObject*>(m_getObject(neighbors[a]));
 		// Make sure *this* agent isn't included in the calculations and that
 		// the agent being examined is close enough ***also make sure it doesn't
 		// include the evade target ***
 		if ((neighbor != nullptr) && (neighbor != owner) && neighbor->isTagged() &&
-			(neighbor != (MovingObject*)getObject(this->target_agent1)))
+			(neighbor != dynamic_cast<MovingObject*>(m_getObject(this->target_agent1))))
 		{
 			CenterOfMass += neighbor->getPosition();
 

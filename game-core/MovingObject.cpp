@@ -3,6 +3,10 @@
 #include "MoveEvent.h"
 #include "ActionType.h"
 
+#include "ObjectTypes.h"
+
+#include "Game.h"
+
 MovingObject::MovingObject(int objectType) : BaseObject(objectType)
 {
 	this->up = Vector(0.0f, 1.0f, 0.0f);
@@ -20,20 +24,6 @@ MovingObject::MovingObject(int objectType) : BaseObject(objectType)
 }
 
 MovingObject::~MovingObject() {}
-
-
-Vector4 MovingObject::getHeading(){
-	return heading;
-
-}
-
-void MovingObject::applyForce(Vector4 &force){
-	tick_force += force;
-}
-
-float MovingObject::speed(){
-	return this->velocity.length();
-}
 
 void MovingObject::applyForce(const Vector4& force){
 	this->force += force;
@@ -93,12 +83,6 @@ void MovingObject::update(float dt){
 	velocity += acceleration*dt;
 	this->position += velocity * dt;
 
-	if (velocity.length() > 0.00001){
-		// Update the object local space base
-		heading = velocity;
-		side = Vector4::perp(heading);
-		top = Vector4::cross(heading, side);
-
 	if (followTrack) {
 		TrackPath *track = Game::getGlobalInstance()->getTrackPath();
 		this->trackIndex = track->locateIndex(this->position, this->trackIndex);
@@ -107,7 +91,6 @@ void MovingObject::update(float dt){
 		Vector4 force = track->nodes[this->trackIndex].normal * TRACK_FORCE;
 		this->applyForce(force);
 	}
-}
 
 	// Reset the forces to the next update
 	force.set(0, 0, 0, 0);
@@ -207,30 +190,16 @@ Vector4 MovingObject::getHeading(){
 	return Vector4::normalize(this->velocity);
 }
 
-Vector4 MovingObject::getFront(){
-	// TODO
-	return Vector4(0, 0, 1);
-	//return heading;
-}
-
-Vector4 MovingObject::getTop(){
-	// TODO
-	return Vector4(0, 1, 0);
-	//return top;
-}
-
-Vector4 MovingObject::getSide(){
-	// TODO
-	return Vector4(1, 0, 0);
-	//return side;
-}
-
 Vector4 MovingObject::getPosition(){
 	return position;
 }
 
 Vector4 MovingObject::getVelocity(){
 	return velocity;
+}
+
+float MovingObject::speed(){
+	return this->velocity.length();
 }
 
 float MovingObject::getMaxForce(){
@@ -245,10 +214,6 @@ bool MovingObject::isTagged(){
 	return tagged;
 }
 
-float MovingObject::speed(){
-	return velocity.length();
-}
-
 string MovingObject::toString(){
 	stringstream buffer;
 	buffer << this->getHandle().toString() << endl;
@@ -259,10 +224,6 @@ string MovingObject::toString(){
 
 void MovingObject::print(){
 	cout << toString();
-}
-
-Vector4 MovingObject::getPosition() {
-	return this->position;
 }
 
 Vector4 MovingObject::getGroupingParameter() const {

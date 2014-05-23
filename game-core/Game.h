@@ -6,8 +6,8 @@
 #include "engine-core/World.h"
 #include "TrackPath.h"
 
-#define getWorld() (((Game::getGlobalInstance())->getEngineInstance())->getWorld())
-#define getObject(handle) ((getWorld())->get(handle))
+#define m_getWorld() (((Game::getGlobalInstance())->getEngineInstance())->getWorld())
+#define m_getObject(handle) ((m_getWorld())->get(handle))
 
 class GAMECOREDLL Game
 {

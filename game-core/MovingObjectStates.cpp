@@ -26,10 +26,7 @@ bool Move::handleEvent(MovingObject* object, Event *evt){
 		force.set(moveEvent->direction.x * forceModule,
 			moveEvent->direction.y * forceModule,
 			moveEvent->direction.z * forceModule);
-		forceToApply = force; Common::Transformation::vectorToWorldSpace(force,
-			object->getSide(),
-			object->getTop(),
-			object->getFront());
+		forceToApply = force;
 		object->applyForce(forceToApply);
 		return true;
 		break;

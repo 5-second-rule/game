@@ -3,14 +3,17 @@
 #include "game-core.h"
 #include "MovingObject.h"
 #include "SteeringBehavior.h"
+#include "BehaviorType.h"
+#include "Path.h"
 
 class GAMECOREDLL SteeringBehavior;
 
-class GAMECOREDLL AutonomousObject : public MovingObject
+class GAMECOREDLL AutonomousObject : public MovingObject, public IFollowPath
 {
 private:
 	SteeringBehavior* steering_behavior;
 public:
+	Path *path;
 	AutonomousObject(int objectType);
 	~AutonomousObject();
 
