@@ -31,8 +31,9 @@ private:
 	string userMessage;
 };
 
+const string str_init_file = "resources/init.txt";
 
-class GAMECOREDLL CommandLine : public BaseObject
+class GAMECOREDLL CommandLine : public IHasHandle, public IUpdatable
 {
 private:
 	std::istream *input;
@@ -40,22 +41,41 @@ private:
 	std::stringstream cmd_buffer;
 	std::mutex cmd_mtx;
 	std::thread *input_thread;
+	std::map< std::string, Handle > dictionary;
+
+	int allocator;
 
 public:
 	CommandLine(std::istream *input, std::ostream *output);
 	~CommandLine();
 
 	void update(float);
+	void readFile(std::string str);
 	bool handleEvent(Event *evt);
 	void readCmd();
-	static void cmdLoop(std::istream *input, std::ostream *output, std::mutex *cmd_mtx, std::stringstream *cmd_buffer);
+	static void cmdLoop(std::istream *input, std::mutex *cmd_mtx, std::stringstream *cmd_buffer);
 	void handleCmd(std::string cmd);
+	bool setParam(std::map<std::string, std::string> &param, std::string str, std::stringstream &buffer);
 	void help();
-	void setHelp();
-	void printHelp();
+	void helpSet();
+	void helpPrint();
+	void helpCreate();
+	void helpObjectType();
 	void invalidCommand();
+	void helpCmd(std::stringstream &buffer);
 	void set(std::stringstream &buffer);
 	void print(std::stringstream &buffer);
-	MovingObject *findObjectById(int);
+	void runFile(std::stringstream &buffer);
+	bool validObjectType(std::string name);
+	ObjectTypes toObjectType(std::string name);
+	float toFloat(std::string f);
+	void createObject(stringstream &buffer);
+	MovingObject *findObjectByIndex(int);
+	MovingObject *translateObject(std::string str);
 
+	static char toLowerChar(char);
+	static std::string toLower(std::string);
+	static std::string toString(int);
+	static std::string toString(float f);
+	static std::string toString(ObjectTypes type);
 };

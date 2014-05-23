@@ -6,10 +6,7 @@
 #include "StateMachine.h"
 #include "MovingObjectStates.h"
 #include "Path.h"
-#include "SteeringBehavior.h"
 #include "BehaviorType.h"
-
-class GAMECOREDLL SteeringBehavior;
 
 struct MovingObjectData {
 	float position[3];
@@ -26,7 +23,6 @@ class GAMECOREDLL MovingObject :
 	friend class State<MovingObject>;
 private:
 	Common::Vector4 force;
-	Common::Vector4 tick_force;
 	Common::Vector4 heading;
 	Common::Vector4 top;
 	Common::Vector4 side;
@@ -36,6 +32,7 @@ private:
 	bool tagged;
 
 protected:
+	Common::Vector4 tick_force;
 	Common::Vector4 velocity;
 	Common::Vector4 position;
 	float max_speed;

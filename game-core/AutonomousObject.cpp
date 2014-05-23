@@ -3,7 +3,7 @@
 
 AutonomousObject::AutonomousObject(int objectType) : MovingObject(objectType)
 {
-	steering_behavior = nullptr;
+	steering_behavior = new SteeringBehavior(this);
 	path = Path::instance();
 	setCurrentWayPoint(path->begin());
 	path->loopOn();
@@ -14,6 +14,10 @@ AutonomousObject::~AutonomousObject()
 {
 }
 
+void AutonomousObject::update(float dt){
+	tick_force += this->steering_behavior->calculate();
+	MovingObject::update(dt);
+}
 
 void AutonomousObject::setPursuit(Handle &pray){
 	steering_behavior->pursuitOn(pray);

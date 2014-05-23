@@ -2,10 +2,10 @@
 
 #include "game-core.h"
 #include "Game.h"
-#include "MovingObject.h"
+#include "AutonomousObject.h"
 #include "BehaviorType.h"
 
-class GAMECOREDLL MovingObject;
+class GAMECOREDLL AutonomousObject;
 
 class GAMECOREDLL SteeringBehavior
 {
@@ -50,7 +50,7 @@ private:
 
 	Common::Vector4 steering_force;
 	Handle target_agent;
-	MovingObject *owner;
+	AutonomousObject *owner;
 
 	Common::Vector4 seek(Common::Vector4 &p_point);
 	Common::Vector4 flee(Common::Vector4 &p_point);
@@ -107,7 +107,7 @@ private:
 	template< class T, class container_T >
 	void tagNeighbors(const T* p_entity, container_T &p_container_entities, float radius);
 public:
-	SteeringBehavior(MovingObject*);
+	SteeringBehavior(AutonomousObject*);
 	~SteeringBehavior();
 	Common::Vector4 calculate();
 	bool On(BehaviorType) const;
@@ -129,4 +129,5 @@ public:
 	void wanderOff();
 	void followPathOff();
 	void offsetPursuitOff();
+	static BehaviorType toBehaviorType(std::string);
 };

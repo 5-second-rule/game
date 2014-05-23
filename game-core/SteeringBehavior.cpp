@@ -2,7 +2,7 @@
 
 using namespace Common;
 
-SteeringBehavior::SteeringBehavior(MovingObject *owner) :behavior(BehaviorType::none)
+SteeringBehavior::SteeringBehavior(AutonomousObject *owner) :behavior(BehaviorType::none)
 {
 	assert(ConfigSettings::config->getValue("time_tick", k_time_elapsed));
 	assert(ConfigSettings::config->getValue("deceleration_tweaker", deceleration_tweaker));
@@ -132,9 +132,6 @@ Vector4 SteeringBehavior::followPath() {
 	{
 		owner->setNextWayPoint();
 		cout << "new point: " << owner->current_way_point->toString() << endl;
-	}
-	if (getWorld()->isTick(60)){
-		cout << distanceSquared(*owner->current_way_point, owner->getPosition()) << endl;
 	}
 
 	if (!owner->path->finished(owner)) {
@@ -407,4 +404,24 @@ void SteeringBehavior::followPathOff(){
 void SteeringBehavior::offsetPursuitOff(){
 	if (On(BehaviorType::offset_pursuit))
 		behavior ^= BehaviorType::offset_pursuit;
+}
+
+BehaviorType SteeringBehavior::toBehaviorType(string str){
+	if (str == "seek")
+		return BehaviorType::seek;
+	if (str == "flee")
+		return BehaviorType::flee;
+	if (str == "arrive")
+		return BehaviorType::arrive;
+	if (str == "wander")
+		return BehaviorType::wander;
+	if (str == "pursuit")
+		return BehaviorType::pursuit;
+	if (str == "evade")
+		return BehaviorType::evade;
+	if (str == "follow_path")
+		return BehaviorType::follow_path;
+	if (str == "offset_pursuit")
+		return BehaviorType::offset_pursuit;
+	return BehaviorType::none;
 }
