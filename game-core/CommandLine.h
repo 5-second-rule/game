@@ -68,14 +68,9 @@ public:
 	void runFile(std::stringstream &buffer);
 	bool validObjectType(std::string name);
 	ObjectTypes toObjectType(std::string name);
-	float toFloat(std::string f);
 	void createObject(stringstream &buffer);
 	MovingObject *findObjectByIndex(int);
 	MovingObject *translateObject(std::string str);
 
-	static char toLowerChar(char);
-	static std::string toLower(std::string);
-	static std::string toString(int);
-	static std::string toString(float f);
 	static std::string toString(ObjectTypes type);
 };

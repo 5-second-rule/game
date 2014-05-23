@@ -3,8 +3,10 @@
 #include "CommandLine.h"
 #include "AutonomousObject.h"
 
+#include "common/misc/utils.h"
 
 using namespace std;
+using namespace Common;
 
 // Command Line Exception
 CmdException::CmdException(const string &message, bool inclSysMsg) : userMessage(message) {
@@ -230,9 +232,9 @@ bool CommandLine::setParam(map<string, string> &param, string str, stringstream 
 		x = y = z = 0.0f;
 		buffer >> x >> y >> z;
 		param["position"] = "true";
-		param["x"] = toString(x);
-		param["y"] = toString(y);
-		param["z"] = toString(z);
+		param["x"] = Common::toString(x);
+		param["y"] = Common::toString(y);
+		param["z"] = Common::toString(z);
 	}
 	else if (str == "-i"){
 		buffer >> str;
@@ -307,7 +309,7 @@ void CommandLine::createObject(std::stringstream &buffer){
 	try {
 		// default parameters
 		param["object_type"] = "ecoli";
-		param["x"] = param["y"] = param["z"] = toString(0.0f);
+		param["x"] = param["y"] = param["z"] = Common::toString(0.0f);
 
 		while (buffer >> str){
 			if (!setParam(param, str, buffer))
@@ -331,8 +333,8 @@ void CommandLine::createObject(std::stringstream &buffer){
 			dictionary[param["name"]] = obj->getHandle();
 	}
 	else {
-			*output << "res" + toString(allocator) << " <-- " << param["object_type"] << endl;
-			dictionary["res" + toString(allocator)] = obj->getHandle();
+			*output << "res" + Common::toString(allocator) << " <-- " << param["object_type"] << endl;
+			dictionary["res" + Common::toString(allocator)] = obj->getHandle();
 			allocator++;
 		}
 
@@ -423,34 +425,3 @@ string CommandLine::toString(ObjectTypes type){
 	return "none";
 }
 
-string CommandLine::toString(int a){
-	stringstream buffer;
-	buffer << a;
-	return buffer.str();
-}
-
-string CommandLine::toString(float f){
-	stringstream buffer;
-	buffer << f;
-	return buffer.str();
-		}
-
-float CommandLine::toFloat(string f){
-	stringstream buffer;
-	float tmp;
-	buffer << f;
-	buffer >> tmp;
-	return tmp;
-		}
-
-char CommandLine::toLowerChar(char c){
-	if (c >= 'A' && c <= 'Z'){
-		return c - 'A' + 'a';
-	}
-	return c;
-	}
-
-string CommandLine::toLower(string str){
-	transform(str.begin(), str.end(), str.begin(), CommandLine::toLowerChar);
-	return str;
-}

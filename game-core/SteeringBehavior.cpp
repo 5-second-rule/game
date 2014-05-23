@@ -1,5 +1,7 @@
 #include "SteeringBehavior.h"
 
+#include "common/4D/Transformation.h"
+
 using namespace Common;
 
 SteeringBehavior::SteeringBehavior(AutonomousObject *owner) :behavior(BehaviorType::none)
