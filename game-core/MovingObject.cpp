@@ -7,35 +7,23 @@
 
 #include "Game.h"
 
-#define MAX_SPEED 50
-#define MAX_FORCE 100
-
-const float MovingObject::max_speed = MAX_SPEED;
-const float MovingObject::max_force = MAX_FORCE;
-
-MovingObject::MovingObject(int objectType)
-	: BaseObject(objectType)
+MovingObject::MovingObject(int objectType) : BaseObject(objectType)
 {
 	this->up = Vector(0.0f, 1.0f, 0.0f);
 	this->heading = Vector(0.0f, 0.0f, 1.0f);
-	this->mass = .1f;
-	this->friction = .2f;
 	this->trackIndex = 0;
 	this->followTrack = true;
 	this->trackVelocity = 1000;
-}
+	assert(ConfigSettings::config->getValue("default_drag_coefficient", drag_coefficient));
+	assert(ConfigSettings::config->getValue("default_max_speed", max_speed));
+	assert(ConfigSettings::config->getValue("default_max_force", max_force));
+	assert(ConfigSettings::config->getValue("default_mass", mass));
 
+	state_machine = new StateMachine<MovingObject>(this);
+	state_machine->setCurrentState(Move::instance());
+}
 
 MovingObject::~MovingObject() {}
-
-
-Vector4 MovingObject::getHeading(){
-	return heading;
-}
-
-float MovingObject::speed(){
-	return this->velocity.length();
-}
 
 void MovingObject::applyForce(const Vector4& force){
 	this->force += force;
@@ -84,15 +72,9 @@ bool MovingObject::handleEvent(Event *evt){
 	return false;
 }
 
+
 void MovingObject::update(float dt){
-	BaseObject::update(dt);
-	
-	this->position += this->velocity * dt;
-
-	Vector4 acceleration = force * (1 / this->mass);
-	this->force = -(this->velocity * this->friction);
-
-	this->velocity += acceleration*dt;
+	state_machine->update();
 
 	if (followTrack) {
 		TrackPath *track = Game::getGlobalInstance()->getTrackPath();
@@ -102,6 +84,18 @@ void MovingObject::update(float dt){
 		Vector4 force = track->nodes[this->trackIndex].normal * TRACK_FORCE;
 		this->applyForce(force);
 	}
+
+	// Update de physics
+	force -= velocity * drag_coefficient;
+	force += tick_force;
+	Vector4 acceleration = force * (1 / this->mass);
+	velocity += acceleration*dt;
+	this->position += velocity * dt;
+
+	// Reset the forces to the next update
+	force.set(0, 0, 0, 0);
+	tick_force.set(0, 0, 0, 0);
+	BaseObject::update(dt);
 }
 
 void MovingObject::reserveSize(IReserve& buffer) const {
@@ -133,12 +127,13 @@ void MovingObject::fillBuffer(IFill& buffer) const {
 	data->force[1] = this->force[1];
 	data->force[2] = this->force[2];
 
-	data->friction = friction;
+	data->drag_coefficient = drag_coefficient;
 	data->mass = mass;
 
 	data->trackIndex = this->trackIndex;
 
 	buffer.filled();
+
 }
 
 void MovingObject::deserialize(BufferReader& reader) {
@@ -153,16 +148,82 @@ void MovingObject::deserialize(BufferReader& reader) {
 	this->velocity = Common::Vector(data->velocity[0], data->velocity[1], data->velocity[2]);
 	this->force = Common::Vector(data->force[0], data->force[1], data->force[2]);
 
-	this->friction = data->friction;
+	this->drag_coefficient = data->drag_coefficient;
 	this->mass = data->mass;
-	
+
 	this->trackIndex = data->trackIndex;
 
 	reader.finished(sizeof(MovingObjectData));
 }
 
-Vector4 MovingObject::getPosition() {
-	return this->position;
+void MovingObject::setPos(float x, float y, float z){
+	position.set(0, x);
+	position.set(1, y);
+	position.set(2, z);
+}
+
+void MovingObject::setDragCoeff(float p_drag_coefficient){
+	drag_coefficient = p_drag_coefficient;
+}
+
+void MovingObject::setMaxSpeed(float p_max_speed){
+	max_speed = p_max_speed;
+}
+
+void MovingObject::setMaxForce(float p_max_force){
+	max_force = p_max_force;
+}
+
+void MovingObject::setTickForce(float x, float y, float z){
+	tick_force.set(x, y, z, 0);
+}
+
+void MovingObject::setForce(float x, float y, float z){
+	force.set(x, y, z, 0);
+}
+
+void MovingObject::setTag(bool tag){
+	this->tagged = tag;
+}
+
+Vector4 MovingObject::getHeading(){
+	return Vector4::normalize(this->velocity);
+}
+
+Vector4 MovingObject::getPosition(){
+	return position;
+}
+
+Vector4 MovingObject::getVelocity(){
+	return velocity;
+}
+
+float MovingObject::speed(){
+	return this->velocity.length();
+}
+
+float MovingObject::getMaxForce(){
+	return max_force;
+}
+
+float MovingObject::getMaxSpeed(){
+	return max_speed;
+}
+
+bool MovingObject::isTagged(){
+	return tagged;
+}
+
+string MovingObject::toString(){
+	stringstream buffer;
+	buffer << this->getHandle().toString() << endl;
+	buffer << "Speed: " << velocity.length() << endl;
+	buffer << "Force: " << force.toString();
+	return buffer.str();
+}
+
+void MovingObject::print(){
+	cout << toString();
 }
 
 Vector4 MovingObject::getGroupingParameter() const {

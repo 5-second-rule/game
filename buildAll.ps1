@@ -24,3 +24,5 @@ cp ../rendering-framework/SampleApp/*.fbx ../game/Debug/resources/
 cp ../rendering-framework/SampleApp/*.dds ../game/Debug/resources/
 cp ../rendering-framework/SampleApp/*.obj ../game/Debug/resources/
 cp ../rendering-framework/SampleApp/*.trk ../game/Debug/resources/
+
+cp ../game/game-core/*.ini ../game/Debug/resources/

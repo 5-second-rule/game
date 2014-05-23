@@ -4,7 +4,8 @@
 #include <iostream>
 
 #include "game-core/ServerGame.h"
-#include "../engine/engine-core/ConfigSettings.h"
+#include "game-core/CommandLine.h"
+#include "engine-core/ConfigSettings.h"
 
 using namespace std;
 
@@ -22,6 +23,11 @@ int main(int argc, char* argv[])
 	cout << "Initializing Server... Please Wait!\n";
 	gameInstance = new ServerGame(DT);
 	gameInstance->init();
+
+	CommandLine *cmd = new CommandLine(&cin, &cout);
+	m_getWorld()->allocateHandle(cmd, HandleType::LOCAL);
+	m_getWorld()->insert(cmd);
+
 	signal( SIGINT, SignalHandler );
 	signal( SIGTERM, SignalHandler );
 
