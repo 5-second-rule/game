@@ -14,7 +14,7 @@ struct GAMECOREDLL PathNode {
 	};
 };
 
-class TrackPath
+class GAMECOREDLL TrackPath
 {
 public:
 	std::vector<PathNode> nodes;
@@ -23,6 +23,8 @@ public:
 	~TrackPath();
 
 	int locateIndex(Common::Vector4 realPosition, int lastIndex);
+
+	PathNode interpolateNode(Common::Vector4 realPosition, int closestIndex);
 
 	static TrackPath * fromFile(char *file);
 };
