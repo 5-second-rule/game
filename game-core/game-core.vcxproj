@@ -90,6 +90,9 @@
     <ClInclude Include="Path.h" />
     <ClInclude Include="ServerGame.h" />
     <ClInclude Include="ShootEvent.h" />
+    <ClInclude Include="StaticObject.h" />
+    <ClInclude Include="TrackPath.h" />
+    <ClInclude Include="Tube.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="StateMachine.h" />
     <ClInclude Include="SteeringBehavior.h" />
@@ -112,6 +115,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Config.ini" />
+    <ClCompile Include="StaticObject.cpp" />
+    <ClCompile Include="TrackPath.cpp" />
+    <ClCompile Include="Tube.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

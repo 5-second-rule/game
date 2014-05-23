@@ -21,7 +21,8 @@ public:
 	ServerGame(float frameTime);
 	~ServerGame();
 
-	void run();
+	virtual void init();
+
 	void stop();
 	void update();
 	void handleCmd();

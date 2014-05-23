@@ -4,6 +4,7 @@
 #include "GameObjectCtorTable.h"
 #include "engine-core/Engine.h"
 #include "engine-core/World.h"
+#include "TrackPath.h"
 
 #define getWorld() (((Game::getGlobalInstance())->getEngineInstance())->getWorld())
 #define getObject(handle) ((getWorld())->get(handle))
@@ -13,10 +14,12 @@ class GAMECOREDLL Game
 private:
 	static Game *globalInstance;
 	Engine *engineInstance;
+	TrackPath *track;
 
 	bool initialized;
 
 protected:
+	GameObjectCtorTable *objectCtors;
 	virtual Engine * makeEngineInstance(ConstructorTable<BaseObject> *objectCtors, ConstructorTable<ActionEvent>* eventCtors) = 0;
 
 public:
@@ -31,4 +34,5 @@ public:
 	virtual void init();
 	void run();
 	Engine * getEngineInstance();
+	TrackPath * getTrackPath();
 };
