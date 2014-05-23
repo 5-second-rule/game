@@ -25,8 +25,8 @@ int main(int argc, char* argv[])
 	gameInstance->init();
 
 	CommandLine *cmd = new CommandLine(&cin, &cout);
-	getWorld()->allocateHandle(cmd, HandleType::LOCAL);
-	getWorld()->insert(cmd);
+	m_getWorld()->allocateHandle(cmd, HandleType::LOCAL);
+	m_getWorld()->insert(cmd);
 
 	signal( SIGINT, SignalHandler );
 	signal( SIGTERM, SignalHandler );

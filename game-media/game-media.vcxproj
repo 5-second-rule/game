@@ -53,7 +53,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);game-core.lib;engine-core.lib;engine-renderer.lib</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);game-core.lib;engine-core.lib;engine-renderer.lib;../../common/Debug/common.lib</AdditionalDependencies>
     </Link>
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>
@@ -78,11 +78,15 @@
     <ClInclude Include="RenderableGame.h" />
     <ClInclude Include="RenderableGameObjectCtorTable.h" />
     <ClInclude Include="RenderableMovingObject.h" />
+    <ClInclude Include="RenderableStaticObject.h" />
+    <ClInclude Include="TrackingCameraHandler.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RenderableGame.cpp" />
     <ClCompile Include="RenderableGameObjectCtorTable.cpp" />
     <ClCompile Include="RenderableMovingObject.cpp" />
+    <ClCompile Include="RenderableStaticObject.cpp" />
+    <ClCompile Include="TrackingCameraHandler.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
