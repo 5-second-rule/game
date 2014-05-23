@@ -19,6 +19,9 @@
     <Filter Include="State">
       <UniqueIdentifier>{c7a0801c-7451-4f8f-a04a-ed871d92c2e4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="AI">
+      <UniqueIdentifier>{e2e927fb-05c6-4136-956d-7c48da447408}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game-core.h">
@@ -48,9 +51,6 @@
     <ClInclude Include="ActionEventCtorTable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="IFollowPath.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="BehaviorType.h">
       <Filter>Types</Filter>
     </ClInclude>
@@ -63,16 +63,7 @@
     <ClInclude Include="TypeDefinition.h">
       <Filter>Types</Filter>
     </ClInclude>
-    <ClInclude Include="Path.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="MovingObjectStates.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SteeringBehavior.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AutonomousObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CommandLine.h">
@@ -89,6 +80,18 @@
     </ClInclude>
     <ClInclude Include="Tube.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IFollowPath.h">
+      <Filter>AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Path.h">
+      <Filter>AI</Filter>
+    </ClInclude>
+    <ClInclude Include="AutonomousObject.h">
+      <Filter>AI</Filter>
+    </ClInclude>
+    <ClInclude Include="SteeringBehavior.h">
+      <Filter>AI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -113,20 +116,20 @@
     <ClCompile Include="ActionEventCtorTable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="IFollowPath.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Path.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="MovingObjectStates.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SteeringBehavior.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Path.cpp">
+      <Filter>AI</Filter>
     </ClCompile>
     <ClCompile Include="AutonomousObject.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="IFollowPath.cpp">
+      <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="SteeringBehavior.cpp">
+      <Filter>AI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

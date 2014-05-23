@@ -103,7 +103,7 @@ TrackPath * TrackPath::fromFile(char *file) {
 
 	fin.close();
 
-	for (int i = 0; i < result->nodes.size(); i++) {
+	for (size_t i = 0; i < result->nodes.size(); i++) {
 		PathNode iNode = result->nodes[i];
 		PathNode nextNode = result->nodes[(i + 1) % result->nodes.size()];
 
