@@ -23,10 +23,12 @@ void Game::init() {
 	this->initialized = true;
 	setGlobalInstance(this);
 
-	GameObjectCtorTable* objectCtors = this->makeCtorTable();
+	this->track = TrackPath::fromFile("resources/track.path");
+
+	this->objectCtors = this->makeCtorTable();
 	ActionEventCtorTable* eventCtors = new ActionEventCtorTable();
-	this->engineInstance = this->makeEngineInstance(objectCtors, eventCtors);
-	objectCtors->initCtors();
+	this->engineInstance = this->makeEngineInstance(this->objectCtors, eventCtors);
+	this->objectCtors->initCtors();
 	eventCtors->initCtors();
 }
 
@@ -50,7 +52,10 @@ Game * Game::getGlobalInstance() {
 	return globalInstance;
 }
 
-
 GameObjectCtorTable * Game::makeCtorTable() {
 	return new GameObjectCtorTable();
+}
+
+TrackPath * Game::getTrackPath() {
+	return this->track;
 }
