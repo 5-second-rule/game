@@ -116,9 +116,6 @@
     <ClCompile Include="ActionEventCtorTable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MovingObjectStates.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Path.cpp">
       <Filter>AI</Filter>
     </ClCompile>
@@ -130,6 +127,9 @@
     </ClCompile>
     <ClCompile Include="SteeringBehavior.cpp">
       <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="MovingObjectStates.cpp">
+      <Filter>State</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

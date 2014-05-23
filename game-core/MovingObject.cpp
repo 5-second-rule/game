@@ -76,13 +76,6 @@ bool MovingObject::handleEvent(Event *evt){
 void MovingObject::update(float dt){
 	state_machine->update();
 
-	// Update de physics
-	force -= velocity * drag_coefficient;
-	force += tick_force;
-	Vector4 acceleration = force * (1 / this->mass);
-	velocity += acceleration*dt;
-	this->position += velocity * dt;
-
 	if (followTrack) {
 		TrackPath *track = Game::getGlobalInstance()->getTrackPath();
 		this->trackIndex = track->locateIndex(this->position, this->trackIndex);
@@ -91,6 +84,13 @@ void MovingObject::update(float dt){
 		Vector4 force = track->nodes[this->trackIndex].normal * TRACK_FORCE;
 		this->applyForce(force);
 	}
+
+	// Update de physics
+	force -= velocity * drag_coefficient;
+	force += tick_force;
+	Vector4 acceleration = force * (1 / this->mass);
+	velocity += acceleration*dt;
+	this->position += velocity * dt;
 
 	// Reset the forces to the next update
 	force.set(0, 0, 0, 0);
