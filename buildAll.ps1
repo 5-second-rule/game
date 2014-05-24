@@ -5,6 +5,8 @@ cd ../engine
 MSbuild.exe ./engine.sln
 cd ../game
 MSBuild.exe ./Game.sln
+cd ../common
+MSBuild.exe ./Common.sln
 
 # Resources Prep 
 mkdir -Force ../game/Debug/resources
