@@ -150,7 +150,7 @@ void RenderableGameObjectCtorTable::initCtors() {
 	this->vertexShaderIndexes[ObjectTypes::Malaria] = engine->loadVertexShader( "resources/vertexWiggle.cso" );
 	this->pixelShaderIndexes[ObjectTypes::Malaria] = engine->loadPixelShader( "resources/pixel.cso" );
 
-	this->modelIndexes[ObjectTypes::WhiteBlood] = engine->loadModel( "resources/.fbx" );
+	this->modelIndexes[ObjectTypes::WhiteBlood] = engine->loadModel( "resources/ecoli6_nomedia.fbx" );
 	this->textureIndexes[ObjectTypes::WhiteBlood] = engine->loadTexture( "resources/Wood.dds" );
 
 	this->modelIndexes[ObjectTypes::RedBlood] = engine->loadModel( "resources/ecoli6_nomedia.fbx" );
