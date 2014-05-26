@@ -4,6 +4,7 @@
 #include "ActionEventCtorTable.h"
 #include "ActionType.h"
 #include "MoveEvent.h"
+#include "ObjectTypes.h"
 
 Game * Game::globalInstance;
 
@@ -58,4 +59,8 @@ GameObjectCtorTable * Game::makeCtorTable() {
 
 TrackPath * Game::getTrackPath() {
 	return this->track;
+}
+
+WallOfDeath * Game::getWallOfDeath() {
+	return this->wallOfDeath;
 }

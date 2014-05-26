@@ -5,7 +5,6 @@
 #include "engine-core/BaseObject.h"
 #include "engine-core/ICollidable.h"
 
-
 #include "common/Vector4.h"
 #include "common/Matrix4.h"
 using namespace Common;
@@ -33,7 +32,6 @@ protected:
 	Vector4 position;
 	Vector4 velocity;
 	Vector4 force;
-	float trackVelocity;
 	
 	float propulsion;
 

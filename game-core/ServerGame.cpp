@@ -37,4 +37,14 @@ void ServerGame::init() {
 	// HACK --	this only works if the clients are up first, but in the future this will
 	//					only be sent when the game starts after character selection
 	// this->getEngineInstance()->sendEvent( new SoundEvent( static_cast<int>(Sounds::SOUNDTRACK), true, false ));
+	// TODO make the client get this too (in the wallOfDeath variable)?
+	this->wallOfDeath = dynamic_cast<WallOfDeath *>(this->objectCtors->invoke(ObjectTypes::Wwod));
+	if (this->wallOfDeath == nullptr) {
+		throw std::runtime_error("Error creating wall of death.");
+	}
+
+	this->getEngineInstance()->getWorld()->allocateHandle(this->wallOfDeath, HandleType::GLOBAL);
+	this->getEngineInstance()->getWorld()->insert(this->wallOfDeath);
+
+	this->wallOfDeath->reset();
 }

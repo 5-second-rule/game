@@ -23,7 +23,6 @@ MovingObject::MovingObject( int objectType, Game* owner )
 	this->propulsion = 1.0f;
 	this->friction = .2f;
 	this->trackIndex = 0;
-	this->trackVelocity = 1000;
 }
 
 
@@ -116,6 +115,25 @@ void MovingObject::update(float dt){
 
 	// reset propulsion
 	this->propulsion = 1.0f;
+
+	// TODO move to player object
+	int wallOfDeathLocation = Game::getGlobalInstance()->getWallOfDeath()->getTrackIndex();
+	int space = track->nodes.size();
+	int wallOfDeathTail = (wallOfDeathLocation + (space / 2)) % space;
+	int comparativeIndex = this->trackIndex;
+
+	bool projectForward = wallOfDeathTail > wallOfDeathLocation;
+	if (projectForward) {
+		comparativeIndex += comparativeIndex > wallOfDeathTail ? 0 : space;
+		wallOfDeathLocation += space;
+	}
+
+	if (comparativeIndex < wallOfDeathLocation && comparativeIndex > wallOfDeathTail) {
+		cout << "you died" << endl;
+	}
+	else {
+		cout << "you're at : " << this->trackIndex << endl;
+	}
 }
 
 void MovingObject::reserveSize(IReserve& buffer) const {

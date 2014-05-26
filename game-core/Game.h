@@ -5,6 +5,7 @@
 #include "engine-core/Engine.h"
 #include "engine-core/World.h"
 #include "TrackPath.h"
+#include "WallOfDeath.h"
 
 class GAMECOREDLL Game
 {
@@ -12,11 +13,12 @@ private:
 	static Game *globalInstance;
 	Engine *engineInstance;
 	TrackPath *track;
-
+	
 	bool initialized;
 
 protected:
 	GameObjectCtorTable *objectCtors;
+	WallOfDeath *wallOfDeath;
 	virtual Engine * makeEngineInstance(ConstructorTable<BaseObject> *objectCtors, ConstructorTable<ActionEvent>* eventCtors) = 0;
 
 public:
@@ -32,4 +34,5 @@ public:
 	void run();
 	Engine * getEngineInstance();
 	TrackPath * getTrackPath();
+	WallOfDeath * getWallOfDeath();
 };
