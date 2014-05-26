@@ -10,7 +10,8 @@ enum GAMECOREDLL ObjectTypes
 	WhiteBlood,
 	RedBlood,
 	MagicSchoolBus,
-	Track
+	Track,
+	Wwod,
 };
 
 enum class GAMECOREDLL CollisionPriorities {

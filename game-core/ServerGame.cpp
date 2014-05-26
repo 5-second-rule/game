@@ -32,4 +32,15 @@ void ServerGame::init() {
 	IHasHandle *track = this->objectCtors->invoke(ObjectTypes::Track);
 	this->getEngineInstance()->getWorld()->allocateHandle(track, HandleType::GLOBAL);
 	this->getEngineInstance()->getWorld()->insert(track);
+
+	// TODO make the client get this too (in the wallOfDeath variable)?
+	this->wallOfDeath = dynamic_cast<WallOfDeath *>(this->objectCtors->invoke(ObjectTypes::Wwod));
+	if (this->wallOfDeath == nullptr) {
+		throw std::runtime_error("Error creating wall of death.");
+	}
+
+	this->getEngineInstance()->getWorld()->allocateHandle(this->wallOfDeath, HandleType::GLOBAL);
+	this->getEngineInstance()->getWorld()->insert(this->wallOfDeath);
+
+	this->wallOfDeath->reset();
 }

@@ -87,6 +87,7 @@
     <ClInclude Include="StaticObject.h" />
     <ClInclude Include="TrackPath.h" />
     <ClInclude Include="Tube.h" />
+    <ClInclude Include="WallOfDeath.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ActionEventCtorTable.cpp" />
@@ -99,6 +100,7 @@
     <ClCompile Include="StaticObject.cpp" />
     <ClCompile Include="TrackPath.cpp" />
     <ClCompile Include="Tube.cpp" />
+    <ClCompile Include="WallOfDeath.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
