@@ -3,6 +3,7 @@
 
 #include "RenderableMovingObject.h"
 #include "RenderableStaticObject.h"
+#include "RenderableWallOfDeath.h"
 
 #include "RenderableGame.h"
 
@@ -112,6 +113,18 @@ static BaseObject * makeRenderableTrack( ConstructorTable<BaseObject> *thisObj )
 		);
 }
 
+static BaseObject * makeRenderableWallOfDeath(ConstructorTable<BaseObject> *thisObj) {
+	RenderableGameObjectCtorTable *table = (RenderableGameObjectCtorTable *)thisObj;
+
+	return new RenderableWallOfDeath(
+		RenderableGame::getGlobalInstance()
+		->getRenderingEngineInstance()
+		->createModelFromIndex(
+		table->modelIndexes[ObjectTypes::Wwod],
+		table->textureIndexes[ObjectTypes::Wwod])
+		);
+}
+
 void RenderableGameObjectCtorTable::initCtors() {
 	GameObjectCtorTable::initCtors();
 	RenderingEngine *engine =
@@ -137,7 +150,7 @@ void RenderableGameObjectCtorTable::initCtors() {
 	this->vertexShaderIndexes[ObjectTypes::Malaria] = engine->loadVertexShader( "resources/vertexWiggle.cso" );
 	this->pixelShaderIndexes[ObjectTypes::Malaria] = engine->loadPixelShader( "resources/pixel.cso" );
 
-	this->modelIndexes[ObjectTypes::WhiteBlood] = engine->loadModel( "resources/ecoli6_nomedia.fbx" );
+	this->modelIndexes[ObjectTypes::WhiteBlood] = engine->loadModel( "resources/.fbx" );
 	this->textureIndexes[ObjectTypes::WhiteBlood] = engine->loadTexture( "resources/Wood.dds" );
 
 	this->modelIndexes[ObjectTypes::RedBlood] = engine->loadModel( "resources/ecoli6_nomedia.fbx" );
@@ -149,6 +162,9 @@ void RenderableGameObjectCtorTable::initCtors() {
 	this->vertexShaderIndexes[ObjectTypes::Track] = engine->loadVertexShader( "resources/vertexTrack.cso" );
 	this->pixelShaderIndexes[ObjectTypes::Track] = engine->loadPixelShader( "resources/pixelBump.cso" );
 
+	this->modelIndexes[ObjectTypes::Wwod] = this->modelIndexes[ObjectTypes::Malaria];
+	this->textureIndexes[ObjectTypes::Wwod] = this->textureIndexes[ObjectTypes::Malaria];
+
 	this->setConstructor( ObjectTypes::Ecoli, makeRenderableEcoli );
 	this->setConstructor( ObjectTypes::ChickenPox, makeRenderableChickenPox );
 	this->setConstructor( ObjectTypes::Syphillis, makeRenderableSyphillis );
@@ -156,4 +172,5 @@ void RenderableGameObjectCtorTable::initCtors() {
 	this->setConstructor( ObjectTypes::WhiteBlood, makeRenderableWhiteBlood );
 	this->setConstructor( ObjectTypes::RedBlood, makeRenderableRedBlood );
 	this->setConstructor( ObjectTypes::Track, makeRenderableTrack );
+	this->setConstructor( ObjectTypes::Wwod, makeRenderableWallOfDeath );
 }

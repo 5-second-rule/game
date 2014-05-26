@@ -34,6 +34,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SoundCtorTable.h">
+	  <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderableWallOfDeath.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -54,6 +57,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SoundCtorTable.cpp">
+	  <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderableWallOfDeath.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
