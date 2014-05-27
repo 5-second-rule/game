@@ -149,11 +149,11 @@ void RenderableGameObjectCtorTable::initCtors() {
 	this->vertexShaderIndexes[ObjectTypes::Track] = engine->loadVertexShader("resources/vertexTrack.cso");
 	this->pixelShaderIndexes[ObjectTypes::Track] = engine->loadPixelShader("resources/pixelBump.cso");
 
-	this->setConstructor(ObjectTypes::Ecoli, makeRenderableEcoli);
+	this->setConstructor( ObjectTypes::Ecoli, makeRenderableEcoli );
 	this->setConstructor( ObjectTypes::ChickenPox, makeRenderableChickenPox );
 	this->setConstructor( ObjectTypes::Syphillis, makeRenderableSyphillis );
 	this->setConstructor( ObjectTypes::Malaria, makeRenderableMalaria );
 	this->setConstructor( ObjectTypes::WhiteBlood, makeRenderableWhiteBlood );
 	this->setConstructor( ObjectTypes::RedBlood, makeRenderableRedBlood );
-	this->setConstructor(ObjectTypes::Track, makeRenderableTrack);
+	this->setConstructor( ObjectTypes::Track, makeRenderableTrack );
 }
