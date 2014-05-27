@@ -3,37 +3,38 @@
 #include "MovingObject.h"
 #include "ObjectTypes.h"
 #include "StaticObject.h"
+#include "Tube.h"
 
 GameObjectCtorTable::GameObjectCtorTable() : ConstructorTable<BaseObject>( OBJECT_TYPE_COUNT ) {}
 
 GameObjectCtorTable::~GameObjectCtorTable() {}
 
 static BaseObject * makeEcoli(ConstructorTable<BaseObject> *thisObj) {
-	return new MovingObject(ObjectTypes::Ecoli);
+	return new MovingObject(ObjectTypes::Ecoli, Game::getGlobalInstance());
 }
 
 static BaseObject * makeChickenPox(ConstructorTable<BaseObject> *thisObj) {
-	return new MovingObject( ObjectTypes::ChickenPox );
+	return new MovingObject( ObjectTypes::ChickenPox, Game::getGlobalInstance() );
 }
 
 static BaseObject * makeSyphillis(ConstructorTable<BaseObject> *thisObj) {
-	return new MovingObject( ObjectTypes::Syphillis );
+	return new MovingObject( ObjectTypes::Syphillis, Game::getGlobalInstance() );
 }
 
 static BaseObject * makeMalaria(ConstructorTable<BaseObject> *thisObj) {
-	return new MovingObject( ObjectTypes::Malaria );
+	return new MovingObject( ObjectTypes::Malaria, Game::getGlobalInstance() );
 }
 
 static BaseObject * makeWhiteBlood(ConstructorTable<BaseObject> *thisObj) {
-	return new MovingObject( ObjectTypes::WhiteBlood );
+	return new MovingObject( ObjectTypes::WhiteBlood, Game::getGlobalInstance() );
 }
 
 static BaseObject * makeRedBlood(ConstructorTable<BaseObject> *thisObj) {
-	return new MovingObject( ObjectTypes::RedBlood );
+	return new MovingObject( ObjectTypes::RedBlood, Game::getGlobalInstance() );
 }
 
 static BaseObject * makeTrack(ConstructorTable<BaseObject> *thisObj) {
-	return new StaticObject(ObjectTypes::Track);
+	return new Tube();
 }
 
 static BaseObject * makeSelectionScreen(ConstructorTable<BaseObject> *thisObj) {

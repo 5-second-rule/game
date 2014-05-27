@@ -33,7 +33,11 @@
     <ClInclude Include="RenderableStaticObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="RenderableSelectionScreen.h">
+=======
+    <ClInclude Include="SoundCtorTable.h">
+>>>>>>> master
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -53,7 +57,11 @@
     <ClCompile Include="RenderableStaticObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="RenderableSelectionScreen.cpp">
+=======
+    <ClCompile Include="SoundCtorTable.cpp">
+>>>>>>> master
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -3,6 +3,7 @@
 #include <fstream>
 #include <stdexcept>
 using namespace std;
+using namespace Common;
 
 TrackPath::TrackPath()
 {
@@ -11,6 +12,58 @@ TrackPath::TrackPath()
 
 TrackPath::~TrackPath()
 {
+}
+
+int TrackPath::locateIndex(Vector4 realPosition, int lastIndex) {
+	PathNode lastNode = this->nodes[lastIndex];
+	float lastDistance = lastNode.distanceTo(realPosition);
+	int direction = lastDistance > 0 ? 1 : -1;
+
+	if (lastDistance == 0){
+		return lastIndex;
+	}
+
+	// TODO make more binary rather than linear
+	int directionHere = direction;
+	int index = lastIndex;
+
+	do {
+		// add size to handle negative wrap around
+		index = (this->nodes.size() + index + direction) % this->nodes.size();
+		PathNode node = this->nodes[index];
+		float dot = node.distanceTo(realPosition);
+		directionHere = dot > 0 ? 1 : -1;
+	} while (direction == directionHere);
+
+	return index;
+}
+
+PathNode TrackPath::interpolateNode(Vector4 realPosition, int closestIndex) {
+	int next = (closestIndex + 1) % this->nodes.size();
+	int previous = (closestIndex - 1) % this->nodes.size();
+
+	PathNode nextNode = this->nodes[next];
+	PathNode closestNode = this->nodes[closestIndex];
+	PathNode previousNode = this->nodes[previous];
+
+	PathNode destination;
+
+	if (nextNode.distanceTo(realPosition) <= previousNode.distanceTo(realPosition)) {
+		destination = nextNode;
+	}
+	else {
+		destination = previousNode;
+	}
+
+	Vector4 pV = destination.point - closestNode.point;
+	float dABC = pV.lengthSquared();
+	float inc = ((realPosition.x() - closestNode.point.x())*pV.x() + (realPosition.y() - closestNode.point.y())*pV.y() + (realPosition.z() - closestNode.point.z())*pV.z()) / dABC;
+
+	PathNode finalNode;
+	finalNode.point.set(closestNode.point.x() + pV.x()*inc, closestNode.point.y() + pV.y()*inc, closestNode.point.z() + pV.z()*inc, 1.0f);
+	finalNode.normal = closestNode.normal;
+
+	return finalNode;
 }
 
 TrackPath * TrackPath::fromFile(char *file) {

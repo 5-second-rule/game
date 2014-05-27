@@ -1,5 +1,6 @@
 #pragma once
 #include "game-core.h"
+#include "Game.h"
 
 #include "engine-core/BaseObject.h"
 #include "engine-core/ICollidable.h"
@@ -10,22 +11,28 @@
 using namespace Common;
 
 struct MovingObjectData {
+	float up[3];
+	float heading[3];
+
 	float position[3];
 	float velocity[3];
 	float force[3];
+
 	float friction;
 	float mass;
-	float trackNormal[3];
+
 	int trackIndex;
 };
 
 class GAMECOREDLL MovingObject : public BaseObject, public ICollidable
 {
 protected:
+	Vector4 up;
+	Vector4 heading;
+
 	Vector4 position;
 	Vector4 velocity;
 	Vector4 force;
-	Vector4 trackNormal;
 	float trackVelocity;
 	
 	float friction;
@@ -38,13 +45,13 @@ protected:
 	bool followTrack;
 
 public:
-	MovingObject(int objectType);
+	MovingObject(int objectType, Game* owner);
 	~MovingObject();
+	Game* owner;
 
-	Vector4 heading(); // A normalized vector giving the direction the object is heading
+	Vector4 getHeading(); // A normalized vector giving the direction the object is heading
 	float speed();
 	Vector4 getPosition();
-	Vector4 getTrackNormal();
 	int getTrackIndex();
 
 	void applyForce(const Vector4& force);
@@ -59,11 +66,11 @@ public:
 	virtual void deserialize(BufferReader& buffer);
 
 	// ICollidable Methods
-	Vector4* getGroupingParameter();
-	bool collidesWith(ICollidable* target);
-	void handleCollision(BoundingSphere bs, float dt);
-	BoundingSphere getBounds();
-	unsigned int getPriority();
+	Common::Vector4 getGroupingParameter() const;
+	bool collidesWith(const ICollidable*) const;
+	void handleCollision(std::shared_ptr<const Bounds>, float dt);
+	std::shared_ptr<const Bounds> getBounds() const;
+	unsigned int getPriority() const;
 
 };
 

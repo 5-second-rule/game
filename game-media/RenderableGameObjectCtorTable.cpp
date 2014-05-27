@@ -10,22 +10,22 @@ RenderableGameObjectCtorTable::RenderableGameObjectCtorTable() {}
 
 RenderableGameObjectCtorTable::~RenderableGameObjectCtorTable() {}
 
-static BaseObject * makeRenderableEcoli(ConstructorTable<BaseObject> *thisObj) {
+static BaseObject * makeRenderableEcoli( ConstructorTable<BaseObject> *thisObj ) {
 	RenderableGameObjectCtorTable *table = (RenderableGameObjectCtorTable *)thisObj;
 
 	return new RenderableMovingObject(
 		ObjectTypes::Ecoli,
 		RenderableGame::getGlobalInstance()
-			->getRenderingEngineInstance()
-			->createModelFromIndex(
-				table->modelIndexes[ObjectTypes::Ecoli],
-				table->textureIndexes[ObjectTypes::Ecoli],
-				table->vertexShaderIndexes[ObjectTypes::Ecoli],
-				table->pixelShaderIndexes[ObjectTypes::Ecoli])
+		->getRenderingEngineInstance()
+		->createModelFromIndex(
+		table->modelIndexes[ObjectTypes::Ecoli],
+		table->textureIndexes[ObjectTypes::Ecoli],
+		table->vertexShaderIndexes[ObjectTypes::Ecoli],
+		table->pixelShaderIndexes[ObjectTypes::Ecoli] )
 		);
 }
 
-static BaseObject * makeRenderableChickenPox(ConstructorTable<BaseObject> *thisObj) {
+static BaseObject * makeRenderableChickenPox( ConstructorTable<BaseObject> *thisObj ) {
 	RenderableGameObjectCtorTable *table = (RenderableGameObjectCtorTable *)thisObj;
 
 	return new RenderableMovingObject(
@@ -36,11 +36,11 @@ static BaseObject * makeRenderableChickenPox(ConstructorTable<BaseObject> *thisO
 		table->modelIndexes[ObjectTypes::ChickenPox],
 		table->textureIndexes[ObjectTypes::ChickenPox],
 		table->vertexShaderIndexes[ObjectTypes::ChickenPox],
-		table->pixelShaderIndexes[ObjectTypes::ChickenPox])
+		table->pixelShaderIndexes[ObjectTypes::ChickenPox] )
 		);
 }
 
-static BaseObject * makeRenderableSyphillis(ConstructorTable<BaseObject> *thisObj) {
+static BaseObject * makeRenderableSyphillis( ConstructorTable<BaseObject> *thisObj ) {
 	RenderableGameObjectCtorTable *table = (RenderableGameObjectCtorTable *)thisObj;
 
 	return new RenderableMovingObject(
@@ -55,7 +55,7 @@ static BaseObject * makeRenderableSyphillis(ConstructorTable<BaseObject> *thisOb
 		);
 }
 
-static BaseObject * makeRenderableMalaria(ConstructorTable<BaseObject> *thisObj) {
+static BaseObject * makeRenderableMalaria( ConstructorTable<BaseObject> *thisObj ) {
 	RenderableGameObjectCtorTable *table = (RenderableGameObjectCtorTable *)thisObj;
 
 	return new RenderableMovingObject(
@@ -70,7 +70,7 @@ static BaseObject * makeRenderableMalaria(ConstructorTable<BaseObject> *thisObj)
 		);
 }
 
-static BaseObject * makeRenderableWhiteBlood(ConstructorTable<BaseObject> *thisObj) {
+static BaseObject * makeRenderableWhiteBlood( ConstructorTable<BaseObject> *thisObj ) {
 	RenderableGameObjectCtorTable *table = (RenderableGameObjectCtorTable *)thisObj;
 
 	return new RenderableMovingObject(
@@ -83,7 +83,7 @@ static BaseObject * makeRenderableWhiteBlood(ConstructorTable<BaseObject> *thisO
 		);
 }
 
-static BaseObject * makeRenderableRedBlood(ConstructorTable<BaseObject> *thisObj) {
+static BaseObject * makeRenderableRedBlood( ConstructorTable<BaseObject> *thisObj ) {
 	RenderableGameObjectCtorTable *table = (RenderableGameObjectCtorTable *)thisObj;
 
 	return new RenderableMovingObject(
@@ -96,7 +96,7 @@ static BaseObject * makeRenderableRedBlood(ConstructorTable<BaseObject> *thisObj
 		);
 }
 
-static BaseObject * makeRenderableTrack(ConstructorTable<BaseObject> *thisObj) {
+static BaseObject * makeRenderableTrack( ConstructorTable<BaseObject> *thisObj ) {
 	RenderableGameObjectCtorTable *table = (RenderableGameObjectCtorTable *)thisObj;
 
 	return new RenderableStaticObject(
@@ -108,19 +108,19 @@ static BaseObject * makeRenderableTrack(ConstructorTable<BaseObject> *thisObj) {
 		table->textureIndexes[ObjectTypes::Track],
 		table->bumpIndexes[ObjectTypes::Track],
 		table->vertexShaderIndexes[ObjectTypes::Track],
-		table->pixelShaderIndexes[ObjectTypes::Track])
+		table->pixelShaderIndexes[ObjectTypes::Track] )
 		);
 }
 
 void RenderableGameObjectCtorTable::initCtors() {
 	GameObjectCtorTable::initCtors();
-	RenderingEngine *engine = 
+	RenderingEngine *engine =
 		RenderableGame::getGlobalInstance()->getRenderingEngineInstance();
 
 	this->modelIndexes[ObjectTypes::Ecoli] = engine->loadModel( "resources/ecoliii.fbx" );
 	this->textureIndexes[ObjectTypes::Ecoli] = engine->loadTexture( "resources/ecolizzz_TXTR.dds" );
 	this->vertexShaderIndexes[ObjectTypes::Ecoli] = engine->loadVertexShader( "resources/vertexTentacle.cso" );
-	this->pixelShaderIndexes[ObjectTypes::Ecoli] = engine->loadPixelShader("resources/pixel.cso");
+	this->pixelShaderIndexes[ObjectTypes::Ecoli] = engine->loadPixelShader( "resources/pixel.cso" );
 
 	this->modelIndexes[ObjectTypes::ChickenPox] = engine->loadModel( "resources/herpes2.fbx" );
 	this->textureIndexes[ObjectTypes::ChickenPox] = engine->loadTexture( "resources/herpes_3_TXTR.dds" );
@@ -143,11 +143,11 @@ void RenderableGameObjectCtorTable::initCtors() {
 	this->modelIndexes[ObjectTypes::RedBlood] = engine->loadModel( "resources/ecoli6_nomedia.fbx" );
 	this->textureIndexes[ObjectTypes::RedBlood] = engine->loadTexture( "resources/Wood.dds" );
 
-	this->modelIndexes[ObjectTypes::Track] = engine->loadModel("resources/track.trk", false);
-	this->textureIndexes[ObjectTypes::Track] = engine->loadTexture("resources/bloodCell_TXTR.dds");
-	this->bumpIndexes[ObjectTypes::Track] = engine->loadBumpMap("resources/bloodCellBump.dds");
-	this->vertexShaderIndexes[ObjectTypes::Track] = engine->loadVertexShader("resources/vertexTrack.cso");
-	this->pixelShaderIndexes[ObjectTypes::Track] = engine->loadPixelShader("resources/pixelBump.cso");
+	this->modelIndexes[ObjectTypes::Track] = engine->loadModel( "resources/track.trk", false );
+	this->textureIndexes[ObjectTypes::Track] = engine->loadTexture( "resources/bloodCell_TXTR.dds" );
+	this->bumpIndexes[ObjectTypes::Track] = engine->loadBumpMap( "resources/bloodCellBump.dds" );
+	this->vertexShaderIndexes[ObjectTypes::Track] = engine->loadVertexShader( "resources/vertexTrack.cso" );
+	this->pixelShaderIndexes[ObjectTypes::Track] = engine->loadPixelShader( "resources/pixelBump.cso" );
 
 	this->setConstructor( ObjectTypes::Ecoli, makeRenderableEcoli );
 	this->setConstructor( ObjectTypes::ChickenPox, makeRenderableChickenPox );

@@ -84,8 +84,10 @@
     <ClInclude Include="ObjectTypes.h" />
     <ClInclude Include="ServerGame.h" />
     <ClInclude Include="ShootEvent.h" />
+    <ClInclude Include="Sounds.h" />
     <ClInclude Include="StaticObject.h" />
     <ClInclude Include="TrackPath.h" />
+    <ClInclude Include="Tube.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ActionEventCtorTable.cpp" />
@@ -97,6 +99,7 @@
     <ClCompile Include="ShootEvent.cpp" />
     <ClCompile Include="StaticObject.cpp" />
     <ClCompile Include="TrackPath.cpp" />
+    <ClCompile Include="Tube.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
