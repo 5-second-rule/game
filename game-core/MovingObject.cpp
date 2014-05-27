@@ -2,6 +2,7 @@
 
 #include "MoveEvent.h"
 #include "ActionType.h"
+#include "Sounds.h"
 
 #include "ObjectTypes.h"
 
@@ -13,8 +14,8 @@
 const float MovingObject::max_speed = MAX_SPEED;
 const float MovingObject::max_force = MAX_FORCE;
 
-MovingObject::MovingObject(int objectType)
-	: BaseObject(objectType)
+MovingObject::MovingObject( int objectType, Game* owner )
+	: BaseObject(objectType), owner(owner)
 {
 	this->up = Vector(0.0f, 1.0f, 0.0f);
 	this->heading = Vector(0.0f, 0.0f, 1.0f);
@@ -76,6 +77,7 @@ bool MovingObject::handleEvent(Event *evt){
 		break;
 	}
 	case ActionType::SHOOT:
+		owner->getEngineInstance()->sendEvent( new SoundEvent( static_cast<int>(Sounds::SHOOT), false, false ) );
 		//TODO: create projectile and set it in motion
 		break;
 	default:
@@ -184,6 +186,9 @@ bool MovingObject::collidesWith(const ICollidable* target) const {
 }
 
 void MovingObject::handleCollision(std::shared_ptr<const Bounds> bounds, float dt) {
+	// play sound for collision, this will probably play twice and needs to be handled :(
+	owner->getEngineInstance()->sendEvent( new SoundEvent( static_cast<int>(Sounds::COLLIDE), false, false ) );
+
 	std::shared_ptr<const BoundingSphere> me = std::static_pointer_cast<const BoundingSphere>(this->getBounds());
 
 	if (bounds->type == BoundsType::Sphere) {

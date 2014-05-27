@@ -4,7 +4,7 @@
 #include <cmath>
 
 RenderableMovingObject::RenderableMovingObject(int type, Transmission::Model* model)
-	: MovingObject(type)
+	: MovingObject(type, nullptr)
 	, RenderableObject(model)
 {}
 

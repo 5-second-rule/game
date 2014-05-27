@@ -33,6 +33,9 @@
     <ClInclude Include="RenderableStaticObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SoundCtorTable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RenderableGameObjectCtorTable.cpp">
@@ -48,6 +51,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="RenderableStaticObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundCtorTable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
