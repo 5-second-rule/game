@@ -34,6 +34,8 @@ protected:
 	Vector4 force;
 	float trackVelocity;
 	
+	float propulsion;
+
 	float friction;
 	float mass;
 
@@ -41,16 +43,16 @@ protected:
 	static const float max_force;
 
 	int trackIndex;
-	bool followTrack;
 
 public:
 	MovingObject(int objectType);
 	~MovingObject();
 
 	Vector4 getHeading(); // A normalized vector giving the direction the object is heading
-	float speed();
+	float getSpeed();
 	Vector4 getPosition();
 	int getTrackIndex();
+	Vector4 getUp();
 
 	void applyForce(const Vector4& force);
 
