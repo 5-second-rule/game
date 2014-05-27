@@ -54,17 +54,8 @@
     <ClInclude Include="BehaviorType.h">
       <Filter>Types</Filter>
     </ClInclude>
-    <ClInclude Include="State.h">
-      <Filter>State</Filter>
-    </ClInclude>
-    <ClInclude Include="StateMachine.h">
-      <Filter>State</Filter>
-    </ClInclude>
     <ClInclude Include="TypeDefinition.h">
       <Filter>Types</Filter>
-    </ClInclude>
-    <ClInclude Include="MovingObjectStates.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CommandLine.h">
       <Filter>Header Files</Filter>
@@ -127,9 +118,6 @@
     </ClCompile>
     <ClCompile Include="SteeringBehavior.cpp">
       <Filter>AI</Filter>
-    </ClCompile>
-    <ClCompile Include="MovingObjectStates.cpp">
-      <Filter>State</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

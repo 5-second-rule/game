@@ -4,6 +4,7 @@
 #include <mutex>
 #include <iostream>
 #include <sstream>
+#include <regex>
 
 #include "game-core.h"
 #include "MovingObject.h"
@@ -36,6 +37,8 @@ const string str_init_file = "resources/init.txt";
 class GAMECOREDLL CommandLine : public IHasHandle, public IUpdatable
 {
 private:
+	Handle handle;
+
 	std::istream *input;
 	std::ostream *output;
 	std::stringstream cmd_buffer;
@@ -50,27 +53,36 @@ public:
 	~CommandLine();
 
 	void update(float);
+	Handle getHandle();
+	void setHandle(Handle);
+	std::string toString();
+
 	void readFile(std::string str);
 	bool handleEvent(Event *evt);
 	void readCmd();
 	static void cmdLoop(std::istream *input, std::mutex *cmd_mtx, std::stringstream *cmd_buffer);
 	void handleCmd(std::string cmd);
-	bool setParam(std::map<std::string, std::string> &param, std::string str, std::stringstream &buffer);
+	std::string parse(std::string std);
+	bool setParameter(std::map<std::string, std::string> &param, std::string parameters, std::list<std::string> values);
 	void help();
 	void helpSet();
 	void helpPrint();
 	void helpCreate();
+	void helpRun();
+	void helpFlags();
+	void helpSteeringBehaviors();
 	void helpObjectType();
 	void invalidCommand();
-	void helpCmd(std::stringstream &buffer);
-	void set(std::stringstream &buffer);
-	void print(std::stringstream &buffer);
-	void runFile(std::stringstream &buffer);
+	void helpCmd(std::map<std::string, std::list<std::string> > &parameter);
+	void set(std::map<std::string, std::list<std::string> > &parameter);
+	void setObject(std::map<std::string, std::string> &parameter);
+	void print(std::map<std::string, std::list<std::string> > &parameter);
+	void runFile(std::map<std::string, std::list<std::string> > &parameter);
+	void createObject(std::map<std::string, std::list<std::string> > &parameter);
 	bool validObjectType(std::string name);
 	ObjectTypes toObjectType(std::string name);
-	void createObject(stringstream &buffer);
-	MovingObject *findObjectByIndex(int);
-	MovingObject *translateObject(std::string str);
+	IHasHandle *findObjectByIndex(int);
+	IHasHandle *translateObject(std::string str);
 
 	static std::string toString(ObjectTypes type);
 };

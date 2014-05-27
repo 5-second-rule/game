@@ -1,5 +1,6 @@
 #include "AutonomousObject.h"
 
+#include <iostream>
 
 AutonomousObject::AutonomousObject(int objectType) : MovingObject(objectType)
 {
@@ -7,11 +8,16 @@ AutonomousObject::AutonomousObject(int objectType) : MovingObject(objectType)
 	path = Path::instance();
 	setCurrentWayPoint(path->begin());
 	path->loopOn();
+	init();
 }
-
 
 AutonomousObject::~AutonomousObject()
 {
+}
+
+void AutonomousObject::init(){
+	MovingObject::init();
+	steering_behavior->init();
 }
 
 void AutonomousObject::update(float dt){
@@ -27,7 +33,7 @@ void AutonomousObject::setEvade(Handle &predator){
 	steering_behavior->pursuitOn(predator);
 }
 
-void AutonomousObject::setOnSteeringBehavior(BehaviorType behavior){
+bool AutonomousObject::setOnSteeringBehavior(BehaviorType behavior){
 	if (behavior == BehaviorType::arrive)
 		steering_behavior->arriveOn();
 	else if (behavior == BehaviorType::flee)
@@ -36,6 +42,19 @@ void AutonomousObject::setOnSteeringBehavior(BehaviorType behavior){
 		steering_behavior->seekOn();
 	else if (behavior == BehaviorType::wander)
 		steering_behavior->wanderOn();
+	else
+		return false;
+	return true;
+}
+
+bool AutonomousObject::setOnSteeringBehavior(BehaviorType behavior, Handle handle){
+	if (behavior == BehaviorType::pursuit)
+		steering_behavior->pursuitOn(handle);
+	else if (behavior == BehaviorType::evade)
+		steering_behavior->evadeOn(handle);
+	else
+		return false;
+	return true;
 }
 
 void AutonomousObject::setOffSteeringBehavior(BehaviorType behavior){
@@ -47,4 +66,11 @@ void AutonomousObject::setOffSteeringBehavior(BehaviorType behavior){
 		steering_behavior->seekOff();
 	else if (behavior == BehaviorType::wander)
 		steering_behavior->wanderOff();
+}
+
+string AutonomousObject::toString(){
+	stringstream buffer;
+	buffer << MovingObject::toString() << endl;
+	buffer << steering_behavior->toString() << endl;
+	return buffer.str();
 }

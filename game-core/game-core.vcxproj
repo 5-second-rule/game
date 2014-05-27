@@ -85,7 +85,6 @@
     <ClInclude Include="IFollowPath.h" />
     <ClInclude Include="MoveEvent.h" />
     <ClInclude Include="MovingObject.h" />
-    <ClInclude Include="MovingObjectStates.h" />
     <ClInclude Include="ObjectTypes.h" />
     <ClInclude Include="Path.h" />
     <ClInclude Include="ServerGame.h" />
@@ -93,8 +92,6 @@
     <ClInclude Include="StaticObject.h" />
     <ClInclude Include="TrackPath.h" />
     <ClInclude Include="Tube.h" />
-    <ClInclude Include="State.h" />
-    <ClInclude Include="StateMachine.h" />
     <ClInclude Include="SteeringBehavior.h" />
     <ClInclude Include="TypeDefinition.h" />
   </ItemGroup>
@@ -107,7 +104,6 @@
     <ClCompile Include="IFollowPath.cpp" />
     <ClCompile Include="MoveEvent.cpp" />
     <ClCompile Include="MovingObject.cpp" />
-    <ClCompile Include="MovingObjectStates.cpp" />
     <ClCompile Include="Path.cpp" />
     <ClCompile Include="ServerGame.cpp" />
     <ClCompile Include="ShootEvent.cpp" />

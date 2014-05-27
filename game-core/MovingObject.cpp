@@ -14,16 +14,17 @@ MovingObject::MovingObject(int objectType) : BaseObject(objectType)
 	this->trackIndex = 0;
 	this->followTrack = true;
 	this->trackVelocity = 1000;
-	assert(ConfigSettings::config->getValue("default_drag_coefficient", drag_coefficient));
-	assert(ConfigSettings::config->getValue("default_max_speed", max_speed));
-	assert(ConfigSettings::config->getValue("default_max_force", max_force));
-	assert(ConfigSettings::config->getValue("default_mass", mass));
-
-	state_machine = new StateMachine<MovingObject>(this);
-	state_machine->setCurrentState(Move::instance());
+	this->init();
 }
 
 MovingObject::~MovingObject() {}
+
+void MovingObject::init(){
+	this->mass = ConfigSettings::config->mass;
+	this->drag_coefficient = ConfigSettings::config->drag_coefficient;
+	this->max_speed = ConfigSettings::config->max_speed;
+	this->max_force = ConfigSettings::config->max_force;
+}
 
 void MovingObject::applyForce(const Vector4& force){
 	this->force += force;
@@ -74,14 +75,12 @@ bool MovingObject::handleEvent(Event *evt){
 
 
 void MovingObject::update(float dt){
-	state_machine->update();
-
 	if (followTrack) {
 		TrackPath *track = Game::getGlobalInstance()->getTrackPath();
 		this->trackIndex = track->locateIndex(this->position, this->trackIndex);
 
-		const float TRACK_FORCE = 20.0f;
-		Vector4 force = track->nodes[this->trackIndex].normal * TRACK_FORCE;
+		float dist = Common::distance(track->nodes[this->trackIndex].point, this->position);
+		Vector4 force = track->nodes[this->trackIndex].normal * this->forceByDist(dist);
 		this->applyForce(force);
 	}
 
@@ -162,6 +161,12 @@ void MovingObject::setPos(float x, float y, float z){
 	position.set(2, z);
 }
 
+void MovingObject::setPos(Vector4 v){
+	position.set(0, v[0]);
+	position.set(1, v[1]);
+	position.set(2, v[2]);
+}
+
 void MovingObject::setDragCoeff(float p_drag_coefficient){
 	drag_coefficient = p_drag_coefficient;
 }
@@ -184,6 +189,16 @@ void MovingObject::setForce(float x, float y, float z){
 
 void MovingObject::setTag(bool tag){
 	this->tagged = tag;
+}
+
+bool MovingObject::setFlag(string flag_name, bool value){
+	if (flag_name == "follow_track") {
+		followTrack = value;
+		return true;
+	}
+	else {
+		return false;
+	}
 }
 
 Vector4 MovingObject::getHeading(){
@@ -216,7 +231,8 @@ bool MovingObject::isTagged(){
 
 string MovingObject::toString(){
 	stringstream buffer;
-	buffer << this->getHandle().toString() << endl;
+	buffer << BaseObject::toString() << endl;
+	buffer << "Position: " << position.toString() << endl;
 	buffer << "Speed: " << velocity.length() << endl;
 	buffer << "Force: " << force.toString();
 	return buffer.str();
@@ -234,7 +250,6 @@ bool MovingObject::collidesWith(const ICollidable* target) const {
 	std::shared_ptr<const Bounds> bounds = target->getBounds();
 
 	if (bounds->type == BoundsType::Sphere) {
-		std::cout << "Wall Check" << std::endl;
 		std::shared_ptr<const BoundingSphere> bs = std::static_pointer_cast<const BoundingSphere>(bounds);
 		std::shared_ptr<const BoundingSphere> me = std::static_pointer_cast<const BoundingSphere>(this->getBounds());
 
@@ -285,4 +300,9 @@ std::shared_ptr<const Bounds> MovingObject::getBounds() const {
 
 unsigned int MovingObject::getPriority() const {
 	return static_cast<unsigned int>(CollisionPriorities::Object);
+}
+
+float MovingObject::forceByDist(float distance){
+	float force = (ConfigSettings::config->tube_radius - distance) / ConfigSettings::config->tube_radius * ConfigSettings::config->fluid_force;
+	return (force > 0 ? force : 0);
 }

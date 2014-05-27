@@ -1,7 +1,5 @@
 #pragma once
 #include "game-core.h"
-#include "StateMachine.h"
-#include "MovingObjectStates.h"
 
 #include "engine-core/BaseObject.h"
 #include "engine-core/ICollidable.h"
@@ -39,7 +37,6 @@ protected:
 	int trackIndex;
 	bool followTrack;
 
-	StateMachine<MovingObject> *state_machine;
 	float mass;
 	float max_speed;
 	float max_force;
@@ -47,6 +44,7 @@ protected:
 public:
 	MovingObject(int objectType);
 	~MovingObject();
+	virtual void init();
 
 	void applyForce(const Common::Vector4 &force);
 	virtual void update(float dt);
@@ -59,6 +57,9 @@ public:
 	void setTickForce(float x, float y, float z);
 	void setForce(float x, float y, float z);
 	void setTag(bool tag);
+	bool setFlag(std::string, bool value);
+	void setPos(float x, float y, float z);
+	void setPos(Common::Vector4 v);
 
 	// Get Methods
 	Common::Vector4 getPosition();
@@ -70,7 +71,7 @@ public:
 	float getMaxForce();
 	bool isTagged();
 
-	void setPos(float x, float y, float z);
+	static float forceByDist(float dist);
 
 	// ISerializable Methods
 	virtual void deserialize(BufferReader& reader);

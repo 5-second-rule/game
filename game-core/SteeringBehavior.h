@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include "game-core.h"
 #include "Game.h"
 #include "AutonomousObject.h"
@@ -38,8 +40,9 @@ private:
 
 	// Steering behavior attributes
 	Common::Vector4 target_point;
-	Handle target_agent1;
-	Handle target_agent2;
+	Handle target_agent_pursuit;
+	Handle target_agent_evade;
+	Handle target_agent_leader;
 	Common::Vector4 wander_target;
 
 	// Offset pursuit attributes
@@ -49,7 +52,6 @@ private:
 	int behavior;
 
 	Common::Vector4 steering_force;
-	Handle target_agent;
 	AutonomousObject *owner;
 
 	Common::Vector4 seek(Common::Vector4 &p_point);
@@ -106,9 +108,12 @@ private:
 	bool accumulateForce(Common::Vector4 &RunningTot, Common::Vector4 ForceToAdd);
 	template< class T, class container_T >
 	void tagNeighbors(const T* p_entity, container_T &p_container_entities, float radius);
+	
+
 public:
 	SteeringBehavior(AutonomousObject*);
 	~SteeringBehavior();
+	virtual void init();
 	Common::Vector4 calculate();
 	bool On(BehaviorType) const;
 	void setTarget(Common::Vector4 p_target);
@@ -130,4 +135,6 @@ public:
 	void followPathOff();
 	void offsetPursuitOff();
 	static BehaviorType toBehaviorType(std::string);
+
+	std::string toString();
 };

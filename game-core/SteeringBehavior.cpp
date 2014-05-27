@@ -1,3 +1,5 @@
+#include <sstream>
+
 #include "SteeringBehavior.h"
 
 #include "common/4D/Transformation.h"
@@ -6,22 +8,24 @@ using namespace Common;
 
 SteeringBehavior::SteeringBehavior(AutonomousObject *owner) :behavior(BehaviorType::none)
 {
-	assert(ConfigSettings::config->getValue("time_tick", k_time_elapsed));
-	assert(ConfigSettings::config->getValue("deceleration_tweaker", deceleration_tweaker));
-	assert(ConfigSettings::config->getValue("wander_jitter", wander_jitter));
-	assert(ConfigSettings::config->getValue("wander_radius", wander_radius));
-	assert(ConfigSettings::config->getValue("wander_distance", wander_distance));
-	assert(ConfigSettings::config->getValue("weight_wander", weight_wander));
-	assert(ConfigSettings::config->getValue("weight_follow_path", weight_follow_path));
-	assert(ConfigSettings::config->getValue("way_point_seek_distance", way_point_seek_distance));
 
-	way_point_seek_distance_sq = way_point_seek_distance * way_point_seek_distance;
 	this->owner = owner;
 }
 
-
 SteeringBehavior::~SteeringBehavior()
 {
+}
+
+void SteeringBehavior::init(){
+	this->k_time_elapsed = ConfigSettings::config->k_time_elapsed;
+	this->deceleration_tweaker = ConfigSettings::config->deceleration_tweaker;
+	this->wander_jitter = ConfigSettings::config->wander_jitter;
+	this->wander_radius = ConfigSettings::config->wander_radius;
+	this->wander_distance = ConfigSettings::config->wander_distance;
+	this->weight_wander = ConfigSettings::config->weight_wander;
+	this->weight_follow_path = ConfigSettings::config->weight_follow_path;
+	this->way_point_seek_distance = ConfigSettings::config->way_point_seek_distance;
+	this->way_point_seek_distance_sq = way_point_seek_distance * way_point_seek_distance;
 }
 
 Vector4 SteeringBehavior::seek(Vector4 &p_targetPosition){
@@ -35,7 +39,7 @@ Vector4 SteeringBehavior::flee(Vector4 &p_targetPosition){
 	Vector4 desiredDirection = Common::Vector4::normalize(owner->getPosition() - p_targetPosition);
 	Vector4 desiredVelocity = desiredDirection * owner->getMaxSpeed();
 
-	return desiredVelocity - owner->getVelocity();
+	return desiredVelocity;
 }
 
 Vector4 SteeringBehavior::arrive(Vector4 &p_targetPosition, Deceleration deceleration){
@@ -79,7 +83,7 @@ Vector4 SteeringBehavior::pursuit(Handle &p_evader_handle){
 	else {
 		pursuitOff();
 	}
-	return Vector4();
+	return Vector4(0, 0, 0);
 }
 
 Vector4 SteeringBehavior::evade(Handle &p_pursuer_handle){
@@ -183,7 +187,7 @@ Vector4 SteeringBehavior::separation(const std::vector<Handle> &neighbors)
 		// the agent being examined is close enough. ***also make sure it doesn't
 		// include the evade target ***
 		if ((neighbor != nullptr) && (neighbor != owner) && neighbor->isTagged() &&
-			(neighbor != m_getObject(target_agent1)))
+			(neighbor != m_getObject(target_agent_evade)))
 		{
 			Vector4 ToAgent = owner->getPosition() - neighbor->getPosition();
 
@@ -212,7 +216,7 @@ Vector4 SteeringBehavior::alignment(const std::vector<Handle> &neighbors)
 		//the agent being examined  is close enough ***also make sure it doesn't
 		//include any evade target ***
 		if ((neighbor != nullptr) && (neighbor != owner) && neighbor->isTagged() &&
-			(neighbor != m_getObject(target_agent1)))
+			(neighbor != m_getObject(target_agent_evade)))
 		{
 			AverageHeading += neighbor->getHeading();
 
@@ -247,7 +251,7 @@ Vector4 SteeringBehavior::cohesion(const std::vector<Handle> &neighbors)
 		// the agent being examined is close enough ***also make sure it doesn't
 		// include the evade target ***
 		if ((neighbor != nullptr) && (neighbor != owner) && neighbor->isTagged() &&
-			(neighbor != dynamic_cast<MovingObject*>(m_getObject(this->target_agent1))))
+			(neighbor != dynamic_cast<MovingObject*>(m_getObject(this->target_agent_evade))))
 		{
 			CenterOfMass += neighbor->getPosition();
 
@@ -310,6 +314,14 @@ Vector4 SteeringBehavior::calculate(){
 Vector4 SteeringBehavior::calculatePrioritized(){
 	Vector4 force;
 
+	if (On(BehaviorType::pursuit)){
+		force = pursuit(target_agent_pursuit);
+		if (!accumulateForce(steering_force, force)) return steering_force;
+	}
+	if (On(BehaviorType::evade)){
+		force = evade(target_agent_evade);
+		if (!accumulateForce(steering_force, force)) return steering_force;
+	}
 	if (On(BehaviorType::follow_path)){
 		force = followPath() * weight_follow_path;
 		if (!accumulateForce(steering_force, force)) return steering_force;
@@ -321,6 +333,7 @@ Vector4 SteeringBehavior::calculatePrioritized(){
 	if (On(BehaviorType::arrive)){
 
 	}
+	
 	return steering_force;
 }
 
@@ -346,12 +359,12 @@ void SteeringBehavior::arriveOn(){
 
 void SteeringBehavior::pursuitOn(Handle &p_evader_handle){
 	behavior |= BehaviorType::pursuit;
-	target_agent = p_evader_handle;
+	target_agent_pursuit = p_evader_handle;
 }
 
 void SteeringBehavior::evadeOn(Handle &p_pursuer_handle){
 	behavior |= BehaviorType::evade;
-	target_agent = p_pursuer_handle;
+	target_agent_evade = p_pursuer_handle;
 }
 
 void SteeringBehavior::wanderOn(){
@@ -365,7 +378,7 @@ void SteeringBehavior::followPathOn(){
 void SteeringBehavior::offsetPursuitOn(Handle &p_leader, const Vector4 p_offset){
 	behavior |= BehaviorType::offset_pursuit;
 	offset = p_offset;
-	target_agent = p_leader;
+	target_agent_leader = p_leader;
 }
 
 void SteeringBehavior::seekOff(){
@@ -426,4 +439,34 @@ BehaviorType SteeringBehavior::toBehaviorType(string str){
 	if (str == "offset_pursuit")
 		return BehaviorType::offset_pursuit;
 	return BehaviorType::none;
+}
+
+string SteeringBehavior::toString(){
+	stringstream buffer;
+	buffer << "Steering Behaviors: ";
+	if (On(BehaviorType::seek)){
+		buffer << "seek|";
+	}
+	if (On(BehaviorType::flee)){
+		buffer << "flee|";
+	}
+	if (On(BehaviorType::arrive)){
+		buffer << "arrive|";
+	}
+	if (On(BehaviorType::wander)){
+		buffer << "wander|";
+	}
+	if (On(BehaviorType::pursuit)){
+		buffer << "pursuit|";
+	}
+	if (On(BehaviorType::evade)){
+		buffer << "evade|";
+	}
+	if (On(BehaviorType::follow_path)){
+		buffer << "follow_path|";
+	}
+	if (On(BehaviorType::offset_pursuit)){
+		buffer << "offset_pursuit|";
+	}
+	return buffer.str();
 }
