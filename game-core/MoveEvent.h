@@ -8,8 +8,8 @@ public:
 	struct MoveDirection {
 		float x;
 		float y;
-
 		float z;
+		float w;
 	};
 	static const ActionType ACTIONTYPE = ActionType::MOVE;
 

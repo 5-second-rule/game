@@ -25,7 +25,7 @@ void RenderableGame::init() {
 
 std::vector<Event *>  RenderableGame::inputTranslator(InputAdapter *inputAdapter) {
 	Transmission::Input::KeyState down = Transmission::Input::KeyState::STATE_DOWN;
-	MoveEvent::MoveDirection dir = { 0.0, 0.0, 0.0 };
+	MoveEvent::MoveDirection dir = { 0.0, 0.0, 0.0, 0.0 };
 	bool moveKeyPressed = false;
 	std::vector<Event *> inputEventVector;
 	
@@ -104,6 +104,14 @@ std::vector<Event *>  RenderableGame::inputTranslator(InputAdapter *inputAdapter
 		if (inputAdapter->getKeyState(Transmission::Input::Key::W) == down) {
 			dir.y += 1;
 		}
+
+		if (inputAdapter->getKeyState(Transmission::Input::Key::Q) == down) {
+			dir.w -= 1;
+		}
+
+		if (inputAdapter->getKeyState(Transmission::Input::Key::E) == down) {
+			dir.w += 1;
+		}
 	}
 
 if (dir.x != 0 || dir.y != 0 || dir.z != 0) {
@@ -122,7 +130,8 @@ Engine * RenderableGame::makeEngineInstance( ConstructorTable<BaseObject> *objec
 		this->appHandle,
 		new TrackingCameraHandler(),
 		"resources\\defaultVertex.cso",
-		"resources\\defaultPixel.cso");
+		"resources\\defaultPixel.cso",
+		L"Vein: Rivers of Blood");
 
 	eng->renderingDelegate = this;
 	return eng;
