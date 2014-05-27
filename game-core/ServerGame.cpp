@@ -1,4 +1,5 @@
 #include "ServerGame.h"
+#include "GameState.h"
 #include "ObjectTypes.h"
 #include "Sounds.h"
 
@@ -28,11 +29,12 @@ void ServerGame::stop() {
 
 void ServerGame::init() {
 	Game::init();
-
+	IRegisterPlayers *gameState = new GameState();
+	this->getEngineInstance()->setPlayerRegistration(gameState);
 	// HACK, wait to load when game screen up?
-	IHasHandle *track = this->objectCtors->invoke(ObjectTypes::Track);
-	this->getEngineInstance()->getWorld()->allocateHandle(track, HandleType::GLOBAL);
-	this->getEngineInstance()->getWorld()->insert(track);
+	//IHasHandle *track = this->objectCtors->invoke(ObjectTypes::Track);
+	//this->getEngineInstance()->getWorld()->allocateHandle(track, HandleType::GLOBAL);
+	//this->getEngineInstance()->getWorld()->insert(track);
 
 	// HACK --	this only works if the clients are up first, but in the future this will
 	//					only be sent when the game starts after character selection

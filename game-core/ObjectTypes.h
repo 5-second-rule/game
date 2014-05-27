@@ -12,7 +12,8 @@ enum GAMECOREDLL ObjectTypes
 	MagicSchoolBus,
 	Track,
 	UI,
-	SelectionScreen
+	SelectionScreen,
+	State
 };
 
 enum class GAMECOREDLL CollisionPriorities {

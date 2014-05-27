@@ -77,7 +77,9 @@
     <ClInclude Include="game-media.h" />
     <ClInclude Include="RenderableGame.h" />
     <ClInclude Include="RenderableGameObjectCtorTable.h" />
+    <ClInclude Include="RenderableGameState.h" />
     <ClInclude Include="RenderableMovingObject.h" />
+    <ClInclude Include="RenderablePlayer.h" />
     <ClInclude Include="RenderableSelectionScreen.h" />
     <ClInclude Include="RenderableStaticObject.h" />
     <ClInclude Include="SoundCtorTable.h" />
@@ -86,7 +88,9 @@
   <ItemGroup>
     <ClCompile Include="RenderableGame.cpp" />
     <ClCompile Include="RenderableGameObjectCtorTable.cpp" />
+    <ClCompile Include="RenderableGameState.cpp" />
     <ClCompile Include="RenderableMovingObject.cpp" />
+    <ClCompile Include="RenderablePlayer.cpp" />
     <ClCompile Include="RenderableSelectionScreen.cpp" />
     <ClCompile Include="RenderableStaticObject.cpp" />
     <ClCompile Include="SoundCtorTable.cpp" />

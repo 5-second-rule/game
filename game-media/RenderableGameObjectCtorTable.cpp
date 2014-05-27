@@ -116,10 +116,46 @@ static BaseObject * makeRenderableTrack( ConstructorTable<BaseObject> *thisObj )
 static BaseObject * makeRenderableSelectionScreen(ConstructorTable<BaseObject> *thisObj) {
 	RenderableGameObjectCtorTable *table = (RenderableGameObjectCtorTable *)thisObj;
 	RenderableStaticObject *playerObjects[4] = {
-		(RenderableStaticObject *) makeRenderableEcoli(thisObj),
-		(RenderableStaticObject *) makeRenderableChickenPox(thisObj),
-		(RenderableStaticObject *) makeRenderableSyphillis(thisObj),
-		(RenderableStaticObject *) makeRenderableMalaria(thisObj)
+		new RenderableStaticObject(
+		ObjectTypes::Ecoli,
+		RenderableGame::getGlobalInstance()
+		->getRenderingEngineInstance()
+		->createModelFromIndex(
+		table->modelIndexes[ObjectTypes::Ecoli],
+		table->textureIndexes[ObjectTypes::Ecoli],
+		table->vertexShaderIndexes[ObjectTypes::Ecoli],
+		table->pixelShaderIndexes[ObjectTypes::Ecoli])
+		),
+		new RenderableStaticObject(
+		ObjectTypes::ChickenPox,
+		RenderableGame::getGlobalInstance()
+		->getRenderingEngineInstance()
+		->createModelFromIndex(
+		table->modelIndexes[ObjectTypes::ChickenPox],
+		table->textureIndexes[ObjectTypes::ChickenPox],
+		table->vertexShaderIndexes[ObjectTypes::ChickenPox],
+		table->pixelShaderIndexes[ObjectTypes::ChickenPox])
+		),
+		new RenderableStaticObject(
+		ObjectTypes::Syphillis,
+		RenderableGame::getGlobalInstance()
+		->getRenderingEngineInstance()
+		->createModelFromIndex(
+		table->modelIndexes[ObjectTypes::Syphillis],
+		table->textureIndexes[ObjectTypes::Syphillis],
+		table->vertexShaderIndexes[ObjectTypes::Syphillis],
+		table->pixelShaderIndexes[ObjectTypes::Syphillis])
+		),
+		new RenderableStaticObject(
+		ObjectTypes::Malaria,
+		RenderableGame::getGlobalInstance()
+		->getRenderingEngineInstance()
+		->createModelFromIndex(
+		table->modelIndexes[ObjectTypes::Malaria],
+		table->textureIndexes[ObjectTypes::Malaria],
+		table->vertexShaderIndexes[ObjectTypes::Malaria],
+		table->pixelShaderIndexes[ObjectTypes::Malaria])
+		)
 	};
 
 	return new RenderableSelectionScreen(playerObjects);

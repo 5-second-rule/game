@@ -8,6 +8,7 @@ RenderableSelectionScreen::RenderableSelectionScreen(RenderableStaticObject *(&p
 
 	const int MAX_PLAYERS = 4;
 	const float MARGIN = 0.05;
+	float scale = (2.0 - 5 * MARGIN) / 8;
 
 	char *names[4] = {
 		"resources/select-name-ecoli.dds",
@@ -24,25 +25,28 @@ RenderableSelectionScreen::RenderableSelectionScreen(RenderableStaticObject *(&p
 	this->calculateTitleVertices(titleVertices, 800, 600);
 
 	Transmission::Index rectangleIndices[6] = { 0, 1, 2, 3, 0, 2 };
-
 	
 	for (int i = 0; i < MAX_PLAYERS; ++i) {
-		this->playerCenters[i] = this->calculatePlayerBackgroundVertices(playerVertices, i, MARGIN);
-		if (i == 0) {
-			backgroundModel = engine->create2DModelFromScratch(backgroundVertices, 4, rectangleIndices, 6, "resources/select-background.dds", textures);
-		}
+		this->playerCenters[i] = this->calculatePlayerBackgroundVertices(playerVertices, i, MARGIN) * 5.5;
+		playerbackgroundModels[i] = engine->create2DModelFromScratch(playerVertices, 4, rectangleIndices, 6, "resources/select-rectangle.dds", textures, false);
+		playerbackgroundObjects[i] = new RenderableStaticObject(ObjectTypes::SelectionScreen, playerbackgroundModels[i]);
 		calculatePlayerNameVertices(playerVertices, i, MARGIN);
-		this->playerNameModels[i] = engine->create2DModelFromScratch(playerVertices, 4, rectangleIndices, 6, names[i], textures);
+		this->playerNameModels[i] = engine->create2DModelFromScratch(playerVertices, 4, rectangleIndices, 6, names[i], textures, true);
 		this->playerNameObjects[i] = new RenderableStaticObject(i, playerNameModels[i]);
 		this->playerObjects[i] = playerObjects[i];
 	}
 
-	titleModel = engine->create2DModelFromScratch(titleVertices, 4, rectangleIndices, 6, "resources/select-title.dds", textures);
-	playerbackgroundModel = engine->create2DModelFromScratch(playerVertices, 4, rectangleIndices, 6, "resources/select-rectangle.dds", textures);
+	this->playerObjects[ObjectTypes::Ecoli]->setScale(scale);
+	this->playerObjects[ObjectTypes::ChickenPox]->setScale(scale);
+	this->playerObjects[ObjectTypes::Malaria]->setScale(scale);
+	this->playerObjects[ObjectTypes::Syphillis]->setScale(scale*3.0);
 
+	backgroundModel = engine->create2DModelFromScratch(backgroundVertices, 4, rectangleIndices, 6, "resources/select-background.dds", textures, false);
+	titleModel = engine->create2DModelFromScratch(titleVertices, 4, rectangleIndices, 6, "resources/select-title.dds", textures, true);
+	
 	backgroundObject = new RenderableStaticObject(ObjectTypes::SelectionScreen, backgroundModel);
 	titleObject = new RenderableStaticObject(ObjectTypes::SelectionScreen, titleModel);
-	playerbackgroundObject = new RenderableStaticObject(ObjectTypes::SelectionScreen, playerbackgroundModel);
+	
 }
 
 
@@ -50,17 +54,17 @@ RenderableSelectionScreen::~RenderableSelectionScreen()
 {
 	delete backgroundObject;
 	delete titleObject;
-	delete playerbackgroundObject;
-
 	backgroundObject = NULL;
 	titleObject = NULL;
-	playerbackgroundObject = NULL;
 
 	for (int i = 0; i < 4; ++i) {
+		delete playerbackgroundObjects[i];
 		delete playerNameObjects[i];
 		delete playerObjects[i];
+		playerbackgroundObjects[i] = NULL;
 		playerNameObjects[i] = NULL;
 		playerObjects[i] = NULL;
+
 	}
 }
 
@@ -87,11 +91,11 @@ void RenderableSelectionScreen::calculateTitleVertices(Transmission::Vertex *ver
 void RenderableSelectionScreen::calculatePlayerNameVertices(Transmission::Vertex *vertices, int playerIndex, float margin) {
 	float numMargins[] = { -1.5, -0.5, 0.5, 1.5 };
 	float pos[] = { -2, -1, 0, 1 };
-
-	float edgeT = 0.5;
-	float edgeB = -0.7;
-
 	float width = (2.0 - 5 * margin) / 4;
+	float height = width * 0.80 * 0.237;
+
+	float edgeB = -0.7 + width * 0.1;
+	float edgeT = edgeB + height;
 
 	float edgeL = pos[playerIndex] * width + numMargins[playerIndex] * margin + width * 0.1;
 	float edgeR = edgeL + width * 0.80;
@@ -128,9 +132,7 @@ void RenderableSelectionScreen::render() {
 	
 	for (int i = 0; i < 4; ++i) {
 		float pos[3] = { this->playerCenters[i], 0.0, 0.0 };
-		this->playerbackgroundObject->setPosition(pos);
-		this->playerbackgroundObject->render();
-		this->playerNameObjects[i]->setPosition(pos);
+		this->playerbackgroundObjects[i]->render();
 		this->playerNameObjects[i]->render();
 		this->playerObjects[i]->setPosition(pos);
 		this->playerObjects[i]->render();

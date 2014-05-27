@@ -3,6 +3,7 @@
 #include "game-core.h"
 #include "Game.h"
 
+
 class GAMECOREDLL ServerGame : public Game
 {
 private:

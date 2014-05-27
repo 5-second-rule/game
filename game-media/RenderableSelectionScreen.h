@@ -7,14 +7,14 @@
 #include "renderer/Model.h"
 #include "game-core/ObjectTypes.h"
 
-class RenderableSelectionScreen : public StaticObject
+class RenderableSelectionScreen : public StaticObject, public IRenderable
 {
 private:
 	float playerCenters[4];
 
 	Transmission::Model *backgroundModel;
 	Transmission::Model *titleModel;
-	Transmission::Model *playerbackgroundModel;
+	Transmission::Model *playerbackgroundModels[4];
 	Transmission::Model *playerNameModels[4];
 	Transmission::Model *playerModels[4];
 
@@ -33,7 +33,7 @@ private:
 protected:
 	RenderableStaticObject *backgroundObject;
 	RenderableStaticObject *titleObject;
-	RenderableStaticObject *playerbackgroundObject;
+	RenderableStaticObject *playerbackgroundObjects[4];
 	RenderableStaticObject *playerNameObjects[4];
 	RenderableStaticObject *playerObjects[4];
 
