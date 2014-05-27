@@ -3,6 +3,7 @@
 
 #include "RenderableMovingObject.h"
 #include "RenderableStaticObject.h"
+#include "RenderableSelectionScreen.h"
 
 #include "RenderableGame.h"
 
@@ -112,6 +113,18 @@ static BaseObject * makeRenderableTrack( ConstructorTable<BaseObject> *thisObj )
 		);
 }
 
+static BaseObject * makeRenderableSelectionScreen(ConstructorTable<BaseObject> *thisObj) {
+	RenderableGameObjectCtorTable *table = (RenderableGameObjectCtorTable *)thisObj;
+	RenderableStaticObject *playerObjects[4] = {
+		(RenderableStaticObject *) makeRenderableEcoli(thisObj),
+		(RenderableStaticObject *) makeRenderableChickenPox(thisObj),
+		(RenderableStaticObject *) makeRenderableSyphillis(thisObj),
+		(RenderableStaticObject *) makeRenderableMalaria(thisObj)
+	};
+
+	return new RenderableSelectionScreen(playerObjects);
+}
+
 void RenderableGameObjectCtorTable::initCtors() {
 	GameObjectCtorTable::initCtors();
 	RenderingEngine *engine =
@@ -156,4 +169,5 @@ void RenderableGameObjectCtorTable::initCtors() {
 	this->setConstructor( ObjectTypes::WhiteBlood, makeRenderableWhiteBlood );
 	this->setConstructor( ObjectTypes::RedBlood, makeRenderableRedBlood );
 	this->setConstructor( ObjectTypes::Track, makeRenderableTrack );
+	this->setConstructor( ObjectTypes::SelectionScreen, makeRenderableSelectionScreen);
 }
