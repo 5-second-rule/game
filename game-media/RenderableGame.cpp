@@ -130,7 +130,8 @@ Engine * RenderableGame::makeEngineInstance( ConstructorTable<BaseObject> *objec
 		this->appHandle,
 		new TrackingCameraHandler(),
 		"resources\\defaultVertex.cso",
-		"resources\\defaultPixel.cso");
+		"resources\\defaultPixel.cso",
+		L"Vein: Rivers of Blood");
 
 	eng->renderingDelegate = this;
 	return eng;
