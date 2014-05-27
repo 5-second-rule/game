@@ -14,9 +14,7 @@ MoveEvent::MoveEvent(unsigned int playerGuid, const char* data)
 		this->direction = *reinterpret_cast<const MoveDirection*>(data);
 }
 
-
 MoveEvent::~MoveEvent() {}
-
 
 void MoveEvent::reserveSize( IReserve& buffer ) const {
 	ActionEvent::reserveSize( buffer );

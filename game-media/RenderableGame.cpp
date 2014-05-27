@@ -25,7 +25,7 @@ void RenderableGame::init() {
 
 std::vector<Event *>  RenderableGame::inputTranslator(InputAdapter *inputAdapter) {
 	Transmission::Input::KeyState down = Transmission::Input::KeyState::STATE_DOWN;
-	MoveEvent::MoveDirection dir = { 0.0, 0.0, 0.0 };
+	MoveEvent::MoveDirection dir = { 0.0, 0.0, 0.0, 0.0 };
 	bool moveKeyPressed = false;
 	std::vector<Event *> inputEventVector;
 	
@@ -103,6 +103,14 @@ std::vector<Event *>  RenderableGame::inputTranslator(InputAdapter *inputAdapter
 
 		if (inputAdapter->getKeyState(Transmission::Input::Key::W) == down) {
 			dir.y += 1;
+		}
+
+		if (inputAdapter->getKeyState(Transmission::Input::Key::Q) == down) {
+			dir.w -= 1;
+		}
+
+		if (inputAdapter->getKeyState(Transmission::Input::Key::E) == down) {
+			dir.w += 1;
 		}
 	}
 

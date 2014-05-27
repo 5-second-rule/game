@@ -8,7 +8,7 @@
 
 #include "Game.h"
 
-#define MAX_SPEED 50
+#define MAX_SPEED 75
 #define MAX_FORCE 100
 
 const float MovingObject::max_speed = MAX_SPEED;
@@ -20,9 +20,9 @@ MovingObject::MovingObject( int objectType, Game* owner )
 	this->up = Vector(0.0f, 1.0f, 0.0f);
 	this->heading = Vector(0.0f, 0.0f, 1.0f);
 	this->mass = .1f;
+	this->propulsion = 1.0f;
 	this->friction = .2f;
 	this->trackIndex = 0;
-	this->followTrack = true;
 	this->trackVelocity = 1000;
 }
 
@@ -31,11 +31,15 @@ MovingObject::~MovingObject() {}
 
 
 Vector4 MovingObject::getHeading(){
-	return heading;
+	return this->heading;
 }
 
-float MovingObject::speed(){
+float MovingObject::getSpeed(){
 	return this->velocity.length();
+}
+
+Vector4 MovingObject::getUp() {
+	return this->up;
 }
 
 void MovingObject::applyForce(const Vector4& force){
@@ -59,20 +63,22 @@ bool MovingObject::handleEvent(Event *evt){
 		if (moveEvent == nullptr)
 			return false;
 
-		const float MOVE_FORCE = 5.0f;
-		const float ROT_SCALE = 0.05f;
+		const float MOVE_FORCE = 10.0f;
+		const float ROT_SCALE = 0.04f;
+		const float BRAKE_SCALE = 0.5f;
+
+		this->up = Matrix4::rotate(this->heading, moveEvent->direction.w * ROT_SCALE) * this->up;
 
 		//rotate sideways
-		this->heading = Matrix4::rotate(this->up, moveEvent->direction.x * ROT_SCALE) * heading;
+		this->heading = Matrix4::rotate(this->up, -moveEvent->direction.x * ROT_SCALE) * this->heading;
 
 		//rotate up and down
-		Matrix4 rot = Matrix4::rotate(Vector4::cross(up, heading), moveEvent->direction.z * ROT_SCALE);
+		Matrix4 rot = Matrix4::rotate(Vector4::cross(up, heading), -moveEvent->direction.y * ROT_SCALE);
 		this->heading = rot * heading;
 		this->up = rot * up;
 
-		this->force = heading * moveEvent->direction.y * MOVE_FORCE;
+		this->propulsion = moveEvent->direction.z + 1.0f; // [-1,1] -> [0,2]
 
-		this->applyForce(force);
 		return true;
 		break;
 	}
@@ -88,22 +94,28 @@ bool MovingObject::handleEvent(Event *evt){
 
 void MovingObject::update(float dt){
 	BaseObject::update(dt);
-	
+
 	this->position += this->velocity * dt;
 
-	Vector4 acceleration = force * (1 / this->mass);
+	Vector4 acceleration = this->force * (1 / this->mass);
 	this->force = -(this->velocity * this->friction);
 
 	this->velocity += acceleration*dt;
 
-	if (followTrack) {
-		TrackPath *track = Game::getGlobalInstance()->getTrackPath();
-		this->trackIndex = track->locateIndex(this->position, this->trackIndex);
+	// follow track
+	TrackPath *track = Game::getGlobalInstance()->getTrackPath();
+	this->trackIndex = track->locateIndex(this->position, this->trackIndex);
 
-		const float TRACK_FORCE = 20.0f;
-		Vector4 force = track->nodes[this->trackIndex].normal * TRACK_FORCE;
-		this->applyForce(force);
-	}
+	const float TRACK_FORCE = 15.0f;
+	const float HEADING_FORCE = 15.0f;
+	Vector4 trackForce = track->nodes[this->trackIndex].normal * TRACK_FORCE;
+	
+	// propulsion in heading
+	Vector4 headingForce = Vector4::normalize(this->heading) * HEADING_FORCE * propulsion;
+	this->applyForce(trackForce + headingForce);
+
+	// reset propulsion
+	this->propulsion = 1.0f;
 }
 
 void MovingObject::reserveSize(IReserve& buffer) const {
