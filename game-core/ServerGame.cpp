@@ -1,5 +1,6 @@
 #include "ServerGame.h"
 #include "ObjectTypes.h"
+#include "Sounds.h"
 
 #include "engine-core/ServerEngine.h"
 
@@ -32,4 +33,8 @@ void ServerGame::init() {
 	IHasHandle *track = this->objectCtors->invoke(ObjectTypes::Track);
 	this->getEngineInstance()->getWorld()->allocateHandle(track, HandleType::GLOBAL);
 	this->getEngineInstance()->getWorld()->insert(track);
+
+	// HACK --	this only works if the clients are up first, but in the future this will
+	//					only be sent when the game starts after character selection
+	// this->getEngineInstance()->sendEvent( new SoundEvent( static_cast<int>(Sounds::SOUNDTRACK), true, false ));
 }

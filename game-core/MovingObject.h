@@ -1,5 +1,6 @@
 #pragma once
 #include "game-core.h"
+#include "Game.h"
 
 #include "engine-core/BaseObject.h"
 #include "engine-core/ICollidable.h"
@@ -45,8 +46,9 @@ protected:
 	int trackIndex;
 
 public:
-	MovingObject(int objectType);
+	MovingObject(int objectType, Game* owner);
 	~MovingObject();
+	Game* owner;
 
 	Vector4 getHeading(); // A normalized vector giving the direction the object is heading
 	float getSpeed();

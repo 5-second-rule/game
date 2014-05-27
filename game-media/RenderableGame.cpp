@@ -4,6 +4,7 @@
 #include "RenderableGameObjectCtorTable.h"
 #include "engine-renderer/RenderableWorld.h"
 #include "TrackingCameraHandler.h"
+#include "SoundCtorTable.h"
 
 RenderableGame::RenderableGame(void *appHandle)
 {
@@ -16,11 +17,10 @@ RenderableGame::~RenderableGame()
 
 void RenderableGame::init() {
 	Game::init();
-	//this->getEngineInstance()->waitForConnection();
+	static_cast<SoundCtorTable*>(this->getRenderingEngineInstance()->soundCtors)->initCtors();
 	this->getRenderingEngineInstance()->waitForServer();
-	int index = this->getRenderingEngineInstance()->loadSound( "resources/soundtrack.wav" );
-	this->getRenderingEngineInstance()->playSound( index, true );
 	this->getEngineInstance()->registerPlayer(true);
+
 }
 
 std::vector<Event *>  RenderableGame::inputTranslator(InputAdapter *inputAdapter) {
@@ -121,11 +121,12 @@ if (dir.x != 0 || dir.y != 0 || dir.z != 0) {
 }
 
 Engine * RenderableGame::makeEngineInstance( ConstructorTable<BaseObject> *objectCtors, ConstructorTable<ActionEvent>* eventCtors ) {
-	
+
 	RenderingEngine* eng = new RenderingEngine(
 		new RenderableWorld(), 
 		objectCtors,
 		eventCtors,
+		new SoundCtorTable(),
 		this->appHandle,
 		new TrackingCameraHandler(),
 		"resources\\defaultVertex.cso",
