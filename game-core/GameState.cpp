@@ -3,9 +3,9 @@
 GameState::State GameState::gameState = State::None;
 
 GameState::GameState() : BaseObject(11) {
-	//this->engine = Game::getGlobalInstance()->getEngineInstance();
-	//this->world = engine->getWorld();
-	//this->objectCtors = engine->getObjCtors();
+	this->engine = Game::getGlobalInstance()->getEngineInstance();
+	this->world = engine->getWorld();
+	this->objectCtors = engine->getObjCtors();
 
 	if (GameState::gameState == State::None) {
 		this->setState(Selection);
@@ -31,14 +31,14 @@ void GameState::setState(int state) {
 void GameState::setState(State state) {
 	IRegisterPlayers::state = state;
 	BaseObject * obj = nullptr;
-	
+
 	GameState::gameState = state;
 	std::vector<Player *>::iterator it;
 	switch (state) {
 	case (Selection) :
-		//obj =  this->objectCtors->invoke(ObjectTypes::SelectionScreen);
-		//world->allocateHandle(obj, HandleType::GLOBAL);
-		//world->insert(obj);
+		obj = this->objectCtors->invoke(ObjectTypes::SelectionScreen);
+		world->allocateHandle(obj, HandleType::GLOBAL);
+		world->insert(obj);
 		break;
 	case (Game) :
 		//obj = this->objectCtors->invoke(ObjectTypes::Track);

@@ -6,7 +6,7 @@
 
 class GAMECOREDLL SelectionEvent : public ActionEvent {
 public:
-	union SelectionType {
+	struct SelectionType {
 		bool selectChar;
 		bool unselectChar;
 		bool toggleSelect;

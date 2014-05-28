@@ -135,7 +135,7 @@ void RenderableSelectionScreen::render() {
 	}
 
 	for (int i = 0; i < 4; ++i) {
-		//this->get
+		//this->getPlayers()[i]
 		//Common::Vector4 pos = Common::Vector4(this->playerCenters[i], 0, 0, 1);
 		//this->playerObjects[i]->setPosition(pos);
 		//this->playerObjects[i]->render();

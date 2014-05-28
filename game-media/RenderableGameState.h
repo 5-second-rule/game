@@ -10,6 +10,9 @@ class RenderableGameState
 	: public GameState, 
 	public RenderableObject, 
 	public IRenderingEngineDelegate {
+protected:
+	RenderingEngine* renderingEngine;
+
 public:
 	RenderableGameState();
 	~RenderableGameState();

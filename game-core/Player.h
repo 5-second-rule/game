@@ -2,6 +2,8 @@
 #include "game-core.h"
 #include "MovingObject.h"
 #include "ObjectTypes.h"
+#include "SelectionEvent.h"
+#include "ActionType.h"
 
 class GAMECOREDLL Player : public MovingObject {
 protected:
@@ -21,5 +23,7 @@ public:
 	int getDeathCount();
 	int getTempSelection();
 	int getSelection();
+
+	virtual bool handleEvent(Event* evt);
 };
 

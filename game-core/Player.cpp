@@ -34,3 +34,46 @@ int Player::getTempSelection() {
 int Player::getSelection() {
 	return this->selection;
 }
+
+bool Player::handleEvent(Event *evt) {
+
+	ActionEvent *actionEvt = Event::cast<ActionEvent>(evt);
+	if (actionEvt == nullptr)
+		return false;
+
+	switch (ActionType(actionEvt->getActionType())) {
+	case ActionType::SELECT: {
+		SelectionEvent *selectionEvent = ActionEvent::cast<SelectionEvent>(actionEvt);
+		if (selectionEvent == nullptr)
+			return false;
+
+		if (selectionEvent->selection.selectChar) {
+			this->selection = this->tempSelection;
+		}
+
+		if (selectionEvent->selection.unselectChar) {
+			this->selection = -1;
+		}
+
+		if (selectionEvent->selection.toggleSelect) {
+			if (this->selection != -1) {
+				this->selection = this->tempSelection;
+			} else {
+				this->selection = -1;
+			}
+		}
+
+		if (selectionEvent->selection.selectionDirection < 0) {
+			this->tempSelection = (this->tempSelection + 3) % 4;
+		} else if (selectionEvent->selection.selectionDirection > 0) {
+			this->tempSelection = (this->tempSelection + 1) % 4;
+		}
+
+		return true;
+		break;
+	}
+	default:
+		break;
+	}
+	return false;
+}
