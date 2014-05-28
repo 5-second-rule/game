@@ -1,9 +1,38 @@
+#include <list>
+
 #include "Tube.h"
 
+#include "MovingObject.h"
+#include "AutonomousObject.h"
 #include "ObjectTypes.h"
 #include "Game.h"
 
-Tube::Tube() : StaticObject(ObjectTypes::Track) {}
+TubeEntity::TubeEntity(Handle handle){
+	MovingObject *obj = dynamic_cast<MovingObject*>(m_getObject(handle));
+	if (obj == nullptr)
+		throw runtime_error("null pointer at TubeEntity");
+	owner = handle;
+	atual_index = obj->getTrackIndex();
+}
+
+bool TubeEntity::operator==(const TubeEntity entity) const{
+	return this->owner.index == entity.owner.index;
+}
+
+bool TubeEntity::operator<(const TubeEntity entity) const{
+	return this->owner.index < entity.owner.index;
+}
+
+string TubeEntity::toString() const{
+	stringstream buffer;
+	buffer << owner.toString();
+	return buffer.str();
+}
+
+
+Tube::Tube() : StaticObject(ObjectTypes::Track) {
+	path = Game::getGlobalInstance()->getTrackPath();
+}
 
 Tube::~Tube() {}
 
@@ -35,4 +64,38 @@ std::shared_ptr<const Bounds> Tube::getBounds() const {
 
 unsigned int Tube::getPriority() const {
 	return static_cast<unsigned int>(CollisionPriorities::Track);
+}
+
+void Tube::update(float dt){
+	list<Handle> players = m_getEngine()->getPlayers();
+	for (list<Handle>::iterator it = players.begin(); it != players.end(); ++it){
+		if (this->players.find(TubeEntity(*it)) == this->players.end())
+			this->players.insert(TubeEntity(*it));
+	}
+
+	for (set<TubeEntity>::iterator it = this->players.begin(); it != this->players.end(); ++it){
+		MovingObject *mObj = dynamic_cast<MovingObject*>(m_getObject(it->owner));
+		
+		if (mObj != nullptr){
+			if (mObj->getTrackIndex() != it->atual_index){
+				TubeEntity n(it->owner);
+				n.atual_index = mObj->getTrackIndex();
+				if (Common::randInt(0, 100) < 1){
+					AutonomousObject *aObj = new AutonomousObject(ObjectTypes::Ecoli, Game::getGlobalInstance());
+					m_getWorld()->allocateHandle(aObj, HandleType::GLOBAL);
+					m_getWorld()->insert(aObj);
+					aObj->setPos(this->path->nodes[(n.atual_index + 100) % this->path->nodes.size()].point);
+					aObj->setFlag("follow_track", false);
+					aObj->setOnSteeringBehavior(BehaviorType::wander);
+					cout << "created!" << endl;
+				}
+			}
+		}
+		else {
+			cout << "Player is null!";
+		}
+
+	}
+	
+
 }

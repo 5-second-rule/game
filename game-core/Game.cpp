@@ -59,3 +59,7 @@ GameObjectCtorTable * Game::makeCtorTable() {
 TrackPath * Game::getTrackPath() {
 	return this->track;
 }
+
+BaseObject *Game::invoke(ObjectTypes object_type){
+	return this->objectCtors->invoke(object_type);
+}

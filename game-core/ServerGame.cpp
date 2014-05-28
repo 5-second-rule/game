@@ -29,7 +29,7 @@ void ServerGame::init() {
 	Game::init();
 
 	// HACK, wait to load when game screen up?
-	IHasHandle *track = this->objectCtors->invoke(ObjectTypes::Track);
+	IHasHandle *track = this->invoke(ObjectTypes::Track);
 	this->getEngineInstance()->getWorld()->allocateHandle(track, HandleType::GLOBAL);
 	this->getEngineInstance()->getWorld()->insert(track);
 }
