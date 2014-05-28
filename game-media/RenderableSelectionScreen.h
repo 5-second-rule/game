@@ -2,12 +2,13 @@
 
 #include "engine-renderer/IRenderable.h"
 #include "RenderableGameObjectCtorTable.h"
+#include "RenderableGameState.h"
 #include "RenderableMovingObject.h"
 #include "RenderableStaticObject.h"
 #include "renderer/Model.h"
 #include "game-core/ObjectTypes.h"
 
-class RenderableSelectionScreen : public StaticObject, public IRenderable
+class GAMEMEDIADLL RenderableSelectionScreen : public StaticObject, public IRenderable
 {
 private:
 	float playerCenters[4];
@@ -35,10 +36,10 @@ protected:
 	RenderableStaticObject *titleObject;
 	RenderableStaticObject *playerbackgroundObjects[4];
 	RenderableStaticObject *playerNameObjects[4];
-	RenderableStaticObject *playerObjects[4];
+	RenderableMovingObject *playerObjects[4];
 
 public:
-	RenderableSelectionScreen(RenderableStaticObject *(&playerObjects)[4]);
+	RenderableSelectionScreen(RenderableMovingObject *(&playerObjects)[4]);
 	virtual ~RenderableSelectionScreen();
 
 	virtual void render();

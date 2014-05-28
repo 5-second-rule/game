@@ -7,7 +7,6 @@ class RenderableStaticObject :
 	public StaticObject, public RenderableObject
 {
 public:
-	RenderableStaticObject();
 	RenderableStaticObject(int type, Transmission::Model* m);
 	~RenderableStaticObject();
 };

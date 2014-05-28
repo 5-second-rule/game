@@ -6,14 +6,11 @@
 #include "TrackingCameraHandler.h"
 #include "SoundCtorTable.h"
 
-RenderableGame::RenderableGame(void *appHandle)
-{
+RenderableGame::RenderableGame(void *appHandle) {
 	this->appHandle = appHandle;
 }
 
-RenderableGame::~RenderableGame()
-{
-}
+RenderableGame::~RenderableGame() {}
 
 void RenderableGame::init() {
 	Game::init();
@@ -26,16 +23,15 @@ void RenderableGame::init() {
 std::vector<Event *>  RenderableGame::inputTranslator(InputAdapter *inputAdapter) {
 	Transmission::Input::KeyState down = Transmission::Input::KeyState::STATE_DOWN;
 	MoveEvent::MoveDirection dir = { 0.0, 0.0, 0.0, 0.0 };
-	bool moveKeyPressed = false;
 	std::vector<Event *> inputEventVector;
-	
+
 
 	if (inputAdapter->getKeyState(Transmission::Input::Key::SPACE) == down) {
 		inputEventVector.emplace_back(new ShootEvent(this->getEngineInstance()->getLocalPlayerGuid(0)));
 	}
-	
-	if (inputAdapter->isControllerConnected()) {
 
+
+	if (inputAdapter->isControllerConnected()) {
 		// Analog Stick Examples -- normalized vector and magnitude
 		std::pair<Common::Vector4, float> leftStickInfo, rightStickInfo;
 		float leftStickMagnitude, rightStickMagnitude;
@@ -64,11 +60,11 @@ std::vector<Event *>  RenderableGame::inputTranslator(InputAdapter *inputAdapter
 		}
 
 		if (inputAdapter->getKeyState(Transmission::Input::Key::GAMEPAD_RIGHT_SHOULDER) == down) {
-			dir.z += 1;
+			dir.w += 1;
 		}
 
 		if (inputAdapter->getKeyState(Transmission::Input::Key::GAMEPAD_LEFT_SHOULDER) == down) {
-			dir.z -= 1;
+			dir.w -= 1;
 		}
 
 		if (inputAdapter->getKeyState(Transmission::Input::Key::GAMEPAD_X) == down) {
@@ -78,8 +74,7 @@ std::vector<Event *>  RenderableGame::inputTranslator(InputAdapter *inputAdapter
 		if (inputAdapter->getKeyState(Transmission::Input::Key::GAMEPAD_Y) == down) {
 			dir.y += 1;
 		}
-	}
-	else {
+	} else {
 		if (inputAdapter->getKeyState(Transmission::Input::Key::A) == down) {
 			dir.x -= 1;
 		}
@@ -114,16 +109,16 @@ std::vector<Event *>  RenderableGame::inputTranslator(InputAdapter *inputAdapter
 		}
 	}
 
-if (dir.x != 0 || dir.y != 0 || dir.z != 0) {
+	if (dir.x != 0 || dir.y != 0 || dir.z != 0 || dir.w != 0) {
 		inputEventVector.emplace_back(new MoveEvent(this->getEngineInstance()->getLocalPlayerGuid(0), dir));
 	}
 	return inputEventVector;
 }
 
-Engine * RenderableGame::makeEngineInstance( ConstructorTable<BaseObject> *objectCtors, ConstructorTable<ActionEvent>* eventCtors ) {
+Engine * RenderableGame::makeEngineInstance(ConstructorTable<BaseObject> *objectCtors, ConstructorTable<ActionEvent>* eventCtors) {
 
 	RenderingEngine* eng = new RenderingEngine(
-		new RenderableWorld(), 
+		new RenderableWorld(),
 		objectCtors,
 		eventCtors,
 		new SoundCtorTable(),
@@ -133,7 +128,7 @@ Engine * RenderableGame::makeEngineInstance( ConstructorTable<BaseObject> *objec
 		"resources\\defaultPixel.cso",
 		L"Vein: Rivers of Blood");
 
-	eng->renderingDelegate = this;
+	eng->gameplayRenderingDelegate = this;
 	return eng;
 }
 

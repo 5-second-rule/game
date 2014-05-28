@@ -56,6 +56,8 @@ public:
 	int getTrackIndex();
 	Vector4 getUp();
 
+	void setPosition(Vector4 pos);
+
 	void applyForce(const Vector4& force);
 
 	virtual void update(float dt);

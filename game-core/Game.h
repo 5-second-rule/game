@@ -6,13 +6,11 @@
 #include "engine-core/World.h"
 #include "TrackPath.h"
 
-class GAMECOREDLL Game
-{
+class GAMECOREDLL Game {
 private:
 	static Game *globalInstance;
 	Engine *engineInstance;
 	TrackPath *track;
-
 	bool initialized;
 
 protected:

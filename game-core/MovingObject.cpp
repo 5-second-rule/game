@@ -42,6 +42,10 @@ Vector4 MovingObject::getUp() {
 	return this->up;
 }
 
+void MovingObject::setPosition(Vector4 pos) {
+	this->position = pos;
+}
+
 void MovingObject::applyForce(const Vector4& force){
 	this->force += force;
 }

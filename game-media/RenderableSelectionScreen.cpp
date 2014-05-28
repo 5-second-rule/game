@@ -2,7 +2,9 @@
 
 using namespace Transmission;
 
-RenderableSelectionScreen::RenderableSelectionScreen(RenderableStaticObject *(&playerObjects)[4]) : StaticObject(ObjectTypes::SelectionScreen) {
+RenderableSelectionScreen::RenderableSelectionScreen(RenderableMovingObject *(&playerObjects)[4])
+: StaticObject(ObjectTypes::SelectionScreen) {
+
 	RenderingEngine *engine =
 		RenderableGame::getGlobalInstance()->getRenderingEngineInstance();
 
@@ -17,15 +19,15 @@ RenderableSelectionScreen::RenderableSelectionScreen(RenderableStaticObject *(&p
 		"resources/select-name-malaria.dds"
 	};
 
-	this->backgroundVertices[0] = {{ -1.0f,  1.0f, 0.0f }, { 0, 0 }, { 0, 0, -1 }, {} };
-	this->backgroundVertices[1] = {{  1.0f,  1.0f, 0.0f }, { 1, 0 }, { 0, 0, -1 }, {} };
-	this->backgroundVertices[2] = {{  1.0f, -1.0f, 0.0f }, { 1, 1 }, { 0, 0, -1 }, {} };
-	this->backgroundVertices[3] = {{ -1.0f, -1.0f, 0.0f }, { 0, 1 }, { 0, 0, -1 }, {} };
+	this->backgroundVertices[0] = { { -1.0f, 1.0f, 0.0f }, { 0, 0 }, { 0, 0, -1 }, {} };
+	this->backgroundVertices[1] = { { 1.0f, 1.0f, 0.0f }, { 1, 0 }, { 0, 0, -1 }, {} };
+	this->backgroundVertices[2] = { { 1.0f, -1.0f, 0.0f }, { 1, 1 }, { 0, 0, -1 }, {} };
+	this->backgroundVertices[3] = { { -1.0f, -1.0f, 0.0f }, { 0, 1 }, { 0, 0, -1 }, {} };
 
 	this->calculateTitleVertices(titleVertices, 800, 600);
 
 	Transmission::Index rectangleIndices[6] = { 0, 1, 2, 3, 0, 2 };
-	
+
 	for (int i = 0; i < MAX_PLAYERS; ++i) {
 		this->playerCenters[i] = this->calculatePlayerBackgroundVertices(playerVertices, i, MARGIN) * 5.5;
 		playerbackgroundModels[i] = engine->create2DModelFromScratch(playerVertices, 4, rectangleIndices, 6, "resources/select-rectangle.dds", textures, false);
@@ -36,34 +38,31 @@ RenderableSelectionScreen::RenderableSelectionScreen(RenderableStaticObject *(&p
 		this->playerObjects[i] = playerObjects[i];
 	}
 
-	this->playerObjects[ObjectTypes::Ecoli]->setScale(scale);
-	this->playerObjects[ObjectTypes::ChickenPox]->setScale(scale);
-	this->playerObjects[ObjectTypes::Malaria]->setScale(scale);
-	this->playerObjects[ObjectTypes::Syphillis]->setScale(scale*3.0);
+	this->playerObjects[ObjectTypes::Ecoli]->getMoveable()->setScale(scale);
+	this->playerObjects[ObjectTypes::ChickenPox]->getMoveable()->setScale(scale);
+	this->playerObjects[ObjectTypes::Malaria]->getMoveable()->setScale(scale*0.9);
+	this->playerObjects[ObjectTypes::Syphillis]->getMoveable()->setScale(scale*3.0);
 
 	backgroundModel = engine->create2DModelFromScratch(backgroundVertices, 4, rectangleIndices, 6, "resources/select-background.dds", textures, false);
 	titleModel = engine->create2DModelFromScratch(titleVertices, 4, rectangleIndices, 6, "resources/select-title.dds", textures, true);
-	
+
 	backgroundObject = new RenderableStaticObject(ObjectTypes::SelectionScreen, backgroundModel);
 	titleObject = new RenderableStaticObject(ObjectTypes::SelectionScreen, titleModel);
-	
 }
 
-
-RenderableSelectionScreen::~RenderableSelectionScreen()
-{
+RenderableSelectionScreen::~RenderableSelectionScreen() {
 	delete backgroundObject;
 	delete titleObject;
-	backgroundObject = NULL;
-	titleObject = NULL;
+	backgroundObject = nullptr;
+	titleObject = nullptr;
 
 	for (int i = 0; i < 4; ++i) {
 		delete playerbackgroundObjects[i];
 		delete playerNameObjects[i];
 		delete playerObjects[i];
-		playerbackgroundObjects[i] = NULL;
-		playerNameObjects[i] = NULL;
-		playerObjects[i] = NULL;
+		playerbackgroundObjects[i] = nullptr;
+		playerNameObjects[i] = nullptr;
+		playerObjects[i] = nullptr;
 
 	}
 }
@@ -129,12 +128,17 @@ float RenderableSelectionScreen::calculatePlayerBackgroundVertices(Transmission:
 void RenderableSelectionScreen::render() {
 	this->backgroundObject->render();
 	this->titleObject->render();
-	
+
 	for (int i = 0; i < 4; ++i) {
-		float pos[3] = { this->playerCenters[i], 0.0, 0.0 };
 		this->playerbackgroundObjects[i]->render();
 		this->playerNameObjects[i]->render();
-		this->playerObjects[i]->setPosition(pos);
-		this->playerObjects[i]->render();
 	}
+
+	for (int i = 0; i < 4; ++i) {
+		//this->get
+		//Common::Vector4 pos = Common::Vector4(this->playerCenters[i], 0, 0, 1);
+		//this->playerObjects[i]->setPosition(pos);
+		//this->playerObjects[i]->render();
+	}
+
 };

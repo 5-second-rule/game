@@ -2,6 +2,7 @@
 #include "game-core.h"
 #include "engine-core/ActionEvent.h"
 #include "ActionType.h"
+#include "Game.h"
 
 class GAMECOREDLL MoveEvent : public ActionEvent {
 public:

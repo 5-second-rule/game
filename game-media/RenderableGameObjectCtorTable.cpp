@@ -115,8 +115,8 @@ static BaseObject * makeRenderableTrack( ConstructorTable<BaseObject> *thisObj )
 
 static BaseObject * makeRenderableSelectionScreen(ConstructorTable<BaseObject> *thisObj) {
 	RenderableGameObjectCtorTable *table = (RenderableGameObjectCtorTable *)thisObj;
-	RenderableStaticObject *playerObjects[4] = {
-		new RenderableStaticObject(
+	RenderableMovingObject *playerObjects[4] = {
+		new RenderableMovingObject(
 		ObjectTypes::Ecoli,
 		RenderableGame::getGlobalInstance()
 		->getRenderingEngineInstance()
@@ -126,7 +126,7 @@ static BaseObject * makeRenderableSelectionScreen(ConstructorTable<BaseObject> *
 		table->vertexShaderIndexes[ObjectTypes::Ecoli],
 		table->pixelShaderIndexes[ObjectTypes::Ecoli])
 		),
-		new RenderableStaticObject(
+		new RenderableMovingObject(
 		ObjectTypes::ChickenPox,
 		RenderableGame::getGlobalInstance()
 		->getRenderingEngineInstance()
@@ -136,7 +136,7 @@ static BaseObject * makeRenderableSelectionScreen(ConstructorTable<BaseObject> *
 		table->vertexShaderIndexes[ObjectTypes::ChickenPox],
 		table->pixelShaderIndexes[ObjectTypes::ChickenPox])
 		),
-		new RenderableStaticObject(
+		new RenderableMovingObject(
 		ObjectTypes::Syphillis,
 		RenderableGame::getGlobalInstance()
 		->getRenderingEngineInstance()
@@ -146,7 +146,7 @@ static BaseObject * makeRenderableSelectionScreen(ConstructorTable<BaseObject> *
 		table->vertexShaderIndexes[ObjectTypes::Syphillis],
 		table->pixelShaderIndexes[ObjectTypes::Syphillis])
 		),
-		new RenderableStaticObject(
+		new RenderableMovingObject(
 		ObjectTypes::Malaria,
 		RenderableGame::getGlobalInstance()
 		->getRenderingEngineInstance()
