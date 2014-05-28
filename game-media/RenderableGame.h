@@ -4,6 +4,7 @@
 #include "game-core/Game.h"
 #include "engine-core/World.h"
 #include "engine-renderer/RenderingEngine.h"
+#include "game-core/Sounds.h"
 
 class GAMEMEDIADLL RenderableGame : public Game, IRenderingEngineDelegate
 {

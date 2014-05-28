@@ -35,5 +35,7 @@ void TrackingCameraHandler::updateFor(IHasHandle *playerObject) {
 		}
 
 		this->lookAt = gameObject->getPosition() +((node.point - gameObject->getPosition()) * 0.5);
+
+		this->up = gameObject->getUp();
 	}
 }

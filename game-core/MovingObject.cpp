@@ -2,18 +2,21 @@
 
 #include "MoveEvent.h"
 #include "ActionType.h"
+#include "Sounds.h"
 
 #include "ObjectTypes.h"
 
 #include "Game.h"
 
-MovingObject::MovingObject(int objectType) : BaseObject(objectType)
+MovingObject::MovingObject( int objectType, Game* owner )
+	: BaseObject(objectType), owner(owner)
 {
 	this->up = Vector(0.0f, 1.0f, 0.0f);
 	this->heading = Vector(0.0f, 0.0f, 1.0f);
+	this->propulsion = 1.0f;
 	this->trackIndex = 0;
-	this->followTrack = true;
 	this->trackVelocity = 1000;
+	this->follow_track = true;
 	this->init();
 }
 
@@ -24,6 +27,14 @@ void MovingObject::init(){
 	this->drag_coefficient = ConfigSettings::config->drag_coefficient;
 	this->max_speed = ConfigSettings::config->max_speed;
 	this->max_force = ConfigSettings::config->max_force;
+}
+
+float MovingObject::getSpeed(){
+	return this->velocity.length();
+}
+
+Vector4 MovingObject::getUp() {
+	return this->up;
 }
 
 void MovingObject::applyForce(const Vector4& force){
@@ -47,24 +58,27 @@ bool MovingObject::handleEvent(Event *evt){
 		if (moveEvent == nullptr)
 			return false;
 
-		const float MOVE_FORCE = 5.0f;
-		const float ROT_SCALE = 0.05f;
+		const float MOVE_FORCE = 10.0f;
+		const float ROT_SCALE = 0.04f;
+		const float BRAKE_SCALE = 0.5f;
+
+		this->up = Matrix4::rotate(this->heading, moveEvent->direction.w * ROT_SCALE) * this->up;
 
 		//rotate sideways
-		this->heading = Matrix4::rotate(this->up, moveEvent->direction.x * ROT_SCALE) * heading;
+		this->heading = Matrix4::rotate(this->up, -moveEvent->direction.x * ROT_SCALE) * this->heading;
 
 		//rotate up and down
-		Matrix4 rot = Matrix4::rotate(Vector4::cross(up, heading), moveEvent->direction.z * ROT_SCALE);
+		Matrix4 rot = Matrix4::rotate(Vector4::cross(up, heading), -moveEvent->direction.y * ROT_SCALE);
 		this->heading = rot * heading;
 		this->up = rot * up;
 
-		this->force = heading * moveEvent->direction.y * MOVE_FORCE;
+		this->propulsion = moveEvent->direction.z + 1.0f; // [-1,1] -> [0,2]
 
-		this->applyForce(force);
 		return true;
 		break;
 	}
 	case ActionType::SHOOT:
+		owner->getEngineInstance()->sendEvent( new SoundEvent( static_cast<int>(Sounds::SHOOT), false, false ) );
 		//TODO: create projectile and set it in motion
 		break;
 	default:
@@ -73,15 +87,23 @@ bool MovingObject::handleEvent(Event *evt){
 	return false;
 }
 
-
 void MovingObject::update(float dt){
-	if (followTrack) {
+	BaseObject::update(dt);
+	if (follow_track){
+		// follow track
+		const float HEADING_FORCE = 15.0f;
+
 		TrackPath *track = Game::getGlobalInstance()->getTrackPath();
 		this->trackIndex = track->locateIndex(this->position, this->trackIndex);
-
 		float dist = Common::distance(track->nodes[this->trackIndex].point, this->position);
-		Vector4 force = track->nodes[this->trackIndex].normal * this->forceByDist(dist);
-		this->applyForce(force);
+		Vector4 trackForce = track->nodes[this->trackIndex].normal * this->forceByDist(dist);
+		
+		// propulsion in heading
+		Vector4 headingForce = Vector4::normalize(this->heading) * this->forceByDist(dist) * propulsion;
+		this->applyForce(trackForce + headingForce);
+
+		// reset propulsion
+		this->propulsion = 1.0f;
 	}
 
 	// Update de physics
@@ -149,7 +171,7 @@ void MovingObject::deserialize(BufferReader& reader) {
 
 	this->drag_coefficient = data->drag_coefficient;
 	this->mass = data->mass;
-
+	
 	this->trackIndex = data->trackIndex;
 
 	reader.finished(sizeof(MovingObjectData));
@@ -187,13 +209,9 @@ void MovingObject::setForce(float x, float y, float z){
 	force.set(x, y, z, 0);
 }
 
-void MovingObject::setTag(bool tag){
-	this->tagged = tag;
-}
-
 bool MovingObject::setFlag(string flag_name, bool value){
 	if (flag_name == "follow_track") {
-		followTrack = value;
+		follow_track = value;
 		return true;
 	}
 	else {
@@ -223,10 +241,6 @@ float MovingObject::getMaxForce(){
 
 float MovingObject::getMaxSpeed(){
 	return max_speed;
-}
-
-bool MovingObject::isTagged(){
-	return tagged;
 }
 
 string MovingObject::toString(){
@@ -260,6 +274,9 @@ bool MovingObject::collidesWith(const ICollidable* target) const {
 }
 
 void MovingObject::handleCollision(std::shared_ptr<const Bounds> bounds, float dt) {
+	// play sound for collision, this will probably play twice and needs to be handled :(
+	owner->getEngineInstance()->sendEvent( new SoundEvent( static_cast<int>(Sounds::COLLIDE), false, false ) );
+
 	std::shared_ptr<const BoundingSphere> me = std::static_pointer_cast<const BoundingSphere>(this->getBounds());
 
 	if (bounds->type == BoundsType::Sphere) {

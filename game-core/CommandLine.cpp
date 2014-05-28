@@ -416,6 +416,7 @@ bool CommandLine::setParameter(map<string, string> &param, string parameter, lis
 void CommandLine::set(map<string, list<string> > &parameter){
 	string str;
 	map<string, string> param;
+	IHasHandle *obj;
 
 	try {
 		for (map < string, list<string> >::iterator it = parameter.begin(); it != parameter.end(); ++it){
@@ -423,8 +424,21 @@ void CommandLine::set(map<string, list<string> > &parameter){
 				throw CmdException("Invalid parameter!");
 		}
 
+		if (param.find("index") != param.end()){
+			obj = translateObject(param["index"]);
+
+			if (param.find("name") != param.end()){
+				*output << param["name"] << " <-- " << toString(ObjectTypes(obj->getType())) << endl;
+				dictionary[param["name"]] = obj->getHandle();
+			}
+		}
+		else if (param.find("name") != param.end())
+			obj = translateObject(param["name"]);
+		else
+			throw CmdException("Identifier not expecified!", false);
+
 		if (param.find("position") != param.end() || param.find("ai") != param.end() || param.find("flag") != param.end()){
-			setObject(param);
+			setObject(param, obj);
 		}
 
 		if (param.find("configuration") != param.end()){
@@ -440,22 +454,9 @@ void CommandLine::set(map<string, list<string> > &parameter){
 	}
 }
 
-void CommandLine::setObject(map<string, string> &param){
-	IHasHandle *obj;
+void CommandLine::setObject(map<string, string> &param, IHasHandle *obj){
 	MovingObject *mObj;
 	AutonomousObject *aObj;
-	if (param.find("index") != param.end()){
-		obj = translateObject(param["index"]);
-
-		if (param.find("name") != param.end()){
-			*output << param["name"] << " <-- " << toString(ObjectTypes(obj->getType())) << endl;
-			dictionary[param["name"]] = obj->getHandle();
-		}
-	}
-	else if (param.find("name") != param.end())
-		obj = translateObject(param["name"]);
-	else
-		throw CmdException("Identifier not expecified!", false);
 
 	if (param.find("position") != param.end()){
 		mObj = dynamic_cast<MovingObject*>(obj);
@@ -527,7 +528,7 @@ void CommandLine::createObject(map<string, list<string> > &parameter){
 		}
 
 		if (param["type"] == "autonomous"){
-			obj = new AutonomousObject(toObjectType(param["object_type"]));
+			obj = new AutonomousObject(toObjectType(param["object_type"]), Game::getGlobalInstance());
 			m_getWorld()->allocateHandle(obj, HandleType::GLOBAL);
 			m_getWorld()->insert(obj);
 		}

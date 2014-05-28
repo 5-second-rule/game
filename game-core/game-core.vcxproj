@@ -89,6 +89,7 @@
     <ClInclude Include="Path.h" />
     <ClInclude Include="ServerGame.h" />
     <ClInclude Include="ShootEvent.h" />
+    <ClInclude Include="Sounds.h" />
     <ClInclude Include="StaticObject.h" />
     <ClInclude Include="TrackPath.h" />
     <ClInclude Include="Tube.h" />

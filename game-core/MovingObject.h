@@ -1,5 +1,6 @@
 #pragma once
 #include "game-core.h"
+#include "Game.h"
 
 #include "engine-core/BaseObject.h"
 #include "engine-core/ICollidable.h"
@@ -28,25 +29,25 @@ protected:
 	Common::Vector4 heading;
 	Common::Vector4 position;
 	Common::Vector4 force;
-	float trackVelocity;
-	bool tagged;
-	
 	Common::Vector4 tick_force;
 	Common::Vector4 velocity;
 
-	int trackIndex;
-	bool followTrack;
-
+	float trackVelocity;
+	float propulsion;
 	float mass;
+
+	bool follow_track;
+	int trackIndex;
+
 	float max_speed;
 	float max_force;
 	float drag_coefficient;
 public:
-	MovingObject(int objectType);
+	MovingObject(int objectType, Game* owner);
 	~MovingObject();
+	Game *owner;
 	virtual void init();
 
-	void applyForce(const Common::Vector4 &force);
 	virtual void update(float dt);
 	virtual bool handleEvent(Event* evt);
 
@@ -56,7 +57,6 @@ public:
 	void setMaxForce(float);
 	void setTickForce(float x, float y, float z);
 	void setForce(float x, float y, float z);
-	void setTag(bool tag);
 	bool setFlag(std::string, bool value);
 	void setPos(float x, float y, float z);
 	void setPos(Common::Vector4 v);
@@ -69,7 +69,10 @@ public:
 	float speed();
 	float getMaxSpeed();
 	float getMaxForce();
-	bool isTagged();
+	float getSpeed();
+	Vector4 getUp();
+
+	void applyForce(const Vector4& force);
 
 	static float forceByDist(float dist);
 

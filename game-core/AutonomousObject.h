@@ -14,9 +14,10 @@ class GAMECOREDLL AutonomousObject : public MovingObject, public IFollowPath
 {
 private:
 	SteeringBehavior* steering_behavior;
+	bool tagged;
 public:
 	Path *path;
-	AutonomousObject(int objectType);
+	AutonomousObject(int objectType, Game *owner);
 	~AutonomousObject();
 	virtual void init();
 
@@ -28,6 +29,9 @@ public:
 	void setOffSteeringBehavior(BehaviorType);
 	void setPursuit(Handle &pray);
 	void setEvade(Handle &predator);
+
+	bool isTagged();
+	void setTag(bool tag);
 	
 	virtual std::string toString();
 };

@@ -75,7 +75,7 @@ public:
 	void invalidCommand();
 	void helpCmd(std::map<std::string, std::list<std::string> > &parameter);
 	void set(std::map<std::string, std::list<std::string> > &parameter);
-	void setObject(std::map<std::string, std::string> &parameter);
+	void setObject(std::map<std::string, std::string> &parameter, IHasHandle *obj);
 	void print(std::map<std::string, std::list<std::string> > &parameter);
 	void runFile(std::map<std::string, std::list<std::string> > &parameter);
 	void createObject(std::map<std::string, std::list<std::string> > &parameter);

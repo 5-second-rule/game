@@ -6,6 +6,9 @@ public:
 	Tube();
 	~Tube();
 
+	// Updatable
+
+
 	// ICollidable Methods
 	Common::Vector4 getGroupingParameter() const;
 	bool collidesWith(const ICollidable*) const;

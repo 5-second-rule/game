@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-AutonomousObject::AutonomousObject(int objectType) : MovingObject(objectType)
+AutonomousObject::AutonomousObject(int objectType, Game *owner) : MovingObject(objectType, owner)
 {
 	steering_behavior = new SteeringBehavior(this);
 	path = Path::instance();
@@ -66,6 +66,14 @@ void AutonomousObject::setOffSteeringBehavior(BehaviorType behavior){
 		steering_behavior->seekOff();
 	else if (behavior == BehaviorType::wander)
 		steering_behavior->wanderOff();
+}
+
+void AutonomousObject::setTag(bool tag){
+	this->tagged = tag;
+}
+
+bool AutonomousObject::isTagged(){
+	return this->tagged;
 }
 
 string AutonomousObject::toString(){

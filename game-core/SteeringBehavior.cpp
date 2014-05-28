@@ -182,7 +182,7 @@ Vector4 SteeringBehavior::separation(const std::vector<Handle> &neighbors)
 
 	for (unsigned int a = 0; a<neighbors.size(); ++a)
 	{
-		MovingObject *neighbor = dynamic_cast<MovingObject*>(m_getObject(neighbors[a]));
+		AutonomousObject *neighbor = dynamic_cast<AutonomousObject*>(m_getObject(neighbors[a]));
 		// Make sure this agent isn't included in the calculations and that
 		// the agent being examined is close enough. ***also make sure it doesn't
 		// include the evade target ***
@@ -211,7 +211,7 @@ Vector4 SteeringBehavior::alignment(const std::vector<Handle> &neighbors)
 	//iterate through all the tagged vehicles and sum their heading vectors  
 	for (unsigned int a = 0; a<neighbors.size(); ++a)
 	{
-		MovingObject* neighbor = dynamic_cast<MovingObject*>(m_getObject(neighbors[a]));
+		AutonomousObject *neighbor = dynamic_cast<AutonomousObject*>(m_getObject(neighbors[a]));
 		//make sure *this* agent isn't included in the calculations and that
 		//the agent being examined  is close enough ***also make sure it doesn't
 		//include any evade target ***
@@ -246,7 +246,7 @@ Vector4 SteeringBehavior::cohesion(const std::vector<Handle> &neighbors)
 	// Iterate through the neighbors and sum up all the position vectors
 	for (unsigned int a = 0; a<neighbors.size(); ++a)
 	{
-		MovingObject *neighbor = dynamic_cast<MovingObject*>(m_getObject(neighbors[a]));
+		AutonomousObject *neighbor = dynamic_cast<AutonomousObject*>(m_getObject(neighbors[a]));
 		// Make sure *this* agent isn't included in the calculations and that
 		// the agent being examined is close enough ***also make sure it doesn't
 		// include the evade target ***
