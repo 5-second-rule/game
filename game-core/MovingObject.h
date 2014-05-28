@@ -40,9 +40,6 @@ protected:
 	float friction;
 	float mass;
 
-	static const float max_speed;
-	static const float max_force;
-
 	int trackIndex;
 
 public:
@@ -50,8 +47,12 @@ public:
 	~MovingObject();
 	Game* owner;
 
+	static const float max_speed;
+	static const float max_force;
+
 	Vector4 getHeading(); // A normalized vector giving the direction the object is heading
 	float getSpeed();
+	Vector4 getVelocity();
 	Vector4 getPosition();
 	int getTrackIndex();
 	Vector4 getUp();

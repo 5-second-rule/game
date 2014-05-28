@@ -74,6 +74,9 @@
   <ItemGroup>
     <ClInclude Include="ActionEventCtorTable.h" />
     <ClInclude Include="ActionType.h" />
+    <ClInclude Include="AIPath.h" />
+    <ClInclude Include="AutonomousObject.h" />
+    <ClInclude Include="BehaviorType.h" />
     <ClInclude Include="game-core.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObjectCtorTable.h" />
@@ -84,11 +87,14 @@
     <ClInclude Include="ShootEvent.h" />
     <ClInclude Include="Sounds.h" />
     <ClInclude Include="StaticObject.h" />
+    <ClInclude Include="SteeringBehavior.h" />
     <ClInclude Include="TrackPath.h" />
     <ClInclude Include="Tube.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ActionEventCtorTable.cpp" />
+    <ClCompile Include="AIPath.cpp" />
+    <ClCompile Include="AutonomousObject.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObjectCtorTable.cpp" />
     <ClCompile Include="MoveEvent.cpp" />
@@ -96,6 +102,7 @@
     <ClCompile Include="ServerGame.cpp" />
     <ClCompile Include="ShootEvent.cpp" />
     <ClCompile Include="StaticObject.cpp" />
+    <ClCompile Include="SteeringBehavior.cpp" />
     <ClCompile Include="TrackPath.cpp" />
     <ClCompile Include="Tube.cpp" />
   </ItemGroup>

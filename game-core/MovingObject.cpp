@@ -38,6 +38,10 @@ float MovingObject::getSpeed(){
 	return this->velocity.length();
 }
 
+Vector4 MovingObject::getVelocity() {
+	return this->velocity;
+}
+
 Vector4 MovingObject::getUp() {
 	return this->up;
 }
