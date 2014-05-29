@@ -1,17 +1,16 @@
-#include "RenderableGameState.h"
+#include "SelectionScreenInput.h"
 
-
-RenderableGameState::RenderableGameState()
-: RenderableObject(nullptr) {
-	if (this->engine != nullptr) {
-		this->renderingEngine = RenderableGame::getGlobalInstance()->getRenderingEngineInstance();
-		this->renderingEngine->selectionRenderingDelegate = this;
-	}
+SelectionScreenInput::SelectionScreenInput() {
+	this->renderingEngine = nullptr;
 }
 
-RenderableGameState::~RenderableGameState() {}
+SelectionScreenInput::SelectionScreenInput(RenderingEngine *renderingEngine) {
+	this->renderingEngine = renderingEngine;
+}
 
-std::vector<Event *> RenderableGameState::inputTranslator(InputAdapter *inputAdapter) {
+SelectionScreenInput::~SelectionScreenInput() {}
+
+std::vector<Event *> SelectionScreenInput::inputTranslator(InputAdapter *inputAdapter) {
 	Transmission::Input::KeyState down = Transmission::Input::KeyState::STATE_DOWN;
 	std::vector<Event *> inputEventVector;
 	SelectionEvent::SelectionType selection;
@@ -60,5 +59,3 @@ std::vector<Event *> RenderableGameState::inputTranslator(InputAdapter *inputAda
 
 	return inputEventVector;
 }
-
-void RenderableGameState::render() {}

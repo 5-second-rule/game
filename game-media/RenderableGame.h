@@ -5,14 +5,15 @@
 #include "engine-core/World.h"
 #include "engine-renderer/RenderingEngine.h"
 #include "game-core/Sounds.h"
+#include "RenderingGameManager.h"
 
-class GAMEMEDIADLL RenderableGame : public Game, IRenderingEngineDelegate
+class GAMEMEDIADLL RenderableGame : public Game
 {
 private:
+	RenderingGameManager gameManager;
 	void *appHandle;
 
 protected:
-	virtual std::vector<Event *> inputTranslator(InputAdapter *inputAdapter);
 	virtual Engine * makeEngineInstance( ConstructorTable<BaseObject> *objectCtors, ConstructorTable<ActionEvent>* eventCtors );
 
 public:
@@ -25,5 +26,6 @@ public:
 	virtual GameObjectCtorTable * makeCtorTable();
 
 	virtual void init();
+	RenderingGameManager *getGameManager();
 };
 

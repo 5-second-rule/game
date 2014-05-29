@@ -35,6 +35,10 @@ int Player::getSelection() {
 	return this->selection;
 }
 
+unsigned int Player::getGuid() {
+	return this->guid;
+}
+
 bool Player::handleEvent(Event *evt) {
 
 	ActionEvent *actionEvt = Event::cast<ActionEvent>(evt);

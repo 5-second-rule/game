@@ -23,6 +23,7 @@ public:
 	int getDeathCount();
 	int getTempSelection();
 	int getSelection();
+	unsigned int getGuid();
 
 	virtual bool handleEvent(Event* evt);
 };

@@ -73,24 +73,31 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="game-media.h" />
+    <ClInclude Include="GameplayInput.h" />
+    <ClInclude Include="INotifyReady.h" />
     <ClInclude Include="RenderableGame.h" />
     <ClInclude Include="RenderableGameObjectCtorTable.h" />
-    <ClInclude Include="RenderableGameState.h" />
+    <ClInclude Include="SelectionScreenInput.h" />
     <ClInclude Include="RenderableMovingObject.h" />
-    <ClInclude Include="RenderablePlayer.h" />
     <ClInclude Include="RenderableSelectionScreen.h" />
     <ClInclude Include="RenderableStaticObject.h" />
+    <ClInclude Include="RenderingGameManager.h" />
+    <ClInclude Include="SelectionScreenData.h" />
+    <ClInclude Include="SignallingGameState.h" />
     <ClInclude Include="SoundCtorTable.h" />
     <ClInclude Include="TrackingCameraHandler.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="GameplayInput.cpp" />
     <ClCompile Include="RenderableGame.cpp" />
     <ClCompile Include="RenderableGameObjectCtorTable.cpp" />
-    <ClCompile Include="RenderableGameState.cpp" />
+    <ClCompile Include="SelectionScreenInput.cpp" />
     <ClCompile Include="RenderableMovingObject.cpp" />
-    <ClCompile Include="RenderablePlayer.cpp" />
     <ClCompile Include="RenderableSelectionScreen.cpp" />
     <ClCompile Include="RenderableStaticObject.cpp" />
+    <ClCompile Include="RenderingGameManager.cpp" />
+    <ClCompile Include="SelectionScreenData.cpp" />
+    <ClCompile Include="SignallingGameState.cpp" />
     <ClCompile Include="SoundCtorTable.cpp" />
     <ClCompile Include="TrackingCameraHandler.cpp" />
   </ItemGroup>
