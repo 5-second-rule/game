@@ -2,7 +2,7 @@
 
 GameState::State GameState::gameState = State::None;
 
-GameState::GameState() : BaseObject(ObjectTypes::GameStateObject) {
+GameState::GameState() : BaseObject(ObjectTypes::State) {
 	this->engine = Game::getGlobalInstance()->getEngineInstance();
 	this->world = engine->getWorld();
 	this->objectCtors = engine->getObjCtors();
