@@ -3,10 +3,15 @@
 #include "MoveEvent.h"
 #include "ActionType.h"
 #include "Sounds.h"
-
 #include "ObjectTypes.h"
-
 #include "Game.h"
+
+#ifdef _DEBUG
+#ifndef DBG_NEW
+#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
+#define new DBG_NEW
+#endif
+#endif  // _DEBUG
 
 #define MAX_SPEED 75
 #define MAX_FORCE 100

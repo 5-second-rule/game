@@ -1,10 +1,11 @@
 #pragma once
 #include "StaticObject.h"
+
 class GAMECOREDLL Tube : public StaticObject, public ICollidable
 {
 public:
 	Tube();
-	~Tube();
+	virtual ~Tube();
 
 	// ICollidable Methods
 	Common::Vector4 getGroupingParameter() const;

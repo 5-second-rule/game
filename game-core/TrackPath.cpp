@@ -2,17 +2,20 @@
 
 #include <fstream>
 #include <stdexcept>
+
+#ifdef _DEBUG
+#ifndef DBG_NEW
+#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
+#define new DBG_NEW
+#endif
+#endif  // _DEBUG
+
 using namespace std;
 using namespace Common;
 
-TrackPath::TrackPath()
-{
-}
+TrackPath::TrackPath(){}
 
-
-TrackPath::~TrackPath()
-{
-}
+TrackPath::~TrackPath(){}
 
 int TrackPath::locateIndex(Vector4 realPosition, int lastIndex) {
 	PathNode lastNode = this->nodes[lastIndex];
@@ -103,7 +106,7 @@ TrackPath * TrackPath::fromFile(char *file) {
 
 	fin.close();
 
-	for (int i = 0; i < result->nodes.size(); i++) {
+	for( size_t i = 0; i < result->nodes.size(); i++ ) {
 		PathNode iNode = result->nodes[i];
 		PathNode nextNode = result->nodes[(i + 1) % result->nodes.size()];
 
