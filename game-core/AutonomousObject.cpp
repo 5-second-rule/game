@@ -1,6 +1,7 @@
 #include "AutonomousObject.h"
 
 #include <iostream>
+#include <sstream>
 
 AutonomousObject::AutonomousObject(int objectType, Game *owner)
 	: MovingObject(objectType, owner)

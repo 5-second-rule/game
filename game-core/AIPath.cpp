@@ -1,5 +1,7 @@
 #include "AIPath.h"
 
+#include <sstream>
+
 AIPath::AIPath() : m_looped(false)
 {
 }
