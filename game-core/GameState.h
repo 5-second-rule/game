@@ -13,20 +13,29 @@ public:
 
 protected:
 	static State gameState;
-	std::vector<Player *> players;
+	std::vector<Player*> players;
 	bool unusedChars[4];
 	Engine *engine;
 	World *world;
 	ConstructorTable<BaseObject> *objectCtors;
 
+	struct GameStateData {
+		int state;
+		unsigned int numPlayers;
+	};
+
 public:
 	GameState();
 	~GameState();
-	void setState(int state);
+	
+	bool handleEvent(Event *evt);
+
 	void setState(State state);
 	int getState();
-	std::vector<Player *> getPlayers();
-	virtual BaseObject * addPlayer(unsigned int playerGuid);
-	virtual bool handleEvent(Event *evt);
+	std::vector<Player*> getPlayers();
+	virtual PlayerDelegate* addPlayer(unsigned int playerGuid);
+	virtual void reserveSize(IReserve& buffer) const;
+	virtual void fillBuffer(IFill& buffer) const;
+	virtual void deserialize(BufferReader& buffer);
 };
 

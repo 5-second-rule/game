@@ -20,6 +20,6 @@ public:
 	void ready(GameState *gameState);
 	void inputTranslator();
 	GameState *getGameState();
-	std::vector<Player *> getPlayers();
+	std::vector<Player*> getPlayers();
 };
 

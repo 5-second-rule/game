@@ -14,6 +14,7 @@ std::vector<Event *> SelectionScreenInput::inputTranslator(InputAdapter *inputAd
 	Transmission::Input::KeyState down = Transmission::Input::KeyState::STATE_DOWN;
 	std::vector<Event *> inputEventVector;
 	SelectionEvent::SelectionType selection;
+	selection.guid = this->renderingEngine->getLocalPlayerGuid(0);
 
 	if (inputAdapter->isControllerConnected()) {
 		std::pair<Common::Vector4, float> leftStickInfo;

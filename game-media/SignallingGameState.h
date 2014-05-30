@@ -4,7 +4,7 @@
 #include "game-core/GameState.h"
 #include "game-core/ObjectTypes.h"
 
-class GAMEMEDIADLL SignallingGameState : public BaseObject {
+class GAMEMEDIADLL SignallingGameState : public GameState {
 private:
 	INotifyReady<GameState> *notifier;
 
@@ -12,9 +12,5 @@ public:
 	SignallingGameState(INotifyReady<GameState> *notifier);
 	~SignallingGameState();
 	virtual bool handleEvent(Event *evt);
-	virtual void reserveSize(IReserve& buffer) const;
-	virtual void fillBuffer(IFill& buffer) const;
 	virtual void deserialize(BufferReader& buffer);
-	virtual void update(float dt);
 };
-

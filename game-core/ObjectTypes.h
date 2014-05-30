@@ -13,7 +13,8 @@ enum GAMECOREDLL ObjectTypes
 	Track,
 	UI,
 	SelectionScreen,
-	State
+	State,
+	GameStateObject
 };
 
 enum class GAMECOREDLL CollisionPriorities {

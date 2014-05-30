@@ -11,7 +11,7 @@ class GAMEMEDIADLL RenderableSelectionScreen : public StaticObject, public IRend
 {
 private:
 	Engine *engine;
-	std::vector<Player *> players;
+	std::vector<Player*> players;
 	SelectionScreenData::Objects *objectData;
 
 public:

@@ -5,12 +5,17 @@
 #include "SelectionEvent.h"
 #include "ActionType.h"
 
-class GAMECOREDLL Player : public MovingObject {
+class GAMECOREDLL Player : public ISerializable, public PlayerDelegate {	
+private:
+	struct PlayerData {
+		unsigned int guid;
+		int deathCount;
+		int tempSelection;
+		int selection;
+	};
+
 protected:
-	unsigned int guid;
-	int deathCount;
-	int tempSelection;
-	int selection;
+	PlayerData data;
 
 public:
 	Player();
@@ -25,6 +30,13 @@ public:
 	int getSelection();
 	unsigned int getGuid();
 
-	virtual bool handleEvent(Event* evt);
+	// ISerializable methods
+	virtual void reserveSize(IReserve& buffer) const;
+	virtual void fillBuffer(IFill& buffer) const;
+	virtual void deserialize(BufferReader& buffer);
+
+	// PlayerDelegate methods
+	void handleEvent(const ActionEvent* evt);
+	Handle cameraTarget();
 };
 

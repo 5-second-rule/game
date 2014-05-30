@@ -14,6 +14,9 @@ void RenderingGameManager::ready(GameState *gameState) {
 }
 
 void RenderingGameManager::inputTranslator() {
+	if (gameState == nullptr)
+		return;
+
 	switch (gameState->getState()) {
 	case (GameState::State::Selection):
 		this->engine->renderingDelegate = &(this->selectionInput);
@@ -30,6 +33,6 @@ GameState *RenderingGameManager::getGameState() {
 	return this->gameState;
 }
 
-std::vector<Player *> RenderingGameManager::getPlayers() {
+std::vector<Player*> RenderingGameManager::getPlayers() {
 	return this->gameState->getPlayers();
 }

@@ -173,8 +173,6 @@ void RenderableGameObjectCtorTable::initCtors() {
 	GameObjectCtorTable::initCtors();
 	RenderingEngine *engine =
 		RenderableGame::getGlobalInstance()->getRenderingEngineInstance();
-	
-	this->prepSelectionScreenData();
 
 	this->modelIndexes[ObjectTypes::Ecoli] = engine->loadModel( "resources/ecoliii.fbx" );
 	this->textureIndexes[ObjectTypes::Ecoli] = engine->loadTexture( "resources/ecolizzz_TXTR.dds" );
@@ -207,6 +205,8 @@ void RenderableGameObjectCtorTable::initCtors() {
 	this->bumpIndexes[ObjectTypes::Track] = engine->loadBumpMap( "resources/bloodCellBump.dds" );
 	this->vertexShaderIndexes[ObjectTypes::Track] = engine->loadVertexShader( "resources/vertexTrack.cso" );
 	this->pixelShaderIndexes[ObjectTypes::Track] = engine->loadPixelShader( "resources/pixelBump.cso" );
+
+	this->prepSelectionScreenData();
 
 	this->setConstructor( ObjectTypes::Ecoli, makeRenderableEcoli );
 	this->setConstructor( ObjectTypes::ChickenPox, makeRenderableChickenPox );

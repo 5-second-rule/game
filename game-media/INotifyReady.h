@@ -6,6 +6,6 @@ class GAMEMEDIADLL INotifyReady {
 public:
 	INotifyReady() {}
 	~INotifyReady() {}
-	void ready(T *);
+	virtual void ready(T *) = 0;
 };
 

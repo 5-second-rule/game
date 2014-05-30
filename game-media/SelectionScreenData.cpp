@@ -5,8 +5,8 @@ SelectionScreenData::SelectionScreenData(RenderableMovingObject *(&playerObjects
 		RenderableGame::getGlobalInstance()->getRenderingEngineInstance();
 
 	const int MAX_PLAYERS = 4;
-	const float MARGIN = 0.05;
-	float scale = (2.0 - 5 * MARGIN) / 8;
+	const float MARGIN = 0.05f;
+	float scale = (2.0f - 5 * MARGIN) / 8;
 	Transmission::Index rectangleIndices[6] = { 0, 1, 2, 3, 0, 2 };
 	char *otherModelNames[4] = {
 		"resources/select-name-ecoli.dds",
@@ -36,7 +36,7 @@ SelectionScreenData::SelectionScreenData(RenderableMovingObject *(&playerObjects
 
 	for (int i = 0; i < MAX_PLAYERS; ++i) {
 		// Create backgound for each player model and find its center
-		this->objectData.playerCenters[i] = this->calculatePlayerBackgroundVertices(playerVertices, i, MARGIN) * 5.5;
+		this->objectData.playerCenters[i] = this->calculatePlayerBackgroundVertices(playerVertices, i, MARGIN) * 5.5f;
 		this->otherPlayerBackgroundModels[i] = engine->create2DModelFromScratch(playerVertices, 4, rectangleIndices, 6, "resources/select-rectangle.dds", textures, false);
 		this->objectData.otherPlayerBackgroundObjects[i] = new RenderableStaticObject(ObjectTypes::SelectionScreen, otherPlayerBackgroundModels[i]);
 		this->myPlayerBackgroundModels[i] = engine->create2DModelFromScratch(playerVertices, 4, rectangleIndices, 6, "resources/select-my-rectangle.dds", textures, false);
@@ -56,8 +56,8 @@ SelectionScreenData::SelectionScreenData(RenderableMovingObject *(&playerObjects
 	// Make models all approximately the same size
 	this->objectData.playerObjects[ObjectTypes::Ecoli]->getMoveable()->setScale(scale);
 	this->objectData.playerObjects[ObjectTypes::ChickenPox]->getMoveable()->setScale(scale);
-	this->objectData.playerObjects[ObjectTypes::Malaria]->getMoveable()->setScale(scale*0.9);
-	this->objectData.playerObjects[ObjectTypes::Syphillis]->getMoveable()->setScale(scale*3.0);
+	this->objectData.playerObjects[ObjectTypes::Malaria]->getMoveable()->setScale(scale*0.9f);
+	this->objectData.playerObjects[ObjectTypes::Syphillis]->getMoveable()->setScale(scale*3.0f);
 }
 
 SelectionScreenData::~SelectionScreenData() {}
@@ -69,10 +69,10 @@ void SelectionScreenData::calculateTitleVertices(Transmission::Vertex *vertices,
 	else
 		scale = winWidth / winHeight / 2;
 
-	float l = -2.0 * scale,
-		r = 2.0 * scale,
-		t = 1.0,
-		b = 1.0 - scale;
+	float l = -2.0f * scale,
+		r = 2.0f * scale,
+		t = 1.0f,
+		b = 1.0f - scale;
 
 	vertices[0] = { { l, t, 0.0f }, { 0, 0 }, { 0, 0, -1 }, {} };
 	vertices[1] = { { r, t, 0.0f }, { 1, 0 }, { 0, 0, -1 }, {} };
@@ -85,14 +85,14 @@ void SelectionScreenData::calculateTitleVertices(Transmission::Vertex *vertices,
 void SelectionScreenData::calculatePlayerNameVertices(Transmission::Vertex *vertices, int playerIndex, float margin) {
 	float numMargins[] = { -1.5, -0.5, 0.5, 1.5 };
 	float pos[] = { -2, -1, 0, 1 };
-	float width = (2.0 - 5 * margin) / 4;
-	float height = width * 0.80 * 0.237;
+	float width = (2.0f - 5 * margin) / 4;
+	float height = width * 0.80f * 0.237f;
 
-	float edgeB = -0.7 + width * 0.1;
+	float edgeB = -0.7f + width * 0.1f;
 	float edgeT = edgeB + height;
 
-	float edgeL = pos[playerIndex] * width + numMargins[playerIndex] * margin + width * 0.1;
-	float edgeR = edgeL + width * 0.80;
+	float edgeL = pos[playerIndex] * width + numMargins[playerIndex] * margin + width * 0.1f;
+	float edgeR = edgeL + width * 0.80f;
 
 	vertices[0] = { { edgeL, edgeT, 0.0f }, { 0, 0 }, { 0, 0, -1 }, {} };
 	vertices[1] = { { edgeR, edgeT, 0.0f }, { 1, 0 }, { 0, 0, -1 }, {} };
@@ -101,13 +101,13 @@ void SelectionScreenData::calculatePlayerNameVertices(Transmission::Vertex *vert
 }
 
 float SelectionScreenData::calculatePlayerBackgroundVertices(Transmission::Vertex *vertices, int playerIndex, float margin) {
-	float numMargins[] = { -1.5, -0.5, 0.5, 1.5 };
+	float numMargins[] = { -1.5f, -0.5f, 0.5f, 1.5f };
 	float pos[] = { -2, -1, 0, 1 };
 
-	float edgeT = 0.5;
-	float edgeB = -0.7;
+	float edgeT = 0.5f;
+	float edgeB = -0.7f;
 
-	float width = (2.0 - 5 * margin) / 4;
+	float width = (2.0f - 5.0f * margin) / 4.0f;
 
 	float edgeL = pos[playerIndex] * width + numMargins[playerIndex] * margin;
 	float edgeR = edgeL + width;

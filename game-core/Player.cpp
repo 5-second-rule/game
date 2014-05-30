@@ -1,83 +1,108 @@
 #include "Player.h"
 
-Player::Player(unsigned int guid) : MovingObject(0, nullptr) {
-	this->guid = guid;
-	this->tempSelection = 0;
-	this->selection = -1;
+Player::Player() {
+	this->data.guid = -1;
+	this->data.tempSelection = 0;
+	this->data.selection = -1;
+}
+
+Player::Player(unsigned int guid) {
+	this->data.guid = guid;
+	this->data.tempSelection = 0;
+	this->data.selection = -1;
 }
 
 Player::~Player() {
 }
 
 void Player::die() {
-	this->deathCount++;
+	this->data.deathCount++;
 }
 
 void Player::updateTempSelection(int tempSelection) {
-	this->tempSelection = tempSelection;
-	IHasHandle::setType(tempSelection);
+	this->data.tempSelection = tempSelection;
 }
 
 void Player::makeSelection(int selection) {
-	this->selection = selection;
-	IHasHandle::setType(selection);
+	this->data.selection = selection;
 }
 
 int Player::getDeathCount() {
-	return this->deathCount;
+	return this->data.deathCount;
 }
 
 int Player::getTempSelection() {
-	return this->tempSelection;
+	return this->data.tempSelection;
 }
 
 int Player::getSelection() {
-	return this->selection;
+	return this->data.selection;
 }
 
 unsigned int Player::getGuid() {
-	return this->guid;
+	return this->data.guid;
 }
 
-bool Player::handleEvent(Event *evt) {
+void Player::handleEvent(const ActionEvent *evt) {
 
-	ActionEvent *actionEvt = Event::cast<ActionEvent>(evt);
-	if (actionEvt == nullptr)
-		return false;
 
-	switch (ActionType(actionEvt->getActionType())) {
+	switch (ActionType(evt->getActionType())) {
 	case ActionType::SELECT: {
-		SelectionEvent *selectionEvent = ActionEvent::cast<SelectionEvent>(actionEvt);
-		if (selectionEvent == nullptr)
-			return false;
+		const SelectionEvent *selectionEvent = ActionEvent::cast<SelectionEvent>(evt);
+		if (selectionEvent == nullptr) return;
 
 		if (selectionEvent->selection.selectChar) {
-			this->selection = this->tempSelection;
+			this->data.selection = this->data.tempSelection;
 		}
 
 		if (selectionEvent->selection.unselectChar) {
-			this->selection = -1;
+			this->data.selection = -1;
 		}
 
 		if (selectionEvent->selection.toggleSelect) {
-			if (this->selection != -1) {
-				this->selection = this->tempSelection;
+			if (this->data.selection != -1) {
+				this->data.selection = this->data.tempSelection;
 			} else {
-				this->selection = -1;
+				this->data.selection = -1;
 			}
 		}
 
 		if (selectionEvent->selection.selectionDirection < 0) {
-			this->tempSelection = (this->tempSelection + 3) % 4;
+			this->data.tempSelection = (this->data.tempSelection + 3) % 4;
 		} else if (selectionEvent->selection.selectionDirection > 0) {
-			this->tempSelection = (this->tempSelection + 1) % 4;
+			this->data.tempSelection = (this->data.tempSelection + 1) % 4;
 		}
 
-		return true;
 		break;
 	}
 	default:
 		break;
 	}
-	return false;
+}
+
+Handle Player::cameraTarget() {
+	//return this->movableObject->getHandle();
+	return Handle();
+}
+
+void Player::reserveSize(IReserve& buffer) const {
+	buffer.reserve(sizeof(PlayerData));
+}
+
+void Player::fillBuffer(IFill& buffer) const {
+	PlayerData * data = reinterpret_cast<PlayerData*>(buffer.getPointer());
+	data->guid = this->data.guid;
+	data->deathCount = this->data.deathCount;
+	data->tempSelection = this->data.tempSelection;
+	data->selection = this->data.selection;
+	buffer.filled();
+}
+
+void Player::deserialize(BufferReader& buffer) {
+	const PlayerData *data = reinterpret_cast<const PlayerData*>(buffer.getPointer());
+	this->data.guid = data->guid;
+	this->data.deathCount = data->deathCount;
+	this->data.tempSelection = data->tempSelection;
+	this->data.selection = data->selection;
+	buffer.finished(sizeof(PlayerData));
 }
