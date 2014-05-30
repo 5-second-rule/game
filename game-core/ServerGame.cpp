@@ -1,14 +1,19 @@
 #include "ServerGame.h"
 #include "ObjectTypes.h"
 #include "Sounds.h"
+#include "MovingObject.h"
 
 #include "engine-core/ServerEngine.h"
 
+#ifdef _DEBUG
+#ifndef DBG_NEW
+#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
+#define new DBG_NEW
+#endif
+#endif  // _DEBUG
+
 ServerGame::ServerGame(float frameTime) {
 	this->frameTime = frameTime;
-}
-
-ServerGame::~ServerGame() {
 }
 
 Engine * ServerGame::makeEngineInstance( ConstructorTable<BaseObject> *objectCtors, ConstructorTable<ActionEvent>* eventCtors ) {

@@ -3,10 +3,15 @@
 #include "MoveEvent.h"
 #include "ActionType.h"
 #include "Sounds.h"
-
 #include "ObjectTypes.h"
-
 #include "Game.h"
+
+#ifdef _DEBUG
+#ifndef DBG_NEW
+#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
+#define new DBG_NEW
+#endif
+#endif  // _DEBUG
 
 #define MAX_SPEED 75
 #define MAX_FORCE 100
@@ -14,8 +19,9 @@
 const float MovingObject::max_speed = MAX_SPEED;
 const float MovingObject::max_force = MAX_FORCE;
 
-MovingObject::MovingObject( int objectType, Game* owner )
-	: BaseObject(objectType), owner(owner)
+MovingObject::MovingObject(int objectType, Game* owner, bool follow, bool propulse)
+	: BaseObject(objectType)
+	, owner(owner)
 {
 	this->up = Vector(0.0f, 1.0f, 0.0f);
 	this->heading = Vector(0.0f, 0.0f, 1.0f);
@@ -24,7 +30,13 @@ MovingObject::MovingObject( int objectType, Game* owner )
 	this->friction = .2f;
 	this->trackIndex = 0;
 	this->trackVelocity = 1000;
+
+	this->followTrack = follow;
+	this->hasPropulsion = propulse;
 }
+
+MovingObject::MovingObject(int objectType, Game* owner)
+	: MovingObject(objectType, owner, true, true) {}
 
 
 MovingObject::~MovingObject() {}
@@ -107,16 +119,22 @@ void MovingObject::update(float dt){
 	this->velocity += acceleration*dt;
 
 	// follow track
-	TrackPath *track = Game::getGlobalInstance()->getTrackPath();
+	TrackPath *track = owner->getTrackPath();
 	this->trackIndex = track->locateIndex(this->position, this->trackIndex);
 
 	const float TRACK_FORCE = 15.0f;
 	const float HEADING_FORCE = 15.0f;
-	Vector4 trackForce = track->nodes[this->trackIndex].normal * TRACK_FORCE;
-	
-	// propulsion in heading
-	Vector4 headingForce = Vector4::normalize(this->heading) * HEADING_FORCE * propulsion;
-	this->applyForce(trackForce + headingForce);
+
+	if (this->followTrack) {
+		Vector4 trackForce = track->nodes[this->trackIndex].normal * TRACK_FORCE;
+		this->applyForce(trackForce);
+	}
+
+	if (this->hasPropulsion) {
+		// propulsion in heading
+		Vector4 headingForce = Vector4::normalize(this->heading) * HEADING_FORCE * propulsion;
+		this->applyForce(headingForce);
+	}
 
 	// reset propulsion
 	this->propulsion = 1.0f;
@@ -245,4 +263,8 @@ std::shared_ptr<const Bounds> MovingObject::getBounds() const {
 
 unsigned int MovingObject::getPriority() const {
 	return static_cast<unsigned int>(CollisionPriorities::Object);
+}
+
+void MovingObject::setPosition(const Vector4& pos) {
+	this->position = pos;
 }

@@ -117,4 +117,9 @@
       <Filter>Source Files\AI</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\track.path">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
 </Project>

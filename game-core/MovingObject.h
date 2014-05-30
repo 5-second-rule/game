@@ -8,6 +8,7 @@
 
 #include "common/Vector4.h"
 #include "common/Matrix4.h"
+
 using namespace Common;
 
 struct MovingObjectData {
@@ -42,9 +43,13 @@ protected:
 
 	int trackIndex;
 
+	bool followTrack;
+	bool hasPropulsion;
+
 public:
 	MovingObject(int objectType, Game* owner);
-	~MovingObject();
+	MovingObject(int objectType, Game* owner, bool follow, bool propulse);
+	virtual ~MovingObject();
 	Game* owner;
 
 	static const float max_speed;
@@ -56,6 +61,8 @@ public:
 	Vector4 getPosition();
 	int getTrackIndex();
 	Vector4 getUp();
+
+	void setPosition(const Vector4& position);
 
 	void applyForce(const Vector4& force);
 
