@@ -165,12 +165,18 @@ void RenderableGameObjectCtorTable::initCtors() {
 	this->modelIndexes[ObjectTypes::Wwod] = this->modelIndexes[ObjectTypes::Malaria];
 	this->textureIndexes[ObjectTypes::Wwod] = this->textureIndexes[ObjectTypes::Malaria];
 
-	this->setConstructor( ObjectTypes::Ecoli, makeRenderableEcoli );
+
+	this->modelIndexes[ObjectTypes::Wwod] = this->modelIndexes[ObjectTypes::Malaria];
+	this->textureIndexes[ObjectTypes::Wwod] = this->textureIndexes[ObjectTypes::Malaria];
+
+	this->setConstructor(ObjectTypes::Ecoli, makeRenderableEcoli);
+
 	this->setConstructor( ObjectTypes::ChickenPox, makeRenderableChickenPox );
 	this->setConstructor( ObjectTypes::Syphillis, makeRenderableSyphillis );
 	this->setConstructor( ObjectTypes::Malaria, makeRenderableMalaria );
 	this->setConstructor( ObjectTypes::WhiteBlood, makeRenderableWhiteBlood );
 	this->setConstructor( ObjectTypes::RedBlood, makeRenderableRedBlood );
+
 	this->setConstructor( ObjectTypes::Track, makeRenderableTrack );
 	this->setConstructor( ObjectTypes::Wwod, makeRenderableWallOfDeath );
 }
