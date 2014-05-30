@@ -10,6 +10,7 @@ private:
 
 protected:
 	virtual Engine * makeEngineInstance( ConstructorTable<BaseObject> *objectCtors, ConstructorTable<ActionEvent>* eventCtors );
+	void populateRedBloodCells();
 
 public:
 	ServerGame(float frameTime);

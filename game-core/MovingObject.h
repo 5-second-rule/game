@@ -45,8 +45,12 @@ protected:
 
 	int trackIndex;
 
+	bool followTrack;
+	bool hasPropulsion;
+
 public:
 	MovingObject(int objectType, Game* owner);
+	MovingObject(int objectType, Game* owner, bool follow, bool propulse);
 	~MovingObject();
 	Game* owner;
 
@@ -55,6 +59,8 @@ public:
 	Vector4 getPosition();
 	int getTrackIndex();
 	Vector4 getUp();
+
+	void setPosition(const Vector4& position);
 
 	void applyForce(const Vector4& force);
 

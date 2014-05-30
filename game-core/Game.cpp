@@ -30,6 +30,7 @@ void Game::init() {
 	this->engineInstance = this->makeEngineInstance(this->objectCtors, eventCtors);
 	this->objectCtors->initCtors();
 	eventCtors->initCtors();
+
 }
 
 void Game::run() {
@@ -59,3 +60,4 @@ GameObjectCtorTable * Game::makeCtorTable() {
 TrackPath * Game::getTrackPath() {
 	return this->track;
 }
+

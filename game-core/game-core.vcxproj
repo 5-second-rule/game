@@ -56,6 +56,9 @@
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>
     </Bscmake>
+    <PostBuildEvent>
+      <Command>xcopy /y "$(ProjectDir)resources\*" "$(SolutionDir)Debug\resources\"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -98,6 +101,9 @@
     <ClCompile Include="StaticObject.cpp" />
     <ClCompile Include="TrackPath.cpp" />
     <ClCompile Include="Tube.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\track.path" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
