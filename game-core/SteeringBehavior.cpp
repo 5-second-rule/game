@@ -69,7 +69,7 @@ Vector4 SteeringBehavior::pursuit(Handle &p_evader_handle){
 	Vector4 toEvader;
 	float relativeHeading, look_ahead_time;
 
-	tmp = theWorld->get(p_evader_handle);
+	tmp = theWorld.get(p_evader_handle);
 	if (evader = dynamic_cast<MovingObject*>(tmp)){
 		toEvader = evader->getPosition() - owner->getPosition();
 		relativeHeading = evader->getHeading().dot(owner->getHeading());
@@ -93,7 +93,7 @@ Vector4 SteeringBehavior::evade(Handle &p_pursuer_handle){
 	Vector4 toPursuer;
 	float look_ahead_time;
 
-	tmp = theWorld->get(p_pursuer_handle);
+	tmp = theWorld.get(p_pursuer_handle);
 	if (pursuer = dynamic_cast<MovingObject*>(tmp)){
 		toPursuer = pursuer->getPosition() - owner->getPosition();
 		look_ahead_time = toPursuer.length() / (MovingObject::max_speed + pursuer->getSpeed());
@@ -144,7 +144,7 @@ Vector4 SteeringBehavior::followPath() {
 }
 
 Vector4 SteeringBehavior::offsetPursuit(Handle &p_leader, Vector4 &offset) {
-	MovingObject* leader = dynamic_cast<MovingObject*>(theWorld->get(p_leader));
+	MovingObject* leader = dynamic_cast<MovingObject*>(theWorld.get(p_leader));
 
 	if (leader == nullptr) {
 		// Leader does not exist anymore
