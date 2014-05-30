@@ -7,6 +7,8 @@
 
 #include "RenderableGame.h"
 
+static SelectionScreenData *selectionScreenData;
+
 RenderableGameObjectCtorTable::RenderableGameObjectCtorTable() {}
 
 RenderableGameObjectCtorTable::~RenderableGameObjectCtorTable() {}
@@ -115,7 +117,7 @@ static BaseObject * makeRenderableTrack( ConstructorTable<BaseObject> *thisObj )
 
 static BaseObject * makeRenderableSelectionScreen(ConstructorTable<BaseObject> *thisObj) {
 	RenderableGameObjectCtorTable *table = (RenderableGameObjectCtorTable *)thisObj;
-	return new RenderableSelectionScreen(table->selectionScreenData->getData());
+	return new RenderableSelectionScreen(selectionScreenData->getData());
 }
 
 void RenderableGameObjectCtorTable::prepSelectionScreenData() {
@@ -161,7 +163,7 @@ void RenderableGameObjectCtorTable::prepSelectionScreenData() {
 		this->pixelShaderIndexes[ObjectTypes::Malaria])
 		)
 	};
-	this->selectionScreenData = new SelectionScreenData(playerObjects);
+	selectionScreenData = new SelectionScreenData(playerObjects);
 }
 
 static BaseObject * makeSignallingGameState(ConstructorTable<BaseObject> *thisObj) {
@@ -215,6 +217,6 @@ void RenderableGameObjectCtorTable::initCtors() {
 	this->setConstructor( ObjectTypes::WhiteBlood, makeRenderableWhiteBlood );
 	this->setConstructor( ObjectTypes::RedBlood, makeRenderableRedBlood );
 	this->setConstructor( ObjectTypes::Track, makeRenderableTrack );
-	this->setConstructor( ObjectTypes::SelectionScreen, makeRenderableSelectionScreen);
-	this->setConstructor(ObjectTypes::State, makeSignallingGameState );
+	this->setConstructor( ObjectTypes::SelectionScreen, makeRenderableSelectionScreen );
+	this->setConstructor( ObjectTypes::State, makeSignallingGameState );
 }

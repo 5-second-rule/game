@@ -14,7 +14,6 @@ private:
 	GameplayInput gameplayInput;
 
 public:
-	RenderingGameManager();
 	RenderingGameManager(RenderingEngine *engine);
 	~RenderingGameManager();
 	void ready(GameState *gameState);

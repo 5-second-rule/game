@@ -10,7 +10,7 @@
 class GAMEMEDIADLL RenderableGame : public Game
 {
 private:
-	RenderingGameManager gameManager;
+	RenderingGameManager *gameManager;
 	void *appHandle;
 
 protected:

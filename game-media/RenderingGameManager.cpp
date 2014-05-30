@@ -1,10 +1,10 @@
 #include "RenderingGameManager.h"
-RenderingGameManager::RenderingGameManager() {}
 
 RenderingGameManager::RenderingGameManager(RenderingEngine *engine) {
 	this->engine = engine;
 	this->selectionInput = SelectionScreenInput(this->engine);
 	this->gameplayInput = GameplayInput(this->engine);
+	this->engine->renderingDelegate = &(this->selectionInput);
 }
 
 RenderingGameManager::~RenderingGameManager() {}

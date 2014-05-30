@@ -17,7 +17,7 @@ void RenderableGame::init() {
 	static_cast<SoundCtorTable*>(this->getRenderingEngineInstance()->soundCtors)->initCtors();
 	this->getRenderingEngineInstance()->waitForServer();
 	this->getEngineInstance()->registerPlayer(true);
-	this->gameManager = RenderingGameManager(this->getRenderingEngineInstance());
+	this->gameManager = new RenderingGameManager(this->getRenderingEngineInstance());
 
 }
 
@@ -57,5 +57,5 @@ GameObjectCtorTable * RenderableGame::makeCtorTable() {
 }
 
 RenderingGameManager *RenderableGame::getGameManager() {
-	return &(this->gameManager);
+	return this->gameManager;
 }
