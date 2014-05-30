@@ -7,7 +7,7 @@ class RenderableMovingObject : public MovingObject, public RenderableObject
 {
 public:
 	RenderableMovingObject(int type, Transmission::Model* model);
-	~RenderableMovingObject();
+	virtual ~RenderableMovingObject();
 
 	virtual void render();
 };

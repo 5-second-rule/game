@@ -7,7 +7,7 @@ public:
 	static const int EVENT_TYPE_COUNT = 10;
 
 	ActionEventCtorTable();
-	~ActionEventCtorTable();
+	virtual ~ActionEventCtorTable();
 
 	virtual void initCtors();
 };
