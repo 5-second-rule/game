@@ -7,7 +7,7 @@
 class GAMECOREDLL StaticObject : public BaseObject {
 public:
 	StaticObject(int objectType);
-	~StaticObject();
+	virtual ~StaticObject();
 
 	virtual bool handleEvent(Event* evt);
 

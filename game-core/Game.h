@@ -30,6 +30,7 @@ public:
 
 	virtual void init();
 	void run();
+	void stop();
 	Engine * getEngineInstance();
 	TrackPath * getTrackPath();
 };

@@ -17,7 +17,6 @@ protected:
 
 public:
 	RenderableGame(void *appHandle);
-	~RenderableGame();
 
 	static RenderableGame * getGlobalInstance();
 	RenderingEngine * getRenderingEngineInstance();

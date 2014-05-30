@@ -8,6 +8,7 @@
 
 #include "common/Vector4.h"
 #include "common/Matrix4.h"
+
 using namespace Common;
 
 struct MovingObjectData {
@@ -51,7 +52,7 @@ protected:
 public:
 	MovingObject(int objectType, Game* owner);
 	MovingObject(int objectType, Game* owner, bool follow, bool propulse);
-	~MovingObject();
+	virtual ~MovingObject();
 	Game* owner;
 
 	Vector4 getHeading(); // A normalized vector giving the direction the object is heading
