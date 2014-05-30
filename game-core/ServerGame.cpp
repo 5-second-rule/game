@@ -35,7 +35,7 @@ void ServerGame::init() {
 	this->getEngineInstance()->getWorld()->allocateHandle(track, HandleType::GLOBAL);
 	this->getEngineInstance()->getWorld()->insert(track);
 
-	//this->populateRedBloodCells();
+	this->populateRedBloodCells();
 
 
 	// HACK --	this only works if the clients are up first, but in the future this will
