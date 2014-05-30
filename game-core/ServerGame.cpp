@@ -1,6 +1,7 @@
 #include "ServerGame.h"
 #include "ObjectTypes.h"
 #include "Sounds.h"
+#include "MovingObject.h"
 
 #include "engine-core/ServerEngine.h"
 

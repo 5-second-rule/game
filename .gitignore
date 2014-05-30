@@ -251,3 +251,4 @@ UpgradeLog*.htm
 
 # Microsoft Fakes
 FakesAssemblies/
+Debug/resources/track.path

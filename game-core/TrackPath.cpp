@@ -75,7 +75,7 @@ TrackPath * TrackPath::fromFile(char *file) {
 
 	fin.open(file);
 
-	if (fin.fail()) {
+	if (!fin || fin.fail()) {
 		throw new std::runtime_error("couldn't open track path file");
 	}
 
