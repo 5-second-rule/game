@@ -31,17 +31,15 @@ void GameState::setState(State state) {
 		world->insert(obj);
 		break;
 	case (Game) :
-		//TODO: tell each player to create a MovingObject they manage
 
-		//obj = this->objectCtors->invoke(ObjectTypes::Track);
-		//world->allocateHandle(obj, HandleType::GLOBAL);
-		//world->insert(obj);
+		obj = this->objectCtors->invoke(ObjectTypes::Track);
+		world->allocateHandle(obj, HandleType::GLOBAL);
+		world->insert(obj);
 
-		//for (it = players.begin(); it != players.end(); ++it) {
-		//	obj = this->objectCtors->invoke((*it)->getSelection());
-		//	world->allocateHandle(obj, HandleType::GLOBAL);
-		//	world->insert(obj);
-		//}
+		// tell each player to create a MovingObject they manage
+		for (auto it = players.begin(); it != players.end(); ++it) {
+			(*it)->spawnMoveableObject();
+		}
 		break;
 	default:
 		break;
@@ -77,9 +75,7 @@ PlayerDelegate * GameState::addPlayer(unsigned int playerGuid) {
 				break;
 			}
 
-			//obj = this->objectCtors->invoke(selection);
-			//world->allocateHandle(obj, HandleType::GLOBAL);
-			//world->insert(obj);
+			player->spawnMoveableObject();
 
 		}
 		break;

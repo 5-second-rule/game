@@ -15,6 +15,16 @@ Player::Player(unsigned int guid) {
 Player::~Player() {
 }
 
+void Player::spawnMoveableObject() {
+	MovingObject* m = new MovingObject(this->getSelection(), Game::getGlobalInstance());
+
+	World* w = Game::getGlobalInstance()->getEngineInstance()->getWorld();
+	w->allocateHandle(m, HandleType::GLOBAL);
+	w->insert(m);
+
+	this->data.movingObject = m->getHandle();
+}
+
 void Player::die() {
 	this->data.deathCount++;
 }
@@ -43,7 +53,7 @@ unsigned int Player::getGuid() {
 	return this->data.guid;
 }
 
-void Player::handleEvent(const ActionEvent *evt) {
+void Player::handleEvent(ActionEvent *evt) {
 
 
 	switch (ActionType(evt->getActionType())) {
@@ -76,6 +86,14 @@ void Player::handleEvent(const ActionEvent *evt) {
 		break;
 	}
 	default:
+		MovingObject* m = dynamic_cast<MovingObject*>(
+			Game::getGlobalInstance()
+			->getEngineInstance()
+			->getWorld()
+			->get(this->data.movingObject)
+		);
+
+		if(m != nullptr) m->handleEvent(evt);
 		break;
 	}
 }
@@ -91,18 +109,12 @@ void Player::reserveSize(IReserve& buffer) const {
 
 void Player::fillBuffer(IFill& buffer) const {
 	PlayerData * data = reinterpret_cast<PlayerData*>(buffer.getPointer());
-	data->guid = this->data.guid;
-	data->deathCount = this->data.deathCount;
-	data->tempSelection = this->data.tempSelection;
-	data->selection = this->data.selection;
+	*data = this->data;
 	buffer.filled();
 }
 
 void Player::deserialize(BufferReader& buffer) {
 	const PlayerData *data = reinterpret_cast<const PlayerData*>(buffer.getPointer());
-	this->data.guid = data->guid;
-	this->data.deathCount = data->deathCount;
-	this->data.tempSelection = data->tempSelection;
-	this->data.selection = data->selection;
+	this->data = *data;
 	buffer.finished(sizeof(PlayerData));
 }

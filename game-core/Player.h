@@ -4,6 +4,7 @@
 #include "ObjectTypes.h"
 #include "SelectionEvent.h"
 #include "ActionType.h"
+#include "MovingObject.h"
 
 class GAMECOREDLL Player : public ISerializable, public PlayerDelegate {	
 private:
@@ -12,6 +13,7 @@ private:
 		int deathCount;
 		int tempSelection;
 		int selection;
+		Handle movingObject;
 	};
 
 protected:
@@ -21,14 +23,21 @@ public:
 	Player();
 	Player(unsigned int guid);
 	~Player();
+	
+	unsigned int getGuid();
+	void spawnMoveableObject();
 
+	// death tracking
 	void die();
+	int getDeathCount();
+	
+	// selection
 	void updateTempSelection(int tempSelection);
 	void makeSelection(int selection);
-	int getDeathCount();
+	
 	int getTempSelection();
 	int getSelection();
-	unsigned int getGuid();
+
 
 	// ISerializable methods
 	virtual void reserveSize(IReserve& buffer) const;
@@ -36,7 +45,7 @@ public:
 	virtual void deserialize(BufferReader& buffer);
 
 	// PlayerDelegate methods
-	void handleEvent(const ActionEvent* evt);
+	void handleEvent(ActionEvent* evt);
 	Handle cameraTarget();
 };
 
