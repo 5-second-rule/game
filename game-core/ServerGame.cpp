@@ -28,5 +28,9 @@ void ServerGame::stop() {
 void ServerGame::init() {
 	Game::init();
 	this->gameState = new GameState();
+	this->getEngineInstance()->getWorld()->allocateHandle(this->gameState, HandleType::GLOBAL);
+	this->getEngineInstance()->getWorld()->insert(this->gameState);
 	this->getEngineInstance()->setPlayerRegistration(this->gameState);
+
+	this->gameState->setState(GameState::Selection);
 }

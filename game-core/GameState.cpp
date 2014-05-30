@@ -7,10 +7,6 @@ GameState::GameState() : BaseObject(ObjectTypes::State) {
 	this->world = engine->getWorld();
 	this->objectCtors = engine->getObjCtors();
 
-	if (GameState::gameState == State::None) {
-		this->setState(Selection);
-	}
-
 	for (int i = 0; i < 4; ++i) {
 		this->unusedChars[i] = true;
 	}
