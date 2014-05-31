@@ -6,6 +6,8 @@
 #include "ActionType.h"
 #include "MovingObject.h"
 
+class GAMECOREDLL GameState;
+
 class GAMECOREDLL Player : public ISerializable, public PlayerDelegate {	
 private:
 	struct PlayerData {
@@ -16,12 +18,14 @@ private:
 		Handle movingObject;
 	};
 
+	GameState* gameState;
+
 protected:
 	PlayerData data;
 
 public:
-	Player();
-	Player(unsigned int guid);
+	Player(GameState* state);
+	Player(unsigned int guid, GameState* state);
 	~Player();
 	
 	unsigned int getGuid();

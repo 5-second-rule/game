@@ -45,16 +45,16 @@
     <ClInclude Include="RenderingGameManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="INotifyReady.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SignallingGameState.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="SelectionScreenInput.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GameplayInput.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="INotifyReady.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SignallingGameState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -86,13 +86,13 @@
     <ClCompile Include="RenderingGameManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SignallingGameState.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="SelectionScreenInput.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GameplayInput.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SignallingGameState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

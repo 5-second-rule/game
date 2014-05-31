@@ -29,11 +29,15 @@ public:
 	~GameState();
 	
 	bool handleEvent(Event *evt);
+	void update(float dt);
 
 	void setState(State state);
 	int getState();
+
 	std::vector<Player*> getPlayers();
 	virtual PlayerDelegate* addPlayer(unsigned int playerGuid);
+	
+	// ISerialize Methods
 	virtual void reserveSize(IReserve& buffer) const;
 	virtual void fillBuffer(IFill& buffer) const;
 	virtual void deserialize(BufferReader& buffer);

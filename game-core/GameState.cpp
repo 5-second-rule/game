@@ -15,6 +15,25 @@ GameState::GameState() : BaseObject(ObjectTypes::State) {
 GameState::~GameState() {
 }
 
+void GameState::update(float dt) {
+	switch (this->getState()) {
+	case Selection: {
+		if (this->players.size() < 4) break;
+
+		bool allReady = true;
+		for (size_t i = 0; i < this->players.size(); ++i) {
+			allReady &= this->players[i]->isSelected();
+		}
+
+		if (allReady) this->setState(Game);
+		break;
+	}
+	case Game:
+		//todo if theres a winner, change state
+		break;
+	}
+}
+
 void GameState::setState(State state) {
 	BaseObject * obj = nullptr;
 
@@ -57,7 +76,7 @@ PlayerDelegate * GameState::addPlayer(unsigned int playerGuid) {
 		return nullptr;
 	}
 
-	Player* player = new Player(playerGuid);
+	Player* player = new Player(playerGuid, this);
 	switch (this->getState()) {
 	case (Selection) :
 		player->updateSelection(numPlayers);
@@ -108,7 +127,7 @@ void GameState::deserialize(BufferReader& buffer) {
 	const GameStateData *data = reinterpret_cast<const GameStateData*>(buffer.getPointer());
 	this->gameState = (State) data->state;
 	while (data->numPlayers > this->players.size()) {
-		this->players.push_back(new Player());
+		this->players.push_back(new Player(this));
 	}
 
 	while (data->numPlayers < this->players.size()) {

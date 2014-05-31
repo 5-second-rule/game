@@ -1,10 +1,10 @@
 #pragma once
 #include "game-media.h"
-#include "INotifyReady.h"
 #include "game-core/GameState.h"
 #include "engine-renderer/RenderingEngine.h"
 #include "SelectionScreenInput.h"
 #include "GameplayInput.h"
+#include "INotifyReady.h"
 
 class GAMEMEDIADLL RenderingGameManager: public INotifyReady<GameState> {
 private:
