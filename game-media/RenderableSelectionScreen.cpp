@@ -27,16 +27,18 @@ void RenderableSelectionScreen::render() {
 	for (size_t i = 0; i < this->players.size(); ++i) {
 		Common::Vector4 pos = Common::Vector4(this->objectData->playerCenters[i], 0, 0, 1);
 		int selection = this->players[i]->getSelection();
-		bool inUse = false;
+		//bool inUse = false;
 
-		for (size_t j = 0; j < this->players.size(); ++j) {
-			if (this->players[j]->getSelection() == selection && this->players[j]->isSelected()) {
-				inUse = true;
-				break;
-			}
-		}
-		// TODO: temporary. change.
-		if (inUse) pos[1] += 1.0f;
+		//for (size_t j = 0; j < this->players.size(); ++j) {
+		//	if (this->players[j]->getSelection() == selection && this->players[j]->isSelected()) {
+		//		inUse = true;
+		//		break;
+		//	}
+		//}
+		//// TODO: temporary. change.
+		if (this->players[i]->isSelected())
+			pos[1] += 1.0f;
+
 		int nameIndex = i * 4 + selection;
 		if (this->players[i]->getGuid() == myGuid) {
 			this->objectData->myPlayerNameObjects[nameIndex]->render();

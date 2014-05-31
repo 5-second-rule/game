@@ -49,7 +49,7 @@ unsigned int Player::getGuid() {
 }
 
 void Player::handleEvent(ActionEvent *evt) {
-
+	int nextToon;
 	switch (ActionType(evt->getActionType())) {
 	case ActionType::SELECT: {
 		const SelectionEvent *selectionEvent = ActionEvent::cast<SelectionEvent>(evt);
@@ -58,24 +58,41 @@ void Player::handleEvent(ActionEvent *evt) {
 		switch (selectionEvent->selection.action) {
 		case SelectionEvent::Select:
 			this->data.selected = true;
+			this->gameState->useToon(this->data.selected);
 			break;
 
 		case SelectionEvent::Deselect:
 			this->data.selected = false;
+			this->gameState->unuseToon(this->data.selected);
 			break;
 
 		case SelectionEvent::Toggle:
 			this->data.selected = !this->data.selected;
+			this->gameState->toggleToonUsed(this->data.selected);
 			break;
 
 		case SelectionEvent::Prev:
-			if(!this->isSelected())
-				this->data.selection = (this->data.selection + 3) % 4;
+			nextToon = this->data.selection;
+			if (!this->isSelected()) {
+				do {
+					nextToon = (nextToon + 3) % 4;
+				} while (this->gameState->isToonUsed(nextToon) && nextToon != this->data.selection);
+
+				this->data.selection = nextToon;
+			}
 			break;
+
 		case SelectionEvent::Next:
-			if (!this->isSelected())
-				this->data.selection = (this->data.selection + 1) % 4;
+			nextToon = this->data.selection;
+			if (!this->isSelected()) {
+				do {
+					nextToon = (nextToon + 1) % 4;
+				} while (this->gameState->isToonUsed(nextToon) && nextToon != this->data.selection);
+
+				this->data.selection = nextToon;
+			}
 			break;
+
 		case SelectionEvent::Go:
 			this->gameState->setState(GameState::Game);
 		}

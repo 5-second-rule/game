@@ -8,7 +8,7 @@ GameState::GameState() : BaseObject(ObjectTypes::State) {
 	this->objectCtors = engine->getObjCtors();
 
 	for (int i = 0; i < 4; ++i) {
-		this->unusedChars[i] = true;
+		this->toonUsed[i] = false;
 	}
 }
 
@@ -69,6 +69,22 @@ std::vector<Player*> GameState::getPlayers() {
 	return players;
 }
 
+bool GameState::isToonUsed(int toon) {
+	return toonUsed[toon];
+}
+
+void GameState::useToon(int toon) {
+	toonUsed[toon] = true;
+}
+
+void GameState::unuseToon(int toon) {
+	toonUsed[toon] = false;
+}
+
+void GameState::toggleToonUsed(int toon) {
+	toonUsed[toon] = !toonUsed[toon];
+}
+
 PlayerDelegate * GameState::addPlayer(unsigned int playerGuid) {
 	int selection;
 	int numPlayers = players.size();
@@ -84,9 +100,9 @@ PlayerDelegate * GameState::addPlayer(unsigned int playerGuid) {
 	case (Game) :
 		for (int i = 0; i < 4; ++i) {
 			selection = i;
-			if (this->unusedChars[i]) {
+			if (this->toonUsed[i]) {
 				player->updateSelection(selection);
-				this->unusedChars[selection] = false;
+				this->toonUsed[selection] = false;
 				break;
 			}
 

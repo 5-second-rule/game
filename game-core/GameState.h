@@ -14,7 +14,7 @@ public:
 protected:
 	static State gameState;
 	std::vector<Player*> players;
-	bool unusedChars[4];
+	bool toonUsed[4];
 	Engine *engine;
 	World *world;
 	ConstructorTable<BaseObject> *objectCtors;
@@ -33,6 +33,10 @@ public:
 
 	void setState(State state);
 	int getState();
+	bool isToonUsed(int toon);
+	void useToon(int toon);
+	void unuseToon(int toon);
+	void toggleToonUsed(int toon);
 
 	std::vector<Player*> getPlayers();
 	virtual PlayerDelegate* addPlayer(unsigned int playerGuid);
