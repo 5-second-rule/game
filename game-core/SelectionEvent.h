@@ -6,13 +6,19 @@
 
 class GAMECOREDLL SelectionEvent : public ActionEvent {
 public:
+	enum SelectionAction {
+		Select,
+		Deselect,
+		Toggle,
+		Next,
+		Prev
+	};
+
 	struct SelectionType {
 		unsigned int guid;
-		bool selectChar;
-		bool unselectChar;
-		bool toggleSelect;
-		float selectionDirection;
+		SelectionAction action;
 	};
+	
 	static const ActionType ACTIONTYPE = ActionType::SELECT;
 
 	SelectionType selection;

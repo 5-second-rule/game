@@ -16,7 +16,7 @@ void RenderableSelectionScreen::render() {
 	this->objectData->titleObject->render();
 	unsigned int myGuid = RenderableGame::getGlobalInstance()->getEngineInstance()->getLocalPlayerGuid(0);
 
-	//for (int i = 0; i < 4; ++i) {
+	//for (int i = 0; i < this->players.size(); ++i) {
 	//	if (this->players[i]->getGuid() == myGuid) {
 	//		this->objectData->myPlayerBackgroundObjects[i]->render();
 	//		this->objectData->myPlayerNameObjects[i]->render();
@@ -28,9 +28,21 @@ void RenderableSelectionScreen::render() {
 
 	for (size_t i = 0; i < this->players.size(); ++i) {
 		Common::Vector4 pos = Common::Vector4(this->objectData->playerCenters[i], 0, 0, 1);
-		int selection = this->players[i]->getTempSelection();
+		int selection = this->players[i]->getSelection();
+		bool inUse = false;
+
+		for (size_t j = 0; j < this->players.size(); ++j) {
+			if (this->players[j]->getSelection() == selection && this->players[j]->isSelected()) {
+				inUse = true;
+				break;
+			}
+		}
+		// TODO: temporary. change.
+		if (inUse) pos[1] += 1.0f;
 		this->objectData->playerObjects[selection]->setPosition(pos);
 		this->objectData->playerObjects[selection]->render();
+
+		// if (inUse) draw something on top of it.
 	}
 
 };

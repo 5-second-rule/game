@@ -1,15 +1,11 @@
 #include "Player.h"
 
-Player::Player() {
-	this->data.guid = -1;
-	this->data.tempSelection = 0;
-	this->data.selection = -1;
-}
+Player::Player() : Player(-1) {}
 
 Player::Player(unsigned int guid) {
 	this->data.guid = guid;
-	this->data.tempSelection = 0;
-	this->data.selection = -1;
+	this->data.selection = 0;
+	this->data.selected = false;
 }
 
 Player::~Player() {
@@ -29,24 +25,20 @@ void Player::die() {
 	this->data.deathCount++;
 }
 
-void Player::updateTempSelection(int tempSelection) {
-	this->data.tempSelection = tempSelection;
-}
-
-void Player::makeSelection(int selection) {
-	this->data.selection = selection;
+void Player::updateSelection(int tempSelection) {
+	this->data.selection = tempSelection;
 }
 
 int Player::getDeathCount() {
 	return this->data.deathCount;
 }
 
-int Player::getTempSelection() {
-	return this->data.tempSelection;
-}
-
 int Player::getSelection() {
 	return this->data.selection;
+}
+
+bool Player::isSelected() {
+	return this->data.selected;
 }
 
 unsigned int Player::getGuid() {
@@ -61,28 +53,27 @@ void Player::handleEvent(ActionEvent *evt) {
 		const SelectionEvent *selectionEvent = ActionEvent::cast<SelectionEvent>(evt);
 		if (selectionEvent == nullptr) return;
 
-		if (selectionEvent->selection.selectChar) {
-			this->data.selection = this->data.tempSelection;
-		}
+		switch (selectionEvent->selection.action) {
+		case SelectionEvent::Select:
+			this->data.selected = true;
+			break;
 
-		if (selectionEvent->selection.unselectChar) {
-			this->data.selection = -1;
-		}
+		case SelectionEvent::Deselect:
+			this->data.selected = false;
+			break;
 
-		if (selectionEvent->selection.toggleSelect) {
-			if (this->data.selection == -1) {
-				this->data.selection = this->data.tempSelection;
-			} else {
-				this->data.selection = -1;
-			}
-		}
-		if (this->data.selection == -1) {
-			if (selectionEvent->selection.selectionDirection < 0) {
-				this->data.tempSelection = (this->data.tempSelection + 3) % 4;
-			}
-			else if (selectionEvent->selection.selectionDirection > 0) {
-				this->data.tempSelection = (this->data.tempSelection + 1) % 4;
-			}
+		case SelectionEvent::Toggle:
+			this->data.selected = !this->data.selected;
+			break;
+
+		case SelectionEvent::Prev:
+			if(!this->isSelected())
+				this->data.selection = (this->data.selection - 1) % 4;
+			break;
+		case SelectionEvent::Next:
+			if (!this->isSelected())
+				this->data.selection = (this->data.selection + 1) % 4;
+			break;
 		}
 
 		break;

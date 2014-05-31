@@ -60,13 +60,13 @@ PlayerDelegate * GameState::addPlayer(unsigned int playerGuid) {
 	Player* player = new Player(playerGuid);
 	switch (this->getState()) {
 	case (Selection) :
-		player->updateTempSelection(numPlayers);
+		player->updateSelection(numPlayers);
 		break;
 	case (Game) :
 		for (int i = 0; i < 4; ++i) {
 			selection = i;
 			if (this->unusedChars[i]) {
-				player->makeSelection(selection);
+				player->updateSelection(selection);
 				this->unusedChars[selection] = false;
 				break;
 			}

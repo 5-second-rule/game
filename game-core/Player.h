@@ -11,8 +11,8 @@ private:
 	struct PlayerData {
 		unsigned int guid;
 		int deathCount;
-		int tempSelection;
 		int selection;
+		bool selected;
 		Handle movingObject;
 	};
 
@@ -32,11 +32,10 @@ public:
 	int getDeathCount();
 	
 	// selection
-	void updateTempSelection(int tempSelection);
-	void makeSelection(int selection);
+	void updateSelection(int tempSelection);
 	
-	int getTempSelection();
 	int getSelection();
+	bool isSelected();
 
 
 	// ISerializable methods
