@@ -70,17 +70,19 @@ void Player::handleEvent(ActionEvent *evt) {
 		}
 
 		if (selectionEvent->selection.toggleSelect) {
-			if (this->data.selection != -1) {
+			if (this->data.selection == -1) {
 				this->data.selection = this->data.tempSelection;
 			} else {
 				this->data.selection = -1;
 			}
 		}
-
-		if (selectionEvent->selection.selectionDirection < 0) {
-			this->data.tempSelection = (this->data.tempSelection + 3) % 4;
-		} else if (selectionEvent->selection.selectionDirection > 0) {
-			this->data.tempSelection = (this->data.tempSelection + 1) % 4;
+		if (this->data.selection == -1) {
+			if (selectionEvent->selection.selectionDirection < 0) {
+				this->data.tempSelection = (this->data.tempSelection + 3) % 4;
+			}
+			else if (selectionEvent->selection.selectionDirection > 0) {
+				this->data.tempSelection = (this->data.tempSelection + 1) % 4;
+			}
 		}
 
 		break;

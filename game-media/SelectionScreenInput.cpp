@@ -48,12 +48,14 @@ std::vector<Event *> SelectionScreenInput::inputTranslator(InputAdapter *inputAd
 	} else {
 		if (inputAdapter->getKeyState(Transmission::Input::Key::LEFT_ARROW) == down ||
 			inputAdapter->getKeyState(Transmission::Input::Key::A) == down) {
+			selection.toggleSelect = false;
 			selection.selectionDirection = -1;
 			inputEventVector.push_back(new SelectionEvent(this->renderingEngine->getLocalPlayerGuid(0), selection));
 		}
 
 		if (inputAdapter->getKeyState(Transmission::Input::Key::RIGHT_ARROW) == down ||
 			inputAdapter->getKeyState(Transmission::Input::Key::D) == down) {
+			selection.toggleSelect = false;
 			selection.selectionDirection = 1;
 			inputEventVector.push_back(new SelectionEvent(this->renderingEngine->getLocalPlayerGuid(0), selection));
 		}
@@ -61,6 +63,7 @@ std::vector<Event *> SelectionScreenInput::inputTranslator(InputAdapter *inputAd
 		if (inputAdapter->getKeyState(Transmission::Input::Key::SPACE) == down ||
 			inputAdapter->getKeyState(Transmission::Input::Key::ENTER) == down) {
 			selection.toggleSelect = true;
+			selection.selectionDirection = 0;
 			inputEventVector.push_back(new SelectionEvent(this->renderingEngine->getLocalPlayerGuid(0), selection));
 		}
 	}
