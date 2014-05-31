@@ -26,7 +26,7 @@ void RenderableSelectionScreen::render() {
 	//	}
 	//}
 
-	for (int i = 0; i < this->players.size(); ++i) {
+	for (size_t i = 0; i < this->players.size(); ++i) {
 		Common::Vector4 pos = Common::Vector4(this->objectData->playerCenters[i], 0, 0, 1);
 		int selection = this->players[i]->getTempSelection();
 		this->objectData->playerObjects[selection]->setPosition(pos);

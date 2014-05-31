@@ -2,6 +2,7 @@
 
 SelectionScreenInput::SelectionScreenInput() {
 	this->renderingEngine = nullptr;
+	this->alreadySent = false;
 }
 
 SelectionScreenInput::SelectionScreenInput(RenderingEngine *renderingEngine) {
@@ -11,9 +12,12 @@ SelectionScreenInput::SelectionScreenInput(RenderingEngine *renderingEngine) {
 SelectionScreenInput::~SelectionScreenInput() {}
 
 std::vector<Event *> SelectionScreenInput::inputTranslator(InputAdapter *inputAdapter) {
+	Transmission::Input::KeyState up = Transmission::Input::KeyState::STATE_UP;
 	Transmission::Input::KeyState down = Transmission::Input::KeyState::STATE_DOWN;
+
 	std::vector<Event *> inputEventVector;
 	SelectionEvent::SelectionType selection;
+
 	selection.guid = this->renderingEngine->getLocalPlayerGuid(0);
 
 	if (inputAdapter->isControllerConnected()) {
@@ -24,39 +28,62 @@ std::vector<Event *> SelectionScreenInput::inputTranslator(InputAdapter *inputAd
 		leftStickMagnitude = leftStickInfo.second;
 
 		stickDirection = leftStickMagnitude*leftStickInfo.first.x();
+
 		if (stickDirection != 0) {
 			selection.selectionDirection = stickDirection;
-			inputEventVector.emplace_back(new SelectionEvent(this->renderingEngine->getLocalPlayerGuid(0), selection));
+			inputEventVector.push_back(new SelectionEvent(this->renderingEngine->getLocalPlayerGuid(0), selection));
 		}
 
 		if (inputAdapter->getKeyState(Transmission::Input::Key::GAMEPAD_A) == down) {
 			selection.selectChar = true;
-			inputEventVector.emplace_back(new SelectionEvent(this->renderingEngine->getLocalPlayerGuid(0), selection));
+			inputEventVector.push_back(new SelectionEvent(this->renderingEngine->getLocalPlayerGuid(0), selection));
 		}
+
 
 		if (inputAdapter->getKeyState(Transmission::Input::Key::GAMEPAD_B) == down) {
 			selection.unselectChar = true;
-			inputEventVector.emplace_back(new SelectionEvent(this->renderingEngine->getLocalPlayerGuid(0), selection));
+			inputEventVector.push_back(new SelectionEvent(this->renderingEngine->getLocalPlayerGuid(0), selection));
 		}
+
 	} else {
 		if (inputAdapter->getKeyState(Transmission::Input::Key::LEFT_ARROW) == down ||
 			inputAdapter->getKeyState(Transmission::Input::Key::A) == down) {
 			selection.selectionDirection = -1;
-			inputEventVector.emplace_back(new SelectionEvent(this->renderingEngine->getLocalPlayerGuid(0), selection));
+			inputEventVector.push_back(new SelectionEvent(this->renderingEngine->getLocalPlayerGuid(0), selection));
 		}
 
 		if (inputAdapter->getKeyState(Transmission::Input::Key::RIGHT_ARROW) == down ||
 			inputAdapter->getKeyState(Transmission::Input::Key::D) == down) {
 			selection.selectionDirection = 1;
-			inputEventVector.emplace_back(new SelectionEvent(this->renderingEngine->getLocalPlayerGuid(0), selection));
+			inputEventVector.push_back(new SelectionEvent(this->renderingEngine->getLocalPlayerGuid(0), selection));
 		}
 
 		if (inputAdapter->getKeyState(Transmission::Input::Key::SPACE) == down ||
 			inputAdapter->getKeyState(Transmission::Input::Key::ENTER) == down) {
 			selection.toggleSelect = true;
-			inputEventVector.emplace_back(new SelectionEvent(this->renderingEngine->getLocalPlayerGuid(0), selection));
+			inputEventVector.push_back(new SelectionEvent(this->renderingEngine->getLocalPlayerGuid(0), selection));
 		}
 	}
 
+	// if an event has already been sent
+	if (alreadySent) {
+
+		// if no events were generated, all the keys have come up;
+		// we're safe to send new ones next time
+		if (inputEventVector.empty()) {
+			alreadySent = false;
+		} else {
+
+			// otherwise, we have to throw away all the invalid events
+			while (!inputEventVector.empty()) {
+				delete inputEventVector.back();
+				inputEventVector.pop_back();
+			}
+		}
+	
+	} else {
+		if (!inputEventVector.empty()) alreadySent = true;
+	}
 	return inputEventVector;
+
 }

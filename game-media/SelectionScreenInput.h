@@ -6,6 +6,7 @@
 class GAMEMEDIADLL SelectionScreenInput : public IRenderingEngineDelegate {
 private:
 	RenderingEngine *renderingEngine;
+	bool alreadySent;
 public:
 	SelectionScreenInput();
 	SelectionScreenInput(RenderingEngine *renderingEngine);
