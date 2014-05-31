@@ -31,7 +31,7 @@ protected:
 	Vector4 heading;
 	Vector4 sideLeft;
 	Vector4 forceUp;
-	Vector4 forceLeft;
+	Vector4 forceRight;
 
 	Vector4 position;
 	Vector4 velocity;
@@ -65,7 +65,7 @@ public:
 	Vector4 getUp();
 	Vector4 getSideLeft();
 	Vector4 getForceUp();
-	Vector4 getForceLeft();
+	Vector4 getForceRight();
 
 	void setPosition(const Vector4& position);
 

@@ -29,7 +29,7 @@ MovingObject::MovingObject(int objectType, Game* owner, bool follow, bool propul
 	this->heading = Vector(0.0f, 0.0f, 1.0f);
 	this->sideLeft = Vector(-1.0f, 0.0f, 0.0f);
 	this->forceUp = Vector(0.0f, 0.0f, 0.0f);
-	this->forceLeft = Vector(0.0f, 0.0f, 0.0f);
+	this->forceRight = Vector(0.0f, 0.0f, 0.0f);
 	this->velocity = Vector(0.0f, 0.0f, 0.0f);
 	this->force = Vector(0.0f, 0.0f, 0.0f);
 	this->mass = .1f;
@@ -73,8 +73,8 @@ Vector4 MovingObject::getForceUp() {
 	return this->forceUp;
 }
 
-Vector4 MovingObject::getForceLeft() {
-	return this->forceLeft;
+Vector4 MovingObject::getForceRight() {
+	return this->forceRight;
 }
 
 void MovingObject::applyForce(const Vector4& force){
@@ -143,7 +143,7 @@ bool MovingObject::handleEvent(Event *evt){
 			this->forceUp = this->up * (moveEvent->direction.y * UP_SCALE); //needs to be set with old up
 		}
 
-		this->forceLeft = this->sideLeft * (moveEvent->direction.x * LEFT_SCALE);
+		this->forceRight = this->sideLeft * (moveEvent->direction.x * LEFT_SCALE);
 
 		return true;
 		break;
@@ -179,7 +179,7 @@ void MovingObject::update(float dt){
 	
 	// propulsion in heading
 	Vector4 headingForce = Vector4::normalize(this->heading) * HEADING_FORCE * propulsion;
-	this->applyForce(trackForce + headingForce + this->forceUp + this->forceLeft);
+	this->applyForce(trackForce + headingForce + this->forceUp + this->forceRight);
 
 	if (this->followTrack) {
 		Vector4 trackForce = track->nodes[this->trackIndex].normal * TRACK_FORCE;
@@ -191,6 +191,8 @@ void MovingObject::update(float dt){
 		Vector4 headingForce = Vector4::normalize(this->heading) * HEADING_FORCE * propulsion;
 		this->applyForce(headingForce);
 	}
+
+	this->applyForce(this->forceUp + this->forceRight);
 
 	// reset propulsion
 	this->propulsion = 1.0f;
