@@ -11,7 +11,8 @@ public:
 		Deselect,
 		Toggle,
 		Next,
-		Prev
+		Prev,
+		Go
 	};
 
 	struct SelectionType {

@@ -69,6 +69,11 @@ std::vector<Event *> SelectionScreenInput::inputTranslator(InputAdapter *inputAd
 			selection.action = SelectionEvent::Toggle;
 			inputEventVector.push_back(new SelectionEvent(this->renderingEngine->getLocalPlayerGuid(0), selection));
 		}
+
+		if (inputAdapter->getKeyState(Transmission::Input::Key::G) == down) {
+			selection.action = SelectionEvent::Go;
+			inputEventVector.push_back(new SelectionEvent(this->renderingEngine->getLocalPlayerGuid(0), selection));
+		}
 	}
 
 	// if an event has already been sent

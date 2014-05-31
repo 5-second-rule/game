@@ -1,11 +1,14 @@
 #include "Player.h"
 
-Player::Player() : Player(-1) {}
+#include "GameState.h"
 
-Player::Player(unsigned int guid) {
+Player::Player(GameState* state) : Player(-1, state) {}
+
+Player::Player(unsigned int guid, GameState* state) {
 	this->data.guid = guid;
 	this->data.selection = 0;
 	this->data.selected = false;
+	this->gameState = state;
 }
 
 Player::~Player() {
@@ -74,6 +77,8 @@ void Player::handleEvent(ActionEvent *evt) {
 			if (!this->isSelected())
 				this->data.selection = (this->data.selection + 1) % 4;
 			break;
+		case SelectionEvent::Go:
+			this->gameState->setState(GameState::Game);
 		}
 
 		break;
