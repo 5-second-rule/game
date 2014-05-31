@@ -47,7 +47,6 @@ unsigned int Player::getGuid() {
 
 void Player::handleEvent(ActionEvent *evt) {
 
-
 	switch (ActionType(evt->getActionType())) {
 	case ActionType::SELECT: {
 		const SelectionEvent *selectionEvent = ActionEvent::cast<SelectionEvent>(evt);
@@ -68,7 +67,7 @@ void Player::handleEvent(ActionEvent *evt) {
 
 		case SelectionEvent::Prev:
 			if(!this->isSelected())
-				this->data.selection = (this->data.selection - 1) % 4;
+				this->data.selection = (this->data.selection + 3) % 4;
 			break;
 		case SelectionEvent::Next:
 			if (!this->isSelected())

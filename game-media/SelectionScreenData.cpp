@@ -9,16 +9,16 @@ SelectionScreenData::SelectionScreenData(RenderableMovingObject *(&playerObjects
 	float scale = (2.0f - 5 * MARGIN) / 8;
 	Transmission::Index rectangleIndices[6] = { 0, 1, 2, 3, 0, 2 };
 	char *otherModelNames[4] = {
+		"resources/select-name-ecoli-noarrows.dds",
+		"resources/select-name-chickenpox-noarrows.dds",
+		"resources/select-name-syphilis-noarrows.dds",
+		"resources/select-name-malaria-noarrows.dds"
+	};
+	char *myModelNames[4] = {
 		"resources/select-name-ecoli.dds",
 		"resources/select-name-chickenpox.dds",
 		"resources/select-name-syphilis.dds",
 		"resources/select-name-malaria.dds"
-	};
-	char *myModelNames[4] = {
-		"resources/select-my-ecoli.dds",
-		"resources/select-my-chickenpox.dds",
-		"resources/select-my-syphilis.dds",
-		"resources/select-my-malaria.dds"
 	};
 
 	// Create background for this screen
@@ -35,19 +35,22 @@ SelectionScreenData::SelectionScreenData(RenderableMovingObject *(&playerObjects
 	this->objectData.titleObject = new RenderableStaticObject(ObjectTypes::SelectionScreen, titleModel);
 
 	for (int i = 0; i < MAX_PLAYERS; ++i) {
-	//	// Create backgound for each player model and find its center
+		// Create backgound for each player model and find its center
 		this->objectData.playerCenters[i] = this->calculatePlayerBackgroundVertices(playerbackgroundVertices, i, MARGIN) * 5.5f;
-	//	this->otherPlayerBackgroundModels[i] = engine->create2DModelFromScratch(playerbackgroundVertices, 4, rectangleIndices, 6, "resources/select-rectangle.dds", textures, false);
-	//	this->objectData.otherPlayerBackgroundObjects[i] = new RenderableStaticObject(ObjectTypes::SelectionScreen, otherPlayerBackgroundModels[i]);
-	//	this->myPlayerBackgroundModels[i] = engine->create2DModelFromScratch(playerbackgroundVertices, 4, rectangleIndices, 6, "resources/select-my-rectangle.dds", textures, false);
-	//	this->objectData.myPlayerBackgroundObjects[i] = new RenderableStaticObject(ObjectTypes::SelectionScreen, myPlayerBackgroundModels[i]);
+		this->otherPlayerBackgroundModels[i] = engine->create2DModelFromScratch(playerbackgroundVertices, 4, rectangleIndices, 6, "resources/select-rectangle.dds", textures, false);
+		this->objectData.otherPlayerBackgroundObjects[i] = new RenderableStaticObject(ObjectTypes::SelectionScreen, otherPlayerBackgroundModels[i]);
+		this->myPlayerBackgroundModels[i] = engine->create2DModelFromScratch(playerbackgroundVertices, 4, rectangleIndices, 6, "resources/select-my-rectangle.dds", textures, false);
+		this->objectData.myPlayerBackgroundObjects[i] = new RenderableStaticObject(ObjectTypes::SelectionScreen, myPlayerBackgroundModels[i]);
 
-	//	// Create the name for each model
-	//	this->calculatePlayerNameVertices(playerNameVertices, i, MARGIN);
-	//	this->otherPlayerNameModels[i] = engine->create2DModelFromScratch(playerNameVertices, 4, rectangleIndices, 6, otherModelNames[i], textures, true);
-	//	this->objectData.otherPlayerNameObjects[i] = new RenderableStaticObject(i, otherPlayerNameModels[i]);
-	//	this->myPlayerNameModels[i] = engine->create2DModelFromScratch(playerNameVertices, 4, rectangleIndices, 6, myModelNames[i], textures, true);
-	//	this->objectData.otherPlayerNameObjects[i] = new RenderableStaticObject(i, myPlayerNameModels[i]);
+		// Create the name for each model
+		for (int j = 0; j < 4; ++j) {
+			int index = i * 4 + j;
+			this->calculatePlayerNameVertices(playerNameVertices, i, MARGIN);
+			this->otherPlayerNameModels[index] = engine->create2DModelFromScratch(playerNameVertices, 4, rectangleIndices, 6, otherModelNames[j], textures, true);
+			this->objectData.otherPlayerNameObjects[index] = new RenderableStaticObject(j, otherPlayerNameModels[index]);
+			this->myPlayerNameModels[index] = engine->create2DModelFromScratch(playerNameVertices, 4, rectangleIndices, 6, myModelNames[j], textures, true);
+			this->objectData.myPlayerNameObjects[index] = new RenderableStaticObject(j, myPlayerNameModels[index]);
+		}
 
 	//	// Store the model
 		this->objectData.playerObjects[i] = playerObjects[i];
@@ -59,7 +62,26 @@ SelectionScreenData::SelectionScreenData(RenderableMovingObject *(&playerObjects
 	this->objectData.playerObjects[ObjectTypes::Syphillis]->getMoveable()->setScale(scale*3.0f);
 }
 
-SelectionScreenData::~SelectionScreenData() {}
+SelectionScreenData::~SelectionScreenData() {
+	delete this->objectData.backgroundObject;
+	delete this->objectData.titleObject;
+	this->objectData.backgroundObject = nullptr;
+	this->objectData.titleObject = nullptr;
+	
+	for (int i = 0; i < 4; ++i) {
+		delete this->objectData.otherPlayerBackgroundObjects[i];
+		delete this->objectData.myPlayerBackgroundObjects[i];
+		this->objectData.otherPlayerBackgroundObjects[i] = nullptr;
+		this->objectData.myPlayerBackgroundObjects[i] = nullptr;
+	}
+	
+	for (int i = 0; i < 16; ++i) {
+		delete this->objectData.otherPlayerNameObjects[i];
+		delete this->objectData.myPlayerNameObjects[i];
+		this->objectData.otherPlayerNameObjects[i] = nullptr;
+		this->objectData.myPlayerNameObjects[i] = nullptr;
+	}
+}
 
 void SelectionScreenData::calculateTitleVertices(Transmission::Vertex *vertices, float winHeight, float winWidth) {
 	float scale;

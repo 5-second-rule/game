@@ -14,8 +14,8 @@ public:
 		RenderableStaticObject *titleObject;
 		RenderableStaticObject *otherPlayerBackgroundObjects[4];
 		RenderableStaticObject *myPlayerBackgroundObjects[4];
-		RenderableStaticObject *otherPlayerNameObjects[4];
-		RenderableStaticObject *myPlayerNameObjects[4];
+		RenderableStaticObject *otherPlayerNameObjects[16];
+		RenderableStaticObject *myPlayerNameObjects[16];
 		RenderableMovingObject *playerObjects[4];
 	};
 private:
@@ -25,8 +25,8 @@ private:
 	Transmission::Model *titleModel;
 	Transmission::Model *otherPlayerBackgroundModels[4];
 	Transmission::Model *myPlayerBackgroundModels[4];
-	Transmission::Model *otherPlayerNameModels[4];
-	Transmission::Model *myPlayerNameModels[4];
+	Transmission::Model *otherPlayerNameModels[16];
+	Transmission::Model *myPlayerNameModels[16];
 	Transmission::Model *playerModels[4];
 
 	Transmission::Vertex titleVertices[4];

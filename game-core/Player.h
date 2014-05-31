@@ -37,7 +37,6 @@ public:
 	int getSelection();
 	bool isSelected();
 
-
 	// ISerializable methods
 	virtual void reserveSize(IReserve& buffer) const;
 	virtual void fillBuffer(IFill& buffer) const;
