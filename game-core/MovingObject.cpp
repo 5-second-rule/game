@@ -21,6 +21,11 @@ MovingObject::MovingObject( int objectType, Game* owner )
 {
 	this->up = Vector(0.0f, 1.0f, 0.0f);
 	this->heading = Vector(0.0f, 0.0f, 1.0f);
+	this->sideLeft = Vector(-1.0f, 0.0f, 0.0f);
+	this->forceUp = Vector(0.0f, 0.0f, 0.0f);
+	this->forceLeft = Vector(0.0f, 0.0f, 0.0f);
+	this->velocity = Vector(0.0f, 0.0f, 0.0f);
+	this->force = Vector(0.0f, 0.0f, 0.0f);
 	this->mass = .1f;
 	this->propulsion = 1.0f;
 	this->friction = .2f;
@@ -43,6 +48,18 @@ Vector4 MovingObject::getUp() {
 	return this->up;
 }
 
+Vector4 MovingObject::getSideLeft() {
+	return this->sideLeft;
+}
+
+Vector4 MovingObject::getForceUp() {
+	return this->forceUp;
+}
+
+Vector4 MovingObject::getForceLeft() {
+	return this->forceLeft;
+}
+
 void MovingObject::applyForce(const Vector4& force){
 	this->force += force;
 }
@@ -61,24 +78,55 @@ bool MovingObject::handleEvent(Event *evt){
 	case ActionType::MOVE:
 	{
 		MoveEvent *moveEvent = ActionEvent::cast<MoveEvent>(actionEvt);
-		if (moveEvent == nullptr)
+		if (moveEvent == nullptr){
 			return false;
+		}
 
 		const float MOVE_FORCE = 10.0f;
 		const float ROT_SCALE = 0.08f;
 		const float BRAKE_SCALE = 0.5f;
 
-		this->up = Matrix4::rotate(this->heading, moveEvent->direction.w * ROT_SCALE) * this->up;
-
-		//rotate sideways
-		this->heading = Matrix4::rotate(this->up, -moveEvent->direction.x * ROT_SCALE) * this->heading;
-
-		//rotate up and down
-		Matrix4 rot = Matrix4::rotate(Vector4::cross(up, heading), -moveEvent->direction.y * ROT_SCALE);
-		this->heading = rot * heading;
-		this->up = rot * up;
+		const float UP_SCALE = 1.0f;
+		const float LEFT_SCALE = 1.0f;
 
 		this->propulsion = moveEvent->direction.z + 1.0f; // [-1,1] -> [0,2]
+
+		//Point in direction of track and update up
+		if (this->propulsion < 2) {
+			TrackPath *track = Game::getGlobalInstance()->getTrackPath();
+
+			this->heading = track->nodes[this->trackIndex].normal;
+			this->heading.normalize();
+			this->heading.set(3,0);
+
+			this->sideLeft = Vector4::cross(up, heading);
+			this->sideLeft.normalize();
+
+			this->up = Vector4::cross(heading, this->sideLeft);
+			this->up.normalize();
+			// finish updating in regards to track
+			this->forceUp = this->up * (moveEvent->direction.y * UP_SCALE);
+
+			// rotate around heading
+			this->up = Matrix4::rotate(this->heading, moveEvent->direction.w * ROT_SCALE) * this->up;
+
+			//rotate sideways
+			this->heading = Matrix4::rotate(this->up, -moveEvent->direction.x * ROT_SCALE) * this->heading;
+
+			//rotate up and down
+			Matrix4 rot = Matrix4::rotate(this->sideLeft, moveEvent->direction.y * ROT_SCALE);
+			this->heading = rot * heading;
+			this->up = rot * up;
+		}
+		else
+		{
+			this->sideLeft = Vector4::cross(up, heading); //doing so sideLeft is set at least once
+			this->sideLeft.normalize();
+
+			this->forceUp = this->up * (moveEvent->direction.y * UP_SCALE); //needs to be set with old up
+		}
+
+		this->forceLeft = this->sideLeft * (moveEvent->direction.x * LEFT_SCALE);
 
 		return true;
 		break;
@@ -113,7 +161,7 @@ void MovingObject::update(float dt){
 	
 	// propulsion in heading
 	Vector4 headingForce = Vector4::normalize(this->heading) * HEADING_FORCE * propulsion;
-	this->applyForce(trackForce + headingForce);
+	this->applyForce(trackForce + headingForce + this->forceUp + this->forceLeft);
 
 	// reset propulsion
 	this->propulsion = 1.0f;

@@ -39,9 +39,10 @@ std::vector<Event *>  RenderableGame::inputTranslator(InputAdapter *inputAdapter
 		// Analog Stick Examples -- normalized vector and magnitude
 		std::pair<Common::Vector4, float> leftStickInfo, rightStickInfo;
 		float leftStickMagnitude, rightStickMagnitude;
+		const float stickScale = 5.0;
 
 		leftStickInfo = inputAdapter->getAnalogStickPosition(Transmission::Input::Key::GAMEPAD_LEFT_STICK);
-		leftStickMagnitude = leftStickInfo.second;
+		leftStickMagnitude = leftStickInfo.second * stickScale;
 
 		rightStickInfo = inputAdapter->getAnalogStickPosition(Transmission::Input::Key::GAMEPAD_RIGHT_STICK);
 		rightStickMagnitude = rightStickInfo.second;
@@ -78,8 +79,7 @@ std::vector<Event *>  RenderableGame::inputTranslator(InputAdapter *inputAdapter
 		if (inputAdapter->getKeyState(Transmission::Input::Key::GAMEPAD_Y) == down) {
 			dir.y += 1;
 		}
-	}
-	else {
+	} else {
 		if (inputAdapter->getKeyState(Transmission::Input::Key::A) == down) {
 			dir.x -= 1;
 		}
@@ -114,9 +114,9 @@ std::vector<Event *>  RenderableGame::inputTranslator(InputAdapter *inputAdapter
 		}
 	}
 
-if (dir.x != 0 || dir.y != 0 || dir.z != 0) {
-		inputEventVector.emplace_back(new MoveEvent(this->getEngineInstance()->getLocalPlayerGuid(0), dir));
-	}
+	//if (dir.x != 0 || dir.y != 0 || dir.z != 0 || dir.w != 0) {
+	inputEventVector.emplace_back(new MoveEvent(this->getEngineInstance()->getLocalPlayerGuid(0), dir));
+	//}
 	return inputEventVector;
 }
 

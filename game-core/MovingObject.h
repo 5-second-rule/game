@@ -28,6 +28,9 @@ class GAMECOREDLL MovingObject : public BaseObject, public ICollidable
 protected:
 	Vector4 up;
 	Vector4 heading;
+	Vector4 sideLeft;
+	Vector4 forceUp;
+	Vector4 forceLeft;
 
 	Vector4 position;
 	Vector4 velocity;
@@ -53,6 +56,9 @@ public:
 	Vector4 getPosition();
 	int getTrackIndex();
 	Vector4 getUp();
+	Vector4 getSideLeft();
+	Vector4 getForceUp();
+	Vector4 getForceLeft();
 
 	void applyForce(const Vector4& force);
 
