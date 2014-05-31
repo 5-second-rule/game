@@ -19,6 +19,8 @@ void RenderingGameManager::ready(GameState *gameState) {
 			gameState->getPlayers()[i]
 		);
 	}
+
+	this->inputTranslator();
 }
 
 void RenderingGameManager::inputTranslator() {

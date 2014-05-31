@@ -39,7 +39,7 @@ SelectionScreenData::SelectionScreenData(RenderableMovingObject *(&playerObjects
 		this->objectData.playerCenters[i] = this->calculatePlayerBackgroundVertices(playerbackgroundVertices, i, MARGIN) * 5.5f;
 		this->otherPlayerBackgroundModels[i] = engine->create2DModelFromScratch(playerbackgroundVertices, 4, rectangleIndices, 6, "resources/select-rectangle.dds", textures, false);
 		this->objectData.otherPlayerBackgroundObjects[i] = new RenderableStaticObject(ObjectTypes::SelectionScreen, otherPlayerBackgroundModels[i]);
-		this->myPlayerBackgroundModels[i] = engine->create2DModelFromScratch(playerbackgroundVertices, 4, rectangleIndices, 6, "resources/select-my-rectangle.dds", textures, false);
+		this->myPlayerBackgroundModels[i] = engine->create2DModelFromScratch(playerbackgroundVertices, 4, rectangleIndices, 6, "resources/select-rectangle.dds", textures, false);
 		this->objectData.myPlayerBackgroundObjects[i] = new RenderableStaticObject(ObjectTypes::SelectionScreen, myPlayerBackgroundModels[i]);
 
 		// Create the name for each model
