@@ -142,7 +142,7 @@ void MovingObject::update(float dt){
 
 std::string MovingObject::toString() {
 	return	BaseObject::toString() +
-					"Up: " + this->up.toString() +
+					"\r\nUp: " + this->up.toString() +
 					"Heading: " + this->heading.toString() +
 					"Postion: " + this->position.toString() +
 					"Velocity: " + this->velocity.toString() +
