@@ -1,10 +1,10 @@
 # Build Projects in Order
 cd ../rendering-framework
-MSBuild.exe ./Framework.sln /m
+MSBuild.exe ./Framework.sln /t:rebuild /m
 cd ../engine
-MSbuild.exe ./engine.sln /m
+MSbuild.exe ./engine.sln /t:rebuild /m
 cd ../game
-MSBuild.exe ./Game.sln /m
+MSBuild.exe ./Game.sln /t:rebuild /m
 
 # Resources Prep 
 mkdir -Force ../game/Debug/resources
