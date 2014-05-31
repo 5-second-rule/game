@@ -6,6 +6,8 @@
 #include "engine-core/World.h"
 #include "TrackPath.h"
 
+#define theWorld (*Game::getGlobalInstance()->getEngineInstance()->getWorld())
+
 class GAMECOREDLL Game {
 private:
 	static Game *globalInstance;
@@ -28,6 +30,7 @@ public:
 
 	virtual void init();
 	void run();
+	void stop();
 	Engine * getEngineInstance();
 	TrackPath * getTrackPath();
 };

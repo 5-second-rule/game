@@ -4,10 +4,16 @@
 #include "RenderableMovingObject.h"
 #include "RenderableStaticObject.h"
 #include "RenderableSelectionScreen.h"
-
 #include "RenderableGame.h"
 
 static SelectionScreenData *selectionScreenData;
+
+#ifdef _DEBUG
+#ifndef DBG_NEW
+#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
+#define new DBG_NEW
+#endif
+#endif  // _DEBUG
 
 RenderableGameObjectCtorTable::RenderableGameObjectCtorTable() {}
 
@@ -186,20 +192,20 @@ void RenderableGameObjectCtorTable::initCtors() {
 	this->vertexShaderIndexes[ObjectTypes::ChickenPox] = engine->loadVertexShader( "resources/vertexRipple.cso" );
 	this->pixelShaderIndexes[ObjectTypes::ChickenPox] = engine->loadPixelShader( "resources/pixel.cso" );
 
-	this->modelIndexes[ObjectTypes::Syphillis] = engine->loadModel( "resources/pox.fbx" );
-	this->textureIndexes[ObjectTypes::Syphillis] = engine->loadTexture( "resources/pox_TXTR.dds" );
+	this->modelIndexes[ObjectTypes::Syphillis] = engine->loadModel( "resources/Pox.fbx" );
+	this->textureIndexes[ObjectTypes::Syphillis] = engine->loadTexture( "resources/pox4_TXTR.dds" );
 	this->vertexShaderIndexes[ObjectTypes::Syphillis] = engine->loadVertexShader( "resources/vertexSpring.cso" );
 	this->pixelShaderIndexes[ObjectTypes::Syphillis] = engine->loadPixelShader( "resources/pixel.cso" );
 
 	this->modelIndexes[ObjectTypes::Malaria] = engine->loadModel( "resources/malaria.fbx" );
-	this->textureIndexes[ObjectTypes::Malaria] = engine->loadTexture( "resources/malaria_TXTR.dds" );
+	this->textureIndexes[ObjectTypes::Malaria] = engine->loadTexture( "resources/malariazbrush_TXTR.dds" );
 	this->vertexShaderIndexes[ObjectTypes::Malaria] = engine->loadVertexShader( "resources/vertexWiggle.cso" );
 	this->pixelShaderIndexes[ObjectTypes::Malaria] = engine->loadPixelShader( "resources/pixel.cso" );
 
-	this->modelIndexes[ObjectTypes::WhiteBlood] = engine->loadModel( "resources/ecoli6_nomedia.fbx" );
+	this->modelIndexes[ObjectTypes::WhiteBlood] = engine->loadModel( "resources/ecoliii.fbx" );
 	this->textureIndexes[ObjectTypes::WhiteBlood] = engine->loadTexture( "resources/Wood.dds" );
 
-	this->modelIndexes[ObjectTypes::RedBlood] = engine->loadModel( "resources/ecoli6_nomedia.fbx" );
+	this->modelIndexes[ObjectTypes::RedBlood] = engine->loadModel( "resources/ecoliii.fbx" );
 	this->textureIndexes[ObjectTypes::RedBlood] = engine->loadTexture( "resources/Wood.dds" );
 
 	this->modelIndexes[ObjectTypes::Track] = engine->loadModel( "resources/track.trk", false );

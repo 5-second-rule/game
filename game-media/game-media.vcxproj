@@ -56,6 +56,9 @@
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>
     </Bscmake>
+    <PostBuildEvent>
+      <Command>xcopy /y "$(ProjectDir)resources\*" "$(SolutionDir)Debug\resources\"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -100,6 +103,21 @@
     <ClCompile Include="SignallingGameState.cpp" />
     <ClCompile Include="SoundCtorTable.cpp" />
     <ClCompile Include="TrackingCameraHandler.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\ecoliii.fbx" />
+    <None Include="resources\herpes2.fbx" />
+    <None Include="resources\malaria.fbx" />
+    <None Include="resources\Pox.fbx" />
+    <None Include="resources\RedBloodCell.fbx" />
+    <None Include="resources\WhiteBloodCell.fbx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\ecolizzz_TXTR.dds" />
+    <Image Include="resources\herpes_3_TXTR.dds" />
+    <Image Include="resources\malariazbrush_TXTR.dds" />
+    <Image Include="resources\pox4_TXTR.dds" />
+    <Image Include="resources\whiteBloodCell2lowRes_TXTR.dds" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

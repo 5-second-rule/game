@@ -96,4 +96,41 @@
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\ecoliii.fbx">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\herpes2.fbx">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\malaria.fbx">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\Pox.fbx">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\RedBloodCell.fbx">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\WhiteBloodCell.fbx">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\ecolizzz_TXTR.dds">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\herpes_3_TXTR.dds">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\malariazbrush_TXTR.dds">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\pox4_TXTR.dds">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\whiteBloodCell2lowRes_TXTR.dds">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
 </Project>

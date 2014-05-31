@@ -6,11 +6,17 @@
 #include "TrackingCameraHandler.h"
 #include "SoundCtorTable.h"
 
-RenderableGame::RenderableGame(void *appHandle) {
+#ifdef _DEBUG
+#ifndef DBG_NEW
+#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
+#define new DBG_NEW
+#endif
+#endif  // _DEBUG
+
+RenderableGame::RenderableGame(void *appHandle)
+{
 	this->appHandle = appHandle;
 }
-
-RenderableGame::~RenderableGame() {}
 
 void RenderableGame::init() {
 	Game::init();

@@ -8,6 +8,6 @@ class RenderableStaticObject :
 {
 public:
 	RenderableStaticObject(int type, Transmission::Model* m);
-	~RenderableStaticObject();
+	virtual ~RenderableStaticObject();
 };
 

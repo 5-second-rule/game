@@ -14,7 +14,6 @@ protected:
 
 public:
 	ServerGame(float frameTime);
-	~ServerGame();
 
 	virtual void init();
 
