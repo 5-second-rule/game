@@ -74,6 +74,7 @@
   <ItemGroup>
     <ClInclude Include="game-media.h" />
     <ClInclude Include="GameplayInput.h" />
+    <ClInclude Include="INotifyReady.h" />
     <ClInclude Include="RenderableGame.h" />
     <ClInclude Include="RenderableGameObjectCtorTable.h" />
     <ClInclude Include="SelectionScreenInput.h" />
@@ -82,6 +83,7 @@
     <ClInclude Include="RenderableStaticObject.h" />
     <ClInclude Include="RenderingGameManager.h" />
     <ClInclude Include="SelectionScreenData.h" />
+    <ClInclude Include="SignallingGameState.h" />
     <ClInclude Include="SoundCtorTable.h" />
     <ClInclude Include="TrackingCameraHandler.h" />
   </ItemGroup>
@@ -95,6 +97,7 @@
     <ClCompile Include="RenderableStaticObject.cpp" />
     <ClCompile Include="RenderingGameManager.cpp" />
     <ClCompile Include="SelectionScreenData.cpp" />
+    <ClCompile Include="SignallingGameState.cpp" />
     <ClCompile Include="SoundCtorTable.cpp" />
     <ClCompile Include="TrackingCameraHandler.cpp" />
   </ItemGroup>
