@@ -74,6 +74,7 @@
     </ClInclude>
     <ClInclude Include="Powerup.h">
       <Filter>Header Files</Filter>
+	</ClInclude>
     <ClInclude Include="AIPath.h">
       <Filter>Header Files\AI</Filter>
     </ClInclude>
