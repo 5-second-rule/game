@@ -65,7 +65,7 @@ bool MovingObject::handleEvent(Event *evt){
 			return false;
 
 		const float MOVE_FORCE = 10.0f;
-		const float ROT_SCALE = 0.04f;
+		const float ROT_SCALE = 0.08f;
 		const float BRAKE_SCALE = 0.5f;
 
 		this->up = Matrix4::rotate(this->heading, moveEvent->direction.w * ROT_SCALE) * this->up;
