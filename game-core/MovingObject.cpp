@@ -8,6 +8,8 @@
 
 #include "Game.h"
 
+#include "CollisionMetadata.h"
+
 #define MAX_SPEED 75
 #define MAX_FORCE 100
 
@@ -115,24 +117,6 @@ void MovingObject::update(float dt){
 
 	// reset propulsion
 	this->propulsion = 1.0f;
-
-	// TODO move to player object
-	int wallOfDeathLocation = Game::getGlobalInstance()->getWallOfDeath()->getTrackIndex();
-	int space = track->nodes.size();
-	int wallOfDeathTail = (wallOfDeathLocation + (space / 2)) % space;
-	int comparativeIndex = this->trackIndex;
-
-	bool projectForward = wallOfDeathTail > wallOfDeathLocation;
-	if (projectForward) {
-		comparativeIndex += comparativeIndex > wallOfDeathTail ? 0 : space;
-		wallOfDeathLocation += space;
-	}
-
-	if (comparativeIndex < wallOfDeathLocation && comparativeIndex > wallOfDeathTail) {
-		cout << "you died" << endl;
-	} else {
-		cout << "you're at : " << this->trackIndex << endl;
-	}
 }
 
 void MovingObject::reserveSize(IReserve& buffer) const {
@@ -214,7 +198,12 @@ bool MovingObject::collidesWith(const ICollidable* target) const {
 	else return false;
 }
 
-void MovingObject::handleCollision(std::shared_ptr<const Bounds> bounds, float dt) {
+void MovingObject::handleCollision(std::shared_ptr<const Bounds> bounds, float dt, int metadata) {
+	if (metadata == CollisionMetadata::POWERUP) {
+		// Ignore power ups for collision bounce
+		return;
+	}
+
 	// play sound for collision, this will probably play twice and needs to be handled :(
 	owner->getEngineInstance()->sendEvent( new SoundEvent( static_cast<int>(Sounds::COLLIDE), false, false ) );
 

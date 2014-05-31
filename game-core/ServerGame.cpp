@@ -2,6 +2,8 @@
 #include "ObjectTypes.h"
 #include "Sounds.h"
 
+#include "Powerup.h"
+
 #include "engine-core/ServerEngine.h"
 
 ServerGame::ServerGame(float frameTime) {
@@ -48,4 +50,9 @@ void ServerGame::init() {
 	this->getEngineInstance()->getWorld()->insert(this->wallOfDeath);
 
 	this->wallOfDeath->reset();
+
+	Powerup * powerup = static_cast<Powerup*>(this->objectCtors->invoke(ObjectTypes::Adrenaline));
+	powerup->place(500);
+	this->getEngineInstance()->getWorld()->allocateHandle(powerup, HandleType::GLOBAL);
+	this->getEngineInstance()->getWorld()->insert(powerup);
 }

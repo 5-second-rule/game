@@ -74,12 +74,15 @@
   <ItemGroup>
     <ClInclude Include="ActionEventCtorTable.h" />
     <ClInclude Include="ActionType.h" />
+    <ClInclude Include="CollisionMetadata.h" />
     <ClInclude Include="game-core.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObjectCtorTable.h" />
     <ClInclude Include="MoveEvent.h" />
     <ClInclude Include="MovingObject.h" />
     <ClInclude Include="ObjectTypes.h" />
+    <ClInclude Include="PlayerMovingObject.h" />
+    <ClInclude Include="Powerup.h" />
     <ClInclude Include="ServerGame.h" />
     <ClInclude Include="ShootEvent.h" />
     <ClInclude Include="Sounds.h" />
@@ -94,6 +97,8 @@
     <ClCompile Include="GameObjectCtorTable.cpp" />
     <ClCompile Include="MoveEvent.cpp" />
     <ClCompile Include="MovingObject.cpp" />
+    <ClCompile Include="PlayerMovingObject.cpp" />
+    <ClCompile Include="Powerup.cpp" />
     <ClCompile Include="ServerGame.cpp" />
     <ClCompile Include="ShootEvent.cpp" />
     <ClCompile Include="StaticObject.cpp" />

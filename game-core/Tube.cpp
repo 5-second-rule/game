@@ -27,7 +27,7 @@ bool Tube::collidesWith(const ICollidable* c) const {
 	else return false;
 }
 
-void Tube::handleCollision(std::shared_ptr<const Bounds>, float dt) {}
+void Tube::handleCollision(std::shared_ptr<const Bounds>, float dt, int metadata) {}
 
 std::shared_ptr<const Bounds> Tube::getBounds() const {
 	return shared_ptr<const Bounds>(new Bounds());

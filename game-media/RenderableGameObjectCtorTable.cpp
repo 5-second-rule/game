@@ -4,6 +4,7 @@
 #include "RenderableMovingObject.h"
 #include "RenderableStaticObject.h"
 #include "RenderableWallOfDeath.h"
+#include "RenderablePowerup.h"
 
 #include "RenderableGame.h"
 
@@ -113,6 +114,19 @@ static BaseObject * makeRenderableTrack( ConstructorTable<BaseObject> *thisObj )
 		);
 }
 
+static BaseObject * makeRenderableAdrenaline(ConstructorTable<BaseObject> *thisObj) {
+	RenderableGameObjectCtorTable *table = (RenderableGameObjectCtorTable *)thisObj;
+
+	return new RenderablePowerup(
+		ObjectTypes::Adrenaline,
+		RenderableGame::getGlobalInstance()
+		->getRenderingEngineInstance()
+		->createModelFromIndex(
+		table->modelIndexes[ObjectTypes::Adrenaline],
+		table->textureIndexes[ObjectTypes::Adrenaline])
+		);
+}
+
 static BaseObject * makeRenderableWallOfDeath(ConstructorTable<BaseObject> *thisObj) {
 	RenderableGameObjectCtorTable *table = (RenderableGameObjectCtorTable *)thisObj;
 
@@ -121,7 +135,9 @@ static BaseObject * makeRenderableWallOfDeath(ConstructorTable<BaseObject> *this
 		->getRenderingEngineInstance()
 		->createModelFromIndex(
 		table->modelIndexes[ObjectTypes::Wwod],
-		table->textureIndexes[ObjectTypes::Wwod])
+		table->textureIndexes[ObjectTypes::Wwod],
+		table->vertexShaderIndexes[ObjectTypes::Wwod],
+		table->pixelShaderIndexes[ObjectTypes::Wwod])
 		);
 }
 
@@ -150,8 +166,8 @@ void RenderableGameObjectCtorTable::initCtors() {
 	this->vertexShaderIndexes[ObjectTypes::Malaria] = engine->loadVertexShader( "resources/vertexWiggle.cso" );
 	this->pixelShaderIndexes[ObjectTypes::Malaria] = engine->loadPixelShader( "resources/pixel.cso" );
 
-	this->modelIndexes[ObjectTypes::WhiteBlood] = engine->loadModel( "resources/ecoli6_nomedia.fbx" );
-	this->textureIndexes[ObjectTypes::WhiteBlood] = engine->loadTexture( "resources/Wood.dds" );
+	this->modelIndexes[ObjectTypes::WhiteBlood] = engine->loadModel( "resources/WhiteBloodCell.fbx" );
+	this->textureIndexes[ObjectTypes::WhiteBlood] = engine->loadTexture( "resources/whiteBloodCell2lowRes_TXTR.dds" );
 
 	this->modelIndexes[ObjectTypes::RedBlood] = engine->loadModel( "resources/ecoli6_nomedia.fbx" );
 	this->textureIndexes[ObjectTypes::RedBlood] = engine->loadTexture( "resources/Wood.dds" );
@@ -162,15 +178,15 @@ void RenderableGameObjectCtorTable::initCtors() {
 	this->vertexShaderIndexes[ObjectTypes::Track] = engine->loadVertexShader( "resources/vertexTrack.cso" );
 	this->pixelShaderIndexes[ObjectTypes::Track] = engine->loadPixelShader( "resources/pixelBump.cso" );
 
-	this->modelIndexes[ObjectTypes::Wwod] = this->modelIndexes[ObjectTypes::Malaria];
-	this->textureIndexes[ObjectTypes::Wwod] = this->textureIndexes[ObjectTypes::Malaria];
+	this->modelIndexes[ObjectTypes::Wwod] = this->modelIndexes[ObjectTypes::WhiteBlood];
+	this->textureIndexes[ObjectTypes::Wwod] = this->textureIndexes[ObjectTypes::WhiteBlood];
+	this->vertexShaderIndexes[ObjectTypes::Wwod] = engine->loadVertexShader("resources/vertexRipple.cso");
+	this->pixelShaderIndexes[ObjectTypes::Wwod] = engine->loadPixelShader("resources/pixel.cso");
 
-
-	this->modelIndexes[ObjectTypes::Wwod] = this->modelIndexes[ObjectTypes::Malaria];
-	this->textureIndexes[ObjectTypes::Wwod] = this->textureIndexes[ObjectTypes::Malaria];
+	this->modelIndexes[ObjectTypes::Adrenaline] = engine->loadModel("resources/adrenaline.obj");
+	this->textureIndexes[ObjectTypes::Adrenaline] = engine->loadTexture("resources/Wood.dds");
 
 	this->setConstructor(ObjectTypes::Ecoli, makeRenderableEcoli);
-
 	this->setConstructor( ObjectTypes::ChickenPox, makeRenderableChickenPox );
 	this->setConstructor( ObjectTypes::Syphillis, makeRenderableSyphillis );
 	this->setConstructor( ObjectTypes::Malaria, makeRenderableMalaria );
@@ -179,4 +195,5 @@ void RenderableGameObjectCtorTable::initCtors() {
 
 	this->setConstructor( ObjectTypes::Track, makeRenderableTrack );
 	this->setConstructor( ObjectTypes::Wwod, makeRenderableWallOfDeath );
+	this->setConstructor(ObjectTypes::Adrenaline, makeRenderableAdrenaline);
 }

@@ -1,29 +1,31 @@
 #include "GameObjectCtorTable.h"
 
 #include "MovingObject.h"
+#include "PlayerMovingObject.h"
 #include "ObjectTypes.h"
 #include "StaticObject.h"
 #include "Tube.h"
 #include "WallOfDeath.h"
+#include "Powerup.h"
 
 GameObjectCtorTable::GameObjectCtorTable() : ConstructorTable<BaseObject>( OBJECT_TYPE_COUNT ) {}
 
 GameObjectCtorTable::~GameObjectCtorTable() {}
 
 static BaseObject * makeEcoli(ConstructorTable<BaseObject> *thisObj) {
-	return new MovingObject(ObjectTypes::Ecoli, Game::getGlobalInstance());
+	return new PlayerMovingObject(ObjectTypes::Ecoli, Game::getGlobalInstance());
 }
 
 static BaseObject * makeChickenPox(ConstructorTable<BaseObject> *thisObj) {
-	return new MovingObject( ObjectTypes::ChickenPox, Game::getGlobalInstance() );
+	return new PlayerMovingObject(ObjectTypes::ChickenPox, Game::getGlobalInstance());
 }
 
 static BaseObject * makeSyphillis(ConstructorTable<BaseObject> *thisObj) {
-	return new MovingObject( ObjectTypes::Syphillis, Game::getGlobalInstance() );
+	return new PlayerMovingObject(ObjectTypes::Syphillis, Game::getGlobalInstance());
 }
 
 static BaseObject * makeMalaria(ConstructorTable<BaseObject> *thisObj) {
-	return new MovingObject( ObjectTypes::Malaria, Game::getGlobalInstance() );
+	return new PlayerMovingObject(ObjectTypes::Malaria, Game::getGlobalInstance());
 }
 
 static BaseObject * makeWhiteBlood(ConstructorTable<BaseObject> *thisObj) {
@@ -42,6 +44,10 @@ static BaseObject * makeWallOfDeath(ConstructorTable<BaseObject> *thisObj) {
 	return new WallOfDeath();
 }
 
+static BaseObject * makeAdrenaline(ConstructorTable<BaseObject> *thisObj) {
+	return new Powerup(ObjectTypes::Adrenaline);
+}
+
 void GameObjectCtorTable::initCtors() {
 	this->setConstructor( ObjectTypes::Ecoli, makeEcoli );
 	this->setConstructor( ObjectTypes::ChickenPox, makeChickenPox );
@@ -51,4 +57,5 @@ void GameObjectCtorTable::initCtors() {
 	this->setConstructor( ObjectTypes::RedBlood, makeRedBlood );
 	this->setConstructor( ObjectTypes::Track, makeTrack );
 	this->setConstructor( ObjectTypes::Wwod, makeWallOfDeath );
+	this->setConstructor(ObjectTypes::Adrenaline, makeAdrenaline);
 }

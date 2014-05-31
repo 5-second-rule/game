@@ -20,7 +20,9 @@ cp ../rendering-framework/SampleApp/*.dds ../engine/SampleApp/
 cp ../rendering-framework/SampleApp/*.obj ../engine/SampleApp/
 cp ../rendering-framework/SampleApp/*.trk ../engine/SampleApp/
 
-cp ../rendering-framework/SampleApp/*.fbx ../game/Debug/resources/
-cp ../rendering-framework/SampleApp/*.dds ../game/Debug/resources/
-cp ../rendering-framework/SampleApp/*.obj ../game/Debug/resources/
-cp ../rendering-framework/SampleApp/*.trk ../game/Debug/resources/
+cp ../rendering-framework/SampleApp/*.fbx ../game/resources/
+cp ../rendering-framework/SampleApp/*.dds ../game/resources/
+cp ../rendering-framework/SampleApp/*.obj ../game/resources/
+cp ../rendering-framework/SampleApp/*.trk ../game/resources/
+
+cp ../game/resources/* ../game/Debug/resources/

@@ -7,7 +7,7 @@
 class GAMECOREDLL GameObjectCtorTable : public ConstructorTable<BaseObject>
 {
 public:
-	static const int OBJECT_TYPE_COUNT = 10;
+	static const int OBJECT_TYPE_COUNT = 20;
 
 	GameObjectCtorTable();
 	~GameObjectCtorTable();

@@ -12,6 +12,7 @@ enum GAMECOREDLL ObjectTypes
 	MagicSchoolBus,
 	Track,
 	Wwod,
+	Adrenaline,
 };
 
 enum class GAMECOREDLL CollisionPriorities {
