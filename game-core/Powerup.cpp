@@ -15,6 +15,7 @@
 Powerup::Powerup(int objectType) : StaticObject(objectType) {
 	this->trackIndex = 0;
 	this->rotationDegrees = rand() % 360;
+	this->timeToLiveAgain = 0;
 }
 
 Powerup::~Powerup() {
@@ -29,6 +30,10 @@ int Powerup::getTrackIndex() {
 }
 
 void Powerup::update(float dt) {
+	if (this->timeToLiveAgain > 0) {
+		this->timeToLiveAgain -= dt;
+	}
+
 	this->rotationDegrees = fmod(this->rotationDegrees + dt, 360);
 	this->rotation = Vector4(0, this->rotationDegrees, 0);
 }
@@ -81,6 +86,10 @@ Vector4 Powerup::getGroupingParameter() const {
 }
 
 bool Powerup::collidesWith(const ICollidable* target) const {
+	if (this->timeToLiveAgain > 0) {
+		return false;
+	}
+
 	std::shared_ptr<const Bounds> bounds = target->getBounds();
 
 	if (bounds->type == BoundsType::Sphere) {
@@ -95,7 +104,7 @@ bool Powerup::collidesWith(const ICollidable* target) const {
 
 void Powerup::handleCollision(std::shared_ptr<const Bounds> bounds, float dt, int metadata) {
 	if (metadata == CollisionMetadata::PLAYER) {
-		// Ignore power ups for collision bounce
+		this->timeToLiveAgain = 100;
 		return;
 	}
 }

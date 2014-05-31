@@ -22,6 +22,7 @@ protected:
 	Vector4 rotation;
 	int trackIndex;
 	float rotationDegrees;
+	float timeToLiveAgain;
 
 public:
 	Powerup(int objectType);
