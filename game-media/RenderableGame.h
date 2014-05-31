@@ -27,5 +27,6 @@ public:
 
 	virtual void init();
 	RenderingGameManager *getGameManager();
+
 };
 

@@ -1,5 +1,7 @@
 #include "RenderingGameManager.h"
 
+#include "RenderableGame.h"
+
 RenderingGameManager::RenderingGameManager(RenderingEngine *engine) {
 	this->engine = engine;
 	this->selectionInput = SelectionScreenInput(this->engine);
@@ -11,6 +13,12 @@ RenderingGameManager::~RenderingGameManager() {}
 
 void RenderingGameManager::ready(GameState *gameState) {
 	this->gameState = gameState;
+	for (size_t i = 0; i < gameState->getPlayers().size(); ++i) {
+		this->engine->setPlayerHandler(
+			gameState->getPlayers()[i]->getGuid(),
+			gameState->getPlayers()[i]
+		);
+	}
 }
 
 void RenderingGameManager::inputTranslator() {
