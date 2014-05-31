@@ -136,6 +136,16 @@ void MovingObject::update(float dt){
 	this->propulsion = 1.0f;
 }
 
+std::string MovingObject::toString() {
+	return	BaseObject::toString() +
+					"Up: " + this->up.toString() +
+					"Heading: " + this->heading.toString() +
+					"Postion: " + this->position.toString() +
+					"Velocity: " + this->velocity.toString() +
+					"Force: " + this->force.toString() + 
+					std::string( "\r\nEnd Object\r\n" );
+}
+
 void MovingObject::reserveSize(IReserve& buffer) const {
 	BaseObject::reserveSize(buffer);
 	buffer.reserve(sizeof(MovingObjectData));

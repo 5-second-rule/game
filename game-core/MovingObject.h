@@ -68,6 +68,8 @@ public:
 	virtual void update(float dt);
 	virtual bool handleEvent(Event* evt);
 
+	virtual std::string toString();
+
 	// ISerializable Methods
 	virtual void reserveSize(IReserve&) const;
 	virtual void fillBuffer(IFill&) const;
