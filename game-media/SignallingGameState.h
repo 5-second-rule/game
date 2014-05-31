@@ -11,6 +11,6 @@ private:
 public:
 	SignallingGameState(INotifyReady<GameState> *notifier);
 	~SignallingGameState();
-	virtual bool handleEvent(Event *evt);
+	virtual void setState(State state);
 	virtual void deserialize(BufferReader& buffer);
 };

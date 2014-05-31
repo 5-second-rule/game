@@ -113,8 +113,10 @@ void Player::handleEvent(ActionEvent *evt) {
 }
 
 Handle Player::cameraTarget() {
-	//return this->movableObject->getHandle();
-	return Handle();
+	if (this->gameState->getState() == GameState::Game)
+		return this->data.movingObject;
+	else
+		return Handle();
 }
 
 void Player::reserveSize(IReserve& buffer) const {
