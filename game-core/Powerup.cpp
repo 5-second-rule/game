@@ -84,7 +84,6 @@ bool Powerup::collidesWith(const ICollidable* target) const {
 	std::shared_ptr<const Bounds> bounds = target->getBounds();
 
 	if (bounds->type == BoundsType::Sphere) {
-		std::cout << "Powerup Check" << std::endl;
 		std::shared_ptr<const BoundingSphere> bs = std::static_pointer_cast<const BoundingSphere>(bounds);
 		std::shared_ptr<const BoundingSphere> me = std::static_pointer_cast<const BoundingSphere>(this->getBounds());
 
@@ -95,7 +94,7 @@ bool Powerup::collidesWith(const ICollidable* target) const {
 }
 
 void Powerup::handleCollision(std::shared_ptr<const Bounds> bounds, float dt, int metadata) {
-	if (metadata == CollisionMetadata::POWERUP) {
+	if (metadata == CollisionMetadata::PLAYER) {
 		// Ignore power ups for collision bounce
 		return;
 	}
@@ -115,4 +114,8 @@ std::shared_ptr<const Bounds> Powerup::getBounds() const {
 
 unsigned int Powerup::getPriority() const {
 	return static_cast<unsigned int>(CollisionPriorities::Object);
+}
+
+int Powerup::getCollisionMetadata() const {
+	return CollisionMetadata::POWERUP;
 }

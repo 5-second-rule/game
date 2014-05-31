@@ -34,7 +34,7 @@ void WallOfDeath::update(float dt){
 	
 	TrackPath *track = Game::getGlobalInstance()->getTrackPath();
 	this->trackIndex = (this->trackIndex + this->defaultVelocity) % track->nodes.size();
-	cout << "wall of death is at : " << this->trackIndex << endl;
+	//cout << "wall of death is at : " << this->trackIndex << endl;
 }
 
 void WallOfDeath::reserveSize(IReserve& buffer) const {

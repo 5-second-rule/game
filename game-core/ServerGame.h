@@ -17,6 +17,8 @@ public:
 
 	virtual void init();
 
+	void initPowerups();
+
 	void stop();
 };
 

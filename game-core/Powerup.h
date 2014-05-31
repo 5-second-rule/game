@@ -46,5 +46,6 @@ public:
 	virtual void handleCollision(std::shared_ptr<const Bounds>, float dt, int metadata);
 	std::shared_ptr<const Bounds> getBounds() const;
 	unsigned int getPriority() const;
+	virtual int getCollisionMetadata() const;
 };
 

@@ -51,8 +51,17 @@ void ServerGame::init() {
 
 	this->wallOfDeath->reset();
 
-	Powerup * powerup = static_cast<Powerup*>(this->objectCtors->invoke(ObjectTypes::Adrenaline));
-	powerup->place(500);
-	this->getEngineInstance()->getWorld()->allocateHandle(powerup, HandleType::GLOBAL);
-	this->getEngineInstance()->getWorld()->insert(powerup);
+	this->initPowerups();
+}
+
+void ServerGame::initPowerups() {
+	int numberOfPowerups = 10;
+	int range = this->getTrackPath()->nodes.size();
+	for (int i = 0; i < numberOfPowerups; i++) {
+		Powerup * powerup = static_cast<Powerup*>(this->objectCtors->invoke(ObjectTypes::Adrenaline));
+		powerup->place(i * (range / numberOfPowerups));
+
+		this->getEngineInstance()->getWorld()->allocateHandle(powerup, HandleType::GLOBAL);
+		this->getEngineInstance()->getWorld()->insert(powerup);
+	}
 }
