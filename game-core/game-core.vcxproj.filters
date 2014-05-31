@@ -87,6 +87,9 @@
     <ClInclude Include="Sounds.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="AutonomousObjectManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MovingObject.cpp">
@@ -121,6 +124,9 @@
     </ClCompile>
     <ClCompile Include="SteeringBehavior.cpp">
       <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="AutonomousObjectManager.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

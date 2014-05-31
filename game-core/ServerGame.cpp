@@ -32,4 +32,7 @@ void ServerGame::init() {
 	IHasHandle *track = this->invoke(ObjectTypes::Track);
 	this->getEngineInstance()->getWorld()->allocateHandle(track, HandleType::GLOBAL);
 	this->getEngineInstance()->getWorld()->insert(track);
+	IHasHandle *AIManager = this->invoke(ObjectTypes::AIManager);
+	this->getEngineInstance()->getWorld()->allocateHandle(AIManager, HandleType::LOCAL);
+	this->getEngineInstance()->getWorld()->insert(AIManager);
 }

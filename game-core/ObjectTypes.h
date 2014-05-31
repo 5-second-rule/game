@@ -11,6 +11,7 @@ enum GAMECOREDLL ObjectTypes
 	RedBlood,
 	MagicSchoolBus,
 	Cmd,
+	AIManager,
 	Track
 };
 

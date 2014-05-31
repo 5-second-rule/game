@@ -41,6 +41,7 @@ protected:
 
 	float max_speed;
 	float max_force;
+	float fluid_force;
 	float drag_coefficient;
 public:
 	MovingObject(int objectType, Game* owner);
@@ -60,6 +61,7 @@ public:
 	bool setFlag(std::string, bool value);
 	void setPos(float x, float y, float z);
 	void setPos(Common::Vector4 v);
+	void setFluidForce(float f);
 
 	// Get Methods
 	Common::Vector4 getPosition();
@@ -74,7 +76,7 @@ public:
 
 	void applyForce(const Vector4& force);
 
-	static float forceByDist(float dist);
+	static float forceByDist(float dist, float maximum);
 
 	// ISerializable Methods
 	virtual void deserialize(BufferReader& reader);

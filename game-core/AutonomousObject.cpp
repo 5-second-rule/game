@@ -2,12 +2,14 @@
 
 #include <iostream>
 
-AutonomousObject::AutonomousObject(int objectType, Game *owner) : MovingObject(objectType, owner)
+AutonomousObject::AutonomousObject(ObjectTypes objectType) : AutonomousObject(objectType, Game::getGlobalInstance()) {}
+
+AutonomousObject::AutonomousObject(ObjectTypes objectType, Game *owner) : MovingObject(objectType, owner)
 {
 	steering_behavior = new SteeringBehavior(this);
 	path = Path::instance();
-	setCurrentWayPoint(path->begin());
-	path->loopOn();
+	m_getWorld()->allocateHandle(this, HandleType::GLOBAL);
+	m_getWorld()->insert(this);
 	init();
 }
 
@@ -66,6 +68,10 @@ void AutonomousObject::setOffSteeringBehavior(BehaviorType behavior){
 		steering_behavior->seekOff();
 	else if (behavior == BehaviorType::wander)
 		steering_behavior->wanderOff();
+}
+
+void AutonomousObject::setOffsetPursuit(Handle &p_leader, Vector4 &p_offset){
+	this->steering_behavior->offsetPursuitOn(p_leader, p_offset);
 }
 
 void AutonomousObject::setTag(bool tag){

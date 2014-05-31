@@ -46,7 +46,7 @@ private:
 	Common::Vector4 wander_target;
 
 	// Offset pursuit attributes
-	Common::Vector4 offset;
+	Common::Vector4 leader_offset;
 
 	// Active behaviors
 	int behavior;

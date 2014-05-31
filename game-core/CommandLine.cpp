@@ -528,7 +528,7 @@ void CommandLine::createObject(map<string, list<string> > &parameter){
 		}
 
 		if (param["type"] == "autonomous"){
-			obj = dynamic_cast<AutonomousObject*>(Game::getGlobalInstance()->invoke(ObjectTypes::RedBlood));
+			obj = new AutonomousObject(ObjectTypes::Ecoli, Game::getGlobalInstance());
 			m_getWorld()->allocateHandle(obj, HandleType::GLOBAL);
 			m_getWorld()->insert(obj);
 		}

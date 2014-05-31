@@ -1,4 +1,5 @@
 #include <sstream>
+#include <algorithm>
 
 #include "SteeringBehavior.h"
 
@@ -8,8 +9,8 @@ using namespace Common;
 
 SteeringBehavior::SteeringBehavior(AutonomousObject *owner) :behavior(BehaviorType::none)
 {
-
 	this->owner = owner;
+	this->init();
 }
 
 SteeringBehavior::~SteeringBehavior()
@@ -54,7 +55,7 @@ Vector4 SteeringBehavior::arrive(Vector4 &p_targetPosition, Deceleration deceler
 	if (dist > 0){
 		speed = dist / ((float)deceleration * deceleration_tweaker);
 
-		//min(speed, object->getMaxVelocity());
+		//std::min(speed, owner->getMaxVelocity());
 		desiredVelocity = toTarget * (speed / dist);
 
 		return desiredVelocity - owner->getVelocity();
@@ -318,6 +319,10 @@ Vector4 SteeringBehavior::calculatePrioritized(){
 		force = pursuit(target_agent_pursuit);
 		if (!accumulateForce(steering_force, force)) return steering_force;
 	}
+	if (On(BehaviorType::offset_pursuit)){
+		force = offsetPursuit(this->target_agent_leader, this->leader_offset);
+		if (!accumulateForce(steering_force, force)) return steering_force;
+	}
 	if (On(BehaviorType::evade)){
 		force = evade(target_agent_evade);
 		if (!accumulateForce(steering_force, force)) return steering_force;
@@ -377,7 +382,7 @@ void SteeringBehavior::followPathOn(){
 
 void SteeringBehavior::offsetPursuitOn(Handle &p_leader, const Vector4 p_offset){
 	behavior |= BehaviorType::offset_pursuit;
-	offset = p_offset;
+	leader_offset = p_offset;
 	target_agent_leader = p_leader;
 }
 

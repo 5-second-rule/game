@@ -17,7 +17,8 @@ private:
 	bool tagged;
 public:
 	Path *path;
-	AutonomousObject(int objectType, Game *owner);
+	AutonomousObject(ObjectTypes objectType);
+	AutonomousObject(ObjectTypes objectType, Game *owner);
 	~AutonomousObject();
 	virtual void init();
 
@@ -29,6 +30,7 @@ public:
 	void setOffSteeringBehavior(BehaviorType);
 	void setPursuit(Handle &pray);
 	void setEvade(Handle &predator);
+	void setOffsetPursuit(Handle &handle, Vector4 &vect);
 
 	bool isTagged();
 	void setTag(bool tag);

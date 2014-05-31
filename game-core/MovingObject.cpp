@@ -1,4 +1,5 @@
 #include "MovingObject.h"
+#include "AutonomousObject.h"
 
 #include "MoveEvent.h"
 #include "ActionType.h"
@@ -27,6 +28,7 @@ void MovingObject::init(){
 	this->drag_coefficient = ConfigSettings::config->drag_coefficient;
 	this->max_speed = ConfigSettings::config->max_speed;
 	this->max_force = ConfigSettings::config->max_force;
+	this->fluid_force = ConfigSettings::config->fluid_force;
 }
 
 float MovingObject::getSpeed(){
@@ -78,9 +80,15 @@ bool MovingObject::handleEvent(Event *evt){
 		break;
 	}
 	case ActionType::SHOOT:
-		owner->getEngineInstance()->sendEvent( new SoundEvent( static_cast<int>(Sounds::SHOOT), false, false ) );
+	{
+		owner->getEngineInstance()->sendEvent(new SoundEvent(static_cast<int>(Sounds::SHOOT), false, false));
 		//TODO: create projectile and set it in motion
+		AutonomousObject *obj = new AutonomousObject(ObjectTypes::Ecoli);
+		obj->setPos(this->getPosition());
+		obj->applyForce(this->getHeading() * 100);
+		obj->setDragCoeff(0.05f);
 		break;
+	}
 	default:
 		break;
 	}
@@ -96,10 +104,10 @@ void MovingObject::update(float dt){
 		TrackPath *track = Game::getGlobalInstance()->getTrackPath();
 		this->trackIndex = track->locateIndex(this->position, this->trackIndex);
 		float dist = Common::distance(track->nodes[this->trackIndex].point, this->position);
-		Vector4 trackForce = track->nodes[this->trackIndex].normal * this->forceByDist(dist);
+		Vector4 trackForce = track->nodes[this->trackIndex].normal * this->forceByDist(dist, fluid_force);
 		
 		// propulsion in heading
-		Vector4 headingForce = Vector4::normalize(this->heading) * this->forceByDist(dist) * propulsion;
+		Vector4 headingForce = Vector4::normalize(this->heading) * this->forceByDist(dist, fluid_force) * propulsion;
 		this->applyForce(trackForce + headingForce);
 
 		// reset propulsion
@@ -219,6 +227,10 @@ bool MovingObject::setFlag(string flag_name, bool value){
 	}
 }
 
+void MovingObject::setFluidForce(float f){
+	this->fluid_force = f;
+}
+
 Vector4 MovingObject::getHeading(){
 	return Vector4::normalize(this->velocity);
 }
@@ -319,7 +331,7 @@ unsigned int MovingObject::getPriority() const {
 	return static_cast<unsigned int>(CollisionPriorities::Object);
 }
 
-float MovingObject::forceByDist(float distance){
-	float force = (ConfigSettings::config->tube_radius - distance) / ConfigSettings::config->tube_radius * ConfigSettings::config->fluid_force;
+float MovingObject::forceByDist(float distance, float maximum){
+	float force = (ConfigSettings::config->tube_radius - distance) / ConfigSettings::config->tube_radius * maximum;
 	return (force > 0 ? force : 0);
 }
