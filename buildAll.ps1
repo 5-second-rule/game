@@ -1,10 +1,10 @@
 # Build Projects in Order
 cd ../rendering-framework
-MSBuild.exe ./Framework.sln
+MSBuild.exe ./Framework.sln /t:rebuild /m
 cd ../engine
-MSbuild.exe ./engine.sln
+MSbuild.exe ./engine.sln /t:rebuild /m
 cd ../game
-MSBuild.exe ./Game.sln
+MSBuild.exe ./Game.sln /t:rebuild /m
 
 # Resources Prep 
 mkdir -Force ../game/Debug/resources
@@ -14,15 +14,3 @@ cp ../engine/Debug/*.dll ../game/Debug
 
 cp ../rendering-framework/Debug/*.cso ../engine/Debug
 cp ../engine/Debug/*.cso ../game/Debug/resources/
-
-cp ../rendering-framework/SampleApp/*.fbx ../engine/SampleApp/
-cp ../rendering-framework/SampleApp/*.dds ../engine/SampleApp/
-cp ../rendering-framework/SampleApp/*.obj ../engine/SampleApp/
-cp ../rendering-framework/SampleApp/*.trk ../engine/SampleApp/
-
-cp ../rendering-framework/SampleApp/*.fbx ../game/resources/
-cp ../rendering-framework/SampleApp/*.dds ../game/resources/
-cp ../rendering-framework/SampleApp/*.obj ../game/resources/
-cp ../rendering-framework/SampleApp/*.trk ../game/resources/
-
-cp ../game/resources/* ../game/Debug/resources/

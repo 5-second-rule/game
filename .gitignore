@@ -251,6 +251,4 @@ UpgradeLog*.htm
 
 # Microsoft Fakes
 FakesAssemblies/
-
-# game resources unignore
-!resources/*.obj
+Debug/resources/track.path

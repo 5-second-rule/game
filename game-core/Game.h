@@ -7,6 +7,8 @@
 #include "TrackPath.h"
 #include "WallOfDeath.h"
 
+#define theWorld (*Game::getGlobalInstance()->getEngineInstance()->getWorld())
+
 class GAMECOREDLL Game
 {
 private:
@@ -32,6 +34,7 @@ public:
 
 	virtual void init();
 	void run();
+	void stop();
 	Engine * getEngineInstance();
 	TrackPath * getTrackPath();
 	WallOfDeath * getWallOfDeath();

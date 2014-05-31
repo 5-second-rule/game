@@ -7,6 +7,7 @@
 
 #include "common/Vector4.h"
 #include "common/Matrix4.h"
+
 using namespace Common;
 
 struct MovingObjectData {
@@ -35,24 +36,30 @@ protected:
 	Vector4 position;
 	Vector4 velocity;
 	Vector4 force;
+	float trackVelocity;
 	
 	float propulsion;
 
 	float friction;
 	float mass;
 
-	static const float max_speed;
-	static const float max_force;
-
 	int trackIndex;
+
+	bool followTrack;
+	bool hasPropulsion;
 
 public:
 	MovingObject(int objectType, Game* owner);
-	~MovingObject();
+	MovingObject(int objectType, Game* owner, bool follow, bool propulse);
+	virtual ~MovingObject();
 	Game* owner;
+
+	static const float max_speed;
+	static const float max_force;
 
 	Vector4 getHeading(); // A normalized vector giving the direction the object is heading
 	float getSpeed();
+	Vector4 getVelocity();
 	Vector4 getPosition();
 	int getTrackIndex();
 	Vector4 getUp();
@@ -60,10 +67,14 @@ public:
 	Vector4 getForceUp();
 	Vector4 getForceLeft();
 
+	void setPosition(const Vector4& position);
+
 	void applyForce(const Vector4& force);
 
 	virtual void update(float dt);
 	virtual bool handleEvent(Event* evt);
+
+	virtual std::string toString();
 
 	// ISerializable Methods
 	virtual void reserveSize(IReserve&) const;

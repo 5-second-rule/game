@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\AI">
+      <UniqueIdentifier>{cb6e30a1-9d0f-4f7d-b73b-7c39e3318429}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\AI">
+      <UniqueIdentifier>{2137e6ff-3243-47c4-9b4f-b464cd8bf8a9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ObjectTypes.h">
@@ -68,6 +74,17 @@
     </ClInclude>
     <ClInclude Include="Powerup.h">
       <Filter>Header Files</Filter>
+    <ClInclude Include="AIPath.h">
+      <Filter>Header Files\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="AutonomousObject.h">
+      <Filter>Header Files\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="BehaviorType.h">
+      <Filter>Header Files\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="SteeringBehavior.h">
+      <Filter>Header Files\AI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -110,5 +127,19 @@
     <ClCompile Include="Powerup.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="AIPath.cpp">
+      <Filter>Source Files\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="AutonomousObject.cpp">
+      <Filter>Source Files\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="SteeringBehavior.cpp">
+      <Filter>Source Files\AI</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\track.path">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

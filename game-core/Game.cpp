@@ -6,6 +6,13 @@
 #include "MoveEvent.h"
 #include "ObjectTypes.h"
 
+#ifdef _DEBUG
+#ifndef DBG_NEW
+#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
+#define new DBG_NEW
+#endif
+#endif  // _DEBUG
+
 Game * Game::globalInstance;
 
 Game::Game() {
@@ -14,6 +21,8 @@ Game::Game() {
 }
 
 Game::~Game() {
+	delete this->engineInstance;
+	delete this->track;
 }
 
 void Game::init() {
@@ -31,6 +40,15 @@ void Game::init() {
 	this->engineInstance = this->makeEngineInstance(this->objectCtors, eventCtors);
 	this->objectCtors->initCtors();
 	eventCtors->initCtors();
+
+}
+
+void Game::stop() {
+	if( !this->initialized ) {
+		throw std::runtime_error( "Need to call init() first." );
+	}
+
+	this->engineInstance->stop();
 }
 
 void Game::run() {

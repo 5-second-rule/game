@@ -45,7 +45,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir)../common/;$(SolutionDir);$(SolutionDir)../engine/</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_IS_GAME_CORE;_WINDLL;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_EXPORT_COMMON;_IS_GAME_CORE;_WINDLL;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <Link>
@@ -56,6 +56,9 @@
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>
     </Bscmake>
+    <PostBuildEvent>
+      <Command>xcopy /y "$(ProjectDir)resources\*" "$(SolutionDir)Debug\resources\"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -75,6 +78,9 @@
     <ClInclude Include="ActionEventCtorTable.h" />
     <ClInclude Include="ActionType.h" />
     <ClInclude Include="CollisionMetadata.h" />
+    <ClInclude Include="AIPath.h" />
+    <ClInclude Include="AutonomousObject.h" />
+    <ClInclude Include="BehaviorType.h" />
     <ClInclude Include="game-core.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObjectCtorTable.h" />
@@ -87,12 +93,15 @@
     <ClInclude Include="ShootEvent.h" />
     <ClInclude Include="Sounds.h" />
     <ClInclude Include="StaticObject.h" />
+    <ClInclude Include="SteeringBehavior.h" />
     <ClInclude Include="TrackPath.h" />
     <ClInclude Include="Tube.h" />
     <ClInclude Include="WallOfDeath.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ActionEventCtorTable.cpp" />
+    <ClCompile Include="AIPath.cpp" />
+    <ClCompile Include="AutonomousObject.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObjectCtorTable.cpp" />
     <ClCompile Include="MoveEvent.cpp" />
@@ -102,9 +111,13 @@
     <ClCompile Include="ServerGame.cpp" />
     <ClCompile Include="ShootEvent.cpp" />
     <ClCompile Include="StaticObject.cpp" />
+    <ClCompile Include="SteeringBehavior.cpp" />
     <ClCompile Include="TrackPath.cpp" />
     <ClCompile Include="Tube.cpp" />
     <ClCompile Include="WallOfDeath.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\track.path" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
