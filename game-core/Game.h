@@ -6,6 +6,8 @@
 #include "engine-core/World.h"
 #include "TrackPath.h"
 
+#define theWorld (*Game::getGlobalInstance()->getEngineInstance()->getWorld())
+
 class GAMECOREDLL Game
 {
 private:
