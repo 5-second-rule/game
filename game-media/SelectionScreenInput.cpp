@@ -29,41 +29,44 @@ std::vector<Event *> SelectionScreenInput::inputTranslator(InputAdapter *inputAd
 
 		stickDirection = leftStickMagnitude*leftStickInfo.first.x();
 
-		if (stickDirection != 0) {
-			selection.selectionDirection = stickDirection;
+		if (stickDirection > 0) {
+			selection.action = SelectionEvent::Next;
 			inputEventVector.push_back(new SelectionEvent(this->renderingEngine->getLocalPlayerGuid(0), selection));
 		}
 
+		if (stickDirection < 0) {
+			selection.action = SelectionEvent::Prev;
+			inputEventVector.push_back(new SelectionEvent(this->renderingEngine->getLocalPlayerGuid(0), selection));
+
+		}
+
 		if (inputAdapter->getKeyState(Transmission::Input::Key::GAMEPAD_A) == down) {
-			selection.selectChar = true;
+			selection.action = SelectionEvent::Select;
 			inputEventVector.push_back(new SelectionEvent(this->renderingEngine->getLocalPlayerGuid(0), selection));
 		}
 
 
 		if (inputAdapter->getKeyState(Transmission::Input::Key::GAMEPAD_B) == down) {
-			selection.unselectChar = true;
+			selection.action = SelectionEvent::Deselect;
 			inputEventVector.push_back(new SelectionEvent(this->renderingEngine->getLocalPlayerGuid(0), selection));
 		}
 
 	} else {
 		if (inputAdapter->getKeyState(Transmission::Input::Key::LEFT_ARROW) == down ||
 			inputAdapter->getKeyState(Transmission::Input::Key::A) == down) {
-			selection.toggleSelect = false;
-			selection.selectionDirection = -1;
+			selection.action = SelectionEvent::Prev;
 			inputEventVector.push_back(new SelectionEvent(this->renderingEngine->getLocalPlayerGuid(0), selection));
 		}
 
 		if (inputAdapter->getKeyState(Transmission::Input::Key::RIGHT_ARROW) == down ||
 			inputAdapter->getKeyState(Transmission::Input::Key::D) == down) {
-			selection.toggleSelect = false;
-			selection.selectionDirection = 1;
+			selection.action = SelectionEvent::Next;
 			inputEventVector.push_back(new SelectionEvent(this->renderingEngine->getLocalPlayerGuid(0), selection));
 		}
 
 		if (inputAdapter->getKeyState(Transmission::Input::Key::SPACE) == down ||
 			inputAdapter->getKeyState(Transmission::Input::Key::ENTER) == down) {
-			selection.toggleSelect = true;
-			selection.selectionDirection = 0;
+			selection.action = SelectionEvent::Toggle;
 			inputEventVector.push_back(new SelectionEvent(this->renderingEngine->getLocalPlayerGuid(0), selection));
 		}
 	}
