@@ -33,17 +33,21 @@ void ServerGame::stop() {
 
 void ServerGame::init() {
 	Game::init();
+	this->gameState = new GameState();
+	this->getEngineInstance()->getWorld()->allocateHandle(this->gameState, HandleType::GLOBAL);
+	this->getEngineInstance()->getWorld()->insert(this->gameState);
+	this->getEngineInstance()->setPlayerRegistration(this->gameState);
 
-	// HACK, wait to load when game screen up?
-	IHasHandle *track = this->invoke(ObjectTypes::Track);
-	this->getEngineInstance()->getWorld()->allocateHandle(track, HandleType::GLOBAL);
-	this->getEngineInstance()->getWorld()->insert(track);
+	this->gameState->setState(GameState::Selection);
 
-	// HACK --	this only works if the clients are up first, but in the future this will
-	//					only be sent when the game starts after character selection
-	// this->getEngineInstance()->sendEvent( new SoundEvent( static_cast<int>(Sounds::SOUNDTRACK), true, false ));
-	IHasHandle *AIManager = this->invoke(ObjectTypes::AIManager);
-	
-	theWorld.allocateHandle(AIManager, HandleType::LOCAL);
-	theWorld.insert(AIManager);
+	this->AI_manager = new AutonomousObjectManager();
+	this->AI_manager->setTrack(this->getTrackPath());
+	this->AI_manager->setGameState(this->gameState);
+	theWorld.allocateHandle(AI_manager, HandleType::LOCAL);
+	theWorld.insert(AI_manager);
+
+}
+
+GameState *ServerGame::getGameState(){
+	return this->gameState;
 }

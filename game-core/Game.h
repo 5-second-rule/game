@@ -10,13 +10,11 @@
 #define theEngine (*Game::getGlobalInstance()->getEngineInstance())
 #define theWorld (*Game::getGlobalInstance()->getEngineInstance()->getWorld())
 
-class GAMECOREDLL Game
-{
+class GAMECOREDLL Game {
 private:
 	static Game *globalInstance;
 	Engine *engineInstance;
 	TrackPath *track;
-
 	bool initialized;
 
 protected:

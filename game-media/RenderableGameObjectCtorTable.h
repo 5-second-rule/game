@@ -2,9 +2,13 @@
 
 #include "game-media.h"
 #include "game-core\GameObjectCtorTable.h"
+#include "SelectionScreenData.h"
+#include "SignallingGameState.h"
 
 class GAMEMEDIADLL RenderableGameObjectCtorTable : public GameObjectCtorTable
 {
+private:
+	void prepSelectionScreenData();
 public:
 	int modelIndexes[GameObjectCtorTable::OBJECT_TYPE_COUNT];
 	int textureIndexes[GameObjectCtorTable::OBJECT_TYPE_COUNT];

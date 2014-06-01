@@ -4,7 +4,6 @@
 #include "ObjectTypes.h"
 #include "StaticObject.h"
 #include "Tube.h"
-#include "AutonomousObjectManager.h"
 
 #ifdef _DEBUG
 #ifndef DBG_NEW
@@ -13,7 +12,7 @@
 #endif
 #endif  // _DEBUG
 
-GameObjectCtorTable::GameObjectCtorTable() : ConstructorTable<BaseObject>( OBJECT_TYPE_COUNT ) {}
+GameObjectCtorTable::GameObjectCtorTable() : ConstructorTable<BaseObject>(OBJECT_TYPE_COUNT) {}
 
 GameObjectCtorTable::~GameObjectCtorTable() {}
 
@@ -45,17 +44,17 @@ static BaseObject * makeTrack(ConstructorTable<BaseObject> *thisObj) {
 	return new Tube();
 }
 
-static BaseObject * makeAutonomousObjectManager(ConstructorTable<BaseObject> *thisObj){
-	return new AutonomousObjectManager();
+static BaseObject * makeSelectionScreen(ConstructorTable<BaseObject> *thisObj) {
+	return new StaticObject(ObjectTypes::SelectionScreen);
 }
 
 void GameObjectCtorTable::initCtors() {
-	this->setConstructor( ObjectTypes::Ecoli, makeEcoli );
-	this->setConstructor( ObjectTypes::ChickenPox, makeChickenPox );
-	this->setConstructor( ObjectTypes::Syphillis, makeSyphillis );
-	this->setConstructor( ObjectTypes::Malaria, makeMalaria );
-	this->setConstructor( ObjectTypes::WhiteBlood, makeWhiteBlood );
-	this->setConstructor( ObjectTypes::RedBlood, makeRedBlood );
-	this->setConstructor( ObjectTypes::Track, makeTrack );
-	this->setConstructor( ObjectTypes::AIManager, makeAutonomousObjectManager );
+	this->setConstructor(ObjectTypes::Ecoli, makeEcoli);
+	this->setConstructor(ObjectTypes::ChickenPox, makeChickenPox);
+	this->setConstructor(ObjectTypes::Syphillis, makeSyphillis);
+	this->setConstructor(ObjectTypes::Malaria, makeMalaria);
+	this->setConstructor(ObjectTypes::WhiteBlood, makeWhiteBlood);
+	this->setConstructor(ObjectTypes::RedBlood, makeRedBlood);
+	this->setConstructor(ObjectTypes::Track, makeTrack);
+	this->setConstructor(ObjectTypes::SelectionScreen, makeSelectionScreen);
 }

@@ -1,6 +1,8 @@
 #include <windows.h>
 
 #ifdef _DEBUG
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
 #include <d3d11.h>
 #pragma comment(lib, "d3d11.lib")
 #ifndef DBG_NEW
@@ -16,6 +18,9 @@
 #include "game-media/RenderableGame.h"
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
+#ifdef _DEBUG
+	_CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
+#endif
 
 	RenderableGame *game = new RenderableGame(hInstance);
 	game->init();

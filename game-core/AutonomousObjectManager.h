@@ -2,14 +2,16 @@
 
 #include <string>
 #include <list>
+#include <vector>
 
 #include "game-core.h"
 #include "AutonomousObject.h"
+#include "GameState.h"
 
 class GAMECOREDLL AutonomousGroup {
 	friend class AutonomousObjectManager;
 private:
-	list< Handle > autonomous_list;
+	std::list< Handle > autonomous_list;
 	Handle owner;
 	int atual_index;
 
@@ -27,12 +29,17 @@ class GAMECOREDLL AutonomousObjectManager :
 private:
 	std::list<AutonomousGroup> players;
 	TrackPath *path;
+	GameState *gameState;
 public:
 	AutonomousObjectManager();
 	~AutonomousObjectManager();
 	virtual bool handleEvent(Event* evt);
-	void setOffset(AutonomousObject*);
+	void setOffsetDefaultAI(AutonomousObject*);
+	void setPursuitDefaultAI(AutonomousObject*);
 
 	void update(float);
+
+	void setTrack(TrackPath*);
+	void setGameState(GameState*);
 };
 

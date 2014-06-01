@@ -21,40 +21,47 @@ string AutonomousGroup::toString() const{
 	return buffer.str();
 }
 
-AutonomousObjectManager::AutonomousObjectManager() : BaseObject(ObjectTypes::AIManager)
-{
-	path = Game::getGlobalInstance()->getTrackPath();
+AutonomousObjectManager::AutonomousObjectManager() : BaseObject(ObjectTypes::AIManager) {}
+
+AutonomousObjectManager::~AutonomousObjectManager() {}
+
+void AutonomousObjectManager::setTrack(TrackPath *p_track_path){
+	this->path = p_track_path;
 }
 
-
-AutonomousObjectManager::~AutonomousObjectManager()
-{
+void AutonomousObjectManager::setGameState(GameState *p_gameState){
+	this->gameState = p_gameState;
 }
 
 bool AutonomousObjectManager::handleEvent(Event* evt){
 	return false;
 }
 
-void AutonomousObjectManager::setOffset(AutonomousObject *obj){
+void AutonomousObjectManager::setOffsetDefaultAI(AutonomousObject *obj){
 	obj->setMaxSpeed(10);
 	obj->setMaxForce(10);
 	obj->setFollowTrack(true);
 	obj->setFluidForce(0.0f);
 }
 
+void AutonomousObjectManager::setPursuitDefaultAI(AutonomousObject *obj){
+	obj->setFollowTrack(false);
+	obj->setHasPropulsion(false);
+	obj->setMaxSpeed(20.0f);
+}
+
 void AutonomousObjectManager::update(float dt){
+	BaseObject::update(dt);
 	static bool offset = false;
-	list<Handle> players = theEngine.getPlayers();
-	for (list<Handle>::iterator it = players.begin(); it != players.end(); ++it){
+	vector<Handle> players = theEngine.getPlayers();
+	for (vector<Handle>::iterator it = players.begin(); it != players.end(); ++it){
 		MovingObject *mObj = dynamic_cast<MovingObject*>(theWorld.get(*it));
-		if (find(this->players.begin(), this->players.end(), *it) == this->players.end()){
+		if (mObj != nullptr && find(this->players.begin(), this->players.end(), *it) == this->players.end()){
 			AutonomousGroup group(*it);
 			for (int i = 0; i < 20; ++i){
 				AutonomousObject *aObj = new AutonomousObject(ObjectTypes::Ecoli);
+				this->setPursuitDefaultAI(aObj);
 				aObj->setPosition(Vector4(200, 0, 0));
-				aObj->setFollowTrack(true);
-				aObj->setFluidForce(0.0f);
-				aObj->setMaxSpeed(25.0f);
 				group.autonomous_list.push_back(aObj->getHandle());
 			}
 
@@ -71,7 +78,6 @@ void AutonomousObjectManager::update(float dt){
 				int perc = rand() % 101;
 				it->atual_index = pray->getTrackIndex();
 				if (perc < 5){
-					cout << "move" << endl;
 					Handle handle = it->autonomous_list.front();
 					AutonomousObject *aObj = dynamic_cast<AutonomousObject*>(theWorld.get(handle));
 

@@ -41,6 +41,7 @@ protected:
 	float max_speed;
 	float max_force;
 	float fluid_force;
+	float heading_force;
 
 	int trackIndex;
 
@@ -51,6 +52,7 @@ public:
 	MovingObject(int objectType, Game* owner);
 	MovingObject(int objectType, Game* owner, bool follow, bool propulse);
 	virtual ~MovingObject();
+	virtual void initDefaultConfiguration();
 	Game* owner;
 
 
@@ -68,6 +70,7 @@ public:
 	void setMaxSpeed(float);
 	void setMaxForce(float);
 	void setFollowTrack(bool);
+	void setHasPropulsion(bool);
 	void setFluidForce(float);
 
 	void applyForce(const Vector4& force);
@@ -78,6 +81,7 @@ public:
 	virtual std::string toString();
 
 	// ISerializable Methods
+	virtual void deserialize(BufferReader& reader);
 	virtual void reserveSize(IReserve&) const;
 	virtual void fillBuffer(IFill&) const;
 
@@ -88,6 +92,6 @@ public:
 	std::shared_ptr<const Bounds> getBounds() const;
 	unsigned int getPriority() const;
 
-	static float forceByDist(float dist, float maximum);
+	static float forceByDistSq(float dist_sq, float maximum);
 };
 

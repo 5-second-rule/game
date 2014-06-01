@@ -92,9 +92,12 @@
     <ClInclude Include="game-core.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObjectCtorTable.h" />
+    <ClInclude Include="GameState.h" />
     <ClInclude Include="MoveEvent.h" />
     <ClInclude Include="MovingObject.h" />
     <ClInclude Include="ObjectTypes.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="SelectionEvent.h" />
     <ClInclude Include="ServerGame.h" />
     <ClInclude Include="ShootEvent.h" />
     <ClInclude Include="Sounds.h" />
@@ -110,8 +113,11 @@
     <ClCompile Include="AIPath.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObjectCtorTable.cpp" />
+    <ClCompile Include="GameState.cpp" />
     <ClCompile Include="MoveEvent.cpp" />
     <ClCompile Include="MovingObject.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="SelectionEvent.cpp" />
     <ClCompile Include="ServerGame.cpp" />
     <ClCompile Include="ShootEvent.cpp" />
   </ItemGroup>
