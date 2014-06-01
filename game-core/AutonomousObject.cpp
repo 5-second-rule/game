@@ -8,10 +8,9 @@ AutonomousObject::AutonomousObject(ObjectTypes objectType) : AutonomousObject(ob
 AutonomousObject::AutonomousObject(ObjectTypes objectType, Game *owner) : MovingObject(objectType, owner)
 {
 	steering_behavior = new SteeringBehavior(this);
-	path = Path::instance();
-	m_getWorld()->allocateHandle(this, HandleType::GLOBAL);
-	m_getWorld()->insert(this);
-	init();
+	path = AIPath::instance();
+	theWorld.allocateHandle(this, HandleType::GLOBAL);
+	theWorld.insert(this);
 }
 
 AutonomousObject::~AutonomousObject() {}

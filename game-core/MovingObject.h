@@ -35,7 +35,12 @@ protected:
 	float trackVelocity;
 	
 	float propulsion;
+
+	float drag_coefficient;
 	float mass;
+	float max_speed;
+	float max_force;
+	float fluid_force;
 
 	int trackIndex;
 
@@ -48,21 +53,27 @@ public:
 	virtual ~MovingObject();
 	Game* owner;
 
-	static const float max_speed;
-	static const float max_force;
 
 	Vector4 getHeading(); // A normalized vector giving the direction the object is heading
 	float getSpeed();
+	float getMaxForce();
+	float getMaxSpeed();
 	Vector4 getVelocity();
 	Vector4 getPosition();
 	int getTrackIndex();
 	Vector4 getUp();
 
 	void setPosition(const Vector4& position);
+	void setDragCoeff(float);
+	void setMaxSpeed(float);
+	void setMaxForce(float);
+	void setFollowTrack(bool);
+	void setFluidForce(float);
 
 	void applyForce(const Vector4& force);
 
-	static float forceByDist(float dist, float maximum);
+	virtual void update(float dt);
+	virtual bool handleEvent(Event* evt);
 
 	virtual std::string toString();
 
@@ -77,5 +88,6 @@ public:
 	std::shared_ptr<const Bounds> getBounds() const;
 	unsigned int getPriority() const;
 
+	static float forceByDist(float dist, float maximum);
 };
 

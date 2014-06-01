@@ -1,3 +1,5 @@
+#include "engine-core/ConfigSettings.h"
+
 #include "MovingObject.h"
 #include "AutonomousObject.h"
 
@@ -14,19 +16,15 @@
 #endif
 #endif  // _DEBUG
 
-#define MAX_SPEED 75
-#define MAX_FORCE 100
-
-const float MovingObject::max_speed = MAX_SPEED;
-const float MovingObject::max_force = MAX_FORCE;
-
 MovingObject::MovingObject(int objectType, Game* owner, bool follow, bool propulse)
 	: BaseObject(objectType)
 	, owner(owner)
 {
 	this->up = Vector(0.0f, 1.0f, 0.0f);
 	this->heading = Vector(0.0f, 0.0f, 1.0f);
+	this->mass = .1f;
 	this->propulsion = 1.0f;
+	this->drag_coefficient = .2f;
 	this->trackIndex = 0;
 	this->trackVelocity = 1000;
 
@@ -40,14 +38,6 @@ MovingObject::MovingObject(int objectType, Game* owner)
 
 MovingObject::~MovingObject() {}
 
-void MovingObject::init(){
-	this->mass = ConfigSettings::config->mass;
-	this->drag_coefficient = ConfigSettings::config->drag_coefficient;
-	this->max_speed = ConfigSettings::config->max_speed;
-	this->max_force = ConfigSettings::config->max_force;
-	this->fluid_force = ConfigSettings::config->fluid_force;
-}
-
 float MovingObject::getSpeed(){
 	return this->velocity.length();
 }
@@ -58,6 +48,42 @@ Vector4 MovingObject::getVelocity() {
 
 Vector4 MovingObject::getUp() {
 	return this->up;
+}
+
+Vector4 MovingObject::getHeading(){
+	return Vector4::normalize(this->velocity);
+}
+
+Vector4 MovingObject::getPosition(){
+	return position;
+}
+
+float MovingObject::getMaxForce(){
+	return max_force;
+}
+
+float MovingObject::getMaxSpeed(){
+	return max_speed;
+}
+
+void MovingObject::setDragCoeff(float p_drag_coefficient){
+	drag_coefficient = p_drag_coefficient;
+}
+
+void MovingObject::setMaxSpeed(float p_max_speed){
+	max_speed = p_max_speed;
+}
+
+void MovingObject::setMaxForce(float p_max_force){
+	max_force = p_max_force;
+}
+
+void MovingObject::setFollowTrack(bool value){
+	this->followTrack = value;
+}
+
+void MovingObject::setFluidForce(float f){
+	this->fluid_force = f;
 }
 
 void MovingObject::applyForce(const Vector4& force){
@@ -116,7 +142,7 @@ void MovingObject::update(float dt){
 	this->position += this->velocity * dt;
 
 	Vector4 acceleration = this->force * (1 / this->mass);
-	this->force = -(this->velocity * this->friction);
+	this->force = -(this->velocity * this->drag_coefficient);
 
 	this->velocity += acceleration*dt;
 
@@ -181,106 +207,13 @@ void MovingObject::fillBuffer(IFill& buffer) const {
 	data->force[1] = this->force[1];
 	data->force[2] = this->force[2];
 
-	data->drag_coefficient = drag_coefficient;
+	data->drag_coefficient = this->drag_coefficient;
 	data->mass = mass;
 
 	data->trackIndex = this->trackIndex;
 
 	buffer.filled();
 
-}
-
-void MovingObject::deserialize(BufferReader& reader) {
-	BaseObject::deserialize(reader);
-
-	const MovingObjectData* data = reinterpret_cast<const MovingObjectData*>(reader.getPointer());
-
-	this->up = Common::Vector(data->up[0], data->up[1], data->up[2]);
-	this->heading = Common::Vector(data->heading[0], data->heading[1], data->heading[2]);
-
-	this->position = Common::Point(data->position[0], data->position[1], data->position[2]);
-	this->velocity = Common::Vector(data->velocity[0], data->velocity[1], data->velocity[2]);
-	this->force = Common::Vector(data->force[0], data->force[1], data->force[2]);
-
-	this->drag_coefficient = data->drag_coefficient;
-	this->mass = data->mass;
-	
-	this->trackIndex = data->trackIndex;
-
-	reader.finished(sizeof(MovingObjectData));
-}
-
-
-
-void MovingObject::setDragCoeff(float p_drag_coefficient){
-	drag_coefficient = p_drag_coefficient;
-}
-
-void MovingObject::setMaxSpeed(float p_max_speed){
-	max_speed = p_max_speed;
-}
-
-void MovingObject::setMaxForce(float p_max_force){
-	max_force = p_max_force;
-}
-
-void MovingObject::setTickForce(float x, float y, float z){
-	tick_force.set(x, y, z, 0);
-}
-
-void MovingObject::setForce(float x, float y, float z){
-	force.set(x, y, z, 0);
-}
-
-bool MovingObject::setFlag(string flag_name, bool value){
-	if (flag_name == "follow_track") {
-		follow_track = value;
-		return true;
-	}
-	else {
-		return false;
-	}
-}
-
-void MovingObject::setFluidForce(float f){
-	this->fluid_force = f;
-}
-
-Vector4 MovingObject::getHeading(){
-	return Vector4::normalize(this->velocity);
-}
-
-Vector4 MovingObject::getPosition(){
-	return position;
-}
-
-Vector4 MovingObject::getVelocity(){
-	return velocity;
-}
-
-float MovingObject::speed(){
-	return this->velocity.length();
-}
-
-float MovingObject::getMaxForce(){
-	return max_force;
-}
-
-float MovingObject::getMaxSpeed(){
-	return max_speed;
-}
-
-string MovingObject::toString(){
-	stringstream buffer;
-	buffer << BaseObject::toString() << endl;
-	buffer << "Position: " << position.toString() << endl;
-	buffer << "Speed: " << velocity.length() << endl;
-	buffer << "Force: " << force.toString();
-	return buffer.str();
-}
-
-void MovingObject::print(){
-	cout << toString();
 }
 
 Vector4 MovingObject::getGroupingParameter() const {
@@ -351,6 +284,6 @@ void MovingObject::setPosition(const Vector4& pos) {
 }
 
 float MovingObject::forceByDist(float distance, float maximum){
-	float force = (ConfigSettings::config->tube_radius - distance) / ConfigSettings::config->tube_radius * maximum;
+	float force = (ConfigSettings::config.tube_radius - distance) / ConfigSettings::config.tube_radius * maximum;
 	return (force > 0 ? force : 0);
 }

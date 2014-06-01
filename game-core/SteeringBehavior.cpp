@@ -31,14 +31,14 @@ void SteeringBehavior::init(){
 
 Vector4 SteeringBehavior::seek(Vector4 &p_targetPosition){
 	Vector4 desiredDirection = Common::Vector4::normalize(p_targetPosition - owner->getPosition());
-	Vector4 desiredVelocity = desiredDirection * MovingObject::max_speed;
+	Vector4 desiredVelocity = desiredDirection * owner->getMaxSpeed();
 
 	return desiredVelocity;
 }
 
 Vector4 SteeringBehavior::flee(Vector4 &p_targetPosition){
 	Vector4 desiredDirection = Common::Vector4::normalize(owner->getPosition() - p_targetPosition);
-	Vector4 desiredVelocity = desiredDirection * MovingObject::max_speed;
+	Vector4 desiredVelocity = desiredDirection * owner->getMaxSpeed();
 
 	return desiredVelocity;
 }
@@ -78,7 +78,7 @@ Vector4 SteeringBehavior::pursuit(Handle &p_evader_handle){
 			return this->seek(evader->getPosition());
 		}
 
-		look_ahead_time = toEvader.length() / (MovingObject::max_speed + evader->getSpeed());
+		look_ahead_time = toEvader.length() / (owner->getMaxSpeed() + evader->getSpeed());
 		return seek(evader->getPosition() + evader->getVelocity() * look_ahead_time);
 	}
 	else {
@@ -96,7 +96,7 @@ Vector4 SteeringBehavior::evade(Handle &p_pursuer_handle){
 	tmp = theWorld.get(p_pursuer_handle);
 	if (pursuer = dynamic_cast<MovingObject*>(tmp)){
 		toPursuer = pursuer->getPosition() - owner->getPosition();
-		look_ahead_time = toPursuer.length() / (MovingObject::max_speed + pursuer->getSpeed());
+		look_ahead_time = toPursuer.length() / (owner->getMaxSpeed() + pursuer->getSpeed());
 		return flee(pursuer->getPosition() + pursuer->getVelocity() * look_ahead_time);
 	}
 	else {
@@ -160,7 +160,7 @@ Vector4 SteeringBehavior::offsetPursuit(Handle &p_leader, Vector4 &offset) {
 	// The lookahead time is propotional to the distance between the leader
 	// and the pursuer; and is inversely proportional to the sum of both
 	// agent's velocities
-	float LookAheadTime = ToOffset.length() / (MovingObject::max_speed + leader->getSpeed());
+	float LookAheadTime = ToOffset.length() / (owner->getMaxSpeed() + leader->getSpeed());
 
 	// Arrive at the predicted future position of the offset
 	return arrive(WorldOffsetPos + leader->getVelocity() * LookAheadTime, fast);
@@ -273,7 +273,7 @@ bool SteeringBehavior::accumulateForce(Vector4 &RunningTot,
 	float MagnitudeSoFar = RunningTot.length();
 
 	// Calculate how much steering force remains to be used by this vehicle
-	float MagnitudeRemaining = MovingObject::max_force - MagnitudeSoFar;
+	float MagnitudeRemaining = owner->getMaxForce() - MagnitudeSoFar;
 
 	// Return false if there is no more force left to use
 	if (MagnitudeRemaining <= 0.0) return false;

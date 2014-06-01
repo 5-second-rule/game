@@ -43,6 +43,7 @@ void ServerGame::init() {
 	//					only be sent when the game starts after character selection
 	// this->getEngineInstance()->sendEvent( new SoundEvent( static_cast<int>(Sounds::SOUNDTRACK), true, false ));
 	IHasHandle *AIManager = this->invoke(ObjectTypes::AIManager);
-	this->getEngineInstance()->getWorld()->allocateHandle(AIManager, HandleType::LOCAL);
-	this->getEngineInstance()->getWor
+	
+	theWorld.allocateHandle(AIManager, HandleType::LOCAL);
+	theWorld.insert(AIManager);
 }

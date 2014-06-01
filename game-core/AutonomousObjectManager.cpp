@@ -1,9 +1,10 @@
 #include <cstdlib>
+#include <sstream>
 
 #include "AutonomousObjectManager.h"
 
 AutonomousGroup::AutonomousGroup(Handle handle){
-	MovingObject *obj = dynamic_cast<MovingObject*>(m_getObject(handle));
+	MovingObject *obj = dynamic_cast<MovingObject*>(theWorld.get(handle));
 	if (obj == nullptr)
 		throw runtime_error("null pointer at AutonomousGroup");
 	owner = handle;
@@ -37,21 +38,21 @@ bool AutonomousObjectManager::handleEvent(Event* evt){
 void AutonomousObjectManager::setOffset(AutonomousObject *obj){
 	obj->setMaxSpeed(10);
 	obj->setMaxForce(10);
-	obj->setFlag("follow_track", true);
+	obj->setFollowTrack(true);
 	obj->setFluidForce(0.0f);
 }
 
 void AutonomousObjectManager::update(float dt){
 	static bool offset = false;
-	list<Handle> players = m_getEngine()->getPlayers();
+	list<Handle> players = theEngine.getPlayers();
 	for (list<Handle>::iterator it = players.begin(); it != players.end(); ++it){
-		MovingObject *mObj = dynamic_cast<MovingObject*>(m_getWorld()->get(*it));
+		MovingObject *mObj = dynamic_cast<MovingObject*>(theWorld.get(*it));
 		if (find(this->players.begin(), this->players.end(), *it) == this->players.end()){
 			AutonomousGroup group(*it);
 			for (int i = 0; i < 20; ++i){
 				AutonomousObject *aObj = new AutonomousObject(ObjectTypes::Ecoli);
-				aObj->setPos(Vector(200, 0, 0));
-				aObj->setFlag("follow_track", true);
+				aObj->setPosition(Vector4(200, 0, 0));
+				aObj->setFollowTrack(true);
 				aObj->setFluidForce(0.0f);
 				aObj->setMaxSpeed(25.0f);
 				group.autonomous_list.push_back(aObj->getHandle());
@@ -63,7 +64,7 @@ void AutonomousObjectManager::update(float dt){
 	}
 
 	for (list<AutonomousGroup>::iterator it = this->players.begin(); it != this->players.end(); ++it){
-		MovingObject *pray = dynamic_cast<MovingObject*>(m_getObject(it->owner));
+		MovingObject *pray = dynamic_cast<MovingObject*>(theWorld.get(it->owner));
 
 		if (pray != nullptr){
 			if (pray->getTrackIndex() != it->atual_index){
@@ -72,7 +73,7 @@ void AutonomousObjectManager::update(float dt){
 				if (perc < 5){
 					cout << "move" << endl;
 					Handle handle = it->autonomous_list.front();
-					AutonomousObject *aObj = dynamic_cast<AutonomousObject*>(m_getWorld()->get(handle));
+					AutonomousObject *aObj = dynamic_cast<AutonomousObject*>(theWorld.get(handle));
 
 					// Avoid change the position of an object that is in front of the object doing a dot product check
 					if ((aObj->getPosition() - pray->getPosition()).dot(path->nodes[it->atual_index].normal) < 0){
@@ -83,7 +84,7 @@ void AutonomousObjectManager::update(float dt){
 							handle = aObj->getHandle();
 						}
 
-						aObj->setPos(path->nodes[(pray->getTrackIndex() + 2000) % path->nodes.size()].point);
+						aObj->setPosition(path->nodes[(pray->getTrackIndex() + 2000) % path->nodes.size()].point);
 						aObj->setPursuit(pray->getHandle());
 						//aObj->setOnSteeringBehavior(BehaviorType::wander);
 
