@@ -157,8 +157,10 @@
     <None Include="resources\track.path">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="Config.ini" />
     <None Include="ConfigTemplate.ini">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Config.ini">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
