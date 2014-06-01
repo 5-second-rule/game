@@ -42,12 +42,7 @@ void ServerGame::init() {
 
 	this->AI_manager = new AutonomousObjectManager();
 	this->AI_manager->setTrack(this->getTrackPath());
-	this->AI_manager->setGameState(this->gameState);
 	theWorld.allocateHandle(AI_manager, HandleType::LOCAL);
 	theWorld.insert(AI_manager);
 
-}
-
-GameState *ServerGame::getGameState(){
-	return this->gameState;
 }

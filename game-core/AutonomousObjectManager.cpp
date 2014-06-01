@@ -29,10 +29,6 @@ void AutonomousObjectManager::setTrack(TrackPath *p_track_path){
 	this->path = p_track_path;
 }
 
-void AutonomousObjectManager::setGameState(GameState *p_gameState){
-	this->gameState = p_gameState;
-}
-
 bool AutonomousObjectManager::handleEvent(Event* evt){
 	return false;
 }

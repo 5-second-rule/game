@@ -29,7 +29,7 @@ class GAMECOREDLL AutonomousObjectManager :
 private:
 	std::list<AutonomousGroup> players;
 	TrackPath *path;
-	GameState *gameState;
+
 public:
 	AutonomousObjectManager();
 	~AutonomousObjectManager();
@@ -40,6 +40,5 @@ public:
 	void update(float);
 
 	void setTrack(TrackPath*);
-	void setGameState(GameState*);
 };
 
