@@ -160,3 +160,7 @@ void GameState::deserialize(BufferReader& buffer) {
 bool GameState::handleEvent(Event* evt) {
 	return false;
 }
+
+std::string GameState::toString() {
+	return	BaseObject::toString() + "\r\nType: GameState";
+}

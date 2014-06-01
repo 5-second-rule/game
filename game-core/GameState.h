@@ -38,6 +38,8 @@ public:
 	void unuseToon(int toon);
 	void toggleToonUsed(int toon);
 
+	std::string toString();
+
 	std::vector<Player*> getPlayers();
 	virtual PlayerDelegate* addPlayer(unsigned int playerGuid);
 	
