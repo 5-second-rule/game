@@ -145,13 +145,13 @@ void MovingObject::update(float dt){
 }
 
 std::string MovingObject::toString() {
-	return	BaseObject::toString() +
+	return	BaseObject::toString() + "\r\nType: " + std::to_string( this->getType() ) +
 					"\r\nUp: " + this->up.toString() +
 					"Heading: " + this->heading.toString() +
 					"Postion: " + this->position.toString() +
 					"Velocity: " + this->velocity.toString() +
 					"Force: " + this->force.toString() + 
-					std::string( "\r\nEnd Object\r\n" );
+					std::string( "End Object\r\n" );
 }
 
 void MovingObject::reserveSize(IReserve& buffer) const {
