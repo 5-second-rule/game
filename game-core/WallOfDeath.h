@@ -28,6 +28,8 @@ public:
 
 	void reset();
 
+	std::string toString();
+
 	// ISerializable Methods
 	virtual void reserveSize(IReserve&) const;
 	virtual void fillBuffer(IFill&) const;

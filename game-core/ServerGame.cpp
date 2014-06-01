@@ -35,28 +35,12 @@ void ServerGame::stop() {
 
 void ServerGame::init() {
 	Game::init();
+	this->gameState = new GameState(this);
+	this->getEngineInstance()->getWorld()->allocateHandle(this->gameState, HandleType::GLOBAL);
+	this->getEngineInstance()->getWorld()->insert(this->gameState);
+	this->getEngineInstance()->setPlayerRegistration(this->gameState);
 
-	// HACK, wait to load when game screen up?
-	IHasHandle *track = this->objectCtors->invoke(ObjectTypes::Track);
-	this->getEngineInstance()->getWorld()->allocateHandle(track, HandleType::GLOBAL);
-	this->getEngineInstance()->getWorld()->insert(track);
-
-	// HACK --	this only works if the clients are up first, but in the future this will
-	//					only be sent when the game starts after character selection
-	// this->getEngineInstance()->sendEvent( new SoundEvent( static_cast<int>(Sounds::SOUNDTRACK), true, false ));
-
-	// TODO make the client get this too (in the wallOfDeath variable)?
-	this->wallOfDeath = dynamic_cast<WallOfDeath *>(this->objectCtors->invoke(ObjectTypes::Wwod));
-	if (this->wallOfDeath == nullptr) {
-		throw std::runtime_error("Error creating wall of death.");
-	}
-
-	this->getEngineInstance()->getWorld()->allocateHandle(this->wallOfDeath, HandleType::GLOBAL);
-	this->getEngineInstance()->getWorld()->insert(this->wallOfDeath);
-
-	this->wallOfDeath->reset();
-
-	this->initPowerups();
+	this->gameState->setState( GameState::Selection );
 }
 
 void ServerGame::initPowerups() {

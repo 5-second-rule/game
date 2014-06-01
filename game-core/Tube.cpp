@@ -43,3 +43,7 @@ std::shared_ptr<const Bounds> Tube::getBounds() const {
 unsigned int Tube::getPriority() const {
 	return static_cast<unsigned int>(CollisionPriorities::Track);
 }
+
+std::string Tube::toString() {
+	return	BaseObject::toString() + "\r\nType: Tube";
+}

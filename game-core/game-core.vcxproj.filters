@@ -63,6 +63,15 @@
     <ClInclude Include="Sounds.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SelectionEvent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="WallOfDeath.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -117,6 +126,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Tube.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SelectionEvent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="WallOfDeath.cpp">

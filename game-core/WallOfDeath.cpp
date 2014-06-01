@@ -60,3 +60,7 @@ void WallOfDeath::deserialize(BufferReader& reader) {
 
 	reader.finished(sizeof(WallOfDeathData));
 }
+
+std::string WallOfDeath::toString() {
+	return	BaseObject::toString() + "\r\nType: WallOfDeath";
+}

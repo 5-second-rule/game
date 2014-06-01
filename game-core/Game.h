@@ -9,18 +9,15 @@
 
 #define theWorld (*Game::getGlobalInstance()->getEngineInstance()->getWorld())
 
-class GAMECOREDLL Game
-{
+class GAMECOREDLL Game {
 private:
 	static Game *globalInstance;
 	Engine *engineInstance;
 	TrackPath *track;
-	
 	bool initialized;
 
 protected:
 	GameObjectCtorTable *objectCtors;
-	WallOfDeath *wallOfDeath;
 	virtual Engine * makeEngineInstance(ConstructorTable<BaseObject> *objectCtors, ConstructorTable<ActionEvent>* eventCtors) = 0;
 
 public:
@@ -31,6 +28,8 @@ public:
 	static Game * getGlobalInstance();
 
 	virtual GameObjectCtorTable * makeCtorTable();
+
+	WallOfDeath *wallOfDeath;
 
 	virtual void init();
 	void run();

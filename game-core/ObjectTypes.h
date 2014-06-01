@@ -11,6 +11,9 @@ enum GAMECOREDLL ObjectTypes
 	RedBlood,
 	MagicSchoolBus,
 	Track,
+	UI,
+	SelectionScreen,
+	State,
 	Wwod,
 	Adrenaline,
 };

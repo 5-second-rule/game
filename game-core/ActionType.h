@@ -5,5 +5,6 @@
 GAMECOREDLL enum class ActionType {
 	MOVE,
 	USE,
-	SHOOT
+	SHOOT,
+	SELECT
 };

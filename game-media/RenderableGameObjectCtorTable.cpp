@@ -6,6 +6,7 @@
 #include "RenderableWallOfDeath.h"
 #include "RenderablePowerup.h"
 
+#include "RenderableSelectionScreen.h"
 #include "RenderableGame.h"
 
 #ifdef _DEBUG
@@ -14,6 +15,8 @@
 #define new DBG_NEW
 #endif
 #endif  // _DEBUG
+
+static SelectionScreenData *selectionScreenData;
 
 RenderableGameObjectCtorTable::RenderableGameObjectCtorTable() {}
 
@@ -134,6 +137,63 @@ static BaseObject * makeRenderableAdrenaline(ConstructorTable<BaseObject> *thisO
 		);
 }
 
+static BaseObject * makeRenderableSelectionScreen(ConstructorTable<BaseObject> *thisObj) {
+	RenderableGameObjectCtorTable *table = (RenderableGameObjectCtorTable *)thisObj;
+	return new RenderableSelectionScreen(selectionScreenData->getData());
+}
+
+void RenderableGameObjectCtorTable::prepSelectionScreenData() {
+	RenderableMovingObject *playerObjects[4] = {
+		new RenderableMovingObject(
+		ObjectTypes::Ecoli,
+		RenderableGame::getGlobalInstance()
+		->getRenderingEngineInstance()
+		->createModelFromIndex(
+		this->modelIndexes[ObjectTypes::Ecoli],
+		this->textureIndexes[ObjectTypes::Ecoli],
+		this->vertexShaderIndexes[ObjectTypes::Ecoli],
+		this->pixelShaderIndexes[ObjectTypes::Ecoli])
+		),
+		new RenderableMovingObject(
+		ObjectTypes::ChickenPox,
+		RenderableGame::getGlobalInstance()
+		->getRenderingEngineInstance()
+		->createModelFromIndex(
+		this->modelIndexes[ObjectTypes::ChickenPox],
+		this->textureIndexes[ObjectTypes::ChickenPox],
+		this->vertexShaderIndexes[ObjectTypes::ChickenPox],
+		this->pixelShaderIndexes[ObjectTypes::ChickenPox])
+		),
+		new RenderableMovingObject(
+		ObjectTypes::Syphillis,
+		RenderableGame::getGlobalInstance()
+		->getRenderingEngineInstance()
+		->createModelFromIndex(
+		this->modelIndexes[ObjectTypes::Syphillis],
+		this->textureIndexes[ObjectTypes::Syphillis],
+		this->vertexShaderIndexes[ObjectTypes::Syphillis],
+		this->pixelShaderIndexes[ObjectTypes::Syphillis])
+		),
+		new RenderableMovingObject(
+		ObjectTypes::Malaria,
+		RenderableGame::getGlobalInstance()
+		->getRenderingEngineInstance()
+		->createModelFromIndex(
+		this->modelIndexes[ObjectTypes::Malaria],
+		this->textureIndexes[ObjectTypes::Malaria],
+		this->vertexShaderIndexes[ObjectTypes::Malaria],
+		this->pixelShaderIndexes[ObjectTypes::Malaria])
+		)
+	};
+	selectionScreenData = new SelectionScreenData(playerObjects);
+}
+
+static BaseObject * makeSignallingGameState(ConstructorTable<BaseObject> *thisObj) {
+	RenderableGameObjectCtorTable *table = (RenderableGameObjectCtorTable *)thisObj;
+	return new SignallingGameState( RenderableGame::getGlobalInstance()->getGameManager(),
+																	RenderableGame::getGlobalInstance() );
+}
+
 static BaseObject * makeRenderableWallOfDeath(ConstructorTable<BaseObject> *thisObj) {
 	RenderableGameObjectCtorTable *table = (RenderableGameObjectCtorTable *)thisObj;
 
@@ -175,9 +235,13 @@ void RenderableGameObjectCtorTable::initCtors() {
 
 	this->modelIndexes[ObjectTypes::WhiteBlood] = engine->loadModel( "resources/WhiteBloodCell.fbx" );
 	this->textureIndexes[ObjectTypes::WhiteBlood] = engine->loadTexture( "resources/whiteBloodCell2lowRes_TXTR.dds" );
+	this->vertexShaderIndexes[ObjectTypes::WhiteBlood] = engine->loadVertexShader( "resources/vertexRipple.cso" );
+	this->pixelShaderIndexes[ObjectTypes::WhiteBlood] = engine->loadPixelShader( "resources/pixel.cso" );
 
-	this->modelIndexes[ObjectTypes::RedBlood] = engine->loadModel( "resources/ecoliii.fbx" );
-	this->textureIndexes[ObjectTypes::RedBlood] = engine->loadTexture( "resources/Wood.dds" );
+	this->modelIndexes[ObjectTypes::RedBlood] = engine->loadModel( "resources/RedBloodCell.fbx" );
+	this->textureIndexes[ObjectTypes::RedBlood] = engine->loadTexture( "resources/bloodCell_TXTR.dds" );
+	this->vertexShaderIndexes[ObjectTypes::RedBlood] = engine->loadVertexShader( "resources/vertexRipple.cso" );
+	this->pixelShaderIndexes[ObjectTypes::RedBlood] = engine->loadPixelShader( "resources/pixel.cso" );
 
 	this->modelIndexes[ObjectTypes::Track] = engine->loadModel( "resources/track.trk", false );
 	this->textureIndexes[ObjectTypes::Track] = engine->loadTexture( "resources/bloodCell_TXTR.dds" );
@@ -193,6 +257,8 @@ void RenderableGameObjectCtorTable::initCtors() {
 	this->modelIndexes[ObjectTypes::Adrenaline] = engine->loadModel("resources/adrenaline.obj");
 	this->textureIndexes[ObjectTypes::Adrenaline] = engine->loadTexture("resources/Wood.dds");
 
+	this->prepSelectionScreenData();
+
 	this->setConstructor(ObjectTypes::Ecoli, makeRenderableEcoli);
 	this->setConstructor( ObjectTypes::ChickenPox, makeRenderableChickenPox );
 	this->setConstructor( ObjectTypes::Syphillis, makeRenderableSyphillis );
@@ -201,6 +267,8 @@ void RenderableGameObjectCtorTable::initCtors() {
 	this->setConstructor( ObjectTypes::RedBlood, makeRenderableRedBlood );
 
 	this->setConstructor( ObjectTypes::Track, makeRenderableTrack );
+	this->setConstructor( ObjectTypes::SelectionScreen, makeRenderableSelectionScreen );
+	this->setConstructor( ObjectTypes::State, makeSignallingGameState );
 	this->setConstructor( ObjectTypes::Wwod, makeRenderableWallOfDeath );
 	this->setConstructor(ObjectTypes::Adrenaline, makeRenderableAdrenaline);
 }
