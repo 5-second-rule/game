@@ -238,7 +238,7 @@ void RenderableGameObjectCtorTable::initCtors() {
 	this->vertexShaderIndexes[ObjectTypes::WhiteBlood] = engine->loadVertexShader( "resources/vertexRipple.cso" );
 	this->pixelShaderIndexes[ObjectTypes::WhiteBlood] = engine->loadPixelShader( "resources/pixel.cso" );
 
-	this->modelIndexes[ObjectTypes::RedBlood] = engine->loadModel( "resources/RedBloodCell.fbx" );
+	this->modelIndexes[ObjectTypes::RedBlood] = engine->loadModel( "resources/bloodCell.fbx" );
 	this->textureIndexes[ObjectTypes::RedBlood] = engine->loadTexture( "resources/bloodCell_TXTR.dds" );
 	this->vertexShaderIndexes[ObjectTypes::RedBlood] = engine->loadVertexShader( "resources/vertexRipple.cso" );
 	this->pixelShaderIndexes[ObjectTypes::RedBlood] = engine->loadPixelShader( "resources/pixel.cso" );
