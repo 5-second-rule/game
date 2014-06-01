@@ -69,10 +69,6 @@ std::vector<Player*> GameState::getPlayers() {
 	return players;
 }
 
-std::vector<Handle> GameState::getPlayersHandle(){
-	return playersHandle;
-}
-
 bool GameState::isToonUsed(int toon) {
 	return toonUsed[toon];
 }
@@ -111,7 +107,6 @@ PlayerDelegate * GameState::addPlayer(unsigned int playerGuid) {
 			}
 
 			player->spawnMoveableObject();
-			this->playersHandle.push_back(player->cameraTarget());
 
 		}
 		break;

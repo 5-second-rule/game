@@ -14,7 +14,7 @@ public:
 protected:
 	static State gameState;
 	std::vector<Player*> players;
-	std::vector<Handle> playersHandle;
+
 	bool toonUsed[4];
 	Engine *engine;
 	World *world;
@@ -40,7 +40,6 @@ public:
 	void toggleToonUsed(int toon);
 
 	std::vector<Player*> getPlayers();
-	std::vector<Handle> getPlayersHandle();
 	virtual PlayerDelegate* addPlayer(unsigned int playerGuid);
 	
 	// ISerialize Methods
