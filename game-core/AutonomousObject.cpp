@@ -3,14 +3,15 @@
 #include <iostream>
 #include <sstream>
 
-AutonomousObject::AutonomousObject(int objectType, Game *owner)
-	: MovingObject(objectType, owner)
+AutonomousObject::AutonomousObject(ObjectTypes objectType) : AutonomousObject(objectType, Game::getGlobalInstance()) {}
+
+AutonomousObject::AutonomousObject(ObjectTypes objectType, Game *owner) : MovingObject(objectType, owner)
 {
 	steering_behavior = new SteeringBehavior(this);
-	path = AIPath::instance();
-	setCurrentWayPoint(path->begin());
-	path->loopOn();
-	steering_behavior->init();
+	path = Path::instance();
+	m_getWorld()->allocateHandle(this, HandleType::GLOBAL);
+	m_getWorld()->insert(this);
+	init();
 }
 
 AutonomousObject::~AutonomousObject() {}

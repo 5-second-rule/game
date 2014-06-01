@@ -1,4 +1,5 @@
 #include "MovingObject.h"
+#include "AutonomousObject.h"
 
 #include "MoveEvent.h"
 #include "ActionType.h"
@@ -25,9 +26,7 @@ MovingObject::MovingObject(int objectType, Game* owner, bool follow, bool propul
 {
 	this->up = Vector(0.0f, 1.0f, 0.0f);
 	this->heading = Vector(0.0f, 0.0f, 1.0f);
-	this->mass = .1f;
 	this->propulsion = 1.0f;
-	this->friction = .2f;
 	this->trackIndex = 0;
 	this->trackVelocity = 1000;
 
@@ -41,9 +40,12 @@ MovingObject::MovingObject(int objectType, Game* owner)
 
 MovingObject::~MovingObject() {}
 
-
-Vector4 MovingObject::getHeading(){
-	return this->heading;
+void MovingObject::init(){
+	this->mass = ConfigSettings::config->mass;
+	this->drag_coefficient = ConfigSettings::config->drag_coefficient;
+	this->max_speed = ConfigSettings::config->max_speed;
+	this->max_force = ConfigSettings::config->max_force;
+	this->fluid_force = ConfigSettings::config->fluid_force;
 }
 
 float MovingObject::getSpeed(){
@@ -129,9 +131,9 @@ void MovingObject::update(float dt){
 		Vector4 trackForce = track->nodes[this->trackIndex].normal * TRACK_FORCE;
 		this->applyForce(trackForce);
 	}
-
+	
 	if (this->hasPropulsion) {
-		// propulsion in heading
+	// propulsion in heading
 		Vector4 headingForce = Vector4::normalize(this->heading) * HEADING_FORCE * propulsion;
 		this->applyForce(headingForce);
 	}
@@ -179,12 +181,13 @@ void MovingObject::fillBuffer(IFill& buffer) const {
 	data->force[1] = this->force[1];
 	data->force[2] = this->force[2];
 
-	data->friction = friction;
+	data->drag_coefficient = drag_coefficient;
 	data->mass = mass;
 
 	data->trackIndex = this->trackIndex;
 
 	buffer.filled();
+
 }
 
 void MovingObject::deserialize(BufferReader& reader) {
@@ -199,7 +202,7 @@ void MovingObject::deserialize(BufferReader& reader) {
 	this->velocity = Common::Vector(data->velocity[0], data->velocity[1], data->velocity[2]);
 	this->force = Common::Vector(data->force[0], data->force[1], data->force[2]);
 
-	this->friction = data->friction;
+	this->drag_coefficient = data->drag_coefficient;
 	this->mass = data->mass;
 	
 	this->trackIndex = data->trackIndex;
@@ -207,8 +210,77 @@ void MovingObject::deserialize(BufferReader& reader) {
 	reader.finished(sizeof(MovingObjectData));
 }
 
-Vector4 MovingObject::getPosition() {
-	return this->position;
+
+
+void MovingObject::setDragCoeff(float p_drag_coefficient){
+	drag_coefficient = p_drag_coefficient;
+}
+
+void MovingObject::setMaxSpeed(float p_max_speed){
+	max_speed = p_max_speed;
+}
+
+void MovingObject::setMaxForce(float p_max_force){
+	max_force = p_max_force;
+}
+
+void MovingObject::setTickForce(float x, float y, float z){
+	tick_force.set(x, y, z, 0);
+}
+
+void MovingObject::setForce(float x, float y, float z){
+	force.set(x, y, z, 0);
+}
+
+bool MovingObject::setFlag(string flag_name, bool value){
+	if (flag_name == "follow_track") {
+		follow_track = value;
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+void MovingObject::setFluidForce(float f){
+	this->fluid_force = f;
+}
+
+Vector4 MovingObject::getHeading(){
+	return Vector4::normalize(this->velocity);
+}
+
+Vector4 MovingObject::getPosition(){
+	return position;
+}
+
+Vector4 MovingObject::getVelocity(){
+	return velocity;
+}
+
+float MovingObject::speed(){
+	return this->velocity.length();
+}
+
+float MovingObject::getMaxForce(){
+	return max_force;
+}
+
+float MovingObject::getMaxSpeed(){
+	return max_speed;
+}
+
+string MovingObject::toString(){
+	stringstream buffer;
+	buffer << BaseObject::toString() << endl;
+	buffer << "Position: " << position.toString() << endl;
+	buffer << "Speed: " << velocity.length() << endl;
+	buffer << "Force: " << force.toString();
+	return buffer.str();
+}
+
+void MovingObject::print(){
+	cout << toString();
 }
 
 Vector4 MovingObject::getGroupingParameter() const {
@@ -219,7 +291,6 @@ bool MovingObject::collidesWith(const ICollidable* target) const {
 	std::shared_ptr<const Bounds> bounds = target->getBounds();
 
 	if (bounds->type == BoundsType::Sphere) {
-		std::cout << "Wall Check" << std::endl;
 		std::shared_ptr<const BoundingSphere> bs = std::static_pointer_cast<const BoundingSphere>(bounds);
 		std::shared_ptr<const BoundingSphere> me = std::static_pointer_cast<const BoundingSphere>(this->getBounds());
 
@@ -277,4 +348,9 @@ unsigned int MovingObject::getPriority() const {
 
 void MovingObject::setPosition(const Vector4& pos) {
 	this->position = pos;
+}
+
+float MovingObject::forceByDist(float distance, float maximum){
+	float force = (ConfigSettings::config->tube_radius - distance) / ConfigSettings::config->tube_radius * maximum;
+	return (force > 0 ? force : 0);
 }

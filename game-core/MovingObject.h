@@ -5,7 +5,6 @@
 #include "engine-core/BaseObject.h"
 #include "engine-core/ICollidable.h"
 
-
 #include "common/Vector4.h"
 #include "common/Matrix4.h"
 
@@ -18,8 +17,7 @@ struct MovingObjectData {
 	float position[3];
 	float velocity[3];
 	float force[3];
-
-	float friction;
+	float drag_coefficient;
 	float mass;
 
 	int trackIndex;
@@ -37,8 +35,6 @@ protected:
 	float trackVelocity;
 	
 	float propulsion;
-
-	float friction;
 	float mass;
 
 	int trackIndex;
@@ -66,16 +62,13 @@ public:
 
 	void applyForce(const Vector4& force);
 
-	virtual void update(float dt);
-	virtual bool handleEvent(Event* evt);
+	static float forceByDist(float dist, float maximum);
 
 	virtual std::string toString();
 
 	// ISerializable Methods
 	virtual void reserveSize(IReserve&) const;
 	virtual void fillBuffer(IFill&) const;
-
-	virtual void deserialize(BufferReader& buffer);
 
 	// ICollidable Methods
 	Common::Vector4 getGroupingParameter() const;

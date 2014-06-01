@@ -2,6 +2,7 @@
 
 #include "game-core.h"
 #include "GameObjectCtorTable.h"
+#include "ObjectTypes.h"
 #include "engine-core/Engine.h"
 #include "engine-core/World.h"
 #include "TrackPath.h"
@@ -35,4 +36,5 @@ public:
 	void stop();
 	Engine * getEngineInstance();
 	TrackPath * getTrackPath();
+	BaseObject *invoke(ObjectTypes object_type);
 };

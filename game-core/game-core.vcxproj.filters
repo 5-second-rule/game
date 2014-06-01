@@ -13,6 +13,15 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Types">
+      <UniqueIdentifier>{5bff2223-e64a-42fc-a14b-0ae676b8f1ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="State">
+      <UniqueIdentifier>{c7a0801c-7451-4f8f-a04a-ed871d92c2e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AI">
+      <UniqueIdentifier>{e2e927fb-05c6-4136-956d-7c48da447408}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Header Files\AI">
       <UniqueIdentifier>{cb6e30a1-9d0f-4f7d-b73b-7c39e3318429}</UniqueIdentifier>
     </Filter>
@@ -21,9 +30,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ObjectTypes.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="game-core.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -48,6 +54,18 @@
     <ClInclude Include="ActionEventCtorTable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="BehaviorType.h">
+      <Filter>Types</Filter>
+    </ClInclude>
+    <ClInclude Include="TypeDefinition.h">
+      <Filter>Types</Filter>
+    </ClInclude>
+    <ClInclude Include="CommandLine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectTypes.h">
+      <Filter>Types</Filter>
+    </ClInclude>
     <ClInclude Include="StaticObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -56,6 +74,18 @@
     </ClInclude>
     <ClInclude Include="Tube.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IFollowPath.h">
+      <Filter>AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Path.h">
+      <Filter>AI</Filter>
+    </ClInclude>
+    <ClInclude Include="AutonomousObject.h">
+      <Filter>AI</Filter>
+    </ClInclude>
+    <ClInclude Include="SteeringBehavior.h">
+      <Filter>AI</Filter>
     </ClInclude>
     <ClInclude Include="ActionType.h">
       <Filter>Header Files</Filter>
@@ -74,6 +104,9 @@
     </ClInclude>
     <ClInclude Include="SteeringBehavior.h">
       <Filter>Header Files\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="AutonomousObjectManager.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -96,6 +129,29 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ActionEventCtorTable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Path.cpp">
+      <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="AutonomousObject.cpp">
+      <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="IFollowPath.cpp">
+      <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="SteeringBehavior.cpp">
+      <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="AutonomousObjectManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Config.ini">
+      <Filter>Resource Files</Filter>
+    </None>
+    <ClCompile Include="CommandLine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="StaticObject.cpp">

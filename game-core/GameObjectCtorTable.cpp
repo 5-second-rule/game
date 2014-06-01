@@ -4,6 +4,7 @@
 #include "ObjectTypes.h"
 #include "StaticObject.h"
 #include "Tube.h"
+#include "AutonomousObjectManager.h"
 
 #ifdef _DEBUG
 #ifndef DBG_NEW
@@ -44,6 +45,10 @@ static BaseObject * makeTrack(ConstructorTable<BaseObject> *thisObj) {
 	return new Tube();
 }
 
+static BaseObject * makeAutonomousObjectManager(ConstructorTable<BaseObject> *thisObj){
+	return new AutonomousObjectManager();
+}
+
 void GameObjectCtorTable::initCtors() {
 	this->setConstructor( ObjectTypes::Ecoli, makeEcoli );
 	this->setConstructor( ObjectTypes::ChickenPox, makeChickenPox );
@@ -52,4 +57,5 @@ void GameObjectCtorTable::initCtors() {
 	this->setConstructor( ObjectTypes::WhiteBlood, makeWhiteBlood );
 	this->setConstructor( ObjectTypes::RedBlood, makeRedBlood );
 	this->setConstructor( ObjectTypes::Track, makeTrack );
+	this->setConstructor( ObjectTypes::AIManager, makeAutonomousObjectManager );
 }
