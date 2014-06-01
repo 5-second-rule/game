@@ -44,6 +44,10 @@ static BaseObject * makeTrack(ConstructorTable<BaseObject> *thisObj) {
 	return new Tube();
 }
 
+static BaseObject * makeSelectionScreen(ConstructorTable<BaseObject> *thisObj) {
+	return new StaticObject(ObjectTypes::SelectionScreen);
+}
+
 void GameObjectCtorTable::initCtors() {
 	this->setConstructor( ObjectTypes::Ecoli, makeEcoli );
 	this->setConstructor( ObjectTypes::ChickenPox, makeChickenPox );
@@ -52,4 +56,5 @@ void GameObjectCtorTable::initCtors() {
 	this->setConstructor( ObjectTypes::WhiteBlood, makeWhiteBlood );
 	this->setConstructor( ObjectTypes::RedBlood, makeRedBlood );
 	this->setConstructor( ObjectTypes::Track, makeTrack );
+	this->setConstructor( ObjectTypes::SelectionScreen, makeSelectionScreen );
 }

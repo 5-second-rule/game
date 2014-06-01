@@ -58,6 +58,10 @@ Vector4 MovingObject::getUp() {
 	return this->up;
 }
 
+void MovingObject::setPosition(const Vector4& pos) {
+	this->position = pos;
+}
+
 void MovingObject::applyForce(const Vector4& force){
 	this->force += force;
 }
@@ -273,8 +277,4 @@ std::shared_ptr<const Bounds> MovingObject::getBounds() const {
 
 unsigned int MovingObject::getPriority() const {
 	return static_cast<unsigned int>(CollisionPriorities::Object);
-}
-
-void MovingObject::setPosition(const Vector4& pos) {
-	this->position = pos;
 }

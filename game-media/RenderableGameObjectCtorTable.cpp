@@ -3,7 +3,10 @@
 
 #include "RenderableMovingObject.h"
 #include "RenderableStaticObject.h"
+#include "RenderableSelectionScreen.h"
 #include "RenderableGame.h"
+
+static SelectionScreenData *selectionScreenData;
 
 #ifdef _DEBUG
 #ifndef DBG_NEW
@@ -118,6 +121,62 @@ static BaseObject * makeRenderableTrack( ConstructorTable<BaseObject> *thisObj )
 		);
 }
 
+static BaseObject * makeRenderableSelectionScreen(ConstructorTable<BaseObject> *thisObj) {
+	RenderableGameObjectCtorTable *table = (RenderableGameObjectCtorTable *)thisObj;
+	return new RenderableSelectionScreen(selectionScreenData->getData());
+}
+
+void RenderableGameObjectCtorTable::prepSelectionScreenData() {
+	RenderableMovingObject *playerObjects[4] = {
+		new RenderableMovingObject(
+		ObjectTypes::Ecoli,
+		RenderableGame::getGlobalInstance()
+		->getRenderingEngineInstance()
+		->createModelFromIndex(
+		this->modelIndexes[ObjectTypes::Ecoli],
+		this->textureIndexes[ObjectTypes::Ecoli],
+		this->vertexShaderIndexes[ObjectTypes::Ecoli],
+		this->pixelShaderIndexes[ObjectTypes::Ecoli])
+		),
+		new RenderableMovingObject(
+		ObjectTypes::ChickenPox,
+		RenderableGame::getGlobalInstance()
+		->getRenderingEngineInstance()
+		->createModelFromIndex(
+		this->modelIndexes[ObjectTypes::ChickenPox],
+		this->textureIndexes[ObjectTypes::ChickenPox],
+		this->vertexShaderIndexes[ObjectTypes::ChickenPox],
+		this->pixelShaderIndexes[ObjectTypes::ChickenPox])
+		),
+		new RenderableMovingObject(
+		ObjectTypes::Syphillis,
+		RenderableGame::getGlobalInstance()
+		->getRenderingEngineInstance()
+		->createModelFromIndex(
+		this->modelIndexes[ObjectTypes::Syphillis],
+		this->textureIndexes[ObjectTypes::Syphillis],
+		this->vertexShaderIndexes[ObjectTypes::Syphillis],
+		this->pixelShaderIndexes[ObjectTypes::Syphillis])
+		),
+		new RenderableMovingObject(
+		ObjectTypes::Malaria,
+		RenderableGame::getGlobalInstance()
+		->getRenderingEngineInstance()
+		->createModelFromIndex(
+		this->modelIndexes[ObjectTypes::Malaria],
+		this->textureIndexes[ObjectTypes::Malaria],
+		this->vertexShaderIndexes[ObjectTypes::Malaria],
+		this->pixelShaderIndexes[ObjectTypes::Malaria])
+		)
+	};
+	selectionScreenData = new SelectionScreenData(playerObjects);
+}
+
+static BaseObject * makeSignallingGameState(ConstructorTable<BaseObject> *thisObj) {
+	RenderableGameObjectCtorTable *table = (RenderableGameObjectCtorTable *)thisObj;
+	return new SignallingGameState(RenderableGame::getGlobalInstance()->getGameManager());
+}
+
 void RenderableGameObjectCtorTable::initCtors() {
 	GameObjectCtorTable::initCtors();
 	RenderingEngine *engine =
@@ -155,6 +214,8 @@ void RenderableGameObjectCtorTable::initCtors() {
 	this->vertexShaderIndexes[ObjectTypes::Track] = engine->loadVertexShader( "resources/vertexTrack.cso" );
 	this->pixelShaderIndexes[ObjectTypes::Track] = engine->loadPixelShader( "resources/pixelBump.cso" );
 
+	this->prepSelectionScreenData();
+
 	this->setConstructor( ObjectTypes::Ecoli, makeRenderableEcoli );
 	this->setConstructor( ObjectTypes::ChickenPox, makeRenderableChickenPox );
 	this->setConstructor( ObjectTypes::Syphillis, makeRenderableSyphillis );
@@ -162,4 +223,6 @@ void RenderableGameObjectCtorTable::initCtors() {
 	this->setConstructor( ObjectTypes::WhiteBlood, makeRenderableWhiteBlood );
 	this->setConstructor( ObjectTypes::RedBlood, makeRenderableRedBlood );
 	this->setConstructor( ObjectTypes::Track, makeRenderableTrack );
+	this->setConstructor( ObjectTypes::SelectionScreen, makeRenderableSelectionScreen );
+	this->setConstructor( ObjectTypes::State, makeSignallingGameState );
 }
