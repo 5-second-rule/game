@@ -123,6 +123,7 @@
     <ClCompile Include="Tube.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ConfigTemplate.ini" />
     <None Include="resources\track.path" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

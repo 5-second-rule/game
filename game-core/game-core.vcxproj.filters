@@ -84,6 +84,9 @@
     <ClInclude Include="AutonomousObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="BehaviorType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MovingObject.cpp">
@@ -134,5 +137,8 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="Config.ini" />
+    <None Include="ConfigTemplate.ini">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

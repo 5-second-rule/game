@@ -2,6 +2,8 @@
 
 #include "SteeringBehavior.h"
 
+#include "engine-core/ConfigSettings.h"
+
 using namespace Common;
 
 #define random_clamped() (((float)(rand()) / (float)(INT_MAX)) * 2.0f - 1.0f)
