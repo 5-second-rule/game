@@ -123,6 +123,7 @@ int MovingObject::getTrackIndex() {
 
 bool MovingObject::handleEvent(Event *evt){
 
+	float position[3] = { this->getPosition().x(), this->getPosition().y(), this->getPosition().z() };
 	ActionEvent *actionEvt = Event::cast<ActionEvent>(evt);
 	if (actionEvt == nullptr)
 		return false;
@@ -154,7 +155,7 @@ bool MovingObject::handleEvent(Event *evt){
 		break;
 	}
 	case ActionType::SHOOT:
-		owner->getEngineInstance()->sendEvent( new SoundEvent( static_cast<int>(Sounds::SHOOT), false, false ) );
+		owner->getEngineInstance()->sendEvent( new SoundEvent( static_cast<int>(Sounds::SHOOT), false, false, position ) );
 		//TODO: create projectile and set it in motion
 		break;
 	default:
@@ -194,13 +195,13 @@ void MovingObject::update(float dt){
 }
 
 std::string MovingObject::toString() {
-	return	BaseObject::toString() +
+	return	BaseObject::toString() + "\r\nType: " + std::to_string( this->getType() ) +
 					"\r\nUp: " + this->up.toString() +
 					"Heading: " + this->heading.toString() +
 					"Postion: " + this->position.toString() +
 					"Velocity: " + this->velocity.toString() +
 					"Force: " + this->force.toString() + 
-					std::string( "\r\nEnd Object\r\n" );
+					std::string( "End Object\r\n" );
 }
 
 void MovingObject::reserveSize(IReserve& buffer) const {
@@ -279,7 +280,8 @@ bool MovingObject::collidesWith(const ICollidable* target) const {
 
 void MovingObject::handleCollision(std::shared_ptr<const Bounds> bounds, float dt) {
 	// play sound for collision, this will probably play twice and needs to be handled :(
-	owner->getEngineInstance()->sendEvent( new SoundEvent( static_cast<int>(Sounds::COLLIDE), false, false ) );
+	float position[3] = { this->getPosition().x(), this->getPosition().y(), this->getPosition().z() };
+	owner->getEngineInstance()->sendEvent( new SoundEvent( static_cast<int>(Sounds::COLLIDE), false, false, position ) );
 
 	std::shared_ptr<const BoundingSphere> me = std::static_pointer_cast<const BoundingSphere>(this->getBounds());
 

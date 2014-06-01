@@ -6,6 +6,8 @@ public:
 	Tube();
 	virtual ~Tube();
 
+	std::string toString();
+
 	// ICollidable Methods
 	Common::Vector4 getGroupingParameter() const;
 	bool collidesWith(const ICollidable*) const;
