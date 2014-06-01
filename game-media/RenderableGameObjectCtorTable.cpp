@@ -202,11 +202,15 @@ void RenderableGameObjectCtorTable::initCtors() {
 	this->vertexShaderIndexes[ObjectTypes::Malaria] = engine->loadVertexShader( "resources/vertexWiggle.cso" );
 	this->pixelShaderIndexes[ObjectTypes::Malaria] = engine->loadPixelShader( "resources/pixel.cso" );
 
-	this->modelIndexes[ObjectTypes::WhiteBlood] = engine->loadModel( "resources/ecoliii.fbx" );
-	this->textureIndexes[ObjectTypes::WhiteBlood] = engine->loadTexture( "resources/Wood.dds" );
+	this->modelIndexes[ObjectTypes::WhiteBlood] = engine->loadModel( "resources/WhiteBloodCell.fbx" );
+	this->textureIndexes[ObjectTypes::WhiteBlood] = engine->loadTexture( "resources/whiteBloodCell2lowRes_TXTR.dds" );
+	this->vertexShaderIndexes[ObjectTypes::WhiteBlood] = engine->loadVertexShader( "resources/vertexRipple.cso" );
+	this->pixelShaderIndexes[ObjectTypes::WhiteBlood] = engine->loadPixelShader( "resources/pixel.cso" );
 
-	this->modelIndexes[ObjectTypes::RedBlood] = engine->loadModel( "resources/ecoliii.fbx" );
-	this->textureIndexes[ObjectTypes::RedBlood] = engine->loadTexture( "resources/Wood.dds" );
+	this->modelIndexes[ObjectTypes::RedBlood] = engine->loadModel( "resources/RedBloodCell.fbx" );
+	this->textureIndexes[ObjectTypes::RedBlood] = engine->loadTexture( "resources/bloodCell_TXTR.dds.dds" );
+	this->vertexShaderIndexes[ObjectTypes::RedBlood] = engine->loadVertexShader( "resources/vertexRipple.cso" );
+	this->pixelShaderIndexes[ObjectTypes::RedBlood] = engine->loadPixelShader( "resources/pixel.cso" );
 
 	this->modelIndexes[ObjectTypes::Track] = engine->loadModel( "resources/track.trk", false );
 	this->textureIndexes[ObjectTypes::Track] = engine->loadTexture( "resources/bloodCell_TXTR.dds" );
