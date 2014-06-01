@@ -42,15 +42,3 @@ void ServerGame::init() {
 
 	this->gameState->setState( GameState::Selection );
 }
-
-void ServerGame::initPowerups() {
-	int numberOfPowerups = 12;
-	int range = this->getTrackPath()->nodes.size();
-	for (int i = 1; i < numberOfPowerups; i++) {
-		Powerup * powerup = static_cast<Powerup*>(this->objectCtors->invoke(ObjectTypes::Adrenaline));
-		powerup->place(i * (range / numberOfPowerups));
-
-		this->getEngineInstance()->getWorld()->allocateHandle(powerup, HandleType::GLOBAL);
-		this->getEngineInstance()->getWorld()->insert(powerup);
-	}
-}

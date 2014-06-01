@@ -16,9 +16,6 @@ public:
 	ServerGame(float frameTime);
 
 	virtual void init();
-
-	void initPowerups();
-
 	void stop();
 };
 

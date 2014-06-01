@@ -43,12 +43,16 @@ void GameState::setState(State state) {
 	std::vector<Player>::iterator it;
 	switch (state) {
 	case (Selection) :
-		obj = this->objectCtors->invoke(ObjectTypes::SelectionScreen);
-		world->allocateHandle(obj, HandleType::GLOBAL);
-		world->insert(obj);
+		this->selScreen = this->objectCtors->invoke(ObjectTypes::SelectionScreen);
+		world->allocateHandle(this->selScreen, HandleType::GLOBAL);
+		world->insert(this->selScreen);
 		break;
 	case (Game) :
 	{
+		// remove selection screen from world
+		world->remove( &this->selScreen->getHandle() );
+		this->selScreen = nullptr;
+
 		obj = this->objectCtors->invoke( ObjectTypes::Track );
 		world->allocateHandle( obj, HandleType::GLOBAL );
 		world->insert( obj );
@@ -58,6 +62,7 @@ void GameState::setState(State state) {
 			throw std::runtime_error( "Error creating wall of death." );
 		}
 
+		world->allocateHandle( this->game->wallOfDeath, HandleType::GLOBAL );
 		this->world->insert( this->game->wallOfDeath );
 
 		this->game->wallOfDeath->reset();
