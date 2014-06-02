@@ -21,9 +21,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "game-media", "game-media\ga
 		{CF61AD8F-BC58-4EFE-A741-8AF01915DE72} = {CF61AD8F-BC58-4EFE-A741-8AF01915DE72}
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{611FE226-1C82-4083-BDBA-B23D2119A1D8}"
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2E770B46-0612-444F-BE9D-DAC22FBAE9B7}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32

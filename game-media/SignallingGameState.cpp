@@ -2,8 +2,8 @@
 
 #include "RenderableGame.h"
 
-SignallingGameState::SignallingGameState(INotifyReady<GameState> *notifier)
-: GameState() {
+SignallingGameState::SignallingGameState(INotifyReady<GameState> *notifier, ::Game* game)
+: GameState(game) {
 	this->notifier = notifier;
 }
 

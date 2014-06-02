@@ -3,6 +3,8 @@
 #include "Sounds.h"
 #include "MovingObject.h"
 
+#include "Powerup.h"
+
 #include "engine-core/ServerEngine.h"
 
 #ifdef _DEBUG
@@ -33,10 +35,10 @@ void ServerGame::stop() {
 
 void ServerGame::init() {
 	Game::init();
-	this->gameState = new GameState();
+	this->gameState = new GameState(this);
 	this->getEngineInstance()->getWorld()->allocateHandle(this->gameState, HandleType::GLOBAL);
 	this->getEngineInstance()->getWorld()->insert(this->gameState);
 	this->getEngineInstance()->setPlayerRegistration(this->gameState);
 
-	this->gameState->setState(GameState::Selection);
+	this->gameState->setState( GameState::Selection );
 }

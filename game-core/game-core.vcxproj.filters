@@ -72,6 +72,18 @@
     <ClInclude Include="SelectionEvent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="WallOfDeath.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerMovingObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionMetadata.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Powerup.h">
+      <Filter>Header Files</Filter>
+	</ClInclude>
     <ClInclude Include="AIPath.h">
       <Filter>Header Files\AI</Filter>
     </ClInclude>
@@ -123,6 +135,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SelectionEvent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WallOfDeath.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerMovingObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Powerup.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="AIPath.cpp">

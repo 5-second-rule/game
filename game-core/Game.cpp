@@ -4,6 +4,7 @@
 #include "ActionEventCtorTable.h"
 #include "ActionType.h"
 #include "MoveEvent.h"
+#include "ObjectTypes.h"
 
 #ifdef _DEBUG
 #ifndef DBG_NEW
@@ -78,3 +79,6 @@ TrackPath * Game::getTrackPath() {
 	return this->track;
 }
 
+WallOfDeath * Game::getWallOfDeath() {
+	return this->wallOfDeath;
+}

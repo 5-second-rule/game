@@ -5,7 +5,6 @@
 #include "engine-core/BaseObject.h"
 #include "engine-core/ICollidable.h"
 
-
 #include "common/Vector4.h"
 #include "common/Matrix4.h"
 
@@ -30,6 +29,9 @@ class GAMECOREDLL MovingObject : public BaseObject, public ICollidable
 protected:
 	Vector4 up;
 	Vector4 heading;
+	Vector4 sideLeft;
+	Vector4 forceUp;
+	Vector4 forceRight;
 
 	Vector4 position;
 	Vector4 velocity;
@@ -61,6 +63,9 @@ public:
 	Vector4 getPosition();
 	int getTrackIndex();
 	Vector4 getUp();
+	Vector4 getSideLeft();
+	Vector4 getForceUp();
+	Vector4 getForceRight();
 
 	void setPosition(const Vector4& position);
 
@@ -80,7 +85,7 @@ public:
 	// ICollidable Methods
 	Common::Vector4 getGroupingParameter() const;
 	bool collidesWith(const ICollidable*) const;
-	void handleCollision(std::shared_ptr<const Bounds>, float dt);
+	virtual void handleCollision(std::shared_ptr<const Bounds>, float dt, int metadata);
 	std::shared_ptr<const Bounds> getBounds() const;
 	unsigned int getPriority() const;
 

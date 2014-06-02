@@ -27,10 +27,10 @@ void RenderableGame::init() {
 
 }
 
-Engine * RenderableGame::makeEngineInstance(ConstructorTable<BaseObject> *objectCtors, ConstructorTable<ActionEvent>* eventCtors) {
+Engine * RenderableGame::makeEngineInstance( ConstructorTable<BaseObject> *objectCtors, ConstructorTable<ActionEvent>* eventCtors ) {
 
 	RenderingEngine* eng = new RenderingEngine(
-		new RenderableWorld(),
+		new RenderableWorld(), 
 		objectCtors,
 		eventCtors,
 		new SoundCtorTable(),
