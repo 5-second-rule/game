@@ -15,7 +15,7 @@ void RenderableSelectionScreen::render() {
 	this->objectData->backgroundObject->render();
 	this->objectData->titleObject->render();
 	unsigned int myGuid = RenderableGame::getGlobalInstance()->getEngineInstance()->getLocalPlayerGuid(0);
-	int i;
+	size_t i;
 	for (i = 0; i < 4; ++i) {
 		if (i < this->players.size() && this->players[i]->getGuid() == myGuid) {
 			this->objectData->myPlayerBackgroundObjects[i]->render();

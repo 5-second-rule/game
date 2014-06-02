@@ -14,7 +14,7 @@
 
 Powerup::Powerup(int objectType) : StaticObject(objectType) {
 	this->trackIndex = 0;
-	this->rotationDegrees = rand() % 360;
+	this->rotationDegrees = static_cast<float>(rand() % 360);
 	this->timeToLiveAgain = 0;
 }
 
@@ -34,7 +34,7 @@ void Powerup::update(float dt) {
 		this->timeToLiveAgain -= dt;
 	}
 
-	this->rotationDegrees = fmod(this->rotationDegrees + dt, 360);
+	this->rotationDegrees = static_cast<float>(fmod(this->rotationDegrees + dt, 360));
 	this->rotation = Vector4(0, this->rotationDegrees, 0);
 }
 
