@@ -29,6 +29,11 @@ void Player::spawnMoveableObject() {
 	this->data.movingObject = m->getHandle();
 }
 
+
+Handle Player::getMovingObject() {
+	return this->data.movingObject;
+}
+
 void Player::respawn() {
 	int wwodPosition = Game::getGlobalInstance()->getWallOfDeath()->getTrackIndex();
 	int leaderIndex = this->gameState->getLeaderboard()[0].playerPosition;
