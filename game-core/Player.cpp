@@ -58,17 +58,17 @@ void Player::handleEvent(ActionEvent *evt) {
 		switch (selectionEvent->selection.action) {
 		case SelectionEvent::Select:
 			this->data.selected = true;
-			this->gameState->useToon(this->data.selected);
+			this->gameState->useToon(this->data.selection);
 			break;
 
 		case SelectionEvent::Deselect:
 			this->data.selected = false;
-			this->gameState->unuseToon(this->data.selected);
+			this->gameState->unuseToon(this->data.selection);
 			break;
 
 		case SelectionEvent::Toggle:
 			this->data.selected = !this->data.selected;
-			this->gameState->toggleToonUsed(this->data.selected);
+			this->gameState->toggleToonUsed(this->data.selection);
 			break;
 
 		case SelectionEvent::Prev:
