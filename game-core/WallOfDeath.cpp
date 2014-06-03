@@ -48,7 +48,7 @@ void WallOfDeath::update(float dt){
 		int followIndex = (entry.playerPosition - this->followDistance + track->nodes.size()) % track->nodes.size();
 		this->trackIndex = followIndex;
 	}
-	cout << "wall of death is at : " << this->trackIndex << endl;
+	//cout << "wall of death is at : " << this->trackIndex << endl;
 }
 
 void WallOfDeath::reserveSize(IReserve& buffer) const {

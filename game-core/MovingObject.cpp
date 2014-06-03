@@ -91,6 +91,10 @@ int MovingObject::getTrackIndex() {
 	return this->trackIndex;
 }
 
+void MovingObject::setTrackIndex(int position) {
+	this->trackIndex = position;
+}
+
 bool MovingObject::handleEvent(Event *evt){
 
 	float position[3] = { this->getPosition().x(), this->getPosition().y(), this->getPosition().z() };

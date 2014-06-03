@@ -6,6 +6,8 @@
 class GAMECOREDLL PlayerMovingObject : public MovingObject
 {
 public:
+	bool dead;
+
 	PlayerMovingObject(int objectType, Game* owner);
 	~PlayerMovingObject();
 
