@@ -125,6 +125,8 @@
     <ClCompile Include="WallOfDeath.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="resources\Config.ini" />
+    <None Include="resources\ConfigTemplate.ini" />
     <None Include="resources\track.path" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

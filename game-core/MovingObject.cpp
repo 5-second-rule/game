@@ -217,19 +217,9 @@ bool MovingObject::handleEvent(Event *evt){
 void MovingObject::update(float dt){
 	BaseObject::update(dt);
 
-	this->position += this->velocity * dt;
-
-	Vector4 acceleration = this->force * (1 / this->mass);
-	this->force = -(this->velocity * this->drag_coefficient);
-
-	this->velocity += acceleration*dt;
-
 	// follow track
 	TrackPath *track = owner->getTrackPath();
 	this->trackIndex = track->locateIndex(this->position, this->trackIndex);
-
-	const float TRACK_FORCE = 15.0f;
-	const float HEADING_FORCE = 15.0f;
 
 	if (this->followTrack) {
 		float dist_sq = (track->nodes[this->trackIndex].point - this->position).lengthSquared();
@@ -245,8 +235,14 @@ void MovingObject::update(float dt){
 
 	this->applyForce(this->forceUp + this->forceRight);
 
+	this->force -= (this->velocity * this->drag_coefficient);
+	Vector4 acceleration = this->force * (1 / this->mass);
+	this->velocity += acceleration*dt;
+	this->position += this->velocity * dt;
+
 	// reset propulsion
 	this->propulsion = 1.0f;
+	this->force = Vector4(0, 0, 0, 0);
 }
 
 std::string MovingObject::toString() {

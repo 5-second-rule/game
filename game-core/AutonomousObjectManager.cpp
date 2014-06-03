@@ -43,7 +43,8 @@ void AutonomousObjectManager::setOffsetPursuitDefaultAI(AutonomousObject *obj){
 void AutonomousObjectManager::setPursuitDefaultAI(AutonomousObject *obj){
 	obj->setFollowTrack(false);
 	obj->setHasPropulsion(false);
-	obj->setMaxSpeed(50.0f);
+	obj->setMaxSpeed(70.0f);
+	obj->setMaxForce(20.0f);
 }
 
 void AutonomousObjectManager::setDefaultRedBlood(MovingObject *obj){
