@@ -88,7 +88,6 @@ TrackPath * TrackPath::fromFile(char *file) {
 			if (input == ' ') {
 				float x, y, z;
 				fin >> x >> y >> z;
-				z = z * -1.0f;
 
 				PathNode node;
 				node.point = Common::Vector4(x, y, z, 1.0f);
