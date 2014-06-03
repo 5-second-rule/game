@@ -9,10 +9,16 @@ WallOfDeath::WallOfDeath()
 {
 	this->trackIndex = 0;
 	this->defaultVelocity = 1;
+	this->leaderboard = nullptr;
+	this->followDistance = 1000;
 }
 
 WallOfDeath::~WallOfDeath()
 {
+}
+
+void WallOfDeath::setLeaderboard(std::vector<LeaderboardEntry> *leaderboard) {
+	this->leaderboard = leaderboard;
 }
 
 int WallOfDeath::getTrackIndex() {
@@ -33,7 +39,15 @@ void WallOfDeath::update(float dt){
 	BaseObject::update(dt);
 	
 	TrackPath *track = Game::getGlobalInstance()->getTrackPath();
-	this->trackIndex = (this->trackIndex + this->defaultVelocity) % track->nodes.size();
+	int velocityIndex = (this->trackIndex + this->defaultVelocity) % track->nodes.size();
+
+	if (this->leaderboard == nullptr || this->leaderboard->size() <= 0) {
+		this->trackIndex = velocityIndex;
+	} else {
+		LeaderboardEntry entry = (*this->leaderboard)[0];
+		int followIndex = (entry.playerPosition - this->followDistance + track->nodes.size()) % track->nodes.size();
+		this->trackIndex = followIndex;
+	}
 	//cout << "wall of death is at : " << this->trackIndex << endl;
 }
 
