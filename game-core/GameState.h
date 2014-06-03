@@ -44,6 +44,8 @@ public:
 
 	std::vector<Player*> getPlayers();
 	virtual PlayerDelegate* addPlayer(unsigned int playerGuid);
+
+	Player* getLeader();
 	
 	// ISerialize Methods
 	virtual void reserveSize(IReserve& buffer) const;

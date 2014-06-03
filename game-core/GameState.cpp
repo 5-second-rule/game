@@ -1,5 +1,6 @@
 #include "GameState.h"
 #include "Powerup.h"
+#include "Sounds.h"
 
 GameState::State GameState::gameState = State::None;
 
@@ -81,6 +82,9 @@ void GameState::setState(State state) {
 		for( auto it = players.begin(); it != players.end(); ++it ) {
 			(*it)->spawnMoveableObject();
 		}
+
+		float dummyLocation[3] = { 0, 0, 0 };
+		this->game->getEngineInstance()->sendEvent(new SoundEvent(static_cast<int>(Sounds::SOUNDTRACK), true, false, dummyLocation));
 
 		break;
 	}
@@ -191,4 +195,8 @@ bool GameState::handleEvent(Event* evt) {
 
 std::string GameState::toString() {
 	return	BaseObject::toString() + "\r\nType: GameState";
+}
+
+Player* GameState::getLeader() {
+	return nullptr;
 }
