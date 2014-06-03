@@ -16,5 +16,7 @@ void RenderablePowerup::render() {
 	move->setPosition(this->position);
 	move->setRotation(this->rotation[0], this->rotation[1], this->rotation[2]);
 
-	RenderableObject::render();
+	if (this->timeToLiveAgain <= 0) {
+		RenderableObject::render();
+	}
 }
