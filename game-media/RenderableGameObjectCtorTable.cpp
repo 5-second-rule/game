@@ -3,10 +3,11 @@
 
 #include "RenderableMovingObject.h"
 #include "RenderableStaticObject.h"
+#include "RenderableWallOfDeath.h"
+#include "RenderablePowerup.h"
+
 #include "RenderableSelectionScreen.h"
 #include "RenderableGame.h"
-
-static SelectionScreenData *selectionScreenData;
 
 #ifdef _DEBUG
 #ifndef DBG_NEW
@@ -14,6 +15,8 @@ static SelectionScreenData *selectionScreenData;
 #define new DBG_NEW
 #endif
 #endif  // _DEBUG
+
+static SelectionScreenData *selectionScreenData;
 
 RenderableGameObjectCtorTable::RenderableGameObjectCtorTable() {}
 
@@ -121,6 +124,19 @@ static BaseObject * makeRenderableTrack( ConstructorTable<BaseObject> *thisObj )
 		);
 }
 
+static BaseObject * makeRenderableAdrenaline(ConstructorTable<BaseObject> *thisObj) {
+	RenderableGameObjectCtorTable *table = (RenderableGameObjectCtorTable *)thisObj;
+
+	return new RenderablePowerup(
+		ObjectTypes::Adrenaline,
+		RenderableGame::getGlobalInstance()
+		->getRenderingEngineInstance()
+		->createModelFromIndex(
+		table->modelIndexes[ObjectTypes::Adrenaline],
+		table->textureIndexes[ObjectTypes::Adrenaline])
+		);
+}
+
 static BaseObject * makeRenderableSelectionScreen(ConstructorTable<BaseObject> *thisObj) {
 	RenderableGameObjectCtorTable *table = (RenderableGameObjectCtorTable *)thisObj;
 	return new RenderableSelectionScreen(selectionScreenData->getData());
@@ -174,7 +190,22 @@ void RenderableGameObjectCtorTable::prepSelectionScreenData() {
 
 static BaseObject * makeSignallingGameState(ConstructorTable<BaseObject> *thisObj) {
 	RenderableGameObjectCtorTable *table = (RenderableGameObjectCtorTable *)thisObj;
-	return new SignallingGameState(RenderableGame::getGlobalInstance()->getGameManager());
+	return new SignallingGameState( RenderableGame::getGlobalInstance()->getGameManager(),
+																	RenderableGame::getGlobalInstance() );
+}
+
+static BaseObject * makeRenderableWallOfDeath(ConstructorTable<BaseObject> *thisObj) {
+	RenderableGameObjectCtorTable *table = (RenderableGameObjectCtorTable *)thisObj;
+
+	return new RenderableWallOfDeath(
+		RenderableGame::getGlobalInstance()
+		->getRenderingEngineInstance()
+		->createModelFromIndex(
+		table->modelIndexes[ObjectTypes::Wwod],
+		table->textureIndexes[ObjectTypes::Wwod],
+		table->vertexShaderIndexes[ObjectTypes::Wwod],
+		table->pixelShaderIndexes[ObjectTypes::Wwod])
+		);
 }
 
 void RenderableGameObjectCtorTable::initCtors() {
@@ -207,7 +238,7 @@ void RenderableGameObjectCtorTable::initCtors() {
 	this->vertexShaderIndexes[ObjectTypes::WhiteBlood] = engine->loadVertexShader( "resources/vertexRipple.cso" );
 	this->pixelShaderIndexes[ObjectTypes::WhiteBlood] = engine->loadPixelShader( "resources/pixel.cso" );
 
-	this->modelIndexes[ObjectTypes::RedBlood] = engine->loadModel( "resources/RedBloodCell.fbx" );
+	this->modelIndexes[ObjectTypes::RedBlood] = engine->loadModel( "resources/bloodCell.fbx" );
 	this->textureIndexes[ObjectTypes::RedBlood] = engine->loadTexture( "resources/bloodCell_TXTR.dds" );
 	this->vertexShaderIndexes[ObjectTypes::RedBlood] = engine->loadVertexShader( "resources/vertexRipple.cso" );
 	this->pixelShaderIndexes[ObjectTypes::RedBlood] = engine->loadPixelShader( "resources/pixel.cso" );
@@ -218,15 +249,26 @@ void RenderableGameObjectCtorTable::initCtors() {
 	this->vertexShaderIndexes[ObjectTypes::Track] = engine->loadVertexShader( "resources/vertexTrack.cso" );
 	this->pixelShaderIndexes[ObjectTypes::Track] = engine->loadPixelShader( "resources/pixelBump.cso" );
 
+	this->modelIndexes[ObjectTypes::Wwod] = this->modelIndexes[ObjectTypes::WhiteBlood];
+	this->textureIndexes[ObjectTypes::Wwod] = this->textureIndexes[ObjectTypes::WhiteBlood];
+	this->vertexShaderIndexes[ObjectTypes::Wwod] = engine->loadVertexShader("resources/vertexRipple.cso");
+	this->pixelShaderIndexes[ObjectTypes::Wwod] = engine->loadPixelShader("resources/pixel.cso");
+
+	this->modelIndexes[ObjectTypes::Adrenaline] = engine->loadModel("resources/adrenaline.obj");
+	this->textureIndexes[ObjectTypes::Adrenaline] = engine->loadTexture("resources/Wood.dds");
+
 	this->prepSelectionScreenData();
 
-	this->setConstructor( ObjectTypes::Ecoli, makeRenderableEcoli );
+	this->setConstructor(ObjectTypes::Ecoli, makeRenderableEcoli);
 	this->setConstructor( ObjectTypes::ChickenPox, makeRenderableChickenPox );
 	this->setConstructor( ObjectTypes::Syphillis, makeRenderableSyphillis );
 	this->setConstructor( ObjectTypes::Malaria, makeRenderableMalaria );
 	this->setConstructor( ObjectTypes::WhiteBlood, makeRenderableWhiteBlood );
 	this->setConstructor( ObjectTypes::RedBlood, makeRenderableRedBlood );
+
 	this->setConstructor( ObjectTypes::Track, makeRenderableTrack );
 	this->setConstructor( ObjectTypes::SelectionScreen, makeRenderableSelectionScreen );
 	this->setConstructor( ObjectTypes::State, makeSignallingGameState );
+	this->setConstructor( ObjectTypes::Wwod, makeRenderableWallOfDeath );
+	this->setConstructor(ObjectTypes::Adrenaline, makeRenderableAdrenaline);
 }

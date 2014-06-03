@@ -14,6 +14,8 @@ enum GAMECOREDLL ObjectTypes
 	UI,
 	SelectionScreen,
 	State,
+	Wwod,
+	Adrenaline,
 	AIManager
 };
 

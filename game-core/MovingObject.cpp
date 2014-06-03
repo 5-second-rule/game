@@ -9,6 +9,8 @@
 #include "ObjectTypes.h"
 #include "Game.h"
 
+#include "CollisionMetadata.h"
+
 #ifdef _DEBUG
 #ifndef DBG_NEW
 #define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
@@ -22,6 +24,14 @@ MovingObject::MovingObject(int objectType, Game* owner, bool follow, bool propul
 {
 	this->up = Vector(0.0f, 1.0f, 0.0f);
 	this->heading = Vector(0.0f, 0.0f, 1.0f);
+	this->sideLeft = Vector(-1.0f, 0.0f, 0.0f);
+	this->forceUp = Vector(0.0f, 0.0f, 0.0f);
+	this->forceRight = Vector(0.0f, 0.0f, 0.0f);
+	this->velocity = Vector(0.0f, 0.0f, 0.0f);
+	this->force = Vector(0.0f, 0.0f, 0.0f);
+	this->mass = .1f;
+	this->propulsion = 1.0f;
+	this->friction = .2f;
 	this->trackIndex = 0;
 	this->followTrack = follow;
 	this->hasPropulsion = propulse;
@@ -113,6 +123,18 @@ void MovingObject::setPosition(const Vector4& pos) {
 	this->position = pos;
 }
 
+Vector4 MovingObject::getSideLeft() {
+	return this->sideLeft;
+}
+
+Vector4 MovingObject::getForceUp() {
+	return this->forceUp;
+}
+
+Vector4 MovingObject::getForceRight() {
+	return this->forceRight;
+}
+
 void MovingObject::applyForce(const Vector4& force){
 	this->force += force;
 }
@@ -132,24 +154,55 @@ bool MovingObject::handleEvent(Event *evt){
 	case ActionType::MOVE:
 	{
 		MoveEvent *moveEvent = ActionEvent::cast<MoveEvent>(actionEvt);
-		if (moveEvent == nullptr)
+		if (moveEvent == nullptr){
 			return false;
+		}
 
 		const float MOVE_FORCE = 10.0f;
-		const float ROT_SCALE = 0.04f;
+		const float ROT_SCALE = 0.08f;
 		const float BRAKE_SCALE = 0.5f;
 
+		const float UP_SCALE = 1.0f;
+		const float LEFT_SCALE = 1.0f;
+
+		this->propulsion = moveEvent->direction.z + 1.0f; // [-1,1] -> [0,2]
+
+		//Point in direction of track and update up
+		if (this->propulsion < 2) {
+			TrackPath *track = Game::getGlobalInstance()->getTrackPath();
+
+			this->heading = track->nodes[this->trackIndex].normal;
+			this->heading.normalize();
+			this->heading.set(3,0);
+
+			this->sideLeft = Vector4::cross(up, heading);
+			this->sideLeft.normalize();
+
+			this->up = Vector4::cross(heading, this->sideLeft);
+			this->up.normalize();
+			// finish updating in regards to track
+			this->forceUp = this->up * (moveEvent->direction.y * UP_SCALE);
+
+			// rotate around heading
 		this->up = Matrix4::rotate(this->heading, moveEvent->direction.w * ROT_SCALE) * this->up;
 
 		//rotate sideways
 		this->heading = Matrix4::rotate(this->up, -moveEvent->direction.x * ROT_SCALE) * this->heading;
 
 		//rotate up and down
-		Matrix4 rot = Matrix4::rotate(Vector4::cross(up, heading), -moveEvent->direction.y * ROT_SCALE);
+			Matrix4 rot = Matrix4::rotate(this->sideLeft, moveEvent->direction.y * ROT_SCALE);
 		this->heading = rot * heading;
 		this->up = rot * up;
+		}
+		else
+		{
+			this->sideLeft = Vector4::cross(up, heading); //doing so sideLeft is set at least once
+			this->sideLeft.normalize();
 
-		this->propulsion = moveEvent->direction.z + 1.0f; // [-1,1] -> [0,2]
+			this->forceUp = this->up * (moveEvent->direction.y * UP_SCALE); //needs to be set with old up
+		}
+
+		this->forceRight = this->sideLeft * (moveEvent->direction.x * LEFT_SCALE);
 
 		return true;
 		break;
@@ -178,6 +231,9 @@ void MovingObject::update(float dt){
 	TrackPath *track = owner->getTrackPath();
 	this->trackIndex = track->locateIndex(this->position, this->trackIndex);
 
+	const float TRACK_FORCE = 15.0f;
+	const float HEADING_FORCE = 15.0f;
+
 	if (this->followTrack) {
 		float dist_sq = (track->nodes[this->trackIndex].point - this->position).lengthSquared();
 		Vector4 trackForce = track->nodes[this->trackIndex].normal * this->forceByDistSq(dist_sq, this->fluid_force);
@@ -189,6 +245,8 @@ void MovingObject::update(float dt){
 		Vector4 headingForce = Vector4::normalize(this->heading) * this->heading_force * propulsion;
 		this->applyForce(headingForce);
 	}
+
+	this->applyForce(this->forceUp + this->forceRight);
 
 	// reset propulsion
 	this->propulsion = 1.0f;
@@ -278,7 +336,12 @@ bool MovingObject::collidesWith(const ICollidable* target) const {
 	else return false;
 }
 
-void MovingObject::handleCollision(std::shared_ptr<const Bounds> bounds, float dt) {
+void MovingObject::handleCollision(std::shared_ptr<const Bounds> bounds, float dt, int metadata) {
+	if (metadata == CollisionMetadata::POWERUP) {
+		// Ignore power ups for collision bounce
+		return;
+	}
+
 	// play sound for collision, this will probably play twice and needs to be handled :(
 	float position[3] = { this->getPosition().x(), this->getPosition().y(), this->getPosition().z() };
 	owner->getEngineInstance()->sendEvent( new SoundEvent( static_cast<int>(Sounds::COLLIDE), false, false, position ) );

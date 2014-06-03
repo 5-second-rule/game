@@ -16,8 +16,10 @@ protected:
 	std::vector<Player*> players;
 
 	bool toonUsed[4];
+	BaseObject * selScreen;
 	Engine *engine;
 	World *world;
+	::Game *game;
 	ConstructorTable<BaseObject> *objectCtors;
 
 	struct GameStateData {
@@ -26,7 +28,7 @@ protected:
 	};
 
 public:
-	GameState();
+	GameState( ::Game* game );
 	~GameState();
 	
 	bool handleEvent(Event *evt);

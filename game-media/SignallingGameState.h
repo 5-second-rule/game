@@ -9,7 +9,7 @@ private:
 	INotifyReady<GameState> *notifier;
 
 public:
-	SignallingGameState(INotifyReady<GameState> *notifier);
+	SignallingGameState(INotifyReady<GameState> *notifier, ::Game* game);
 	~SignallingGameState();
 	virtual void setState(State state);
 	virtual void deserialize(BufferReader& buffer);

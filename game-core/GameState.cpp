@@ -1,8 +1,10 @@
 #include "GameState.h"
+#include "Powerup.h"
 
 GameState::State GameState::gameState = State::None;
 
-GameState::GameState() : BaseObject(ObjectTypes::State) {
+GameState::GameState( ::Game* game ) : BaseObject( ObjectTypes::State ) {
+	this->game = game;
 	this->engine = Game::getGlobalInstance()->getEngineInstance();
 	this->world = engine->getWorld();
 	this->objectCtors = engine->getObjCtors();
@@ -41,21 +43,47 @@ void GameState::setState(State state) {
 	std::vector<Player>::iterator it;
 	switch (state) {
 	case (Selection) :
-		obj = this->objectCtors->invoke(ObjectTypes::SelectionScreen);
-		world->allocateHandle(obj, HandleType::GLOBAL);
-		world->insert(obj);
+		this->selScreen = this->objectCtors->invoke(ObjectTypes::SelectionScreen);
+		world->allocateHandle(this->selScreen, HandleType::GLOBAL);
+		world->insert(this->selScreen);
 		break;
 	case (Game) :
+	{
+		// remove selection screen from world
+		world->remove( &this->selScreen->getHandle() );
+		this->selScreen = nullptr;
 
-		obj = this->objectCtors->invoke(ObjectTypes::Track);
-		world->allocateHandle(obj, HandleType::GLOBAL);
-		world->insert(obj);
+		obj = this->objectCtors->invoke( ObjectTypes::Track );
+		world->allocateHandle( obj, HandleType::GLOBAL );
+		world->insert( obj );
+
+		this->game->wallOfDeath = dynamic_cast<WallOfDeath *>(this->objectCtors->invoke( ObjectTypes::Wwod ));
+		if( this->game->wallOfDeath == nullptr ) {
+			throw std::runtime_error( "Error creating wall of death." );
+		}
+
+		world->allocateHandle( this->game->wallOfDeath, HandleType::GLOBAL );
+		this->world->insert( this->game->wallOfDeath );
+
+		this->game->wallOfDeath->reset();
+
+		int numberOfPowerups = 12;
+		int range = this->game->getTrackPath()->nodes.size();
+		for( int i = 1; i < numberOfPowerups; i++ ) {
+			Powerup * powerup = static_cast<Powerup*>(this->objectCtors->invoke( ObjectTypes::Adrenaline ));
+			powerup->place( i * (range / numberOfPowerups) );
+
+			this->world->allocateHandle( powerup, HandleType::GLOBAL );
+			this->world->insert( powerup );
+		}
 
 		// tell each player to create a MovingObject they manage
-		for (auto it = players.begin(); it != players.end(); ++it) {
+		for( auto it = players.begin(); it != players.end(); ++it ) {
 			(*it)->spawnMoveableObject();
 		}
+
 		break;
+	}
 	default:
 		break;
 	}

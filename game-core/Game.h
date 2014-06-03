@@ -6,6 +6,7 @@
 #include "engine-core/Engine.h"
 #include "engine-core/World.h"
 #include "TrackPath.h"
+#include "WallOfDeath.h"
 
 #define theEngine (*Game::getGlobalInstance()->getEngineInstance())
 #define theWorld (*Game::getGlobalInstance()->getEngineInstance()->getWorld())
@@ -30,10 +31,13 @@ public:
 
 	virtual GameObjectCtorTable * makeCtorTable();
 
+	WallOfDeath *wallOfDeath;
+
 	virtual void init();
 	void run();
 	void stop();
 	Engine * getEngineInstance();
 	TrackPath * getTrackPath();
+	WallOfDeath * getWallOfDeath();
 	BaseObject *invoke(ObjectTypes object_type);
 };

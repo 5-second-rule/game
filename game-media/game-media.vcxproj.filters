@@ -57,6 +57,12 @@
     <ClInclude Include="SignallingGameState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="RenderableWallOfDeath.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderablePowerup.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RenderableGameObjectCtorTable.cpp">
@@ -93,6 +99,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SignallingGameState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderableWallOfDeath.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderablePowerup.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
