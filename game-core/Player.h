@@ -30,6 +30,7 @@ public:
 	
 	unsigned int getGuid();
 	void spawnMoveableObject();
+	void respawn();
 
 	// death tracking
 	void die();

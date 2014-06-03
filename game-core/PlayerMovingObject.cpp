@@ -5,6 +5,7 @@
 PlayerMovingObject::PlayerMovingObject(int objectType, Game* owner)
 	: MovingObject(objectType, owner)
 {
+	this->dead = false;
 }
 
 
@@ -29,10 +30,7 @@ void PlayerMovingObject::update(float dt) {
 	}
 
 	if (comparativeIndex < wallOfDeathLocation && comparativeIndex > wallOfDeathTail) {
-		//cout << "you died" << endl;
-	}
-	else {
-		//cout << "you're at : " << this->trackIndex << endl;
+		this->dead = true;
 	}
 }
 

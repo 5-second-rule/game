@@ -37,13 +37,20 @@ void GameState::update(float dt) {
 		int smallestPos = -1;
 		int largestPos = -1;
 
-		MovingObject* playerObjs[4];
+		PlayerMovingObject* playerObjs[4];
 
 		for (int i = 0; i < this->players.size(); i++) {
-			playerObjs[i] = dynamic_cast<MovingObject*>(
+			playerObjs[i] = dynamic_cast<PlayerMovingObject*>(
 				this->world->get(this->players[i]->cameraTarget()));
 
 			if (playerObjs[i] != nullptr) {
+				if (playerObjs[i]->dead) {
+					playerObjs[i]->dead = false;
+					this->players[i]->die();
+					this->players[i]->respawn();
+					cout << "player #" << i << " has died" << endl;
+				}
+
 				int trackIndex = playerObjs[i]->getTrackIndex();
 
 				if (smallestPos == -1 || smallestPos > trackIndex) {

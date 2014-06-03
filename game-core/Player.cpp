@@ -29,6 +29,30 @@ void Player::spawnMoveableObject() {
 	this->data.movingObject = m->getHandle();
 }
 
+void Player::respawn() {
+	int wwodPosition = Game::getGlobalInstance()->getWallOfDeath()->getTrackIndex();
+	int leaderIndex = this->gameState->getLeaderboard()[0].playerPosition;
+
+	TrackPath *track = Game::getGlobalInstance()->getTrackPath();
+
+	int trackSize = track->nodes.size();
+	if (wwodPosition > leaderIndex) {
+		leaderIndex += trackSize;
+	}
+
+	int newTrackIndex = ((leaderIndex + wwodPosition) / 2) % trackSize;
+
+	MovingObject* m = dynamic_cast<MovingObject*>(
+		Game::getGlobalInstance()
+		->getEngineInstance()
+		->getWorld()
+		->get(this->data.movingObject)
+		);
+
+	m->setPosition(track->nodes[newTrackIndex].point);
+	m->setTrackIndex(newTrackIndex);
+}
+
 void Player::die() {
 	this->data.deathCount++;
 }
