@@ -17,8 +17,7 @@ struct MovingObjectData {
 	float position[3];
 	float velocity[3];
 	float force[3];
-
-	float friction;
+	float drag_coefficient;
 	float mass;
 
 	int trackIndex;
@@ -37,11 +36,15 @@ protected:
 	Vector4 velocity;
 	Vector4 force;
 	float trackVelocity;
-	
+
 	float propulsion;
 
-	float friction;
+	float drag_coefficient;
 	float mass;
+	float max_speed;
+	float max_force;
+	float fluid_force;
+	float heading_force;
 
 	int trackIndex;
 
@@ -52,13 +55,14 @@ public:
 	MovingObject(int objectType, Game* owner);
 	MovingObject(int objectType, Game* owner, bool follow, bool propulse);
 	virtual ~MovingObject();
+	virtual void initDefaultConfiguration();
 	Game* owner;
 
-	static const float max_speed;
-	static const float max_force;
 
 	Vector4 getHeading(); // A normalized vector giving the direction the object is heading
 	float getSpeed();
+	float getMaxForce();
+	float getMaxSpeed();
 	Vector4 getVelocity();
 	Vector4 getPosition();
 	int getTrackIndex();
@@ -68,6 +72,12 @@ public:
 	Vector4 getForceRight();
 
 	void setPosition(const Vector4& position);
+	void setDragCoeff(float);
+	void setMaxSpeed(float);
+	void setMaxForce(float);
+	void setFollowTrack(bool);
+	void setHasPropulsion(bool);
+	void setFluidForce(float);
 
 	void applyForce(const Vector4& force);
 
@@ -77,10 +87,9 @@ public:
 	virtual std::string toString();
 
 	// ISerializable Methods
+	virtual void deserialize(BufferReader& reader);
 	virtual void reserveSize(IReserve&) const;
 	virtual void fillBuffer(IFill&) const;
-
-	virtual void deserialize(BufferReader& buffer);
 
 	// ICollidable Methods
 	Common::Vector4 getGroupingParameter() const;
@@ -89,5 +98,5 @@ public:
 	std::shared_ptr<const Bounds> getBounds() const;
 	unsigned int getPriority() const;
 
+	static float forceByDistSq(float dist_sq, float maximum);
 };
-

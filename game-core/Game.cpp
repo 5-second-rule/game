@@ -44,8 +44,8 @@ void Game::init() {
 }
 
 void Game::stop() {
-	if( !this->initialized ) {
-		throw std::runtime_error( "Need to call init() first." );
+	if (!this->initialized) {
+		throw std::runtime_error("Need to call init() first.");
 	}
 
 	this->engineInstance->stop();
@@ -81,4 +81,8 @@ TrackPath * Game::getTrackPath() {
 
 WallOfDeath * Game::getWallOfDeath() {
 	return this->wallOfDeath;
+}
+
+BaseObject *Game::invoke(ObjectTypes object_type){
+	return this->objectCtors->invoke(object_type);
 }
