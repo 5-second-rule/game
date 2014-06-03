@@ -24,6 +24,10 @@ void Player::spawnMoveableObject() {
 	this->data.movingObject = m->getHandle();
 }
 
+Handle Player::getMovingObject() {
+	return this->data.movingObject;
+}
+
 void Player::die() {
 	this->data.deathCount++;
 }
