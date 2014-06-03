@@ -29,9 +29,6 @@ MovingObject::MovingObject(int objectType, Game* owner, bool follow, bool propul
 	this->forceRight = Vector(0.0f, 0.0f, 0.0f);
 	this->velocity = Vector(0.0f, 0.0f, 0.0f);
 	this->force = Vector(0.0f, 0.0f, 0.0f);
-	this->mass = .1f;
-	this->propulsion = 1.0f;
-	this->friction = .2f;
 	this->trackIndex = 0;
 	this->followTrack = follow;
 	this->hasPropulsion = propulse;
