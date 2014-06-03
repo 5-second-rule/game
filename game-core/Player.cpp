@@ -15,7 +15,7 @@ Player::~Player() {
 }
 
 void Player::spawnMoveableObject() {
-	MovingObject* m = new MovingObject(this->getSelection(), Game::getGlobalInstance());
+	PlayerMovingObject* m = new PlayerMovingObject(this->getSelection(), Game::getGlobalInstance());
 
 	World* w = Game::getGlobalInstance()->getEngineInstance()->getWorld();
 	w->allocateHandle(m, HandleType::GLOBAL);

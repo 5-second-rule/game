@@ -4,7 +4,7 @@
 #include "ObjectTypes.h"
 #include "SelectionEvent.h"
 #include "ActionType.h"
-#include "MovingObject.h"
+#include "PlayerMovingObject.h"
 
 class GAMECOREDLL GameState;
 
