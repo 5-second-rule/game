@@ -5,6 +5,7 @@
 #include "engine-core/Engine.h"
 #include "game-core/Game.h"
 #include "Player.h"
+#include "Leaderboard.h"
 
 class GAMECOREDLL GameState : public BaseObject, public IRegisterPlayers
 {
@@ -14,6 +15,7 @@ public:
 protected:
 	static State gameState;
 	std::vector<Player*> players;
+	std::vector<LeaderboardEntry> leaderboard;
 	bool toonUsed[4];
 	BaseObject * selScreen;
 	Engine *engine;
@@ -45,7 +47,7 @@ public:
 	std::vector<Player*> getPlayers();
 	virtual PlayerDelegate* addPlayer(unsigned int playerGuid);
 
-	Player* getLeader();
+	std::vector<LeaderboardEntry> getLeaderboard();
 	
 	// ISerialize Methods
 	virtual void reserveSize(IReserve& buffer) const;

@@ -32,6 +32,61 @@ void GameState::update(float dt) {
 		break;
 	}
 	case Game:
+		// update leaderboard, maybe move to new function
+		TrackPath *track = this->game->getTrackPath();
+		int smallestPos = -1;
+		int largestPos = -1;
+
+		MovingObject* playerObjs[4];
+
+		for (int i = 0; i < this->players.size(); i++) {
+			playerObjs[i] = dynamic_cast<MovingObject*>(
+				this->world->get(this->players[i]->cameraTarget()));
+
+			if (playerObjs[i] != nullptr) {
+				int trackIndex = playerObjs[i]->getTrackIndex();
+
+				if (smallestPos == -1 || smallestPos > trackIndex) {
+					smallestPos = trackIndex;
+				}
+
+				if (largestPos == -1 || largestPos < trackIndex) {
+					largestPos = trackIndex;
+				}
+			}
+		}
+
+		bool midLapRollover = (largestPos - smallestPos) > (track->nodes.size() / 2);
+		int dividingLine = largestPos - (track->nodes.size() / 2);
+		
+		int positions[4];
+		for (int i = 0; i < this->players.size(); i++) {
+			if (playerObjs[i] != nullptr) {
+				positions[i] = playerObjs[i]->getTrackIndex();
+				if (midLapRollover && positions[i] < dividingLine) {
+					positions[i] += track->nodes.size();
+				}
+			}
+			else {
+				positions[i] = midLapRollover ? smallestPos : dividingLine;
+			}
+		}
+
+		for (int i = 0; i < this->players.size(); i++) {
+			for (int j = i; j < this->players.size(); j++) {
+				LeaderboardEntry iEntry = leaderboard[i];
+				iEntry.playerPosition = positions[iEntry.playerIndex];
+				leaderboard[i] = iEntry;
+
+				LeaderboardEntry jEntry = leaderboard[j];
+				if (positions[jEntry.playerIndex] > iEntry.playerPosition) {
+					LeaderboardEntry tmp = leaderboard[i];
+					leaderboard[i] = leaderboard[j];
+					leaderboard[j] = tmp;
+				}
+			}
+		}
+
 		//todo if theres a winner, change state
 		break;
 	}
@@ -67,6 +122,7 @@ void GameState::setState(State state) {
 		this->world->insert( this->game->wallOfDeath );
 
 		this->game->wallOfDeath->reset();
+		this->game->wallOfDeath->setLeaderboard(&this->leaderboard);
 
 		int numberOfPowerups = 12;
 		int range = this->game->getTrackPath()->nodes.size();
@@ -144,6 +200,8 @@ PlayerDelegate * GameState::addPlayer(unsigned int playerGuid) {
 		break;
 	default: break;
 	}
+
+	this->leaderboard.push_back({ numPlayers, 0 });
 	this->players.push_back(player);
 
 	return player;
@@ -197,6 +255,6 @@ std::string GameState::toString() {
 	return	BaseObject::toString() + "\r\nType: GameState";
 }
 
-Player* GameState::getLeader() {
-	return nullptr;
+std::vector<LeaderboardEntry> GameState::getLeaderboard() {
+	return this->leaderboard;
 }
