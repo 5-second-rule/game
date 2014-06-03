@@ -15,7 +15,7 @@
 #endif
 #endif  // _DEBUG
 
-GameObjectCtorTable::GameObjectCtorTable() : ConstructorTable<BaseObject>( OBJECT_TYPE_COUNT ) {}
+GameObjectCtorTable::GameObjectCtorTable() : ConstructorTable<BaseObject>(OBJECT_TYPE_COUNT) {}
 
 GameObjectCtorTable::~GameObjectCtorTable() {}
 

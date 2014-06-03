@@ -27,8 +27,8 @@ private:
 	WayPoint current_way_point;
 
 public:
-
-	AutonomousObject(int objectType, Game *owner);
+	AutonomousObject(ObjectTypes objectType);
+	AutonomousObject(ObjectTypes objectType, Game *owner);
 	~AutonomousObject();
 
 	virtual void update(float dt);

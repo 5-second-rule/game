@@ -82,3 +82,7 @@ TrackPath * Game::getTrackPath() {
 WallOfDeath * Game::getWallOfDeath() {
 	return this->wallOfDeath;
 }
+
+BaseObject *Game::invoke(ObjectTypes object_type){
+	return this->objectCtors->invoke(object_type);
+}

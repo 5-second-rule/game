@@ -1,6 +1,5 @@
 #pragma once
 #include "StaticObject.h"
-
 class GAMECOREDLL Tube : public StaticObject, public ICollidable
 {
 public:

@@ -141,7 +141,6 @@ PlayerDelegate * GameState::addPlayer(unsigned int playerGuid) {
 	default: break;
 	}
 	this->players.push_back(player);
-
 	return player;
 }
 

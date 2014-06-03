@@ -14,6 +14,7 @@ public:
 protected:
 	static State gameState;
 	std::vector<Player*> players;
+
 	bool toonUsed[4];
 	BaseObject * selScreen;
 	Engine *engine;

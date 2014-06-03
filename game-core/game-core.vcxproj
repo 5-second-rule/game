@@ -38,6 +38,10 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>$(SolutionDir);$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)../engine/;$(SolutionDir)../common/</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDir)Debug;$(SolutionDir)../engine/Debug/;$(SolutionDir)../common/Debug/</LibraryPath>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -46,10 +50,13 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir)../common/;$(SolutionDir);$(SolutionDir)../engine/</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_EXPORT_COMMON;_IS_GAME_CORE;_WINDLL;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)../common/;</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_IS_GAME_CORE;_WINDLL;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);engine-core.lib;../../common/debug/Common.lib</AdditionalDependencies>
       <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);engine-core.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)../common/;$(SolutionDir)Debug;$(SolutionDir)../engine/Debug</AdditionalLibraryDirectories>
     </Link>
@@ -78,8 +85,10 @@
     <ClInclude Include="ActionEventCtorTable.h" />
     <ClInclude Include="ActionType.h" />
     <ClInclude Include="CollisionMetadata.h" />
-    <ClInclude Include="AIPath.h" />
     <ClInclude Include="AutonomousObject.h" />
+    <ClInclude Include="AutonomousObjectManager.h" />
+    <ClInclude Include="BehaviorType.h" />
+    <ClInclude Include="AIPath.h" />
     <ClInclude Include="BehaviorType.h" />
     <ClInclude Include="game-core.h" />
     <ClInclude Include="Game.h" />
@@ -103,8 +112,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ActionEventCtorTable.cpp" />
-    <ClCompile Include="AIPath.cpp" />
     <ClCompile Include="AutonomousObject.cpp" />
+    <ClCompile Include="AutonomousObjectManager.cpp" />
+    <ClCompile Include="AIPath.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObjectCtorTable.cpp" />
     <ClCompile Include="GameState.cpp" />
@@ -116,6 +126,9 @@
     <ClCompile Include="Powerup.cpp" />
     <ClCompile Include="ServerGame.cpp" />
     <ClCompile Include="ShootEvent.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Config.ini" />
     <ClCompile Include="StaticObject.cpp" />
     <ClCompile Include="SteeringBehavior.cpp" />
     <ClCompile Include="TrackPath.cpp" />
@@ -123,6 +136,7 @@
     <ClCompile Include="WallOfDeath.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ConfigTemplate.ini" />
     <None Include="resources\track.path" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

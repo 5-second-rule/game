@@ -87,13 +87,28 @@
     <ClInclude Include="AIPath.h">
       <Filter>Header Files\AI</Filter>
     </ClInclude>
-    <ClInclude Include="AutonomousObject.h">
-      <Filter>Header Files\AI</Filter>
-    </ClInclude>
     <ClInclude Include="BehaviorType.h">
       <Filter>Header Files\AI</Filter>
     </ClInclude>
+    <ClInclude Include="BehaviorType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AutonomousObjectManager.h">
+      <Filter>Header Files\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="BehaviorType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="SteeringBehavior.h">
+      <Filter>Header Files\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="BehaviorType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BehaviorType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AutonomousObject.h">
       <Filter>Header Files\AI</Filter>
     </ClInclude>
   </ItemGroup>
@@ -149,15 +164,24 @@
     <ClCompile Include="AIPath.cpp">
       <Filter>Source Files\AI</Filter>
     </ClCompile>
-    <ClCompile Include="AutonomousObject.cpp">
+    <ClCompile Include="AutonomousObjectManager.cpp">
       <Filter>Source Files\AI</Filter>
     </ClCompile>
     <ClCompile Include="SteeringBehavior.cpp">
       <Filter>Source Files\AI</Filter>
     </ClCompile>
+    <ClCompile Include="AutonomousObject.cpp">
+      <Filter>Source Files\AI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\track.path">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="ConfigTemplate.ini">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Config.ini">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
