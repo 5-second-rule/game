@@ -33,7 +33,7 @@ bool AutonomousObjectManager::handleEvent(Event* evt){
 	return false;
 }
 
-void AutonomousObjectManager::setOffsetDefaultAI(AutonomousObject *obj){
+void AutonomousObjectManager::setOffsetPursuitDefaultAI(AutonomousObject *obj){
 	obj->setMaxSpeed(10);
 	obj->setMaxForce(10);
 	obj->setFollowTrack(true);
@@ -43,7 +43,12 @@ void AutonomousObjectManager::setOffsetDefaultAI(AutonomousObject *obj){
 void AutonomousObjectManager::setPursuitDefaultAI(AutonomousObject *obj){
 	obj->setFollowTrack(false);
 	obj->setHasPropulsion(false);
-	obj->setMaxSpeed(20.0f);
+	obj->setMaxSpeed(50.0f);
+}
+
+void AutonomousObjectManager::setDefaultRedBlood(MovingObject *obj){
+	obj->setFollowTrack(false);
+	obj->setHasPropulsion(false);
 }
 
 void AutonomousObjectManager::update(float dt){
@@ -54,11 +59,17 @@ void AutonomousObjectManager::update(float dt){
 		MovingObject *mObj = dynamic_cast<MovingObject*>(theWorld.get(*it));
 		if (mObj != nullptr && find(this->players.begin(), this->players.end(), *it) == this->players.end()){
 			AutonomousGroup group(*it);
-			for (int i = 0; i < 20; ++i){
+			for (int i = 0; i < 15; ++i){
 				AutonomousObject *aObj = new AutonomousObject(ObjectTypes::WhiteBlood);
 				this->setPursuitDefaultAI(aObj);
 				aObj->setPosition(Vector4(200, 0, 0));
 				group.autonomous_list.push_back(aObj->getHandle());
+			}
+			for (int i = 0; i < 10; ++i){
+				AutonomousObject *mObj = new AutonomousObject(ObjectTypes::RedBlood, Game::getGlobalInstance());
+				this->setDefaultRedBlood(mObj);
+				mObj->setPosition(Vector4(200, 0, 0));
+				group.red_blood.push_back(mObj->getHandle());
 			}
 
 			group.atual_index = 0;
@@ -81,11 +92,6 @@ void AutonomousObjectManager::update(float dt){
 					if ((aObj->getPosition() - pray->getPosition()).dot(path->nodes[it->atual_index].normal) < 0){
 						it->autonomous_list.pop_front();
 
-						if (aObj == nullptr){
-							aObj = new AutonomousObject(ObjectTypes::Ecoli);
-							handle = aObj->getHandle();
-						}
-
 						aObj->setPosition(path->nodes[(pray->getTrackIndex() + 2000) % path->nodes.size()].point);
 						aObj->setPursuit(pray->getHandle());
 						//aObj->setOnSteeringBehavior(BehaviorType::wander);
@@ -93,6 +99,22 @@ void AutonomousObjectManager::update(float dt){
 						it->autonomous_list.push_back(handle);
 					}
 				}
+
+				if (perc < 5){
+					Handle handle = it->red_blood.front();
+					AutonomousObject *aObj = dynamic_cast<AutonomousObject*>(theWorld.get(handle));
+
+					// Avoid change the position of an object that is in front of the object doing a dot product check
+					if ((aObj->getPosition() - pray->getPosition()).dot(path->nodes[it->atual_index].normal) < 0){
+						it->red_blood.pop_front();
+
+						aObj->setPosition(path->nodes[(pray->getTrackIndex() + 2000) % path->nodes.size()].point);
+						aObj->setOnSteeringBehavior(BehaviorType::wander);
+
+						it->red_blood.push_back(handle);
+					}
+				}
+
 				/*else if (perc < 6 && !offset){
 				cout << "chupa";
 				Vector4 p = path->nodes[(pray->getTrackIndex() + 2000) % path->nodes.size()].point;
@@ -118,6 +140,8 @@ void AutonomousObjectManager::update(float dt){
 				aObj5->setOffsetPursuit(pray->getHandle(), Vector4(0, 5, 0));
 				offset = true;
 				}*/
+
+				
 			}
 		}
 		else {

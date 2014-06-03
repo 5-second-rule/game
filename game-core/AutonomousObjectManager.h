@@ -12,6 +12,7 @@ class GAMECOREDLL AutonomousGroup {
 	friend class AutonomousObjectManager;
 private:
 	std::list< Handle > autonomous_list;
+	std::list< Handle > red_blood;
 	Handle owner;
 	int atual_index;
 
@@ -34,8 +35,9 @@ public:
 	AutonomousObjectManager();
 	~AutonomousObjectManager();
 	virtual bool handleEvent(Event* evt);
-	void setOffsetDefaultAI(AutonomousObject*);
+	void setOffsetPursuitDefaultAI(AutonomousObject*);
 	void setPursuitDefaultAI(AutonomousObject*);
+	void setDefaultRedBlood(MovingObject*);
 
 	void update(float);
 
