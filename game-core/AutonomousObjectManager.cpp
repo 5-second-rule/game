@@ -55,7 +55,7 @@ void AutonomousObjectManager::update(float dt){
 		if (mObj != nullptr && find(this->players.begin(), this->players.end(), *it) == this->players.end()){
 			AutonomousGroup group(*it);
 			for (int i = 0; i < 20; ++i){
-				AutonomousObject *aObj = new AutonomousObject(ObjectTypes::RedBlood);
+				AutonomousObject *aObj = new AutonomousObject(ObjectTypes::WhiteBlood);
 				this->setPursuitDefaultAI(aObj);
 				aObj->setPosition(Vector4(200, 0, 0));
 				group.autonomous_list.push_back(aObj->getHandle());
