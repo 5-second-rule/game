@@ -4,8 +4,8 @@ SelectionScreenData::SelectionScreenData(RenderableMovingObject *(&playerObjects
 	RenderingEngine *engine =
 		RenderableGame::getGlobalInstance()->getRenderingEngineInstance();
 
-	this->winWidth = engine->getWinWidth();
-	this->winHeight = engine->getWinHeight();
+	this->objectData.width = engine->getWindowWidth();
+	this->objectData.height = engine->getWindowHeight();
 
 	const int MAX_PLAYERS = 4;
 	const float MARGIN = 0.05f;
@@ -39,7 +39,7 @@ SelectionScreenData::SelectionScreenData(RenderableMovingObject *(&playerObjects
 
 	for (int i = 0; i < MAX_PLAYERS; ++i) {
 		// Create backgound for each player model and find its center
-		this->objectData.playerCenters[i] = this->calculatePlayerBackgroundVertices(playerbackgroundVertices, i, MARGIN) * this->winWidth / 800 * 5.5f;
+		this->objectData.playerCenters[i] = this->calculatePlayerBackgroundVertices(playerbackgroundVertices, i, MARGIN);
 		this->otherPlayerBackgroundModels[i] = engine->create2DModelFromScratch(playerbackgroundVertices, 4, rectangleIndices, 6, "resources/select-rectangle.dds", textures, false);
 		this->objectData.otherPlayerBackgroundObjects[i] = new RenderableStaticObject(ObjectTypes::SelectionScreen, otherPlayerBackgroundModels[i]);
 		this->myPlayerBackgroundModels[i] = engine->create2DModelFromScratch(playerbackgroundVertices, 4, rectangleIndices, 6, "resources/select-rectangle.dds", textures, false);

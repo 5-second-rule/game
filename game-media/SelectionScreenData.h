@@ -9,6 +9,8 @@
 class SelectionScreenData {
 public:
 	struct Objects {
+		unsigned int width;
+		unsigned int height;
 		float playerCenters[4];
 		RenderableStaticObject *backgroundObject;
 		RenderableStaticObject *titleObject;
