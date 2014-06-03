@@ -46,7 +46,7 @@ void SoundCtorTable::initCtors() {
 		RenderableGame::getGlobalInstance()->getRenderingEngineInstance();
 
 
-	this->soundIndices[static_cast<int>(Sounds::SOUNDTRACK)] = engine->loadSound( "resources/soundtrack.wav" );
+	this->soundIndices[static_cast<int>(Sounds::SOUNDTRACK)] = engine->loadSound( "resources/lava.wav" );
 	//this->soundIndices[static_cast<int>(Sounds::ACCEL)] = engine->loadSound( "resources/accelerate.wav" );
 	//this->soundIndices[static_cast<int>(Sounds::DEACCEL)] = engine->loadSound( "resources/deaccelerate.wav" );
 	this->soundIndices[static_cast<int>(Sounds::SHOOT)] = engine->loadSound( "resources/shoot.wav" );

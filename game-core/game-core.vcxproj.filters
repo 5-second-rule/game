@@ -83,7 +83,7 @@
     </ClInclude>
     <ClInclude Include="Powerup.h">
       <Filter>Header Files</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="AIPath.h">
       <Filter>Header Files\AI</Filter>
     </ClInclude>
@@ -95,6 +95,9 @@
     </ClInclude>
     <ClInclude Include="SteeringBehavior.h">
       <Filter>Header Files\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Leaderboard.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

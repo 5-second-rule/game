@@ -85,6 +85,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObjectCtorTable.h" />
     <ClInclude Include="GameState.h" />
+    <ClInclude Include="Leaderboard.h" />
     <ClInclude Include="MoveEvent.h" />
     <ClInclude Include="MovingObject.h" />
     <ClInclude Include="ObjectTypes.h" />
