@@ -6,9 +6,14 @@ Player::Player(GameState* state) : Player(-1, state) {}
 
 Player::Player(unsigned int guid, GameState* state) {
 	this->data.guid = guid;
-	this->data.selection = 0;
 	this->data.selected = false;
 	this->gameState = state;
+	for (int i = 0; i < 4; i++) {
+		if (!this->gameState->isToonUsed(i)) {
+			this->data.selection = i;
+			break;
+		}
+	}
 }
 
 Player::~Player() {

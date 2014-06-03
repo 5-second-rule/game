@@ -183,7 +183,7 @@ PlayerDelegate * GameState::addPlayer(unsigned int playerGuid) {
 	Player* player = new Player(playerGuid, this);
 	switch (this->getState()) {
 	case (Selection) :
-		player->updateSelection(numPlayers);
+		//player->updateSelection(numPlayers);
 		break;
 	case (Game) :
 		for (int i = 0; i < 4; ++i) {
@@ -214,6 +214,10 @@ void GameState::reserveSize(IReserve& buffer) const {
 	for (unsigned int i = 0; i < players.size(); ++i) {
 		players[i]->reserveSize(buffer);
 	}
+
+	for (unsigned int i = 0; i < players.size(); ++i) {
+		buffer.reserve(sizeof(LeaderboardEntry));
+	}
 }
 
 void GameState::fillBuffer(IFill& buffer) const {
@@ -225,7 +229,12 @@ void GameState::fillBuffer(IFill& buffer) const {
 	for (unsigned int i = 0; i < players.size(); ++i) {
 		players[i]->fillBuffer(buffer);
 	}
-	
+
+	for (unsigned int i = 0; i < players.size(); ++i) {
+		LeaderboardEntry * entry = reinterpret_cast<LeaderboardEntry*>(buffer.getPointer());
+		(*entry) = leaderboard[i];
+		buffer.filled();
+	}
 }
 
 void GameState::deserialize(BufferReader& buffer) {
@@ -234,17 +243,25 @@ void GameState::deserialize(BufferReader& buffer) {
 	this->gameState = (State) data->state;
 	while (data->numPlayers > this->players.size()) {
 		this->players.push_back(new Player(this));
+		this->leaderboard.push_back(LeaderboardEntry());
 	}
 
 	while (data->numPlayers < this->players.size()) {
 		this->players.pop_back();
+		this->leaderboard.pop_back();
 	}
 
 	buffer.finished(sizeof(GameStateData));
 
 	for (unsigned int i = 0; i < data->numPlayers; ++i) {
 		players[i]->deserialize(buffer);
-	}	
+	}
+
+	for (unsigned int i = 0; i < data->numPlayers; ++i) {
+		const LeaderboardEntry *entry = reinterpret_cast<const LeaderboardEntry*>(buffer.getPointer());
+		leaderboard[i] = *entry;
+		buffer.finished(sizeof(LeaderboardEntry));
+	}
 }
 
 bool GameState::handleEvent(Event* evt) {
