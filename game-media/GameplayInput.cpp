@@ -1,4 +1,5 @@
 #include "GameplayInput.h"
+#include "RenderableGame.h"
 
 GameplayInput::GameplayInput() {
 	this->renderingEngine = nullptr;
@@ -95,8 +96,24 @@ std::vector<Event *>  GameplayInput::inputTranslator(InputAdapter *inputAdapter)
 		}
 
 		if( inputAdapter->getKeyState( Transmission::Input::Key::SPACE ) == down ) {
-			inputEventVector.emplace_back( new ShootEvent( this->renderingEngine->getLocalPlayerGuid( 0 ) ) );
+			inputEventVector.push_back( new ShootEvent( this->renderingEngine->getLocalPlayerGuid( 0 ) ) );
 		}
+	}
+
+	if (inputAdapter->getKeyState(Transmission::Input::Key::H) == down) {
+		RenderableGame::getGlobalInstance()->getRenderingEngineInstance()->changeSaturation(-0.005);
+	}
+
+	if (inputAdapter->getKeyState(Transmission::Input::Key::J) == down) {
+		RenderableGame::getGlobalInstance()->getRenderingEngineInstance()->changeSaturation(0.005);
+	}
+
+	if (inputAdapter->getKeyState(Transmission::Input::Key::K) == down) {
+		RenderableGame::getGlobalInstance()->getRenderingEngineInstance()->changeLightness(-0.005);
+	}
+
+	if (inputAdapter->getKeyState(Transmission::Input::Key::L) == down) {
+		RenderableGame::getGlobalInstance()->getRenderingEngineInstance()->changeLightness(0.005);
 	}
 
 	//if (dir.x != 0 || dir.y != 0 || dir.z != 0 || dir.w != 0) {
