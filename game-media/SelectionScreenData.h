@@ -21,6 +21,9 @@ public:
 private:
 	Objects objectData;
 
+	unsigned int winHeight;
+	unsigned int winWidth;
+
 	Transmission::Model *backgroundModel;
 	Transmission::Model *titleModel;
 	Transmission::Model *otherPlayerBackgroundModels[4];
@@ -46,5 +49,7 @@ public:
 	SelectionScreenData(RenderableMovingObject *(&playerObjects)[4]);
 	~SelectionScreenData();
 	Objects *getData();
+	unsigned int getHeight();
+	unsigned int getWidth();
 };
 

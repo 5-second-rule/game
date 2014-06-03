@@ -4,6 +4,9 @@ SelectionScreenData::SelectionScreenData(RenderableMovingObject *(&playerObjects
 	RenderingEngine *engine =
 		RenderableGame::getGlobalInstance()->getRenderingEngineInstance();
 
+	this->winWidth = engine->getWinWidth();
+	this->winHeight = engine->getWinHeight();
+
 	const int MAX_PLAYERS = 4;
 	const float MARGIN = 0.05f;
 	float scale = (2.0f - 5 * MARGIN) / 8;
@@ -30,13 +33,13 @@ SelectionScreenData::SelectionScreenData(RenderableMovingObject *(&playerObjects
 	this->objectData.backgroundObject = new RenderableStaticObject(ObjectTypes::SelectionScreen, backgroundModel);
 
 	// Create object for screen title, e.g., "Choose Player"
-	this->calculateTitleVertices(titleVertices, 800, 600);
+	this->calculateTitleVertices(titleVertices, this->winWidth, this->winHeight);
 	this->titleModel = engine->create2DModelFromScratch(titleVertices, 4, rectangleIndices, 6, "resources/select-title.dds", textures, true);
 	this->objectData.titleObject = new RenderableStaticObject(ObjectTypes::SelectionScreen, titleModel);
 
 	for (int i = 0; i < MAX_PLAYERS; ++i) {
 		// Create backgound for each player model and find its center
-		this->objectData.playerCenters[i] = this->calculatePlayerBackgroundVertices(playerbackgroundVertices, i, MARGIN) * 5.5f;
+		this->objectData.playerCenters[i] = this->calculatePlayerBackgroundVertices(playerbackgroundVertices, i, MARGIN) * this->winWidth / 800 * 5.5f;
 		this->otherPlayerBackgroundModels[i] = engine->create2DModelFromScratch(playerbackgroundVertices, 4, rectangleIndices, 6, "resources/select-rectangle.dds", textures, false);
 		this->objectData.otherPlayerBackgroundObjects[i] = new RenderableStaticObject(ObjectTypes::SelectionScreen, otherPlayerBackgroundModels[i]);
 		this->myPlayerBackgroundModels[i] = engine->create2DModelFromScratch(playerbackgroundVertices, 4, rectangleIndices, 6, "resources/select-rectangle.dds", textures, false);
@@ -143,4 +146,12 @@ float SelectionScreenData::calculatePlayerBackgroundVertices(Transmission::Verte
 
 SelectionScreenData::Objects *SelectionScreenData::getData() {
 	return &(this->objectData);
+}
+
+unsigned int SelectionScreenData::getHeight() {
+	return this->winHeight;
+}
+
+unsigned int SelectionScreenData::getWidth() {
+	return this->winWidth;
 }
