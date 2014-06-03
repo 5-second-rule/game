@@ -1,5 +1,7 @@
 #include "MovingObject.h"
 
+#include <chrono>
+
 #include "MoveEvent.h"
 #include "ActionType.h"
 #include "Sounds.h"
@@ -282,7 +284,9 @@ bool MovingObject::collidesWith(const ICollidable* target) const {
 	std::shared_ptr<const Bounds> bounds = target->getBounds();
 
 	if (bounds->type == BoundsType::Sphere) {
-		std::cout << "Wall Check" << std::endl;
+		if( owner->getEngineInstance()->getDebugLevel() > 0 ) {
+			std::cout << "Wall Check" << std::endl;
+		}
 		std::shared_ptr<const BoundingSphere> bs = std::static_pointer_cast<const BoundingSphere>(bounds);
 		std::shared_ptr<const BoundingSphere> me = std::static_pointer_cast<const BoundingSphere>(this->getBounds());
 
@@ -299,8 +303,12 @@ void MovingObject::handleCollision(std::shared_ptr<const Bounds> bounds, float d
 	}
 
 	// play sound for collision, this will probably play twice and needs to be handled :(
-	float position[3] = { this->getPosition().x(), this->getPosition().y(), this->getPosition().z() };
-	owner->getEngineInstance()->sendEvent( new SoundEvent( static_cast<int>(Sounds::COLLIDE), false, false, position ) );
+	static chrono::system_clock::time_point lastPlay = chrono::high_resolution_clock::now();
+	if( chrono::high_resolution_clock::now() >= lastPlay + chrono::milliseconds(700) ) {
+		lastPlay = chrono::high_resolution_clock::now();
+		float position[3] = { this->getPosition().x(), this->getPosition().y(), this->getPosition().z() };
+		owner->getEngineInstance()->sendEvent( new SoundEvent( static_cast<int>(Sounds::COLLIDE), false, false, position ) );
+	}
 
 	std::shared_ptr<const BoundingSphere> me = std::static_pointer_cast<const BoundingSphere>(this->getBounds());
 
