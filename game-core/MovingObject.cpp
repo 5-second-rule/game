@@ -79,7 +79,7 @@ Vector4 MovingObject::getUp() {
 }
 
 Vector4 MovingObject::getHeading(){
-	return Vector4::normalize(this->velocity);
+	return this->headingVector;
 }
 
 Vector4 MovingObject::getPosition(){
@@ -230,7 +230,7 @@ void MovingObject::update(float dt){
 	if (this->followTrack) {
 		float dist_sq = (track->nodes[this->trackIndex].point - this->position).lengthSquared();
 		Vector4 trackForce = track->nodes[this->trackIndex].normal * this->forceByDistSq(dist_sq, this->fluid_force);
-		this->applyForce(trackForce + this->forceUp + this->forceRight);
+		this->applyForce(trackForce + this->forceUp * 5 + this->forceRight * 5);
 	}
 
 	if (this->hasPropulsion) {
