@@ -38,7 +38,9 @@ void PlayerMovingObject::handleCollision(std::shared_ptr<const Bounds> bounds, f
 	MovingObject::handleCollision(bounds, dt, metadata);
 
 	if (metadata == CollisionMetadata::POWERUP) {
-		cout << ">>>>>>>>>>>> power up" << endl;
+		if( Game::getGlobalInstance()->getEngineInstance()->getDebugLevel() > 0 ) {
+			cout << ">>>>>>>>>>>> power up" << endl;
+		}
 
 		const float TRACK_FORCE = 3000.0f;
 		TrackPath *track = Game::getGlobalInstance()->getTrackPath();
