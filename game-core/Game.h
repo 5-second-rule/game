@@ -16,9 +16,12 @@ private:
 	TrackPath *track;
 	bool initialized;
 
+
 protected:
 	GameObjectCtorTable *objectCtors;
 	virtual Engine * makeEngineInstance(ConstructorTable<BaseObject> *objectCtors, ConstructorTable<ActionEvent>* eventCtors) = 0;
+	std::thread *backgroundLoader;
+	bool loading;
 
 public:
 	Game();

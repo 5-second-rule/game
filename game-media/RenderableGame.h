@@ -15,6 +15,7 @@ private:
 
 protected:
 	virtual Engine * makeEngineInstance( ConstructorTable<BaseObject> *objectCtors, ConstructorTable<ActionEvent>* eventCtors );
+	Handle titleScreenHandle;
 
 public:
 	RenderableGame(void *appHandle);
@@ -28,6 +29,6 @@ public:
 	RenderingGameManager *getGameManager();
 
 	void beforeDraw();
-
+	bool loadingDone();
 };
 
