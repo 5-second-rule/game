@@ -28,6 +28,7 @@ class GAMECOREDLL MovingObject : public BaseObject, public ICollidable
 protected:
 	Vector4 up;
 	Vector4 heading;
+	Vector4 headingVector;
 	Vector4 sideLeft;
 	Vector4 forceUp;
 	Vector4 forceRight;

@@ -77,6 +77,7 @@ Vector4 MovingObject::getUp() {
 }
 
 Vector4 MovingObject::getHeading(){
+	return this->headingVector;
 	return Vector4::normalize(this->velocity);
 }
 
@@ -240,6 +241,10 @@ void MovingObject::update(float dt){
 	this->velocity += acceleration*dt;
 	this->position += this->velocity * dt;
 
+	if (this->velocity.lengthSquared() > 0.01){
+		this->headingVector = Vector4::normalize(this->velocity);
+	}
+
 	// reset propulsion
 	this->propulsion = 1.0f;
 	this->force = Vector4(0, 0, 0, 0);
@@ -383,6 +388,6 @@ unsigned int MovingObject::getPriority() const {
 }
 
 float MovingObject::forceByDistSq(float distance_sq, float maximum){
-	float force = (ConfigSettings::config.tube_radius_sq - distance_sq) / ConfigSettings::config.tube_radius_sq * maximum;
+	float force = (Game::getGlobalInstance()->tubeRadius - distance_sq) / Game::getGlobalInstance()->tubeRadius * maximum;
 	return (force > 0 ? force : 0);
 }

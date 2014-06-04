@@ -23,6 +23,8 @@ protected:
 	virtual Engine * makeEngineInstance(ConstructorTable<BaseObject> *objectCtors, ConstructorTable<ActionEvent>* eventCtors) = 0;
 
 public:
+	float tubeRadius;
+
 	Game();
 	~Game();
 
