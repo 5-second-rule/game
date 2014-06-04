@@ -24,6 +24,7 @@ protected:
 
 public:
 	float tubeRadius;
+	float tubeRadiusSq;
 
 	Game();
 	~Game();
@@ -41,5 +42,4 @@ public:
 	Engine * getEngineInstance();
 	TrackPath * getTrackPath();
 	WallOfDeath * getWallOfDeath();
-	BaseObject *invoke(ObjectTypes object_type);
 };

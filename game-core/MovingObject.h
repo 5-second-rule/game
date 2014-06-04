@@ -67,6 +67,7 @@ public:
 	Vector4 getVelocity();
 	Vector4 getPosition();
 	int getTrackIndex();
+	void setTrackIndex(int position);
 	Vector4 getUp();
 	Vector4 getSideLeft();
 	Vector4 getForceUp();

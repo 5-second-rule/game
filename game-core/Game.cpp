@@ -21,6 +21,7 @@ Game::Game() {
 	this->initialized = false;
 	this->engineInstance = nullptr;
 	ConfigSettings::config.getValueOrDefault("tube_radius", this->tubeRadius, 100.0f);
+	this->tubeRadiusSq = this->tubeRadius * this->tubeRadius;
 }
 
 Game::~Game() {
@@ -84,8 +85,4 @@ TrackPath * Game::getTrackPath() {
 
 WallOfDeath * Game::getWallOfDeath() {
 	return this->wallOfDeath;
-}
-
-BaseObject *Game::invoke(ObjectTypes object_type){
-	return this->objectCtors->invoke(object_type);
 }

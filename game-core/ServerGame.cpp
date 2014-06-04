@@ -42,8 +42,7 @@ void ServerGame::init() {
 
 	this->gameState->setState( GameState::Selection );
 	
-	this->AI_manager = new AutonomousObjectManager();
-	this->AI_manager->setTrack(this->getTrackPath());
+	this->AI_manager = new AutonomousObjectManager(this->getTrackPath(), this->gameState);
 	theWorld.allocateHandle(AI_manager, HandleType::LOCAL);
 	theWorld.insert(AI_manager);
 

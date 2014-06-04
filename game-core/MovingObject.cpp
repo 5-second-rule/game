@@ -3,6 +3,8 @@
 #include "MovingObject.h"
 #include "AutonomousObject.h"
 
+#include <chrono>
+
 #include "MoveEvent.h"
 #include "ActionType.h"
 #include "Sounds.h"
@@ -19,8 +21,8 @@
 #endif  // _DEBUG
 
 MovingObject::MovingObject(int objectType, Game* owner, bool follow, bool propulse)
-: BaseObject(objectType)
-, owner(owner)
+	: BaseObject(objectType)
+	, owner(owner)
 {
 	this->up = Vector(0.0f, 1.0f, 0.0f);
 	this->heading = Vector(0.0f, 0.0f, 1.0f);
@@ -59,7 +61,7 @@ void MovingObject::initDefaultConfiguration(){
 }
 
 MovingObject::MovingObject(int objectType, Game* owner)
-: MovingObject(objectType, owner, true, true) {}
+	: MovingObject(objectType, owner, true, true) {}
 
 
 MovingObject::~MovingObject() {}
@@ -77,7 +79,6 @@ Vector4 MovingObject::getUp() {
 }
 
 Vector4 MovingObject::getHeading(){
-	return this->headingVector;
 	return Vector4::normalize(this->velocity);
 }
 
@@ -141,6 +142,10 @@ int MovingObject::getTrackIndex() {
 	return this->trackIndex;
 }
 
+void MovingObject::setTrackIndex(int position) {
+	this->trackIndex = position;
+}
+
 bool MovingObject::handleEvent(Event *evt){
 
 	float position[3] = { this->getPosition().x(), this->getPosition().y(), this->getPosition().z() };
@@ -151,59 +156,59 @@ bool MovingObject::handleEvent(Event *evt){
 	switch (ActionType(actionEvt->getActionType())) {
 	case ActionType::MOVE:
 	{
-							 MoveEvent *moveEvent = ActionEvent::cast<MoveEvent>(actionEvt);
-							 if (moveEvent == nullptr){
-								 return false;
-							 }
+		MoveEvent *moveEvent = ActionEvent::cast<MoveEvent>(actionEvt);
+		if (moveEvent == nullptr){
+			return false;
+		}
 
-							 const float MOVE_FORCE = 10.0f;
-							 const float ROT_SCALE = 0.08f;
-							 const float BRAKE_SCALE = 0.5f;
+		const float MOVE_FORCE = 10.0f;
+		const float ROT_SCALE = 0.08f;
+		const float BRAKE_SCALE = 0.5f;
 
-							 const float UP_SCALE = 1.0f;
-							 const float LEFT_SCALE = 1.0f;
+		const float UP_SCALE = 1.0f;
+		const float LEFT_SCALE = 1.0f;
 
-							 this->propulsion = moveEvent->direction.z + 1.0f; // [-1,1] -> [0,2]
+		this->propulsion = moveEvent->direction.z + 1.0f; // [-1,1] -> [0,2]
 
-							 //Point in direction of track and update up
-							 if (this->propulsion < 2) {
-								 TrackPath *track = Game::getGlobalInstance()->getTrackPath();
+		//Point in direction of track and update up
+		if (this->propulsion < 2) {
+			TrackPath *track = Game::getGlobalInstance()->getTrackPath();
 
-								 this->heading = track->nodes[this->trackIndex].normal;
-								 this->heading.normalize();
+			this->heading = track->nodes[this->trackIndex].normal;
+			this->heading.normalize();
 								 this->heading.set(3, 0);
 
-								 this->sideLeft = Vector4::cross(up, heading);
-								 this->sideLeft.normalize();
+			this->sideLeft = Vector4::cross(up, heading);
+			this->sideLeft.normalize();
 
-								 this->up = Vector4::cross(heading, this->sideLeft);
-								 this->up.normalize();
-								 // finish updating in regards to track
-								 this->forceUp = this->up * (moveEvent->direction.y * UP_SCALE);
+			this->up = Vector4::cross(heading, this->sideLeft);
+			this->up.normalize();
+			// finish updating in regards to track
+			this->forceUp = this->up * (moveEvent->direction.y * UP_SCALE);
 
-								 // rotate around heading
-								 this->up = Matrix4::rotate(this->heading, moveEvent->direction.w * ROT_SCALE) * this->up;
+			// rotate around heading
+		this->up = Matrix4::rotate(this->heading, moveEvent->direction.w * ROT_SCALE) * this->up;
 
-								 //rotate sideways
-								 this->heading = Matrix4::rotate(this->up, -moveEvent->direction.x * ROT_SCALE) * this->heading;
+		//rotate sideways
+		this->heading = Matrix4::rotate(this->up, -moveEvent->direction.x * ROT_SCALE) * this->heading;
 
-								 //rotate up and down
-								 Matrix4 rot = Matrix4::rotate(this->sideLeft, moveEvent->direction.y * ROT_SCALE);
-								 this->heading = rot * heading;
-								 this->up = rot * up;
-							 }
-							 else
-							 {
-								 this->sideLeft = Vector4::cross(up, heading); //doing so sideLeft is set at least once
-								 this->sideLeft.normalize();
+		//rotate up and down
+			Matrix4 rot = Matrix4::rotate(this->sideLeft, moveEvent->direction.y * ROT_SCALE);
+		this->heading = rot * heading;
+		this->up = rot * up;
+		}
+		else
+		{
+			this->sideLeft = Vector4::cross(up, heading); //doing so sideLeft is set at least once
+			this->sideLeft.normalize();
 
-								 this->forceUp = this->up * (moveEvent->direction.y * UP_SCALE); //needs to be set with old up
-							 }
+			this->forceUp = this->up * (moveEvent->direction.y * UP_SCALE); //needs to be set with old up
+		}
 
-							 this->forceRight = this->sideLeft * (moveEvent->direction.x * LEFT_SCALE);
+		this->forceRight = this->sideLeft * (moveEvent->direction.x * LEFT_SCALE);
 
-							 return true;
-							 break;
+		return true;
+		break;
 	}
 	case ActionType::SHOOT:
 		owner->getEngineInstance()->sendEvent(new SoundEvent(static_cast<int>(Sounds::SHOOT), false, false, position));
@@ -225,7 +230,7 @@ void MovingObject::update(float dt){
 	if (this->followTrack) {
 		float dist_sq = (track->nodes[this->trackIndex].point - this->position).lengthSquared();
 		Vector4 trackForce = track->nodes[this->trackIndex].normal * this->forceByDistSq(dist_sq, this->fluid_force);
-		this->applyForce(trackForce);
+		this->applyForce(trackForce + this->forceUp + this->forceRight);
 	}
 
 	if (this->hasPropulsion) {
@@ -234,14 +239,12 @@ void MovingObject::update(float dt){
 		this->applyForce(headingForce);
 	}
 
-	this->applyForce(this->forceUp + this->forceRight);
-
 	this->force -= (this->velocity * this->drag_coefficient);
 	Vector4 acceleration = this->force * (1 / this->mass);
 	this->velocity += acceleration*dt;
 	this->position += this->velocity * dt;
 
-	if (this->velocity.lengthSquared() > 0.01){
+	if (this->velocity.lengthSquared() > 0.000001){
 		this->headingVector = Vector4::normalize(this->velocity);
 	}
 
@@ -252,11 +255,11 @@ void MovingObject::update(float dt){
 
 std::string MovingObject::toString() {
 	return	BaseObject::toString() + "\r\nType: " + std::to_string(this->getType()) +
-		"\r\nUp: " + this->up.toString() +
-		"Heading: " + this->heading.toString() +
-		"Postion: " + this->position.toString() +
-		"Velocity: " + this->velocity.toString() +
-		"Force: " + this->force.toString() +
+					"\r\nUp: " + this->up.toString() +
+					"Heading: " + this->heading.toString() +
+					"Postion: " + this->position.toString() +
+					"Velocity: " + this->velocity.toString() +
+					"Force: " + this->force.toString() + 
 		std::string("End Object\r\n");
 }
 
@@ -311,7 +314,7 @@ void MovingObject::deserialize(BufferReader& reader) {
 
 	this->drag_coefficient = data->drag_coefficient;
 	this->mass = data->mass;
-
+	
 	this->trackIndex = data->trackIndex;
 
 	reader.finished(sizeof(MovingObjectData));
@@ -341,8 +344,12 @@ void MovingObject::handleCollision(std::shared_ptr<const Bounds> bounds, float d
 	}
 
 	// play sound for collision, this will probably play twice and needs to be handled :(
+	static chrono::system_clock::time_point lastPlay = chrono::high_resolution_clock::now();
+	if( chrono::high_resolution_clock::now() >= lastPlay + chrono::milliseconds(700) ) {
+		lastPlay = chrono::high_resolution_clock::now();
 	float position[3] = { this->getPosition().x(), this->getPosition().y(), this->getPosition().z() };
-	owner->getEngineInstance()->sendEvent(new SoundEvent(static_cast<int>(Sounds::COLLIDE), false, false, position));
+		owner->getEngineInstance()->sendEvent( new SoundEvent( static_cast<int>(Sounds::COLLIDE), false, false, position ) );
+	}
 
 	std::shared_ptr<const BoundingSphere> me = std::static_pointer_cast<const BoundingSphere>(this->getBounds());
 
@@ -368,7 +375,7 @@ void MovingObject::handleCollision(std::shared_ptr<const Bounds> bounds, float d
 		//TODO: replace 100 with track radius
 		this->position = track->nodes[this->trackIndex].point - (wallNormal * (100.0f - me->radius));
 	}
-
+	
 }
 
 std::shared_ptr<const Bounds> MovingObject::getBounds() const {
@@ -388,6 +395,6 @@ unsigned int MovingObject::getPriority() const {
 }
 
 float MovingObject::forceByDistSq(float distance_sq, float maximum){
-	float force = (Game::getGlobalInstance()->tubeRadius - distance_sq) / Game::getGlobalInstance()->tubeRadius * maximum;
+	float force = (Game::getGlobalInstance()->tubeRadiusSq - distance_sq) / Game::getGlobalInstance()->tubeRadiusSq * maximum;
 	return (force > 0 ? force : 0);
 }

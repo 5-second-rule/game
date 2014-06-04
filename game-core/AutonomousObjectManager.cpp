@@ -2,6 +2,7 @@
 #include <sstream>
 
 #include "AutonomousObjectManager.h"
+#include "GameState.h"
 
 AutonomousGroup::AutonomousGroup(Handle handle){
 	MovingObject *obj = dynamic_cast<MovingObject*>(theWorld.get(handle));
@@ -21,13 +22,14 @@ string AutonomousGroup::toString() const{
 	return buffer.str();
 }
 
-AutonomousObjectManager::AutonomousObjectManager() : BaseObject(ObjectTypes::AIManager) {}
+AutonomousObjectManager::AutonomousObjectManager(TrackPath *p_track_path, GameState *p_game_state) :
+	BaseObject(ObjectTypes::AIManager)
+{
+	this->path = p_track_path;
+	this->gameState = p_game_state;
+}
 
 AutonomousObjectManager::~AutonomousObjectManager() {}
-
-void AutonomousObjectManager::setTrack(TrackPath *p_track_path){
-	this->path = p_track_path;
-}
 
 bool AutonomousObjectManager::handleEvent(Event* evt){
 	return false;
@@ -44,7 +46,7 @@ void AutonomousObjectManager::setPursuitDefaultAI(AutonomousObject *obj){
 	obj->setFollowTrack(false);
 	obj->setHasPropulsion(false);
 	obj->setMaxSpeed(70.0f);
-	obj->setMaxForce(20.0f);
+	obj->setMaxForce(40.0f);
 }
 
 void AutonomousObjectManager::setDefaultRedBlood(MovingObject *obj){
@@ -55,12 +57,12 @@ void AutonomousObjectManager::setDefaultRedBlood(MovingObject *obj){
 void AutonomousObjectManager::update(float dt){
 	BaseObject::update(dt);
 	static bool offset = false;
-	vector<Handle> players = theEngine.getPlayers();
+	vector<Handle> players = this->gameState->getPlayersHandle();
 	for (vector<Handle>::iterator it = players.begin(); it != players.end(); ++it){
 		MovingObject *mObj = dynamic_cast<MovingObject*>(theWorld.get(*it));
 		if (mObj != nullptr && find(this->players.begin(), this->players.end(), *it) == this->players.end()){
 			AutonomousGroup group(*it);
-			for (int i = 0; i < 15; ++i){
+			for (int i = 0; i < 10; ++i){
 				AutonomousObject *aObj = new AutonomousObject(ObjectTypes::WhiteBlood);
 				this->setPursuitDefaultAI(aObj);
 				aObj->setPosition(Vector4(200, 0, 0));

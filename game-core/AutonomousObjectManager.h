@@ -30,9 +30,10 @@ class GAMECOREDLL AutonomousObjectManager :
 private:
 	std::list<AutonomousGroup> players;
 	TrackPath *path;
+	GameState *gameState;
 
 public:
-	AutonomousObjectManager();
+	AutonomousObjectManager(TrackPath *p_track_path, GameState *p_game_state);
 	~AutonomousObjectManager();
 	virtual bool handleEvent(Event* evt);
 	void setOffsetPursuitDefaultAI(AutonomousObject*);
@@ -40,6 +41,4 @@ public:
 	void setDefaultRedBlood(MovingObject*);
 
 	void update(float);
-
-	void setTrack(TrackPath*);
 };

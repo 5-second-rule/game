@@ -7,7 +7,7 @@
 #include "game-core/Sounds.h"
 #include "RenderingGameManager.h"
 
-class GAMEMEDIADLL RenderableGame : public Game
+class GAMEMEDIADLL RenderableGame : public Game, IFrameDelegate
 {
 private:
 	RenderingGameManager *gameManager;
@@ -26,6 +26,8 @@ public:
 
 	virtual void init();
 	RenderingGameManager *getGameManager();
+
+	void beforeDraw();
 
 };
 
