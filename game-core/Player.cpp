@@ -6,22 +6,56 @@ Player::Player(GameState* state) : Player(-1, state) {}
 
 Player::Player(unsigned int guid, GameState* state) {
 	this->data.guid = guid;
-	this->data.selection = 0;
 	this->data.selected = false;
 	this->gameState = state;
+	for (int i = 0; i < 4; i++) {
+		if (!this->gameState->isToonUsed(i)) {
+			this->data.selection = i;
+			break;
+		}
+	}
 }
 
 Player::~Player() {
 }
 
 void Player::spawnMoveableObject() {
-	MovingObject* m = new MovingObject(this->getSelection(), Game::getGlobalInstance());
+	PlayerMovingObject* m = new PlayerMovingObject(this->getSelection(), Game::getGlobalInstance());
 
 	World* w = Game::getGlobalInstance()->getEngineInstance()->getWorld();
 	w->allocateHandle(m, HandleType::GLOBAL);
 	w->insert(m);
 
 	this->data.movingObject = m->getHandle();
+}
+
+
+Handle Player::getMovingObject() {
+	return this->data.movingObject;
+}
+
+void Player::respawn() {
+	int wwodPosition = Game::getGlobalInstance()->getWallOfDeath()->getTrackIndex();
+	int leaderIndex = this->gameState->getLeaderboard()[0].playerPosition;
+
+	TrackPath *track = Game::getGlobalInstance()->getTrackPath();
+
+	int trackSize = track->nodes.size();
+	if (wwodPosition > leaderIndex) {
+		leaderIndex += trackSize;
+	}
+
+	int newTrackIndex = ((leaderIndex + wwodPosition) / 2) % trackSize;
+
+	MovingObject* m = dynamic_cast<MovingObject*>(
+		Game::getGlobalInstance()
+		->getEngineInstance()
+		->getWorld()
+		->get(this->data.movingObject)
+		);
+
+	m->setPosition(track->nodes[newTrackIndex].point);
+	m->setTrackIndex(newTrackIndex);
 }
 
 void Player::die() {

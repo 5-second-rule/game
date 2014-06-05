@@ -13,6 +13,7 @@ enum GAMECOREDLL ObjectTypes
 	Track,
 	UI,
 	SelectionScreen,
+	TitleScreen,
 	State,
 	Wwod,
 	Adrenaline,

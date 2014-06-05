@@ -104,7 +104,7 @@ bool Powerup::collidesWith(const ICollidable* target) const {
 
 void Powerup::handleCollision(std::shared_ptr<const Bounds> bounds, float dt, int metadata) {
 	if (metadata == CollisionMetadata::PLAYER) {
-		this->timeToLiveAgain = 100;
+		this->timeToLiveAgain = 3;
 		return;
 	}
 }
