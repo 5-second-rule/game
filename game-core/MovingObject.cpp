@@ -176,7 +176,7 @@ bool MovingObject::handleEvent(Event *evt){
 
 			this->heading = track->nodes[this->trackIndex].normal;
 			this->heading.normalize();
-								 this->heading.set(3, 0);
+			this->heading.set(3, 0);
 
 			this->sideLeft = Vector4::cross(up, heading);
 			this->sideLeft.normalize();
