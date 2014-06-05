@@ -328,14 +328,16 @@ void MovingObject::handleCollision(std::shared_ptr<const Bounds> bounds, float d
 	} else {
 		TrackPath *track = Game::getGlobalInstance()->getTrackPath();
 
-		Vector4 trackPos = track->nodes[this->trackIndex].point - this->position;
+		//Possible interpolation here to smooth out
+	
+		PathNode trackNode = track->interpolateNode(this->position, this->trackIndex);
+		Vector4 trackPos = trackNode.point - this->position;
 		Vector4 wallNormal = Vector4::normalize(trackPos);
 
 		float mag = this->velocity.dot(-wallNormal);
 		this->velocity += wallNormal * (1.7f * mag);
 
-		//TODO: replace 100 with track radius
-		this->position = track->nodes[this->trackIndex].point - (wallNormal * (100.0f - me->radius));
+		this->position = track->nodes[this->trackIndex].point - (wallNormal * (trackNode.radius - me->radius));
 	}
 	
 }

@@ -29,7 +29,7 @@ bool Tube::collidesWith(const ICollidable* c) const {
 		
 		float distance = (bs->position - trackPoint).length() + bs->radius;
 
-		return distance > 100.0f; // track->nodes[c->getGroupingParameter.z()].radius
+		return distance > track->nodes[c->getGroupingParameter().z()].radius;
 	}
 	else return false;
 }
