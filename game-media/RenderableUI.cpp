@@ -50,6 +50,7 @@ void RenderableUI::render() {
 			}
 			xObject = this->objectData->jumbboXObject;
 		} else {
+			itsMe = false;
 			playerObject = this->objectData->playerObjects[selection];
 			onesObject = this->objectData->numberObjects[selection];
 			tensObject = this->objectData->numberObjects[selection];
