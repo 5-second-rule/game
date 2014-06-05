@@ -13,6 +13,6 @@ private:
 public:
 	RenderableSelectionScreen(SelectionScreenData::Objects *objectData);
 	virtual ~RenderableSelectionScreen();
-
+	void destroy();
 	virtual void render();
 };

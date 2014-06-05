@@ -8,6 +8,8 @@ private:
 	RenderingEngine *engine;
 	std::vector<Player*> players;
 	UIData::Objects *objectData;
+	std::vector<LeaderboardEntry> leaderboard;
+	unsigned int playerGuid;
 
 public:
 	RenderableUI(UIData::Objects *objectData);

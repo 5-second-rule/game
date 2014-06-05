@@ -32,27 +32,43 @@ UIData::UIData() {
 	};
 
 	float lastEdge;
-	lastEdge = this->calculatePlayerVertices(this->vertices, MARGIN);
+	lastEdge = this->calculatePlayerVertices(this->vertices, MARGIN, false);
 
 	for (int i = 0; i < MAX_PLAYERS; ++i) {
 		this->playerModels[i] = engine->create2DModelFromScratch(vertices, 4, rectangleIndices, 6, playerTextures[i], textures, true);
 		this->objectData.playerObjects[i] = new RenderableMovingObject(ObjectTypes::UI, playerModels[i]);
 	}
 
-	lastEdge=this->calculateXVertices(this->vertices, MARGIN, lastEdge);
+	lastEdge=this->calculateXVertices(this->vertices, MARGIN, lastEdge, false);
 	this->xModel = engine->create2DModelFromScratch(vertices, 4, rectangleIndices, 6, "resources/ui-x.dds", textures, true);
 	this->objectData.xObject = new RenderableMovingObject(ObjectTypes::UI, xModel);
 
-	this->calculateNumberVertices(this->vertices, MARGIN, lastEdge);
+	this->calculateNumberVertices(this->vertices, MARGIN, lastEdge, false);
 	for (int i = 0; i < 10; ++i) {
 		this->numberModels[i] = engine->create2DModelFromScratch(vertices, 4, rectangleIndices, 6, numberTextures[i], textures, true);
 		this->objectData.numberObjects[i] = new RenderableMovingObject(ObjectTypes::UI, numberModels[i]);
+	}
+
+	lastEdge = this->calculatePlayerVertices(this->vertices, MARGIN, true);
+	for (int i = 0; i < MAX_PLAYERS; ++i) {
+		this->jumboPlayerModels[i] = engine->create2DModelFromScratch(vertices, 4, rectangleIndices, 6, playerTextures[i], textures, true);
+		this->objectData.jumboPlayerObjects[i] = new RenderableMovingObject(ObjectTypes::UI, jumboPlayerModels[i]);
+	}
+
+	lastEdge = this->calculateXVertices(this->vertices, MARGIN, lastEdge, true);
+	this->jumboXModel = engine->create2DModelFromScratch(vertices, 4, rectangleIndices, 6, "resources/ui-x.dds", textures, true);
+	this->objectData.jumbboXObject = new RenderableMovingObject(ObjectTypes::UI, jumboXModel);
+
+	this->calculateNumberVertices(this->vertices, MARGIN, lastEdge, true);
+	for (int i = 0; i < 10; ++i) {
+		this->jumboNumberModels[i] = engine->create2DModelFromScratch(vertices, 4, rectangleIndices, 6, numberTextures[i], textures, true);
+		this->objectData.jumboNumberObjects[i] = new RenderableMovingObject(ObjectTypes::UI, jumboNumberModels[i]);
 	}
 }
 
 UIData::~UIData() {}
 
-float UIData::calculatePlayerVertices(Transmission::Vertex *vertices, float margin) {
+float UIData::calculatePlayerVertices(Transmission::Vertex *vertices, float margin, bool isJumbo) {
 	float imgWidth, imgHeight, h_w_ratio, winRatio;
 	if (this->engine->getWindowWidth() == 0 || this->engine->getWindowHeight() == 0) {
 		winRatio = 800.0f / 600.0f;
@@ -64,7 +80,7 @@ float UIData::calculatePlayerVertices(Transmission::Vertex *vertices, float marg
 	imgHeight = 500;
 	h_w_ratio = imgHeight / imgWidth;
 
-	float width = 0.075f;
+	float width = isJumbo ? 0.075f * 1.5f: 0.075f;
 	float height = (width * h_w_ratio * winRatio);
 
 	float edgeT = 1.0f - margin;
@@ -82,7 +98,7 @@ float UIData::calculatePlayerVertices(Transmission::Vertex *vertices, float marg
 	return edgeR;
 }
 
-float UIData::calculateXVertices(Transmission::Vertex *vertices, float margin, float lastEdge) {
+float UIData::calculateXVertices(Transmission::Vertex *vertices, float margin, float lastEdge, bool isJumbo) {
 	float imgWidth, imgHeight, h_w_ratio, winRatio;
 	if (this->engine->getWindowWidth() == 0 || this->engine->getWindowHeight() == 0) {
 		winRatio = 800.0f / 600.0f;
@@ -94,13 +110,13 @@ float UIData::calculateXVertices(Transmission::Vertex *vertices, float margin, f
 	imgHeight = 129;
 	h_w_ratio = imgHeight / imgWidth;
 
-	float width = 0.024f;
+	float width = isJumbo ? 0.024f * 1.5f : 0.024f;
 	float height = (width * h_w_ratio * winRatio);
 
 	float edgeT = (1.0f - margin) - (this->playerHeight - height) / 2.0f;
 	float edgeB = edgeT - height;
 
-	float edgeL = lastEdge + 0.005f;
+	float edgeL = lastEdge + 0.01f;
 	float edgeR = edgeL + width;
 
 	vertices[0] = { { edgeL, edgeT, 0.0f }, { 0, 0 }, { 0, 0, -1 }, {} };
@@ -111,7 +127,7 @@ float UIData::calculateXVertices(Transmission::Vertex *vertices, float margin, f
 	return edgeR;
 }
 
-void UIData::calculateNumberVertices(Transmission::Vertex *vertices, float margin, float lastEdge) {
+void UIData::calculateNumberVertices(Transmission::Vertex *vertices, float margin, float lastEdge, bool isJumbo) {
 	float imgWidth, imgHeight, h_w_ratio, winRatio;
 	if (this->engine->getWindowWidth() == 0 || this->engine->getWindowHeight() == 0) {
 		winRatio = 800.0f / 600.0f;
@@ -123,13 +139,13 @@ void UIData::calculateNumberVertices(Transmission::Vertex *vertices, float margi
 	imgHeight = 234;
 	h_w_ratio = imgHeight / imgWidth;
 
-	float width = 0.04f;
+	float width = isJumbo ? 0.04f * 1.5f : 0.04f;
 	float height = (width * h_w_ratio * winRatio);
 
 	float edgeT = (1.0f - margin) - (this->playerHeight - height) / 2.0f;
 	float edgeB = edgeT - height;
 
-	float edgeL = lastEdge + 0.01;
+	float edgeL = lastEdge + 0.01f;
 	float edgeR = edgeL + width;
 
 	vertices[0] = { { edgeL, edgeT, 0.0f }, { 0, 0 }, { 0, 0, -1 }, {} };
