@@ -38,15 +38,14 @@ bool AutonomousObjectManager::handleEvent(Event* evt){
 void AutonomousObjectManager::setOffsetPursuitDefaultAI(AutonomousObject *obj){
 	obj->setMaxSpeed(10);
 	obj->setMaxForce(10);
-	obj->setFollowTrack(true);
-	obj->setFluidForce(0.0f);
+	obj->setFollowTrack(false);
 }
 
 void AutonomousObjectManager::setPursuitDefaultAI(AutonomousObject *obj){
 	obj->setFollowTrack(false);
 	obj->setHasPropulsion(false);
-	obj->setMaxSpeed(70.0f);
-	obj->setMaxForce(40.0f);
+	obj->setMaxSpeed(100.0f);
+	obj->setMaxForce(80.0f);
 }
 
 void AutonomousObjectManager::setDefaultRedBlood(MovingObject *obj){
@@ -56,25 +55,32 @@ void AutonomousObjectManager::setDefaultRedBlood(MovingObject *obj){
 
 void AutonomousObjectManager::update(float dt){
 	BaseObject::update(dt);
+	AutonomousObject *aObj;
+	MovingObject *mObj;
 	static bool offset = false;
 	vector<Handle> players = this->gameState->getPlayersHandle();
 	for (vector<Handle>::iterator it = players.begin(); it != players.end(); ++it){
-		MovingObject *mObj = dynamic_cast<MovingObject*>(theWorld.get(*it));
+		mObj = dynamic_cast<MovingObject*>(theWorld.get(*it));
 		if (mObj != nullptr && find(this->players.begin(), this->players.end(), *it) == this->players.end()){
 			AutonomousGroup group(*it);
-			for (int i = 0; i < 30; ++i){
-				AutonomousObject *aObj = new AutonomousObject(ObjectTypes::WhiteBlood);
+			for (int i = 0; i < 20; ++i){
+				aObj = new AutonomousObject(ObjectTypes::WhiteBlood);
+				theWorld.allocateHandle(aObj, HandleType::GLOBAL);
+				theWorld.insert(aObj);
 				this->setPursuitDefaultAI(aObj);
-				aObj->setPosition(Vector4(20000, 0, 0));
+				aObj->setPursuit(mObj->getHandle());
+				aObj->setPosition(this->path->nodes[i * 300 + 1000].point);
 				group.autonomous_list.push_back(aObj->getHandle());
 			}
-			for (int i = 0; i < 10; ++i){
-				AutonomousObject *mObj = new AutonomousObject(ObjectTypes::RedBlood, Game::getGlobalInstance());
-				this->setDefaultRedBlood(mObj);
-				mObj->setPosition(Vector4(20000, 0, 0));
-				group.red_blood.push_back(mObj->getHandle());
+			for (int i = 0; i < 20; ++i){
+				aObj = new AutonomousObject(ObjectTypes::RedBlood, Game::getGlobalInstance());
+				theWorld.allocateHandle(aObj, HandleType::GLOBAL);
+				theWorld.insert(aObj);
+				this->setDefaultRedBlood(aObj);
+				aObj->setOnSteeringBehavior(BehaviorType::wander);
+				aObj->setPosition(this->path->nodes[i * 300 + 1000].point);
+				group.red_blood.push_back(aObj->getHandle());
 			}
-			cout << (this->path->nodes[0].point - this->path->nodes[2000].point).length() << endl;
 
 			group.atual_index = 0;
 			this->players.push_back(group);
@@ -88,41 +94,38 @@ void AutonomousObjectManager::update(float dt){
 			if (pray->getTrackIndex() != it->atual_index){
 				int perc = rand() % 101;
 				it->atual_index = pray->getTrackIndex();
-				if (perc < 5){
+				if (perc < 10){
 					Handle handle = it->autonomous_list.front();
 					AutonomousObject *aObj = dynamic_cast<AutonomousObject*>(theWorld.get(handle));
 					Vector4 dif = aObj->getPosition() - pray->getPosition();
 					// Avoid change the position of an object that is in front of the object doing a dot product check
 					if ((dif.dot(path->nodes[it->atual_index].normal) < 0 && dif.lengthSquared() > 10000.0f)||
-						dif.lengthSquared() > 4000000){
+						dif.lengthSquared() > 250000){
 						it->autonomous_list.pop_front();
-						//cout << "move" << endl;
-						//cout << pray->getPosition().toString() << endl;
+						//cout << "move: " << it->atual_index << endl;
+						//cout << "pray: " << pray->getPosition().toString();
+						//cout << "track: " << path->nodes[pray->getTrackIndex()].point.toString();
 						//cout << pray->getTrackIndex() << endl;
-						aObj->setPosition(path->nodes[(pray->getTrackIndex() + 1000) % path->nodes.size()].point);
-						aObj->setPursuit(pray->getHandle());
+						aObj->setPosition(path->nodes[(pray->getTrackIndex() + 2000) % path->nodes.size()].point);
+						//aObj->setPosition(pray->getPosition() + pray->getHeading() * 10);
+						//cout << "ai: " << aObj->toString();
 						//aObj->setOnSteeringBehavior(BehaviorType::wander);
 
 						it->autonomous_list.push_back(handle);
 					}
-					else {
-						cout << aObj->getPosition().toString() << endl;
-						cout << dif.length() << endl;
-					}
 				}
 
-				else if (perc < 10){
+				else if (perc < 20){
 					Handle handle = it->red_blood.front();
 					AutonomousObject *aObj = dynamic_cast<AutonomousObject*>(theWorld.get(handle));
 					Vector4 dif = aObj->getPosition() - pray->getPosition();
 
 					// Avoid change the position of an object that is in front of the object doing a dot product check
 					if ((dif.dot(path->nodes[it->atual_index].normal) < 0 && dif.lengthSquared() > 10000.0f) ||
-						dif.lengthSquared() > 4000000){
+						dif.lengthSquared() > 250000){
 						it->red_blood.pop_front();
 
 						aObj->setPosition(path->nodes[(pray->getTrackIndex() + 2000) % path->nodes.size()].point);
-						aObj->setOnSteeringBehavior(BehaviorType::wander);
 
 						it->red_blood.push_back(handle);
 					}

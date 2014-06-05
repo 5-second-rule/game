@@ -9,8 +9,6 @@ AutonomousObject::AutonomousObject(ObjectTypes objectType, Game *owner) : Moving
 {
 	steering_behavior = new SteeringBehavior(this);
 	path = AIPath::instance();
-	theWorld.allocateHandle(this, HandleType::GLOBAL);
-	theWorld.insert(this);
 }
 
 AutonomousObject::~AutonomousObject() {}
@@ -49,7 +47,7 @@ void AutonomousObject::setOffSteeringBehavior(BehaviorType behavior){
 
 string AutonomousObject::toString() const {
 	stringstream buffer;
-	//buffer << MovingObject::toString() << endl;
+	buffer << MovingObject::toString();
 	buffer << steering_behavior->toString() << endl;
 	return buffer.str();
 }

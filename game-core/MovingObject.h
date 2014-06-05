@@ -17,7 +17,7 @@ struct MovingObjectData {
 	float position[3];
 	float velocity[3];
 	float force[3];
-	float drag_coefficient;
+	float friction;
 	float mass;
 
 	int trackIndex;
@@ -40,7 +40,7 @@ protected:
 
 	float propulsion;
 
-	float drag_coefficient;
+	float friction;
 	float mass;
 	float max_speed;
 	float max_force;
@@ -86,7 +86,7 @@ public:
 	virtual void update(float dt);
 	virtual bool handleEvent(Event* evt);
 
-	virtual std::string toString();
+	virtual std::string toString() const ;
 
 	// ISerializable Methods
 	virtual void deserialize(BufferReader& reader);
