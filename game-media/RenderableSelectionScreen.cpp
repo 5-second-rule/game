@@ -5,7 +5,7 @@ using namespace Transmission;
 RenderableSelectionScreen::RenderableSelectionScreen(SelectionScreenData::Objects *objectData)
 : StaticObject(ObjectTypes::SelectionScreen) {
 	this->objectData = objectData;
-	this->engine = RenderableGame::getGlobalInstance()->getEngineInstance();
+	this->engine = RenderableGame::getGlobalInstance()->getRenderingEngineInstance();
 	this->players = RenderableGame::getGlobalInstance()->getGameManager()->getPlayers();
 }
 
@@ -14,7 +14,7 @@ RenderableSelectionScreen::~RenderableSelectionScreen() {}
 void RenderableSelectionScreen::render() {
 	this->objectData->backgroundObject->render();
 	this->objectData->titleObject->render();
-	unsigned int myGuid = RenderableGame::getGlobalInstance()->getEngineInstance()->getLocalPlayerGuid(0);
+	unsigned int myGuid = this->engine->getLocalPlayerGuid(0);
 	size_t i;
 	for (i = 0; i < 4; ++i) {
 		if (i < this->players.size() && this->players[i]->getGuid() == myGuid) {
@@ -24,20 +24,17 @@ void RenderableSelectionScreen::render() {
 		}
 	}
 
-	for (size_t i = 0; i < this->players.size(); ++i) {
-		Common::Vector4 pos = Common::Vector4(this->objectData->playerCenters[i] * this->objectData->width / 800 * 5.5f, 0, 0, 1);
-		int selection = this->players[i]->getSelection();
-		//bool inUse = false;
+	float winRatio = 1.0f * this->engine->getWindowWidth() / this->engine->getWindowHeight();
+	float origRatio = 800.0f / 600.0f;
+	float xScalar =  winRatio / origRatio * 5.5f;
 
-		//for (size_t j = 0; j < this->players.size(); ++j) {
-		//	if (this->players[j]->getSelection() == selection && this->players[j]->isSelected()) {
-		//		inUse = true;
-		//		break;
-		//	}
-		//}
-		//// TODO: temporary. change.
-		if (this->players[i]->isSelected())
-			pos[1] += 1.0f;
+	for (size_t i = 0; i < this->players.size(); ++i) {	
+		Common::Vector4 pos = Common::Vector4(this->objectData->playerCenters[i] * xScalar, 0, 0, 1);
+		int selection = this->players[i]->getSelection();
+
+		if (this->players[i]->isSelected()) {
+			this->objectData->checkMarkObjects[i]->render();
+		}
 
 		int nameIndex = i * 4 + selection;
 		if (this->players[i]->getGuid() == myGuid) {
@@ -45,9 +42,9 @@ void RenderableSelectionScreen::render() {
 		} else {
 			this->objectData->otherPlayerNameObjects[nameIndex]->render();
 		}
+
 		this->objectData->playerObjects[selection]->setPosition(pos);
 		this->objectData->playerObjects[selection]->render();
-		// if (inUse) draw something on top of it.
 	}
 
 };

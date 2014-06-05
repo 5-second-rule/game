@@ -1,8 +1,8 @@
 #include "SelectionScreenData.h"
+#include <stdio.h>
 
 SelectionScreenData::SelectionScreenData(RenderableMovingObject *(&playerObjects)[4]) {
-	RenderingEngine *engine =
-		RenderableGame::getGlobalInstance()->getRenderingEngineInstance();
+	this->engine = RenderableGame::getGlobalInstance()->getRenderingEngineInstance();
 
 	this->objectData.width = engine->getWindowWidth();
 	this->objectData.height = engine->getWindowHeight();
@@ -33,7 +33,7 @@ SelectionScreenData::SelectionScreenData(RenderableMovingObject *(&playerObjects
 	this->objectData.backgroundObject = new RenderableStaticObject(ObjectTypes::SelectionScreen, backgroundModel);
 
 	// Create object for screen title, e.g., "Choose Player"
-	this->calculateTitleVertices(titleVertices, this->winWidth, this->winHeight);
+	this->calculateTitleVertices(titleVertices, MARGIN);
 	this->titleModel = engine->create2DModelFromScratch(titleVertices, 4, rectangleIndices, 6, "resources/select-title.dds", textures, true);
 	this->objectData.titleObject = new RenderableStaticObject(ObjectTypes::SelectionScreen, titleModel);
 
@@ -45,17 +45,22 @@ SelectionScreenData::SelectionScreenData(RenderableMovingObject *(&playerObjects
 		this->myPlayerBackgroundModels[i] = engine->create2DModelFromScratch(playerbackgroundVertices, 4, rectangleIndices, 6, "resources/select-rectangle.dds", textures, false);
 		this->objectData.myPlayerBackgroundObjects[i] = new RenderableStaticObject(ObjectTypes::SelectionScreen, myPlayerBackgroundModels[i]);
 
+		// check marks for selection
+		this->calculatePlayerNameVertices(playerNameVertices, i, MARGIN, true);
+		this->checkMarkModels[i] = engine->create2DModelFromScratch(playerNameVertices, 4, rectangleIndices, 6, "resources/select-check.dds", textures, true);
+		this->objectData.checkMarkObjects[i] = new RenderableStaticObject(i, checkMarkModels[i]);
+
 		// Create the name for each model
 		for (int j = 0; j < 4; ++j) {
 			int index = i * 4 + j;
-			this->calculatePlayerNameVertices(playerNameVertices, i, MARGIN);
+			this->calculatePlayerNameVertices(playerNameVertices, i, MARGIN, false);
 			this->otherPlayerNameModels[index] = engine->create2DModelFromScratch(playerNameVertices, 4, rectangleIndices, 6, otherModelNames[j], textures, true);
 			this->objectData.otherPlayerNameObjects[index] = new RenderableStaticObject(j, otherPlayerNameModels[index]);
 			this->myPlayerNameModels[index] = engine->create2DModelFromScratch(playerNameVertices, 4, rectangleIndices, 6, myModelNames[j], textures, true);
 			this->objectData.myPlayerNameObjects[index] = new RenderableStaticObject(j, myPlayerNameModels[index]);
 		}
 
-	//	// Store the model
+		// Store the model
 		this->objectData.playerObjects[i] = playerObjects[i];
 	}
 	//s all approximately the same size
@@ -86,17 +91,16 @@ SelectionScreenData::~SelectionScreenData() {
 	}
 }
 
-void SelectionScreenData::calculateTitleVertices(Transmission::Vertex *vertices, float winHeight, float winWidth) {
-	float scale;
-	if (winHeight < winWidth)
-		scale = winHeight / winWidth / 2;
-	else
-		scale = winWidth / winHeight / 2;
+void SelectionScreenData::calculateTitleVertices(Transmission::Vertex *vertices, float margin) {
+	float imgWidth, imgHeight, h_w_ratio;
+	imgWidth = 1100;
+	imgHeight = 221;
+	h_w_ratio = imgHeight / imgWidth;
 
-	float l = -2.0f * scale,
-		r = 2.0f * scale,
-		t = 1.0f,
-		b = 1.0f - scale;
+	float l = -1.0f + margin,
+		r = 1.0f - margin,
+		t = 1.0f - margin,
+		b = t - h_w_ratio * 2;
 
 	vertices[0] = { { l, t, 0.0f }, { 0, 0 }, { 0, 0, -1 }, {} };
 	vertices[1] = { { r, t, 0.0f }, { 1, 0 }, { 0, 0, -1 }, {} };
@@ -106,14 +110,28 @@ void SelectionScreenData::calculateTitleVertices(Transmission::Vertex *vertices,
 	// don't think these calculations are right but I can't think
 }
 
-void SelectionScreenData::calculatePlayerNameVertices(Transmission::Vertex *vertices, int playerIndex, float margin) {
+void SelectionScreenData::calculatePlayerNameVertices(Transmission::Vertex *vertices, int playerIndex, float margin, bool isCheck) {
+	float imgWidth, imgHeight, h_w_ratio, h_offset;
+
+	if (isCheck) {
+		imgWidth = 208;
+		imgHeight = 115;
+		h_w_ratio = imgHeight / imgWidth;
+		h_offset = 0.5f;
+	} else {
+		imgWidth = 650;
+		imgHeight = 154;
+		h_w_ratio = imgHeight / imgWidth;
+		h_offset = 0;
+	}
+
 	float numMargins[] = { -1.5, -0.5, 0.5, 1.5 };
 	float pos[] = { -2, -1, 0, 1 };
 	float width = (2.0f - 5 * margin) / 4;
-	float height = width * 0.80f * 0.237f;
+	float height = (width * 0.80f) * h_w_ratio;
 
-	float edgeB = -0.7f + width * 0.1f;
-	float edgeT = edgeB + height;
+	float edgeB = -0.7f + width * 0.1f - (height * h_offset);
+	float edgeT = edgeB + height + (height * h_offset);
 
 	float edgeL = pos[playerIndex] * width + numMargins[playerIndex] * margin + width * 0.1f;
 	float edgeR = edgeL + width * 0.80f;
@@ -146,12 +164,4 @@ float SelectionScreenData::calculatePlayerBackgroundVertices(Transmission::Verte
 
 SelectionScreenData::Objects *SelectionScreenData::getData() {
 	return &(this->objectData);
-}
-
-unsigned int SelectionScreenData::getHeight() {
-	return this->winHeight;
-}
-
-unsigned int SelectionScreenData::getWidth() {
-	return this->winWidth;
 }
