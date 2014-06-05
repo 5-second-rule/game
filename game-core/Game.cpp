@@ -23,6 +23,7 @@ Game::Game() {
 Game::~Game() {
 	delete this->engineInstance;
 	delete this->track;
+	this->backgroundLoader->join();
 }
 
 void Game::init() {
@@ -30,17 +31,19 @@ void Game::init() {
 		return;
 	}
 
+	this->objectCtors = this->makeCtorTable();
+	ActionEventCtorTable* eventCtors = new ActionEventCtorTable();
+	this->engineInstance = this->makeEngineInstance( this->objectCtors, eventCtors );
 	this->initialized = true;
 	setGlobalInstance(this);
 
-	this->track = TrackPath::fromFile("resources/track.path");
-
-	this->objectCtors = this->makeCtorTable();
-	ActionEventCtorTable* eventCtors = new ActionEventCtorTable();
-	this->engineInstance = this->makeEngineInstance(this->objectCtors, eventCtors);
-	this->objectCtors->initCtors();
 	eventCtors->initCtors();
-
+	this->track = TrackPath::fromFile("resources/track.path");
+	this->backgroundLoader = new std::thread( [=] {
+		this->loading = true;
+		this->objectCtors->initCtors();
+		this->loading = false;
+	} );
 }
 
 void Game::stop() {

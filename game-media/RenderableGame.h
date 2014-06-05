@@ -7,7 +7,7 @@
 #include "game-core/Sounds.h"
 #include "RenderingGameManager.h"
 
-class GAMEMEDIADLL RenderableGame : public Game
+class GAMEMEDIADLL RenderableGame : public Game, IFrameDelegate
 {
 private:
 	RenderingGameManager *gameManager;
@@ -15,6 +15,7 @@ private:
 
 protected:
 	virtual Engine * makeEngineInstance( ConstructorTable<BaseObject> *objectCtors, ConstructorTable<ActionEvent>* eventCtors );
+	Handle titleScreenHandle;
 
 public:
 	RenderableGame(void *appHandle);
@@ -27,5 +28,7 @@ public:
 	virtual void init();
 	RenderingGameManager *getGameManager();
 
+	void beforeDraw();
+	bool loadingDone();
 };
 

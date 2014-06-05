@@ -4,7 +4,7 @@
 #include "ObjectTypes.h"
 #include "SelectionEvent.h"
 #include "ActionType.h"
-#include "MovingObject.h"
+#include "PlayerMovingObject.h"
 
 class GAMECOREDLL GameState;
 
@@ -30,6 +30,8 @@ public:
 	
 	unsigned int getGuid();
 	void spawnMoveableObject();
+	Handle getMovingObject();
+	void respawn();
 
 	// death tracking
 	void die();
