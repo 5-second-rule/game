@@ -39,7 +39,7 @@ void GameState::update(float dt) {
 
 		PlayerMovingObject* playerObjs[4];
 
-		for (int i = 0; i < this->players.size(); i++) {
+		for (size_t i = 0; i < this->players.size(); i++) {
 			playerObjs[i] = dynamic_cast<PlayerMovingObject*>(
 				this->world->get(this->players[i]->cameraTarget()));
 
@@ -63,11 +63,11 @@ void GameState::update(float dt) {
 			}
 		}
 
-		bool midLapRollover = (largestPos - smallestPos) > (track->nodes.size() / 2);
+		bool midLapRollover = static_cast<size_t>(largestPos - smallestPos) > (track->nodes.size() / 2);
 		int dividingLine = largestPos - (track->nodes.size() / 2);
 		
 		int positions[4];
-		for (int i = 0; i < this->players.size(); i++) {
+		for (size_t i = 0; i < this->players.size(); i++) {
 			if (playerObjs[i] != nullptr) {
 				positions[i] = playerObjs[i]->getTrackIndex();
 				if (midLapRollover && positions[i] < dividingLine) {
@@ -79,8 +79,8 @@ void GameState::update(float dt) {
 			}
 		}
 
-		for (int i = 0; i < this->players.size(); i++) {
-			for (int j = i; j < this->players.size(); j++) {
+		for (size_t i = 0; i < this->players.size(); i++) {
+			for (size_t j = i; j < this->players.size(); j++) {
 				LeaderboardEntry iEntry = leaderboard[i];
 				iEntry.playerPosition = positions[iEntry.playerIndex];
 				leaderboard[i] = iEntry;

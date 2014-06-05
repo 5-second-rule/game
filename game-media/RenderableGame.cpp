@@ -21,6 +21,23 @@ RenderableGame::RenderableGame(void *appHandle)
 
 void RenderableGame::init() {
 	Game::init();
+	std::vector<Transmission::Texture *>textures;
+	Transmission::Index rectangleIndices[6] = { 0, 1, 2, 3, 0, 2 };
+
+	// Create background for this screen, put into world as local
+	Transmission::Vertex backgroundVertices[4];
+	backgroundVertices[0] = { { -1.0f, 1.0f, 0.0f }, { 0, 0 }, { 0, 0, -1 }, {} };
+	backgroundVertices[1] = { { 1.0f, 1.0f, 0.0f }, { 1, 0 }, { 0, 0, -1 }, {} };
+	backgroundVertices[2] = { { 1.0f, -1.0f, 0.0f }, { 1, 1 }, { 0, 0, -1 }, {} };
+	backgroundVertices[3] = { { -1.0f, -1.0f, 0.0f }, { 0, 1 }, { 0, 0, -1 }, {} };
+	Transmission::Model *titleModel = 
+		this->getRenderingEngineInstance()->create2DModelFromScratch( backgroundVertices, 4, rectangleIndices, 6, 
+		"resources/playScreen.dds", textures, false );
+	RenderableStaticObject *titleScreen = new RenderableStaticObject( ObjectTypes::SelectionScreen, titleModel );
+	this->titleScreenHandle = static_cast<IHasHandle*>(titleScreen)->getHandle();
+	this->getRenderingEngineInstance()->getWorld()->allocateHandle( titleScreen, LOCAL );
+	this->getRenderingEngineInstance()->getWorld()->insert( titleScreen );
+	
 	static_cast<SoundCtorTable*>(this->getRenderingEngineInstance()->soundCtors)->initCtors();
 	this->getRenderingEngineInstance()->waitForServer();
 	this->getEngineInstance()->registerPlayer(true);
@@ -85,4 +102,17 @@ void RenderableGame::beforeDraw() {
 
 		this->getRenderingEngineInstance()->setLightBuffers(positions, colors, players.size());
 	}
+}
+
+bool RenderableGame::loadingDone() {
+	static bool loaded = false;
+	
+	// if done loading the first time, remove the titleScreen
+	// and set to loaded
+	if( loaded == false && !this->loading ) {
+		theWorld.remove( &this->titleScreenHandle );
+		loaded = true;
+	}
+	
+	return loaded;
 }

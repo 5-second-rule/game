@@ -101,19 +101,19 @@ std::vector<Event *>  GameplayInput::inputTranslator(InputAdapter *inputAdapter)
 	}
 
 	if (inputAdapter->getKeyState(Transmission::Input::Key::H) == down) {
-		RenderableGame::getGlobalInstance()->getRenderingEngineInstance()->changeSaturation(-0.005);
+		RenderableGame::getGlobalInstance()->getRenderingEngineInstance()->changeSaturation(-0.005f);
 	}
 
 	if (inputAdapter->getKeyState(Transmission::Input::Key::J) == down) {
-		RenderableGame::getGlobalInstance()->getRenderingEngineInstance()->changeSaturation(0.005);
+		RenderableGame::getGlobalInstance()->getRenderingEngineInstance()->changeSaturation(0.005f);
 	}
 
 	if (inputAdapter->getKeyState(Transmission::Input::Key::K) == down) {
-		RenderableGame::getGlobalInstance()->getRenderingEngineInstance()->changeLightness(-0.005);
+		RenderableGame::getGlobalInstance()->getRenderingEngineInstance()->changeLightness(-0.005f);
 	}
 
 	if (inputAdapter->getKeyState(Transmission::Input::Key::L) == down) {
-		RenderableGame::getGlobalInstance()->getRenderingEngineInstance()->changeLightness(0.005);
+		RenderableGame::getGlobalInstance()->getRenderingEngineInstance()->changeLightness(0.005f);
 	}
 
 	//if (dir.x != 0 || dir.y != 0 || dir.z != 0 || dir.w != 0) {
