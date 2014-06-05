@@ -33,7 +33,5 @@ public:
 
 	virtual bool handleEvent(Event* evt);
 	virtual void update(float dt);
-	virtual std::string toString();
-
 };
 
