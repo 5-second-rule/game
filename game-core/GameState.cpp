@@ -205,6 +205,7 @@ PlayerDelegate * GameState::addPlayer(unsigned int playerGuid) {
 			}
 
 			player->spawnMoveableObject();
+			player->spawnRotateCameraObject();
 
 		}
 		break;
