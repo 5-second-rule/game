@@ -347,7 +347,7 @@ void MovingObject::handleCollision(std::shared_ptr<const Bounds> bounds, float d
 	static chrono::system_clock::time_point lastPlay = chrono::high_resolution_clock::now();
 	if( chrono::high_resolution_clock::now() >= lastPlay + chrono::milliseconds(300) ) {
 		lastPlay = chrono::high_resolution_clock::now();
-	float position[3] = { this->getPosition().x(), this->getPosition().y(), this->getPosition().z() };
+		float position[3] = { this->getPosition().x(), this->getPosition().y(), this->getPosition().z() };
 		owner->getEngineInstance()->sendEvent( new SoundEvent( static_cast<int>(Sounds::COLLIDE), false, false, position ) );
 	}
 
