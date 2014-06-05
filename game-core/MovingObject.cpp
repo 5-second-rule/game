@@ -187,15 +187,15 @@ bool MovingObject::handleEvent(Event *evt){
 			this->forceUp = this->up * (moveEvent->direction.y * UP_SCALE);
 
 			// rotate around heading
-		this->up = Matrix4::rotate(this->heading, moveEvent->direction.w * ROT_SCALE) * this->up;
+			this->up = Matrix4::rotate(this->heading, moveEvent->direction.w * ROT_SCALE) * this->up;
 
-		//rotate sideways
-		this->heading = Matrix4::rotate(this->up, -moveEvent->direction.x * ROT_SCALE) * this->heading;
+			//rotate sideways
+			this->heading = Matrix4::rotate(this->up, -moveEvent->direction.x * ROT_SCALE) * this->heading;
 
-		//rotate up and down
+			//rotate up and down
 			Matrix4 rot = Matrix4::rotate(this->sideLeft, moveEvent->direction.y * ROT_SCALE);
-		this->heading = rot * heading;
-		this->up = rot * up;
+			this->heading = rot * heading;
+			this->up = rot * up;
 		}
 		else
 		{
