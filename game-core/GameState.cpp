@@ -77,11 +77,14 @@ void GameState::setState(State state) {
 			this->world->insert( powerup );
 		}
 
+		obj = this->objectCtors->invoke(ObjectTypes::UI);
+		world->allocateHandle(obj, HandleType::GLOBAL);
+		world->insert(obj);
+
 		// tell each player to create a MovingObject they manage
 		for( auto it = players.begin(); it != players.end(); ++it ) {
 			(*it)->spawnMoveableObject();
 		}
-
 		break;
 	}
 	default:

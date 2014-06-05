@@ -1,10 +1,7 @@
 #pragma once
-#include <vector>
-#include "RenderableGame.h"
 #include "RenderableMovingObject.h"
 #include "RenderableStaticObject.h"
 #include "renderer/Model.h"
-#include "game-core/ObjectTypes.h"
 
 class SelectionScreenData {
 public:

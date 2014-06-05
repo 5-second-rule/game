@@ -5,8 +5,12 @@
 #include "RenderableStaticObject.h"
 #include "RenderableWallOfDeath.h"
 #include "RenderablePowerup.h"
+#include "SelectionScreenData.h"
+#include "UIData.h"
+#include "SignallingGameState.h"
 
 #include "RenderableSelectionScreen.h"
+#include "RenderableUI.h"
 #include "RenderableGame.h"
 
 #ifdef _DEBUG
@@ -17,6 +21,7 @@
 #endif  // _DEBUG
 
 static SelectionScreenData *selectionScreenData;
+static UIData *uiData;
 
 RenderableGameObjectCtorTable::RenderableGameObjectCtorTable() {}
 
@@ -208,6 +213,15 @@ static BaseObject * makeRenderableWallOfDeath(ConstructorTable<BaseObject> *this
 		);
 }
 
+void RenderableGameObjectCtorTable::prepUIData() {
+	uiData = new UIData();
+}
+
+static BaseObject * makeRenderableUI(ConstructorTable<BaseObject> *thisObj) {
+	RenderableGameObjectCtorTable *table = (RenderableGameObjectCtorTable *) thisObj;
+	return new RenderableUI(uiData->getData());
+}
+
 void RenderableGameObjectCtorTable::initCtors() {
 	GameObjectCtorTable::initCtors();
 	RenderingEngine *engine =
@@ -258,17 +272,19 @@ void RenderableGameObjectCtorTable::initCtors() {
 	this->textureIndexes[ObjectTypes::Adrenaline] = engine->loadTexture("resources/Wood.dds");
 
 	this->prepSelectionScreenData();
+	this->prepUIData();
 
 	this->setConstructor(ObjectTypes::Ecoli, makeRenderableEcoli);
-	this->setConstructor( ObjectTypes::ChickenPox, makeRenderableChickenPox );
-	this->setConstructor( ObjectTypes::Syphillis, makeRenderableSyphillis );
-	this->setConstructor( ObjectTypes::Malaria, makeRenderableMalaria );
-	this->setConstructor( ObjectTypes::WhiteBlood, makeRenderableWhiteBlood );
-	this->setConstructor( ObjectTypes::RedBlood, makeRenderableRedBlood );
+	this->setConstructor(ObjectTypes::ChickenPox, makeRenderableChickenPox);
+	this->setConstructor(ObjectTypes::Syphillis, makeRenderableSyphillis);
+	this->setConstructor(ObjectTypes::Malaria, makeRenderableMalaria);
+	this->setConstructor(ObjectTypes::WhiteBlood, makeRenderableWhiteBlood);
+	this->setConstructor(ObjectTypes::RedBlood, makeRenderableRedBlood);
 
-	this->setConstructor( ObjectTypes::Track, makeRenderableTrack );
-	this->setConstructor( ObjectTypes::SelectionScreen, makeRenderableSelectionScreen );
-	this->setConstructor( ObjectTypes::State, makeSignallingGameState );
-	this->setConstructor( ObjectTypes::Wwod, makeRenderableWallOfDeath );
+	this->setConstructor(ObjectTypes::Track, makeRenderableTrack);
+	this->setConstructor(ObjectTypes::SelectionScreen, makeRenderableSelectionScreen);
+	this->setConstructor(ObjectTypes::State, makeSignallingGameState);
+	this->setConstructor(ObjectTypes::Wwod, makeRenderableWallOfDeath);
 	this->setConstructor(ObjectTypes::Adrenaline, makeRenderableAdrenaline);
+	this->setConstructor(ObjectTypes::UI, makeRenderableUI);
 }
