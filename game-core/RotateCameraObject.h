@@ -10,42 +10,29 @@
 using namespace Common;
 
 struct RotateCameraObjectData {
-	float up[3];
 	float heading[3];
-
-	float position[3];
+	float target[3];
+	double rotateAmt;
 };
 
 class GAMECOREDLL RotateCameraObject : public BaseObject
 {
 protected:
-	Vector4 up;
-	Vector4 heading;
-	Vector4 sideLeft;
-
-	Vector4 cameraChangeVec;
+	const Vector4 up;
+	const Vector4 heading;
+	const Vector4 target;
 	double rotateAmt;
 
-	Vector4 position;
-
 public:
-	RotateCameraObject();
+	RotateCameraObject(const Vector4& target, const Vector4& heading, const Vector4& up);
 	virtual ~RotateCameraObject();
-	Game* owner;
 
-	Vector4 getHeading(); // A normalized vector giving the direction the object is heading
-	Vector4 getPosition();
-	Vector4 getUp();
-	Vector4 getSideLeft();
-
-	Vector4 getCameraChangeVec(); // A normalized vector giving the direction the camera's position should be changed by
+	const Vector4& getTarget();
+	const Vector4& getDelta();
+	const Vector4& getUp();
 
 	virtual bool handleEvent(Event* evt);
-
-	void setPosition(const Vector4& position);
-
 	virtual void update(float dt);
-
 	virtual std::string toString();
 
 };

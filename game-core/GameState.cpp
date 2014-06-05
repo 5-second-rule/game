@@ -147,6 +147,7 @@ void GameState::setState(State state) {
 		// tell each player to create a MovingObject they manage
 		for (auto it = players.begin(); it != players.end(); ++it) {
 			(*it)->spawnMoveableObject();
+			(*it)->spawnRotateCameraObject();
 		}
 
 		float dummyLocation[3] = { 0, 0, 0 };

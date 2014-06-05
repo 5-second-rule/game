@@ -20,12 +20,10 @@ void TrackingCameraHandler::updateFor(IHasHandle *playerObject) {
 
 	if (rotateGameObject != nullptr)
 	{
-		Common::Vector4 changeVec = rotateGameObject->getCameraChangeVec();
-		changeVec.normalize();
-		this->position = rotateGameObject->getPosition() + (changeVec * CAMERABACKSCALE);
+		Vector4 target = rotateGameObject->getTarget();
 
-		this->lookAt = rotateGameObject->getPosition();// +((node.point - gameObject->getPosition()) * 0.5);
-
+		this->position = target + (rotateGameObject->getDelta() * CAMERABACKSCALE);
+		this->lookAt = target;
 		this->up = rotateGameObject->getUp();
 	}
 	else {

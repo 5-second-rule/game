@@ -30,7 +30,8 @@ void Player::spawnMoveableObject() {
 }
 
 void Player::spawnRotateCameraObject() {
-	RotateCameraObject* c = new RotateCameraObject();
+	MovingObject* m = dynamic_cast<MovingObject*>(theWorld.get(this->data.movingObject));
+	RotateCameraObject* c = new RotateCameraObject(m->getPosition(), m->getHeading(), m->getUp());
 
 	World* w = Game::getGlobalInstance()->getEngineInstance()->getWorld();
 	w->allocateHandle(c, HandleType::GLOBAL);
