@@ -6,6 +6,7 @@
 #include "TrackingCameraHandler.h"
 #include "SoundCtorTable.h"
 #include "RenderableMovingObject.h"
+#include "RenderableStaticObject.h"
 
 #ifdef _DEBUG
 #ifndef DBG_NEW
