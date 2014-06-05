@@ -28,7 +28,12 @@ void GameState::update(float dt) {
 			allReady &= this->players[i]->isSelected();
 		}
 
-		if (allReady) this->setState(Game);
+		if (allReady) this->setState(Countdown);
+		break;
+	}
+	case Countdown: {
+		//TODO Countdown logic
+		this->setState(Game);
 		break;
 	}
 	case Game:
@@ -106,16 +111,14 @@ void GameState::setState(State state) {
 	std::vector<Player>::iterator it;
 	switch (state) {
 	case (Selection) :
+	{
 		this->selScreen = this->objectCtors->invoke(ObjectTypes::SelectionScreen);
 		world->allocateHandle(this->selScreen, HandleType::GLOBAL);
 		world->insert(this->selScreen);
 		break;
-	case (Game) :
+	}
+	case (Countdown) :
 	{
-		// remove selection screen from world
-		world->remove( &this->selScreen->getHandle() );
-		this->selScreen = nullptr;
-
 		obj = this->objectCtors->invoke( ObjectTypes::Track );
 		world->allocateHandle( obj, HandleType::GLOBAL );
 		world->insert( obj );
@@ -142,7 +145,7 @@ void GameState::setState(State state) {
 		}
 
 		// tell each player to create a MovingObject they manage
-		for( auto it = players.begin(); it != players.end(); ++it ) {
+		for (auto it = players.begin(); it != players.end(); ++it) {
 			(*it)->spawnMoveableObject();
 		}
 
@@ -191,6 +194,19 @@ PlayerDelegate * GameState::addPlayer(unsigned int playerGuid) {
 	switch (this->getState()) {
 	case (Selection) :
 		//player->updateSelection(numPlayers);
+		break;
+	case (Countdown) :
+		for (int i = 0; i < 4; ++i) {
+			selection = i;
+			if (this->toonUsed[i]) {
+				player->updateSelection(selection);
+				this->toonUsed[selection] = false;
+				break;
+			}
+
+			player->spawnMoveableObject();
+
+		}
 		break;
 	case (Game) :
 		for (int i = 0; i < 4; ++i) {

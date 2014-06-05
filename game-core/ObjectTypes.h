@@ -17,6 +17,7 @@ enum GAMECOREDLL ObjectTypes
 	State,
 	Wwod,
 	Adrenaline,
+	RotateCamera
 };
 
 enum class GAMECOREDLL CollisionPriorities {

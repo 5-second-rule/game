@@ -95,6 +95,14 @@ void MovingObject::setTrackIndex(int position) {
 	this->trackIndex = position;
 }
 
+void MovingObject::setFollowTrack(bool state) {
+	this->followTrack = state;
+}
+
+void MovingObject::setHasPropulsion(bool state) {
+	this->hasPropulsion = state;
+}
+
 bool MovingObject::handleEvent(Event *evt){
 
 	float position[3] = { this->getPosition().x(), this->getPosition().y(), this->getPosition().z() };

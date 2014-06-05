@@ -70,6 +70,9 @@ public:
 
 	void setPosition(const Vector4& position);
 
+	void setFollowTrack(bool state);
+	void setHasPropulsion(bool state);
+
 	void applyForce(const Vector4& force);
 
 	virtual void update(float dt);

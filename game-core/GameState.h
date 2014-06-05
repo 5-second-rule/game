@@ -10,7 +10,7 @@
 class GAMECOREDLL GameState : public BaseObject, public IRegisterPlayers
 {
 public:
-	enum State { Load, Title, Selection, Game, Score, None = -1 };
+	enum State { Load, Title, Selection, Countdown, Game, Score, None = -1 };
 
 protected:
 	static State gameState;
