@@ -23,8 +23,17 @@ void RenderableUI::render() {
 		y -= 0.15f * i;
 		Common::Vector4 pos = Common::Vector4( x, y, 0, 1);
 		int selection = this->players[i]->getSelection();
-		this->objectData->player1Objects[selection]->setPosition(pos);
-		this->objectData->player1Objects[selection]->render();
+		this->objectData->playerObjects[selection]->setPosition(pos);
+		this->objectData->playerObjects[selection]->render();
+
+		int numDeaths = this->players[i]->getDeathCount();
+		if (numDeaths < 10) {
+			this->objectData->xObject->setPosition(pos);
+			this->objectData->xObject->render();
+			this->objectData->numberObjects[numDeaths]->setPosition(pos);
+			this->objectData->numberObjects[numDeaths]->render();
+		}
+		
 	}
 
 };
