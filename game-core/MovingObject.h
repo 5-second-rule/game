@@ -106,6 +106,4 @@ public:
 	virtual void handleCollision(std::shared_ptr<const Bounds>, float dt, int metadata);
 	std::shared_ptr<const Bounds> getBounds() const;
 	unsigned int getPriority() const;
-
-	static float forceByDistSq(float dist_sq, float maximum);
 };
