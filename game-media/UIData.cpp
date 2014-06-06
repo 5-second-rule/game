@@ -38,6 +38,13 @@ UIData::UIData() {
 		"resources/ui-number-9.dds"
 	};
 
+	char *countdownTextures[4] = {
+		"resources/countdown-3.dds",
+		"resources/countdown-2.dds",
+		"resources/countdown-1.dds",
+		"resources/countdown-go.dds"
+	};
+
 	float lastEdge;
 
 	// regular toon images
@@ -70,9 +77,23 @@ UIData::UIData() {
 	this->deadModel = engine->create2DModelFromScratch(vertices, 4, rectangleIndices, 6, "resources/ui-dead.dds", textures, true);
 	this->objectData.deadObject = new RenderableStaticObject(ObjectTypes::UI, deadModel);
 
+
+	// Countdown images
+	this->calculateCountdownVertices(this->vertices, false);
+	for (int i = 0; i < 4; ++i) {
+		if (i == 3) {
+			this->calculateCountdownVertices(this->vertices, true);
+		}
+		this->countdownModels[i] = engine->create2DModelFromScratch(vertices, 4, rectangleIndices, 6, countdownTextures[i], textures, true);
+		this->objectData.countdownObjects[i] = new RenderableStaticObject(ObjectTypes::UI, countdownModels[i]);
+	}
 }
 
 UIData::~UIData() {}
+
+UIData::Objects *UIData::getData() {
+	return &(this->objectData);
+}
 
 float UIData::calculatePlayerVertices(Transmission::Vertex *vertices) {
 	float imgWidth, imgHeight, h_w_ratio, winRatio;
@@ -193,6 +214,35 @@ void UIData::calculateDeadVertices(Transmission::Vertex *vertices, float lastEdg
 	this->playerHeight = height;
 }
 
-UIData::Objects *UIData::getData() {
-	return &(this->objectData);
+void UIData::calculateCountdownVertices(Transmission::Vertex *vertices, bool isGo) {
+	float imgWidth, imgHeight, width, winRatio;
+	if (this->engine->getWindowWidth() == 0 || this->engine->getWindowHeight() == 0) {
+		winRatio = 800.0f / 600.0f;
+	} else {
+		winRatio = 1.0f * this->engine->getWindowWidth() / this->engine->getWindowHeight();
+	}
+
+	if (isGo) {
+		imgWidth = 625;
+		imgHeight = 321;
+		width = 0.4;
+	} else {
+		imgWidth = 200;
+		imgHeight = 300;
+		width = 0.2;
+	}
+	
+	float h_w_ratio = imgHeight / imgWidth;
+	float height = width * h_w_ratio * winRatio;
+
+	float edgeT = 0.8;
+	float edgeB = edgeT - height;
+
+	float edgeL = -width/2.0f;
+	float edgeR = width / 2.0f;
+
+	vertices[0] = { { edgeL, edgeT, 0.0f }, { 0, 0 }, { 0, 0, -1 }, {} };
+	vertices[1] = { { edgeR, edgeT, 0.0f }, { 1, 0 }, { 0, 0, -1 }, {} };
+	vertices[2] = { { edgeR, edgeB, 0.0f }, { 1, 1 }, { 0, 0, -1 }, {} };
+	vertices[3] = { { edgeL, edgeB, 0.0f }, { 0, 1 }, { 0, 0, -1 }, {} };
 }
