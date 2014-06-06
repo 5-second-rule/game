@@ -50,8 +50,7 @@ void TrackingCameraHandler::updateFor(IHasHandle *playerObject) {
 
 			float camDistanceFromTube = changeVec.length();
 
-			//TODO: replace 100 with track radius
-			float difference = camDistanceFromTube - 0.75f*(100.0f);
+			float difference = camDistanceFromTube - 0.75f*(cameraTrackPos.radius);
 			if (difference > 0){
 				changeVec.normalize();
 				this->position = this->position + (changeVec * difference);
