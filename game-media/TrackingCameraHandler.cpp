@@ -22,7 +22,12 @@ void TrackingCameraHandler::updateFor(IHasHandle *playerObject) {
 	{
 		Vector4 target = rotateGameObject->getTarget();
 
-		this->position = target + (rotateGameObject->getDelta() * CAMERABACKSCALE);
+		Vector4 delta = rotateGameObject->getDelta();
+		//delta[3] = 0;
+		delta.normalize();
+		
+
+		this->position = target + (delta * CAMERABACKSCALE);
 		this->lookAt = target;
 		this->up = rotateGameObject->getUp();
 	}

@@ -30,7 +30,7 @@ public:
 	virtual ~RotateCameraObject();
 
 	const Vector4& getTarget();
-	const Vector4& getDelta();
+	Vector4 getDelta();
 	const Vector4& getUp();
 
 	virtual bool handleEvent(Event* evt);

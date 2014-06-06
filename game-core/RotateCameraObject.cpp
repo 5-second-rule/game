@@ -25,15 +25,22 @@ RotateCameraObject::RotateCameraObject(const Vector4& target, const Vector4& hea
 	, rotateAmt(0)
 	, heading(Vector4::normalize(heading))
 	, up(Vector4::normalize(up))
-{}
+{
+	this->target[3] = 1.0f;
+	this->heading[3] = 0.0f;
+	this->up[3] = 0.0f;
+}
 
 RotateCameraObject::~RotateCameraObject() {}
 
 const Vector4& RotateCameraObject::getTarget() {
 	return this->target;
 }
-const Vector4& RotateCameraObject::getDelta() {
-	return (Matrix4::rotate(up, rotateAmt) * heading) * (cos(rotateAmt) * 0.5 + 0.5);
+
+Vector4 RotateCameraObject::getDelta() {
+	Vector4 delta = Vector4::normalize((Matrix4::rotate(up, rotateAmt) * heading) * (cos(rotateAmt) * 0.5 + 0.5));
+	delta[3] = 0;
+	return delta;
 }
 const Vector4& RotateCameraObject::getUp() {
 	return up;
