@@ -65,7 +65,7 @@ PathNode TrackPath::interpolateNode(Vector4 realPosition, int closestIndex) {
 	PathNode finalNode;
 	finalNode.point.set(closestNode.point.x() + pV.x()*inc, closestNode.point.y() + pV.y()*inc, closestNode.point.z() + pV.z()*inc, 1.0f);
 	finalNode.normal = closestNode.normal;
-	finalNode.radius = closestNode.radius;
+	finalNode.radius = closestNode.radius;// +(destination.radius - closestNode.radius)*inc;
 
 	return finalNode;
 }

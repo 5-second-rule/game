@@ -13,6 +13,7 @@ struct PowerupData {
 	float position[3];
 	float rotation[3];
 	int trackIndex;
+	float timeToLive;
 };
 
 class GAMECOREDLL Powerup : public StaticObject, public ICollidable

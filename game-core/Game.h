@@ -26,8 +26,6 @@ protected:
 	bool loading;
 
 public:
-	float tubeRadius;
-	float tubeRadiusSq;
 
 	Game();
 	~Game();

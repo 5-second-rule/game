@@ -20,8 +20,6 @@ Game * Game::globalInstance;
 Game::Game() {
 	this->initialized = false;
 	this->engineInstance = nullptr;
-	ConfigSettings::config.getValueOrDefault("tube_radius", this->tubeRadius, 100.0f);
-	this->tubeRadiusSq = this->tubeRadius * this->tubeRadius;
 }
 
 Game::~Game() {

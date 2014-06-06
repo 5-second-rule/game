@@ -253,7 +253,7 @@ void MovingObject::update(float dt){
 
 	if (this->followTrack) {
 		float dist_sq = (track->nodes[this->trackIndex].point - this->position).lengthSquared();
-		Vector4 trackForce = track->nodes[this->trackIndex].normal*this->fluid_force;//this->forceByDistSq( dist_sq, this->fluid_force );
+		Vector4 trackForce = track->nodes[this->trackIndex].normal*this->fluid_force;
 		this->applyForce(trackForce + this->forceUp * 2 + this->forceRight * 2);
 	}
 
@@ -413,9 +413,4 @@ std::shared_ptr<const Bounds> MovingObject::getBounds() const {
 
 unsigned int MovingObject::getPriority() const {
 	return static_cast<unsigned int>(CollisionPriorities::Object);
-}
-
-float MovingObject::forceByDistSq(float distance_sq, float maximum){
-	float force = maximum*( Game::getGlobalInstance()->tubeRadiusSq - distance_sq ) / Game::getGlobalInstance()->tubeRadiusSq;
-	return (force > 0 ? force : 0);
 }
