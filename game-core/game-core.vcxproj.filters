@@ -83,7 +83,7 @@
     </ClInclude>
     <ClInclude Include="Powerup.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
+	</ClInclude>
     <ClInclude Include="AIPath.h">
       <Filter>Header Files\AI</Filter>
     </ClInclude>
@@ -98,6 +98,9 @@
     </ClInclude>
     <ClInclude Include="Leaderboard.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AutonomousObjectManager.h">
+      <Filter>Header Files\AI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -158,9 +161,18 @@
     <ClCompile Include="SteeringBehavior.cpp">
       <Filter>Source Files\AI</Filter>
     </ClCompile>
+    <ClCompile Include="AutonomousObjectManager.cpp">
+      <Filter>Source Files\AI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\track.path">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\Config.ini">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\ConfigTemplate.ini">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
