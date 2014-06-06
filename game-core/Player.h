@@ -18,6 +18,7 @@ private:
 		bool selected;
 		Handle movingObject;
 		Handle rotateCameraObject;
+		bool hasAdrenaline;
 	};
 
 	GameState* gameState;
@@ -42,6 +43,8 @@ public:
 	// death tracking
 	void die();
 	int getDeathCount();
+
+	void addPowerup();
 	
 	// selection
 	void updateSelection(int tempSelection);

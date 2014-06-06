@@ -11,6 +11,7 @@ class GAMECOREDLL PlayerMovingObject : public MovingObject
 {
 public:
 	bool dead;
+	bool hasNewPowerup;
 
 	PlayerMovingObject(int objectType, Game* owner);
 	virtual ~PlayerMovingObject();
