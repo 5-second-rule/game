@@ -18,6 +18,10 @@ private:
 		bool selected;
 		Handle movingObject;
 		Handle rotateCameraObject;
+		Handle deathCamera;
+
+		bool dead;
+		float respawnTimer;
 		bool hasAdrenaline;
 	};
 
@@ -30,11 +34,14 @@ public:
 	Player(GameState* state);
 	Player(unsigned int guid, GameState* state);
 	~Player();
+
+	void update(float dt);
 	
 	unsigned int getGuid();
 	void spawnMoveableObject();
 
 	void spawnRotateCameraObject();
+	void spawnDeathCamera();
 
 	Handle getMovingObject();
 	Handle getRotateCameraObject();
@@ -43,6 +50,8 @@ public:
 	// death tracking
 	void die();
 	int getDeathCount();
+
+	bool isDead();
 
 	void addPowerup();
 	

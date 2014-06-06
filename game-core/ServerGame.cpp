@@ -40,10 +40,22 @@ void ServerGame::init() {
 	this->getEngineInstance()->getWorld()->insert(this->gameState);
 	this->getEngineInstance()->setPlayerRegistration(this->gameState);
 
+	static_cast<ServerEngine*>(this->getEngineInstance())->commandLine.registerCommand( "restart", new Restart( this ) );
+
 	this->gameState->setState( GameState::Selection );
 	
 	this->AI_manager = new AutonomousObjectManager(this->getTrackPath(), this->gameState);
 	theWorld.allocateHandle(AI_manager, HandleType::LOCAL);
 	theWorld.insert(AI_manager);
 
+}
+
+void ServerGame::restart()
+{
+	this->gameState->setState( GameState::State::Selection );
+}
+
+void Restart::execute( std::string args )
+{
+	this->game->restart();
 }
