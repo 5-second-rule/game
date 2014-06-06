@@ -38,6 +38,13 @@ UIData::UIData() {
 		"resources/ui-number-9.dds"
 	};
 
+	char *winnerTextures[4] = {
+		"resources/ui-ecoliwinner.dds",
+		"resources/ui-chickenpoxwinner.dds",
+		"resources/ui-syphiliswinner.dds",
+		"resources/ui-malariawinner.dds"
+	};
+
 	float lastEdge;
 
 	// regular toon images
@@ -75,6 +82,12 @@ UIData::UIData() {
 	this->adrenalineModel = engine->create2DModelFromScratch(vertices, 4, rectangleIndices, 6, "resources/ui-adrenaline.dds", textures, true);
 	this->objectData.adrenalineObject = new RenderableStaticObject(ObjectTypes::UI, adrenalineModel);
 
+	// winner images
+	this->calculateWinnerVertices(this->vertices);
+	for (int i = 0; i < 4; ++i) {
+		this->winnerModels[i] = engine->create2DModelFromScratch(vertices, 4, rectangleIndices, 6, winnerTextures[i], textures, true);
+		this->objectData.winnerObjects[i] = new RenderableStaticObject(ObjectTypes::UI, winnerModels[i]);
+	}
 }
 
 UIData::~UIData() {}
@@ -229,4 +242,11 @@ void UIData::calculateAdrenalineVertices(Transmission::Vertex *vertices) {
 	vertices[3] = { { edgeL, edgeB, 0.0f }, { 0, 1 }, { 0, 0, -1 }, {} };
 
 	this->playerHeight = height;
+}
+
+void UIData::calculateWinnerVertices(Transmission::Vertex *vertices) {
+	vertices[0] = { { -1.0f, 1.0f, 0.0f }, { 0, 0 }, { 0, 0, -1 }, {} };
+	vertices[1] = { { 1.0f, 1.0f, 0.0f }, { 1, 0 }, { 0, 0, -1 }, {} };
+	vertices[2] = { { 1.0f, -1.0f, 0.0f }, { 1, 1 }, { 0, 0, -1 }, {} };
+	vertices[3] = { { -1.0f, -1.0f, 0.0f }, { 0, 1 }, { 0, 0, -1 }, {} };
 }
