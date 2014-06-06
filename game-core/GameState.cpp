@@ -53,7 +53,7 @@ void GameState::update(float dt) {
 
 		for (size_t i = 0; i < this->players.size(); i++) {
 			playerObjs[i] = dynamic_cast<PlayerMovingObject*>(
-				this->world->get(this->players[i]->cameraTarget()));
+				this->world->get(this->players[i]->getMovingObject()));
 			
 
 			if (playerObjs[i] != nullptr) {
