@@ -37,8 +37,12 @@ void RenderableGame::init() {
 	this->titleScreenHandle = static_cast<IHasHandle*>(titleScreen)->getHandle();
 	this->getRenderingEngineInstance()->getWorld()->allocateHandle( titleScreen, LOCAL );
 	this->getRenderingEngineInstance()->getWorld()->insert( titleScreen );
-	
+
+	// init Sound Ctor and play title screen track
 	static_cast<SoundCtorTable*>(this->getRenderingEngineInstance()->soundCtors)->initCtors();
+	this->titleScreenMusic = this->getRenderingEngineInstance()->soundCtors->invoke( static_cast<int>(Sounds::CLOCK) );
+	this->titleScreenMusic->sound->play();
+
 	this->getRenderingEngineInstance()->waitForServer();
 	this->getEngineInstance()->registerPlayer(true);
 	this->gameManager = new RenderingGameManager(this->getRenderingEngineInstance());
@@ -111,6 +115,9 @@ bool RenderableGame::loadingDone() {
 	// and set to loaded
 	if( loaded == false && !this->loading ) {
 		theWorld.remove( &this->titleScreenHandle );
+		this->titleScreenMusic->sound->stop();
+		delete this->titleScreenMusic;
+		this->titleScreenMusic = nullptr;
 		loaded = true;
 	}
 	

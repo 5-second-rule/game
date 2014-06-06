@@ -16,6 +16,7 @@ private:
 protected:
 	virtual Engine * makeEngineInstance( ConstructorTable<BaseObject> *objectCtors, ConstructorTable<ActionEvent>* eventCtors );
 	Handle titleScreenHandle;
+	SoundObject *titleScreenMusic;
 
 public:
 	RenderableGame(void *appHandle);
