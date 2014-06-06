@@ -1,5 +1,6 @@
 #include "TrackingCameraHandler.h"
 #include "game-core/MovingObject.h"
+#include "game-core/RotateCameraObject.h"
 #include "game-core/Game.h"
 
 #define CAMERABACKSCALE 150
@@ -15,31 +16,50 @@ TrackingCameraHandler::~TrackingCameraHandler()
 }
 
 void TrackingCameraHandler::updateFor(IHasHandle *playerObject) {
-	MovingObject *gameObject = dynamic_cast<MovingObject *>(playerObject);
-	
-	if (gameObject != nullptr) {
-		TrackPath *track = Game::getGlobalInstance()->getTrackPath();
-		//PathNode node = track->nodes[gameObject->getTrackIndex()];
-		PathNode node = track->interpolateNode(gameObject->getPosition(), gameObject->getTrackIndex());
-		Common::Vector4 moveVec = gameObject->getPosition() - node.point;
-		this->position = node.point - (node.normal * CAMERABACKSCALE) -(node.normal * POINTDISTANCESCALE * node.distanceTo(gameObject->getPosition()));
-		//PathNode cameraTrackPos = track->nodes[track->locateIndex(this->position, gameObject->getTrackIndex())];
-		this->position = this->position + moveVec * 0.75;
+	RotateCameraObject *rotateGameObject = dynamic_cast<RotateCameraObject *>(playerObject);
 
-		PathNode cameraTrackPos = track->interpolateNode(this->position, track->locateIndex(this->position, gameObject->getTrackIndex()));
+	if (rotateGameObject != nullptr)
+	{
+		Vector4 target = rotateGameObject->getTarget();
 
-		Common::Vector4 changeVec = cameraTrackPos.point - this->position;
+		Vector4 delta = rotateGameObject->getDelta();
+		//delta[3] = 0;
+		delta.normalize();
 		
-		float camDistanceFromTube = changeVec.length();
 
-		float difference = camDistanceFromTube - 0.75f*(cameraTrackPos.radius);
-		if (difference > 0){
-			changeVec.normalize();
-			this->position = this->position + (changeVec * difference);
+		this->position = target + (delta * CAMERABACKSCALE);
+		this->lookAt = target;
+		this->up = rotateGameObject->getUp();
+	}
+	else {
+		MovingObject *gameObject = dynamic_cast<MovingObject *>(playerObject);
+
+		if (gameObject != nullptr) {
+			TrackPath *track = Game::getGlobalInstance()->getTrackPath();
+			//PathNode node = track->nodes[gameObject->getTrackIndex()];
+			PathNode node = track->interpolateNode(gameObject->getPosition(), gameObject->getTrackIndex());
+			Common::Vector4 moveVec = gameObject->getPosition() - node.point;
+			this->position = node.point - (node.normal * CAMERABACKSCALE) - (node.normal * POINTDISTANCESCALE * node.distanceTo(gameObject->getPosition()));
+			//PathNode cameraTrackPos = track->nodes[track->locateIndex(this->position, gameObject->getTrackIndex())];
+			this->position = this->position + moveVec * 0.75;
+
+
+			PathNode cameraTrackPos = track->interpolateNode(this->position, track->locateIndex(this->position, gameObject->getTrackIndex()));
+
+			Common::Vector4 changeVec = cameraTrackPos.point - this->position;
+
+			float camDistanceFromTube = changeVec.length();
+
+			//TODO: replace 100 with track radius
+			float difference = camDistanceFromTube - 0.75f*(100.0f);
+			if (difference > 0){
+				changeVec.normalize();
+				this->position = this->position + (changeVec * difference);
+			}
+
+			this->lookAt = gameObject->getPosition();// +((node.point - gameObject->getPosition()) * 0.5);
+
+			this->up = gameObject->getUp();
 		}
-
-		this->lookAt = gameObject->getPosition();// +((node.point - gameObject->getPosition()) * 0.5);
-
-		this->up = gameObject->getUp();
 	}
 }

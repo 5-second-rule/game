@@ -5,6 +5,7 @@
 #include "SelectionEvent.h"
 #include "ActionType.h"
 #include "PlayerMovingObject.h"
+#include "RotateCameraObject.h"
 
 class GAMECOREDLL GameState;
 
@@ -16,6 +17,7 @@ private:
 		int selection;
 		bool selected;
 		Handle movingObject;
+		Handle rotateCameraObject;
 	};
 
 	GameState* gameState;
@@ -30,7 +32,9 @@ public:
 	
 	unsigned int getGuid();
 	void spawnMoveableObject();
+	void spawnRotateCameraObject();
 	Handle getMovingObject();
+	Handle getRotateCameraObject();
 	void respawn();
 
 	// death tracking

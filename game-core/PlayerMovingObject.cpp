@@ -9,9 +9,7 @@ PlayerMovingObject::PlayerMovingObject(int objectType, Game* owner)
 }
 
 
-PlayerMovingObject::~PlayerMovingObject()
-{
-}
+PlayerMovingObject::~PlayerMovingObject() {}
 
 void PlayerMovingObject::update(float dt) {
 	MovingObject::update(dt);

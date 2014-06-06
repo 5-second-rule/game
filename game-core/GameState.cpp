@@ -15,8 +15,7 @@ GameState::GameState( ::Game* game ) : BaseObject( ObjectTypes::State ) {
 	}
 }
 
-GameState::~GameState() {
-}
+GameState::~GameState() {}
 
 void GameState::update(float dt) {
 	switch (this->getState()) {
@@ -28,7 +27,21 @@ void GameState::update(float dt) {
 			allReady &= this->players[i]->isSelected();
 		}
 
-		if (allReady) this->setState(Game);
+		if (allReady) this->setState(Countdown);
+		break;
+	}
+	case Countdown: {
+		//TODO Countdown logic
+		this->counter -= dt;
+		if (this->counter <= 0.0f) {
+			this->setState(Game);
+		}
+		else if (this->counter <= 3.0f && !countdownSound){
+			//TODO play sound once
+			float dummyLocation[3] = { 0, 0, 0 };
+			this->game->getEngineInstance()->sendEvent(new SoundEvent(static_cast<int>(Sounds::COUNTDOWN), true, false, dummyLocation));
+			countdownSound = true;
+		}
 		break;
 	}
 	case Game:
@@ -106,14 +119,16 @@ void GameState::setState(State state) {
 	std::vector<Player>::iterator it;
 	switch (state) {
 	case (Selection) :
+	{
 		this->selScreen = this->objectCtors->invoke(ObjectTypes::SelectionScreen);
 		world->allocateHandle(this->selScreen, HandleType::GLOBAL);
 		world->insert(this->selScreen);
 		break;
-	case (Game) :
+	}
+	case (Countdown) :
 	{
 		// remove selection screen from world
-		world->remove( &this->selScreen->getHandle() );
+		world->remove(&this->selScreen->getHandle());
 		this->selScreen = nullptr;
 
 		obj = this->objectCtors->invoke( ObjectTypes::Track );
@@ -133,6 +148,7 @@ void GameState::setState(State state) {
 
 		int numberOfPowerups = 12;
 		int range = this->game->getTrackPath()->nodes.size();
+
 		for( int i = 1; i < numberOfPowerups; i++ ) {
 			Powerup * powerup = static_cast<Powerup*>(this->objectCtors->invoke( ObjectTypes::Adrenaline ));
 			powerup->place( i * (range / numberOfPowerups) );
@@ -142,15 +158,42 @@ void GameState::setState(State state) {
 		}
 
 		// tell each player to create a MovingObject they manage
-		for( auto it = players.begin(); it != players.end(); ++it ) {
-			(*it)->spawnMoveableObject();
+
+		Vector4 positions[4] = {
+			Point(1.0f, 0.01f, 0.01f) * 30,
+			Point(0.01f, 1.0f, 0.01f) * 30,
+			Point(-1.0f, 0.01f, 0.01f) * 30,
+			Point(0.01f, -1.0f, 0.01f) * 30
+		};
+
+		for (size_t i = 0; i < players.size(); ++i) {
+			players[i]->spawnMoveableObject();
+
+			MovingObject* m = dynamic_cast<MovingObject*>(theWorld.get(players[i]->getMovingObject()));
+			if (m != nullptr) {
+				m->setPosition(positions[i]);
+				m->setUp(positions[i]);
+			}
+
+			players[i]->spawnRotateCameraObject();
 		}
 
 		float dummyLocation[3] = { 0, 0, 0 };
 		this->game->getEngineInstance()->sendEvent(new SoundEvent(static_cast<int>(Sounds::SOUNDTRACK), true, false, dummyLocation));
 
+		this->countdownSound = true;
+		this->counter = 5.0f;
 		break;
 	}
+	case (Game) :
+		for (auto it = players.begin(); it != players.end(); ++it) {
+			PlayerMovingObject* m = dynamic_cast<PlayerMovingObject*>(theWorld.get((*it)->getMovingObject()));
+			if (m != nullptr) {
+				m->setFollowTrack(true);
+				m->setHasPropulsion(true);
+			}
+		}
+		break;
 	default:
 		break;
 	}
@@ -191,6 +234,20 @@ PlayerDelegate * GameState::addPlayer(unsigned int playerGuid) {
 	switch (this->getState()) {
 	case (Selection) :
 		//player->updateSelection(numPlayers);
+		break;
+	case (Countdown) :
+		for (int i = 0; i < 4; ++i) {
+			selection = i;
+			if (this->toonUsed[i]) {
+				player->updateSelection(selection);
+				this->toonUsed[selection] = false;
+				break;
+			}
+
+			player->spawnMoveableObject();
+			player->spawnRotateCameraObject();
+
+		}
 		break;
 	case (Game) :
 		for (int i = 0; i < 4; ++i) {
