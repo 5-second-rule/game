@@ -8,6 +8,8 @@
 struct GAMECOREDLL PathNode {
 	Common::Vector4 point;
 	Common::Vector4 normal;
+	
+	float radius;
 
 	float distanceTo(Common::Vector4 otherPoint) {
 		return this->normal.dot(otherPoint - this->point);

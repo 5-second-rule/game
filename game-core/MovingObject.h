@@ -17,7 +17,6 @@ struct MovingObjectData {
 	float position[3];
 	float velocity[3];
 	float force[3];
-
 	float friction;
 	float mass;
 
@@ -29,6 +28,7 @@ class GAMECOREDLL MovingObject : public BaseObject, public ICollidable
 protected:
 	Vector4 up;
 	Vector4 heading;
+	Vector4 headingVector;
 	Vector4 sideLeft;
 	Vector4 forceUp;
 	Vector4 forceRight;
@@ -36,12 +36,15 @@ protected:
 	Vector4 position;
 	Vector4 velocity;
 	Vector4 force;
-	float trackVelocity;
-	
+
 	float propulsion;
 
 	float friction;
 	float mass;
+	float max_speed;
+	float max_force;
+	float fluid_force;
+	float heading_force;
 
 	int trackIndex;
 
@@ -52,13 +55,16 @@ public:
 	MovingObject(int objectType, Game* owner);
 	MovingObject(int objectType, Game* owner, bool follow, bool propulse);
 	virtual ~MovingObject();
+	virtual void initDefaultConfiguration();
 	Game* owner;
 
-	static const float max_speed;
-	static const float max_force;
+
+	void setHeading(const Vector4& heading);
 
 	Vector4 getHeading(); // A normalized vector giving the direction the object is heading
 	float getSpeed();
+	float getMaxForce();
+	float getMaxSpeed();
 	Vector4 getVelocity();
 	Vector4 getPosition();
 	int getTrackIndex();
@@ -69,19 +75,31 @@ public:
 	Vector4 getForceRight();
 
 	void setPosition(const Vector4& position);
+	void setDragCoeff(float);
+	void setMaxSpeed(float);
+	void setMaxForce(float);
+
+	void setFluidForce(float);
+	void setVelocity(const Vector4&);
+	void setMass(float);
+
+	void setUp(const Vector4& up);
+
+	void setFollowTrack(bool state);
+	void setHasPropulsion(bool state);
+
 
 	void applyForce(const Vector4& force);
 
 	virtual void update(float dt);
 	virtual bool handleEvent(Event* evt);
 
-	virtual std::string toString();
+	virtual std::string toString() const ;
 
 	// ISerializable Methods
+	virtual void deserialize(BufferReader& reader);
 	virtual void reserveSize(IReserve&) const;
 	virtual void fillBuffer(IFill&) const;
-
-	virtual void deserialize(BufferReader& buffer);
 
 	// ICollidable Methods
 	Common::Vector4 getGroupingParameter() const;
@@ -90,5 +108,5 @@ public:
 	std::shared_ptr<const Bounds> getBounds() const;
 	unsigned int getPriority() const;
 
+	static float forceByDistSq(float dist_sq, float maximum);
 };
-

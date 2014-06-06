@@ -77,6 +77,7 @@
   <ItemGroup>
     <ClInclude Include="ActionEventCtorTable.h" />
     <ClInclude Include="ActionType.h" />
+    <ClInclude Include="AutonomousObjectManager.h" />
     <ClInclude Include="CollisionMetadata.h" />
     <ClInclude Include="AIPath.h" />
     <ClInclude Include="AutonomousObject.h" />
@@ -91,6 +92,7 @@
     <ClInclude Include="MovingObject.h" />
     <ClInclude Include="ObjectTypes.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="RotateCameraObject.h" />
     <ClInclude Include="SelectionEvent.h" />
     <ClInclude Include="PlayerMovingObject.h" />
     <ClInclude Include="Powerup.h" />
@@ -107,12 +109,14 @@
     <ClCompile Include="ActionEventCtorTable.cpp" />
     <ClCompile Include="AIPath.cpp" />
     <ClCompile Include="AutonomousObject.cpp" />
+    <ClCompile Include="AutonomousObjectManager.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObjectCtorTable.cpp" />
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="MoveEvent.cpp" />
     <ClCompile Include="MovingObject.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="RotateCameraObject.cpp" />
     <ClCompile Include="SelectionEvent.cpp" />
     <ClCompile Include="PlayerMovingObject.cpp" />
     <ClCompile Include="Powerup.cpp" />
@@ -125,6 +129,8 @@
     <ClCompile Include="WallOfDeath.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="resources\Config.ini" />
+    <None Include="resources\ConfigTemplate.ini" />
     <None Include="resources\track.path" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

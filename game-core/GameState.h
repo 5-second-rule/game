@@ -13,9 +13,12 @@
 class GAMECOREDLL GameState : public BaseObject, public IRegisterPlayers
 {
 public:
-	enum State { Load, Title, Selection, Game, Score, None = -1 };
+	enum State { Load, Title, Selection, Countdown, Game, Score, None = -1 };
 
 protected:
+	bool countdownSound;
+	float counter;
+
 	static State gameState;
 	std::vector<Player*> players;
 	std::vector<LeaderboardEntry> leaderboard;
@@ -41,6 +44,7 @@ public:
 
 	void setState(State state);
 	int getState();
+	std::vector<Handle> getPlayersHandle();
 	bool isToonUsed(int toon);
 	void useToon(int toon);
 	void unuseToon(int toon);

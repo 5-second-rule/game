@@ -2,6 +2,8 @@
 
 #include "SteeringBehavior.h"
 
+#include "engine-core/ConfigSettings.h"
+
 using namespace Common;
 
 #define random_clamped() (((float)(rand()) / (float)(INT_MAX)) * 2.0f - 1.0f)
@@ -9,8 +11,8 @@ using namespace Common;
 
 SteeringBehavior::SteeringBehavior(AutonomousObject *owner) :behavior(BehaviorType::none)
 {
-
 	this->owner = owner;
+	this->init();
 }
 
 SteeringBehavior::~SteeringBehavior()
@@ -18,27 +20,35 @@ SteeringBehavior::~SteeringBehavior()
 }
 
 void SteeringBehavior::init(){
-	this->k_time_elapsed = 0.016667f; //ConfigSettings::config->k_time_elapsed;
-	this->deceleration_tweaker = 0.3f; //ConfigSettings::config->deceleration_tweaker;
-	this->wander_jitter = 50.0f; //ConfigSettings::config->wander_jitter;
-	this->wander_radius = 3.0f; //ConfigSettings::config->wander_radius;
-	this->wander_distance = 10.0f; //ConfigSettings::config->wander_distance;
-	this->weight_wander = 80.0f; //ConfigSettings::config->weight_wander;
-	this->weight_follow_path = 10.0f; //ConfigSettings::config->weight_follow_path;
-	this->way_point_seek_distance = 5.0f; //ConfigSettings::config->way_point_seek_distance;
+	float frame_rate;
+	bool read_file = true;
+	read_file = read_file && ConfigSettings::config.getValueOrDefault("frame_rate", frame_rate, 30.0f);
+	read_file = read_file && ConfigSettings::config.getValueOrDefault("deceleration_tweaker", this->deceleration_tweaker, 0.3f);
+	read_file = read_file && ConfigSettings::config.getValueOrDefault("wander_jitter", this->wander_jitter, 50.0f);
+	read_file = read_file && ConfigSettings::config.getValueOrDefault("wander_radius", this->wander_radius, 3.0f);
+	read_file = read_file && ConfigSettings::config.getValueOrDefault("wander_distance", this->wander_distance, 10.0f);
+	read_file = read_file && ConfigSettings::config.getValueOrDefault("weight_wander", this->weight_wander, 80.0f);
+	read_file = read_file && ConfigSettings::config.getValueOrDefault("weight_follow_path", this->weight_follow_path, 10.0f);
+	read_file = read_file && ConfigSettings::config.getValueOrDefault("way_point_seek_distance", this->way_point_seek_distance, 5.0f);
+
 	this->way_point_seek_distance_sq = way_point_seek_distance * way_point_seek_distance;
+	this->k_time_elapsed = 1 / frame_rate;
+
+	if (!read_file){
+		cout << "Fail to read configurations from file in SteeringBehavior::init()!";
+	}
 }
 
 Vector4 SteeringBehavior::seek(Vector4 &p_targetPosition){
 	Vector4 desiredDirection = Common::Vector4::normalize(p_targetPosition - owner->getPosition());
-	Vector4 desiredVelocity = desiredDirection * MovingObject::max_speed;
+	Vector4 desiredVelocity = desiredDirection * owner->getMaxSpeed();
 
 	return desiredVelocity;
 }
 
 Vector4 SteeringBehavior::flee(Vector4 &p_targetPosition){
 	Vector4 desiredDirection = Common::Vector4::normalize(owner->getPosition() - p_targetPosition);
-	Vector4 desiredVelocity = desiredDirection * MovingObject::max_speed;
+	Vector4 desiredVelocity = desiredDirection * owner->getMaxSpeed();
 
 	return desiredVelocity;
 }
@@ -78,7 +88,7 @@ Vector4 SteeringBehavior::pursuit(Handle &p_evader_handle){
 			return this->seek(evader->getPosition());
 		}
 
-		look_ahead_time = toEvader.length() / (MovingObject::max_speed + evader->getSpeed());
+		look_ahead_time = toEvader.length() / (owner->getMaxSpeed() + evader->getSpeed());
 		return seek(evader->getPosition() + evader->getVelocity() * look_ahead_time);
 	}
 	else {
@@ -96,7 +106,7 @@ Vector4 SteeringBehavior::evade(Handle &p_pursuer_handle){
 	tmp = theWorld.get(p_pursuer_handle);
 	if (pursuer = dynamic_cast<MovingObject*>(tmp)){
 		toPursuer = pursuer->getPosition() - owner->getPosition();
-		look_ahead_time = toPursuer.length() / (MovingObject::max_speed + pursuer->getSpeed());
+		look_ahead_time = toPursuer.length() / (owner->getMaxSpeed() + pursuer->getSpeed());
 		return flee(pursuer->getPosition() + pursuer->getVelocity() * look_ahead_time);
 	}
 	else {
@@ -160,7 +170,7 @@ Vector4 SteeringBehavior::offsetPursuit(Handle &p_leader, Vector4 &offset) {
 	// The lookahead time is propotional to the distance between the leader
 	// and the pursuer; and is inversely proportional to the sum of both
 	// agent's velocities
-	float LookAheadTime = ToOffset.length() / (MovingObject::max_speed + leader->getSpeed());
+	float LookAheadTime = ToOffset.length() / (owner->getMaxSpeed() + leader->getSpeed());
 
 	// Arrive at the predicted future position of the offset
 	return arrive(WorldOffsetPos + leader->getVelocity() * LookAheadTime, fast);
@@ -169,100 +179,100 @@ Vector4 SteeringBehavior::offsetPursuit(Handle &p_leader, Vector4 &offset) {
 /*
 Vector4 SteeringBehavior::separation(const std::vector<Handle> &neighbors)
 {
-	Vector4 SteeringForce;
+Vector4 SteeringForce;
 
-	for (unsigned int a = 0; a<neighbors.size(); ++a)
-	{
-		AutonomousObject *neighbor = dynamic_cast<AutonomousObject*>(m_getObject(neighbors[a]));
-		// Make sure this agent isn't included in the calculations and that
-		// the agent being examined is close enough. ***also make sure it doesn't
-		// include the evade target ***
-		if ((neighbor != nullptr) && (neighbor != owner) && neighbor->isTagged() &&
-			(neighbor != m_getObject(target_agent_evade)))
-		{
-			Vector4 ToAgent = owner->getPosition() - neighbor->getPosition();
+for (unsigned int a = 0; a<neighbors.size(); ++a)
+{
+AutonomousObject *neighbor = dynamic_cast<AutonomousObject*>(m_getObject(neighbors[a]));
+// Make sure this agent isn't included in the calculations and that
+// the agent being examined is close enough. ***also make sure it doesn't
+// include the evade target ***
+if ((neighbor != nullptr) && (neighbor != owner) && neighbor->isTagged() &&
+(neighbor != m_getObject(target_agent_evade)))
+{
+Vector4 ToAgent = owner->getPosition() - neighbor->getPosition();
 
-			//scale the force inversely proportional to the agents distance  
-			//from its neighbor.
-			SteeringForce += Common::Vector4::normalize(ToAgent) * (1 / ToAgent.length());
-		}
-	}
+//scale the force inversely proportional to the agents distance
+//from its neighbor.
+SteeringForce += Common::Vector4::normalize(ToAgent) * (1 / ToAgent.length());
+}
+}
 
-	return SteeringForce;
+return SteeringForce;
 }
 
 Vector4 SteeringBehavior::alignment(const std::vector<Handle> &neighbors)
 {
-	//used to record the average heading of the neighbors
-	Vector4 AverageHeading;
+//used to record the average heading of the neighbors
+Vector4 AverageHeading;
 
-	//used to count the number of vehicles in the neighborhood
-	int    NeighborCount = 0;
+//used to count the number of vehicles in the neighborhood
+int    NeighborCount = 0;
 
-	//iterate through all the tagged vehicles and sum their heading vectors  
-	for (unsigned int a = 0; a<neighbors.size(); ++a)
-	{
-		AutonomousObject *neighbor = dynamic_cast<AutonomousObject*>(m_getObject(neighbors[a]));
-		//make sure *this* agent isn't included in the calculations and that
-		//the agent being examined  is close enough ***also make sure it doesn't
-		//include any evade target ***
-		if ((neighbor != nullptr) && (neighbor != owner) && neighbor->isTagged() &&
-			(neighbor != m_getObject(target_agent_evade)))
-		{
-			AverageHeading += neighbor->getHeading();
+//iterate through all the tagged vehicles and sum their heading vectors
+for (unsigned int a = 0; a<neighbors.size(); ++a)
+{
+AutonomousObject *neighbor = dynamic_cast<AutonomousObject*>(m_getObject(neighbors[a]));
+//make sure *this* agent isn't included in the calculations and that
+//the agent being examined  is close enough ***also make sure it doesn't
+//include any evade target ***
+if ((neighbor != nullptr) && (neighbor != owner) && neighbor->isTagged() &&
+(neighbor != m_getObject(target_agent_evade)))
+{
+AverageHeading += neighbor->getHeading();
 
-			++NeighborCount;
-		}
-	}
+++NeighborCount;
+}
+}
 
-	//if the neighborhood contained one or more vehicles, average their
-	//heading vectors.
-	if (NeighborCount > 0)
-	{
-		AverageHeading *= 1 / (float)NeighborCount;
+//if the neighborhood contained one or more vehicles, average their
+//heading vectors.
+if (NeighborCount > 0)
+{
+AverageHeading *= 1 / (float)NeighborCount;
 
-		AverageHeading -= owner->getHeading();
-	}
+AverageHeading -= owner->getHeading();
+}
 
-	return AverageHeading;
+return AverageHeading;
 }
 
 
 Vector4 SteeringBehavior::cohesion(const std::vector<Handle> &neighbors)
 {
-	// First find the center of mass of all the agents
-	Vector4 CenterOfMass, SteeringForce;
+// First find the center of mass of all the agents
+Vector4 CenterOfMass, SteeringForce;
 
-	int NeighborCount = 0;
+int NeighborCount = 0;
 
-	// Iterate through the neighbors and sum up all the position vectors
-	for (unsigned int a = 0; a<neighbors.size(); ++a)
-	{
-		AutonomousObject *neighbor = dynamic_cast<AutonomousObject*>(m_getObject(neighbors[a]));
-		// Make sure *this* agent isn't included in the calculations and that
-		// the agent being examined is close enough ***also make sure it doesn't
-		// include the evade target ***
-		if ((neighbor != nullptr) && (neighbor != owner) && neighbor->isTagged() &&
-			(neighbor != dynamic_cast<MovingObject*>(m_getObject(this->target_agent_evade))))
-		{
-			CenterOfMass += neighbor->getPosition();
+// Iterate through the neighbors and sum up all the position vectors
+for (unsigned int a = 0; a<neighbors.size(); ++a)
+{
+AutonomousObject *neighbor = dynamic_cast<AutonomousObject*>(m_getObject(neighbors[a]));
+// Make sure *this* agent isn't included in the calculations and that
+// the agent being examined is close enough ***also make sure it doesn't
+// include the evade target ***
+if ((neighbor != nullptr) && (neighbor != owner) && neighbor->isTagged() &&
+(neighbor != dynamic_cast<MovingObject*>(m_getObject(this->target_agent_evade))))
+{
+CenterOfMass += neighbor->getPosition();
 
-			++NeighborCount;
-		}
-	}
+++NeighborCount;
+}
+}
 
-	if (NeighborCount > 0)
-	{
-		// The center of mass is the average of the sum of positions
-		CenterOfMass *= 1 / (float)NeighborCount;
+if (NeighborCount > 0)
+{
+// The center of mass is the average of the sum of positions
+CenterOfMass *= 1 / (float)NeighborCount;
 
-		// Seek towards that position
-		SteeringForce = seek(CenterOfMass);
-	}
+// Seek towards that position
+SteeringForce = seek(CenterOfMass);
+}
 
-	// The magnitude of cohesion is usually much larger than separation or
-	// allignment so it usually helps to normalize it.
-	return Common::Vector4::normalize(SteeringForce);
+// The magnitude of cohesion is usually much larger than separation or
+// allignment so it usually helps to normalize it.
+return Common::Vector4::normalize(SteeringForce);
 }
 */
 
@@ -273,7 +283,7 @@ bool SteeringBehavior::accumulateForce(Vector4 &RunningTot,
 	float MagnitudeSoFar = RunningTot.length();
 
 	// Calculate how much steering force remains to be used by this vehicle
-	float MagnitudeRemaining = MovingObject::max_force - MagnitudeSoFar;
+	float MagnitudeRemaining = owner->getMaxForce() - MagnitudeSoFar;
 
 	// Return false if there is no more force left to use
 	if (MagnitudeRemaining <= 0.0) return false;

@@ -13,7 +13,7 @@ public:
 	bool dead;
 
 	PlayerMovingObject(int objectType, Game* owner);
-	~PlayerMovingObject();
+	virtual ~PlayerMovingObject();
 
 	virtual void update(float dt);
 

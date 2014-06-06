@@ -8,7 +8,12 @@ RenderableMovingObject::RenderableMovingObject(int type, Transmission::Model* mo
 	: MovingObject(type, nullptr)
 	, RenderableObject(model)
 {
+
 	if (type == ObjectTypes::Syphillis && model != nullptr) {
+		this->getMoveable()->setScale(3);
+	}
+
+	if (type == ObjectTypes::RedBlood && model != nullptr) {
 		this->getMoveable()->setScale(3);
 	}
 }
@@ -20,11 +25,11 @@ void RenderableMovingObject::render() {
 
 	IMoveable* move = this->getMoveable();
 	move->setPosition(this->position);
+	
+	// reset rotation
+	move->setRotation(0, 0, 0);
 
 	if (this->heading != Vector4() && this->heading != Vector(0.0f, 0.0f, -1.0f)) {
-
-		// reset rotation
-		move->setRotation(0, 0, 0);
 
 		// rotate the z vector to face the new heading
 		move->rotate(

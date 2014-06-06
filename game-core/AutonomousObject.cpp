@@ -3,14 +3,12 @@
 #include <iostream>
 #include <sstream>
 
-AutonomousObject::AutonomousObject(int objectType, Game *owner)
-	: MovingObject(objectType, owner)
+AutonomousObject::AutonomousObject(ObjectTypes objectType) : AutonomousObject(objectType, Game::getGlobalInstance()) {}
+
+AutonomousObject::AutonomousObject(ObjectTypes objectType, Game *owner) : MovingObject(objectType, owner)
 {
 	steering_behavior = new SteeringBehavior(this);
 	path = AIPath::instance();
-	setCurrentWayPoint(path->begin());
-	path->loopOn();
-	steering_behavior->init();
 }
 
 AutonomousObject::~AutonomousObject() {}
@@ -49,7 +47,7 @@ void AutonomousObject::setOffSteeringBehavior(BehaviorType behavior){
 
 string AutonomousObject::toString() const {
 	stringstream buffer;
-	//buffer << MovingObject::toString() << endl;
+	buffer << MovingObject::toString();
 	buffer << steering_behavior->toString() << endl;
 	return buffer.str();
 }
