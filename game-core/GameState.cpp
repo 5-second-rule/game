@@ -285,7 +285,7 @@ PlayerDelegate * GameState::addPlayer(unsigned int playerGuid) {
 	default: break;
 	}
 
-	this->deathboard.push_back({ numPlayers, 0, -1 });
+	this->deathboard.push_back({ numPlayers, 0, -1, false });
 	this->leaderboard.push_back({ numPlayers, 0 });
 	this->players.push_back(player);
 
@@ -391,25 +391,33 @@ void GameState::sortDeathboard() {
 				DeathboardEntry tmp = deathboard[i];
 				deathboard[i] = deathboard[j];
 				deathboard[j] = tmp;
-			} else if (deathboard[j].deathOrder > -1 && deathboard[j].deathOrder < deathboard[i].deathOrder) {
+			} else if (deathboard[j].deathOrder > -1 && deathboard[j].deathOrder > deathboard[i].deathOrder) {
 				DeathboardEntry tmp = deathboard[i];
 				deathboard[i] = deathboard[j];
 				deathboard[j] = tmp;
 			}
 		}
-			}
-		}
+	}
 
-void GameState::placeInDeathOrder(int i) {
+	if (this->players.size() > 1 && deathboard[1].deathOrder >= 0) {
+		deathboard[0].winner = true;
+	}
+}
+
+void GameState::placeInDeathOrder(int player) {
 	int lastDeath = -1;
-	for (std::vector<DeathboardEntry>::iterator it = this->deathboard.begin(); it != this->deathboard.end(); ++it) {
-		if (it->deathOrder > lastDeath) {
-			lastDeath = it->deathOrder;
+	for (size_t i = 0; i < this->players.size(); i++) {
+		if (deathboard[i].deathOrder > lastDeath) {
+			lastDeath = deathboard[i].deathOrder;
 		}
 	}
-	for (std::vector<DeathboardEntry>::iterator it = this->deathboard.begin(); it != this->deathboard.end(); ++it) {
-		if (it->playerIndex == i) {
-			it->deathOrder = lastDeath + 1;
+	std::cout << "deathcount = " << lastDeath;
+
+	for (size_t i = 0; i < this->players.size(); i++) {
+		if (deathboard[i].playerIndex == player) {
+			std::cout << " .. index = " << i << std::endl;
+			deathboard[i].deathOrder = lastDeath + 1;
+			return;
 		}
 	}
 }
