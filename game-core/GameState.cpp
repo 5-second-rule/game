@@ -9,7 +9,7 @@ GameState::GameState( ::Game* game ) : BaseObject( ObjectTypes::State ) {
 	this->engine = Game::getGlobalInstance()->getEngineInstance();
 	this->world = engine->getWorld();
 	this->objectCtors = engine->getObjCtors();
-	this->countdownFlag = false;
+	this->countdownFlag = -1;
 	for (int i = 0; i < 4; ++i) {
 		this->toonUsed[i] = false;
 	}
@@ -34,6 +34,10 @@ void GameState::update(float dt) {
 		//TODO Countdown logic
 		this->counter -= dt;
 		
+		if (this->counter <= 3.5f) {
+			this->countdownFlag = (int) ceil(this->counter) - 1;
+		}
+
 		if (this->counter <= 0.0f) {
 			this->setState(Game);
 		} else if (this->counter <= 3.0f && !countdownSound){
@@ -163,7 +167,6 @@ void GameState::setState(State state) {
 			this->world->insert( powerup );
 		}
 
-		this->countdownFlag = true;
 		obj = this->objectCtors->invoke(ObjectTypes::UI);
 		world->allocateHandle(obj, HandleType::GLOBAL);
 		world->insert(obj);
@@ -198,7 +201,6 @@ void GameState::setState(State state) {
 		break;
 	}
 	case (Game) :
-		this->countdownFlag = false;
 		for (auto it = players.begin(); it != players.end(); ++it) {
 			PlayerMovingObject* m = dynamic_cast<PlayerMovingObject*>(theWorld.get((*it)->getMovingObject()));
 			if (m != nullptr) {
@@ -285,7 +287,7 @@ PlayerDelegate * GameState::addPlayer(unsigned int playerGuid) {
 	return player;
 }
 
-bool GameState::getCountdownFlag() {
+int GameState::getCountdownFlag() {
 	return this->countdownFlag;
 }
 
@@ -310,6 +312,7 @@ void GameState::fillBuffer(IFill& buffer) const {
 	GameStateData * data = reinterpret_cast<GameStateData*>(buffer.getPointer());
 	data->state = gameState;
 	data->numPlayers = players.size();
+	data->countdownFlag = this->countdownFlag;
 	buffer.filled();
 	for (unsigned int i = 0; i < players.size(); ++i) {
 		players[i]->fillBuffer(buffer);
@@ -332,6 +335,7 @@ void GameState::deserialize(BufferReader& buffer) {
 	BaseObject::deserialize(buffer);
 	const GameStateData *data = reinterpret_cast<const GameStateData*>(buffer.getPointer());
 	this->gameState = (State) data->state;
+	this->countdownFlag = data->countdownFlag;
 	while (data->numPlayers > this->players.size()) {
 		this->players.push_back(new Player(this));
 		this->leaderboard.push_back(LeaderboardEntry());

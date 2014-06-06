@@ -18,7 +18,7 @@ public:
 protected:
 	bool countdownSound;
 	float counter;
-	bool countdownFlag;
+	int countdownFlag;
 
 	static State gameState;
 	std::vector<Player*> players;
@@ -34,6 +34,7 @@ protected:
 	struct GameStateData {
 		int state;
 		unsigned int numPlayers;
+		int countdownFlag;
 	};
 
 public:
@@ -55,7 +56,7 @@ public:
 
 	std::vector<Player*> getPlayers();
 	virtual PlayerDelegate* addPlayer(unsigned int playerGuid);
-	bool getCountdownFlag();
+	int getCountdownFlag();
 
 	std::vector<LeaderboardEntry> getLeaderboard();
 	std::vector<DeathboardEntry> getDeathboard();

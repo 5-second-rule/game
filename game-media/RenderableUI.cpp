@@ -58,7 +58,8 @@ void RenderableUI::render() {
 			this->objectData->deadObject->render();
 		}
 	}
-	// 0 == go, 1 == 1, etc. Just wanted to see it, since all my attempts at calling it failed.
-	if (this->gamestate->getCountdownFlag())
-		this->objectData->countdownObjects[0]->render();
+	int flag = this->gamestate->getCountdownFlag();
+	if (flag >= 0) {
+		this->objectData->countdownObjects[flag]->render();
+	}
 };
