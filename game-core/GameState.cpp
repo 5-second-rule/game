@@ -33,7 +33,22 @@ void GameState::update(float dt) {
 	}
 	case Countdown: {
 		//TODO Countdown logic
-		//this->setState(Game);
+		this->counter -= dt;
+		if (this->counter <= 0.0f) {
+			this->setState(Game);
+		}
+		else if (this->counter <= 1.0f){
+			//TODO draw 1
+		}
+		else if (this->counter <= 2.0f) {
+			//TODO draw 2
+		}
+		else if (this->counter <= 3.0f) {
+			//TODO draw 3
+		}
+		else {
+			// No draw.
+		}
 		break;
 	}
 	case Game:
@@ -140,6 +155,7 @@ void GameState::setState(State state) {
 
 		int numberOfPowerups = 12;
 		int range = this->game->getTrackPath()->nodes.size();
+
 		for( int i = 1; i < numberOfPowerups; i++ ) {
 			Powerup * powerup = static_cast<Powerup*>(this->objectCtors->invoke( ObjectTypes::Adrenaline ));
 			powerup->place( i * (range / numberOfPowerups) );
@@ -157,8 +173,18 @@ void GameState::setState(State state) {
 		float dummyLocation[3] = { 0, 0, 0 };
 		this->game->getEngineInstance()->sendEvent(new SoundEvent(static_cast<int>(Sounds::SOUNDTRACK), true, false, dummyLocation));
 
+		this->counter = 5.0f;
 		break;
 	}
+	case (Game) :
+		for (auto it = players.begin(); it != players.end(); ++it) {
+			PlayerMovingObject* m = dynamic_cast<PlayerMovingObject*>(theWorld.get((*it)->getMovingObject()));
+			if (m != nullptr) {
+				m->setFollowTrack(true);
+				m->setHasPropulsion(true);
+			}
+		}
+		break;
 	default:
 		break;
 	}

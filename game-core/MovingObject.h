@@ -57,6 +57,8 @@ public:
 	static const float max_speed;
 	static const float max_force;
 
+	void setHeading(const Vector4& heading);
+
 	Vector4 getHeading(); // A normalized vector giving the direction the object is heading
 	float getSpeed();
 	Vector4 getVelocity();

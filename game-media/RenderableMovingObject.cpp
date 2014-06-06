@@ -6,7 +6,8 @@
 RenderableMovingObject::RenderableMovingObject(int type, Transmission::Model* model)
 	: MovingObject(type, nullptr)
 	, RenderableObject(model)
-{}
+{
+}
 
 
 RenderableMovingObject::~RenderableMovingObject() {}
@@ -15,11 +16,11 @@ void RenderableMovingObject::render() {
 
 	IMoveable* move = this->getMoveable();
 	move->setPosition(this->position);
+	
+	// reset rotation
+	move->setRotation(0, 0, 0);
 
 	if (this->heading != Vector4() && this->heading != Vector(0.0f, 0.0f, -1.0f)) {
-
-		// reset rotation
-		move->setRotation(0, 0, 0);
 
 		// rotate the z vector to face the new heading
 		move->rotate(

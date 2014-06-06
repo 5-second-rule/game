@@ -13,7 +13,7 @@
 #endif
 #endif  // _DEBUG
 
-#define ROTATE_INC 0.1
+#define ROTATE_INC (M_PI / 3.0f)
 
 RotateCameraObject::RotateCameraObject()
 	: RotateCameraObject(Vector(0,0,0), Vector(0,0,0), Point(0,0,0))

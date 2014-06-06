@@ -20,11 +20,16 @@ Player::~Player() {
 }
 
 void Player::spawnMoveableObject() {
+
 	PlayerMovingObject* m = new PlayerMovingObject(this->getSelection(), Game::getGlobalInstance());
 
 	World* w = Game::getGlobalInstance()->getEngineInstance()->getWorld();
 	w->allocateHandle(m, HandleType::GLOBAL);
 	w->insert(m);
+
+	//bool movement = this->gameState->getState() == GameState::State::Game;
+	m->setFollowTrack(false);
+	m->setHasPropulsion(false);
 
 	this->data.movingObject = m->getHandle();
 }

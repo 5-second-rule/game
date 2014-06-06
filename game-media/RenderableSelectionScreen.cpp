@@ -7,6 +7,10 @@ RenderableSelectionScreen::RenderableSelectionScreen(SelectionScreenData::Object
 	this->objectData = objectData;
 	this->engine = RenderableGame::getGlobalInstance()->getEngineInstance();
 	this->players = RenderableGame::getGlobalInstance()->getGameManager()->getPlayers();
+
+	for (int i = 0; i < 4; ++i) {
+		this->objectData->playerObjects[i]->setHeading(Vector(0.0f, 0.0f, -1.0f));
+	}
 }
 
 RenderableSelectionScreen::~RenderableSelectionScreen() {}

@@ -28,7 +28,7 @@ MovingObject::MovingObject(int objectType, Game* owner, bool follow, bool propul
 	, owner(owner)
 {
 	this->up = Vector(0.0f, 1.0f, 0.0f);
-	this->heading = Vector(0.0f, 0.0f, 1.0f);
+	this->heading = Vector4::normalize(Vector(0.01f, 0.01f, 1.0f));
 	this->sideLeft = Vector(-1.0f, 0.0f, 0.0f);
 	this->forceUp = Vector(0.0f, 0.0f, 0.0f);
 	this->forceRight = Vector(0.0f, 0.0f, 0.0f);
@@ -50,6 +50,9 @@ MovingObject::MovingObject(int objectType, Game* owner)
 
 MovingObject::~MovingObject() {}
 
+void MovingObject::setHeading(const Vector4& heading) {
+	this->heading = heading;
+}
 
 Vector4 MovingObject::getHeading(){
 	return this->heading;
@@ -195,10 +198,6 @@ void MovingObject::update(float dt){
 	const float HEADING_FORCE = 15.0f;
 
 	Vector4 trackForce = track->nodes[this->trackIndex].normal * TRACK_FORCE;
-	
-	// propulsion in heading
-	Vector4 headingForce = Vector4::normalize(this->heading) * HEADING_FORCE * propulsion;
-	this->applyForce(trackForce + headingForce + this->forceUp + this->forceRight);
 
 	if (this->followTrack) {
 		Vector4 trackForce = track->nodes[this->trackIndex].normal * TRACK_FORCE;

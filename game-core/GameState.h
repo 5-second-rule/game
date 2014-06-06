@@ -13,6 +13,8 @@ public:
 	enum State { Load, Title, Selection, Countdown, Game, Score, None = -1 };
 
 protected:
+	float counter;
+
 	static State gameState;
 	std::vector<Player*> players;
 	std::vector<LeaderboardEntry> leaderboard;
