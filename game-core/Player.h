@@ -30,6 +30,7 @@ public:
 	
 	unsigned int getGuid();
 	void spawnMoveableObject();
+	void despawnMoveableObject();
 	Handle getMovingObject();
 	void respawn();
 

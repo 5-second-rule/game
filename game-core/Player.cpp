@@ -30,6 +30,11 @@ void Player::spawnMoveableObject() {
 	this->data.movingObject = m->getHandle();
 }
 
+void Player::despawnMoveableObject() {
+	World* w = Game::getGlobalInstance()->getEngineInstance()->getWorld();
+	w->remove(&this->data.movingObject);
+}
+
 
 Handle Player::getMovingObject() {
 	return this->data.movingObject;

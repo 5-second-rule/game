@@ -8,14 +8,21 @@ UIData::UIData() {
 	this->engine = RenderableGame::getGlobalInstance()->getRenderingEngineInstance();
 
 	const int MAX_PLAYERS = 4;
-	const float MARGIN = 0.02f;
-	float scale = (2.0f - 5 * MARGIN) / 8;
+	this->margin = 0.02f;
+	float scale = (2.0f - 5 * this->margin) / 8;
 	Transmission::Index rectangleIndices[6] = { 0, 1, 2, 3, 0, 2 };
 	char *playerTextures[4] = {
 		"resources/ui-ecoli2D.dds",
 		"resources/ui-chickenpox2D.dds",
 		"resources/ui-syphilis2D.dds",
 		"resources/ui-malaria2D.dds"
+	};
+
+	char *glowPlayerTextures[4] = {
+		"resources/ui-ecoliglow.dds",
+		"resources/ui-chickenpoxglow.dds",
+		"resources/ui-syphilisglow.dds",
+		"resources/ui-malariaglow.dds"
 	};
 
 	char *numberTextures[10] = {
@@ -32,43 +39,42 @@ UIData::UIData() {
 	};
 
 	float lastEdge;
-	lastEdge = this->calculatePlayerVertices(this->vertices, MARGIN, false);
 
+	// regular toon images
+	lastEdge = this->calculatePlayerVertices(this->vertices);
 	for (int i = 0; i < MAX_PLAYERS; ++i) {
 		this->playerModels[i] = engine->create2DModelFromScratch(vertices, 4, rectangleIndices, 6, playerTextures[i], textures, true);
 		this->objectData.playerObjects[i] = new RenderableMovingObject(ObjectTypes::UI, playerModels[i]);
 	}
 
-	lastEdge=this->calculateXVertices(this->vertices, MARGIN, lastEdge, false);
+	// glow toon images
+	for (int i = 0; i < MAX_PLAYERS; ++i) {
+		this->glowPlayerModels[i] = engine->create2DModelFromScratch(vertices, 4, rectangleIndices, 6, glowPlayerTextures[i], textures, true);
+		this->objectData.glowPlayerObjects[i] = new RenderableMovingObject(ObjectTypes::UI, glowPlayerModels[i]);
+	}
+
+	// x image
+	lastEdge = this->calculateXVertices(this->vertices, lastEdge);
 	this->xModel = engine->create2DModelFromScratch(vertices, 4, rectangleIndices, 6, "resources/ui-x.dds", textures, true);
 	this->objectData.xObject = new RenderableMovingObject(ObjectTypes::UI, xModel);
 
-	this->calculateNumberVertices(this->vertices, MARGIN, lastEdge, false);
+	// number images
+	lastEdge = this->calculateNumberVertices(this->vertices, lastEdge);
 	for (int i = 0; i < 10; ++i) {
 		this->numberModels[i] = engine->create2DModelFromScratch(vertices, 4, rectangleIndices, 6, numberTextures[i], textures, true);
 		this->objectData.numberObjects[i] = new RenderableMovingObject(ObjectTypes::UI, numberModels[i]);
 	}
 
-	lastEdge = this->calculatePlayerVertices(this->vertices, MARGIN, true);
-	for (int i = 0; i < MAX_PLAYERS; ++i) {
-		this->jumboPlayerModels[i] = engine->create2DModelFromScratch(vertices, 4, rectangleIndices, 6, playerTextures[i], textures, true);
-		this->objectData.jumboPlayerObjects[i] = new RenderableMovingObject(ObjectTypes::UI, jumboPlayerModels[i]);
-	}
+	// dead image
+	this->calculateDeadVertices(this->vertices, lastEdge);
+	this->deadModel = engine->create2DModelFromScratch(vertices, 4, rectangleIndices, 6, "resources/ui-dead.dds", textures, true);
+	this->objectData.deadObject = new RenderableMovingObject(ObjectTypes::UI, deadModel);
 
-	lastEdge = this->calculateXVertices(this->vertices, MARGIN, lastEdge, true);
-	this->jumboXModel = engine->create2DModelFromScratch(vertices, 4, rectangleIndices, 6, "resources/ui-x.dds", textures, true);
-	this->objectData.jumbboXObject = new RenderableMovingObject(ObjectTypes::UI, jumboXModel);
-
-	this->calculateNumberVertices(this->vertices, MARGIN, lastEdge, true);
-	for (int i = 0; i < 10; ++i) {
-		this->jumboNumberModels[i] = engine->create2DModelFromScratch(vertices, 4, rectangleIndices, 6, numberTextures[i], textures, true);
-		this->objectData.jumboNumberObjects[i] = new RenderableMovingObject(ObjectTypes::UI, jumboNumberModels[i]);
-	}
 }
 
 UIData::~UIData() {}
 
-float UIData::calculatePlayerVertices(Transmission::Vertex *vertices, float margin, bool isJumbo) {
+float UIData::calculatePlayerVertices(Transmission::Vertex *vertices) {
 	float imgWidth, imgHeight, h_w_ratio, winRatio;
 	if (this->engine->getWindowWidth() == 0 || this->engine->getWindowHeight() == 0) {
 		winRatio = 800.0f / 600.0f;
@@ -76,17 +82,17 @@ float UIData::calculatePlayerVertices(Transmission::Vertex *vertices, float marg
 		winRatio = 1.0f * this->engine->getWindowWidth() / this->engine->getWindowHeight();
 	}
 	
-	imgWidth = 350;
-	imgHeight = 500;
+	imgWidth = 400;
+	imgHeight = 540;
 	h_w_ratio = imgHeight / imgWidth;
+	
+	float width = 0.075f;
+	float height = width * h_w_ratio * winRatio;
 
-	float width = isJumbo ? 0.075f * 1.5f: 0.075f;
-	float height = (width * h_w_ratio * winRatio);
-
-	float edgeT = 1.0f - margin;
+	float edgeT = 1.0f - this->margin;
 	float edgeB = edgeT - height;
 	
-	float edgeL = -1.0f + margin;
+	float edgeL = -1.0f + this->margin;
 	float edgeR = edgeL + width;
 
 	vertices[0] = { { edgeL, edgeT, 0.0f }, { 0, 0 }, { 0, 0, -1 }, {} };
@@ -95,10 +101,11 @@ float UIData::calculatePlayerVertices(Transmission::Vertex *vertices, float marg
 	vertices[3] = { { edgeL, edgeB, 0.0f }, { 0, 1 }, { 0, 0, -1 }, {} };
 
 	this->playerHeight = height;
+	this->leftEdge = edgeL;
 	return edgeR;
 }
 
-float UIData::calculateXVertices(Transmission::Vertex *vertices, float margin, float lastEdge, bool isJumbo) {
+float UIData::calculateXVertices(Transmission::Vertex *vertices, float lastEdge) {
 	float imgWidth, imgHeight, h_w_ratio, winRatio;
 	if (this->engine->getWindowWidth() == 0 || this->engine->getWindowHeight() == 0) {
 		winRatio = 800.0f / 600.0f;
@@ -110,10 +117,10 @@ float UIData::calculateXVertices(Transmission::Vertex *vertices, float margin, f
 	imgHeight = 129;
 	h_w_ratio = imgHeight / imgWidth;
 
-	float width = isJumbo ? 0.024f * 1.5f : 0.024f;
-	float height = (width * h_w_ratio * winRatio);
+	float width = 0.024f;
+	float height = width * h_w_ratio * winRatio;
 
-	float edgeT = (1.0f - margin) - (this->playerHeight - height) / 2.0f;
+	float edgeT = (1.0f - this->margin) - (this->playerHeight - height) / 2.0f;
 	float edgeB = edgeT - height;
 
 	float edgeL = lastEdge + 0.01f;
@@ -127,7 +134,7 @@ float UIData::calculateXVertices(Transmission::Vertex *vertices, float margin, f
 	return edgeR;
 }
 
-void UIData::calculateNumberVertices(Transmission::Vertex *vertices, float margin, float lastEdge, bool isJumbo) {
+float UIData::calculateNumberVertices(Transmission::Vertex *vertices, float lastEdge) {
 	float imgWidth, imgHeight, h_w_ratio, winRatio;
 	if (this->engine->getWindowWidth() == 0 || this->engine->getWindowHeight() == 0) {
 		winRatio = 800.0f / 600.0f;
@@ -139,10 +146,10 @@ void UIData::calculateNumberVertices(Transmission::Vertex *vertices, float margi
 	imgHeight = 234;
 	h_w_ratio = imgHeight / imgWidth;
 
-	float width = isJumbo ? 0.04f * 1.5f : 0.04f;
-	float height = (width * h_w_ratio * winRatio);
+	float width = 0.04f;
+	float height = width * h_w_ratio * winRatio;
 
-	float edgeT = (1.0f - margin) - (this->playerHeight - height) / 2.0f;
+	float edgeT = (1.0f - this->margin) - (this->playerHeight - height) / 2.0f;
 	float edgeB = edgeT - height;
 
 	float edgeL = lastEdge + 0.01f;
@@ -152,6 +159,38 @@ void UIData::calculateNumberVertices(Transmission::Vertex *vertices, float margi
 	vertices[1] = { { edgeR, edgeT, 0.0f }, { 1, 0 }, { 0, 0, -1 }, {} };
 	vertices[2] = { { edgeR, edgeB, 0.0f }, { 1, 1 }, { 0, 0, -1 }, {} };
 	vertices[3] = { { edgeL, edgeB, 0.0f }, { 0, 1 }, { 0, 0, -1 }, {} };
+
+	return edgeR;
+}
+
+void UIData::calculateDeadVertices(Transmission::Vertex *vertices, float lastEdge) {
+	float imgWidth, imgHeight, h_w_ratio, winRatio;
+	if (this->engine->getWindowWidth() == 0 || this->engine->getWindowHeight() == 0) {
+		winRatio = 800.0f / 600.0f;
+	}
+	else {
+		winRatio = 1.0f * this->engine->getWindowWidth() / this->engine->getWindowHeight();
+	}
+
+	imgWidth = 925;
+	imgHeight = 311;
+	h_w_ratio = imgHeight / imgWidth;
+
+	float edgeL = this->leftEdge;
+	float edgeR = lastEdge;
+
+	float width = abs(edgeR - edgeL);
+	float height = width * h_w_ratio * winRatio;
+
+	float edgeT = (1.0f - this->margin) - (this->playerHeight - height) / 2.0f;
+	float edgeB = edgeT - height;
+	
+	vertices[0] = { { edgeL, edgeT, 0.0f }, { 0, 0 }, { 0, 0, -1 }, {} };
+	vertices[1] = { { edgeR, edgeT, 0.0f }, { 1, 0 }, { 0, 0, -1 }, {} };
+	vertices[2] = { { edgeR, edgeB, 0.0f }, { 1, 1 }, { 0, 0, -1 }, {} };
+	vertices[3] = { { edgeL, edgeB, 0.0f }, { 0, 1 }, { 0, 0, -1 }, {} };
+
+	this->playerHeight = height;
 }
 
 UIData::Objects *UIData::getData() {

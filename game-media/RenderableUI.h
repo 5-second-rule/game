@@ -8,7 +8,7 @@ private:
 	RenderingEngine *engine;
 	std::vector<Player*> players;
 	UIData::Objects *objectData;
-	std::vector<LeaderboardEntry> leaderboard;
+	std::vector<DeathboardEntry> deathboard;
 	unsigned int playerGuid;
 
 public:

@@ -3,7 +3,8 @@
 #include "engine-renderer/IRenderable.h"
 #include "SelectionScreenData.h"
 
-class GAMEMEDIADLL RenderableSelectionScreen : public StaticObject, public IRenderable
+class GAMEMEDIADLL RenderableSelectionScreen 
+	: public StaticObject, public IRenderable
 {
 private:
 	RenderingEngine *engine;
@@ -13,6 +14,5 @@ private:
 public:
 	RenderableSelectionScreen(SelectionScreenData::Objects *objectData);
 	virtual ~RenderableSelectionScreen();
-	void destroy();
 	virtual void render();
 };

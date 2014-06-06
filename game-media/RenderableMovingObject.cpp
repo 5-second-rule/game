@@ -1,12 +1,17 @@
 #define _USE_MATH_DEFINES
 #include "RenderableMovingObject.h"
+#include "game-core\ObjectTypes.h"
 
 #include <cmath>
 
 RenderableMovingObject::RenderableMovingObject(int type, Transmission::Model* model)
 	: MovingObject(type, nullptr)
 	, RenderableObject(model)
-{}
+{
+	if (type == ObjectTypes::Syphillis && model != nullptr) {
+		this->getMoveable()->setScale(3);
+	}
+}
 
 
 RenderableMovingObject::~RenderableMovingObject() {}
