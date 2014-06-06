@@ -235,7 +235,7 @@ void MovingObject::update(float dt){
 	if (this->followTrack) {
 		float dist_sq = (track->nodes[this->trackIndex].point - this->position).lengthSquared();
 		Vector4 trackForce = track->nodes[this->trackIndex].normal * this->forceByDistSq(dist_sq, this->fluid_force);
-		this->applyForce(trackForce + this->forceUp * 7 + this->forceRight * 7);
+		this->applyForce(trackForce + this->forceUp * 2 + this->forceRight * 2);
 	}
 
 	if (this->hasPropulsion) {

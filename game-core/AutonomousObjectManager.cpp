@@ -51,8 +51,8 @@ void AutonomousObjectManager::setOffsetPursuitDefaultAI(AutonomousObject *obj){
 void AutonomousObjectManager::setPursuitDefaultAI(AutonomousObject *obj){
 	obj->setFollowTrack(false);
 	obj->setHasPropulsion(false);
-	obj->setMaxSpeed(90.f);
-	obj->setMaxForce(70.0f);
+	obj->setMaxSpeed(30.f);
+	obj->setMaxForce(20.0f);
 }
 
 void AutonomousObjectManager::setDefaultRedBlood(MovingObject *obj){
@@ -72,7 +72,7 @@ void AutonomousObjectManager::update(float dt){
 		MovingObject *mObj = dynamic_cast<MovingObject*>(theWorld.get(*it));
 		if (mObj != nullptr && find(this->players.begin(), this->players.end(), *it) == this->players.end()){
 			AutonomousGroup group(*it);
-			for (int i = 0; i < 20; ++i){
+			for (int i = 0; i < 10; ++i){
 				AutonomousObject *aObj = new AutonomousObject(ObjectTypes::WhiteBlood);
 				theWorld.allocateHandle(aObj, HandleType::GLOBAL);
 				theWorld.insert(aObj);
@@ -82,7 +82,7 @@ void AutonomousObjectManager::update(float dt){
 				aObj->setPosition(pointNoise(this->path->nodes[(i * 300 + 1000) % this->path->nodes.size()].point));
 				group.white_blood.push_back(AutonomousEntity(aObj->getHandle(), false));
 			}
-			for (int i = 0; i < 20; ++i){
+			for (int i = 0; i < 10; ++i){
 				AutonomousObject *aObj = new AutonomousObject(ObjectTypes::RedBlood);
 				theWorld.allocateHandle(aObj, HandleType::GLOBAL);
 				theWorld.insert(aObj);
