@@ -11,6 +11,7 @@ public:
 		RenderableStaticObject *numberObjects[10];
 		RenderableStaticObject *xObject;
 		RenderableStaticObject *deadObject;
+		RenderableStaticObject *adrenalineObject;
 	};
 private:
 	Objects objectData;
@@ -24,6 +25,7 @@ private:
 	Transmission::Model *numberModels[10];
 	Transmission::Model *xModel;
 	Transmission::Model *deadModel;
+	Transmission::Model *adrenalineModel;
 
 	Transmission::Vertex vertices[4];
 	std::vector<Transmission::Texture *>textures;
@@ -32,6 +34,7 @@ private:
 	float calculateXVertices(Transmission::Vertex *vertices, float lastEdge);
 	float calculateNumberVertices(Transmission::Vertex *vertices, float lastEdge);
 	void calculateDeadVertices(Transmission::Vertex *vertices, float lastEdge);
+	void calculateAdrenalineVertices(Transmission::Vertex *vertices);
 
 public:
 	UIData();

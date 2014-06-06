@@ -70,9 +70,18 @@ UIData::UIData() {
 	this->deadModel = engine->create2DModelFromScratch(vertices, 4, rectangleIndices, 6, "resources/ui-dead.dds", textures, true);
 	this->objectData.deadObject = new RenderableStaticObject(ObjectTypes::UI, deadModel);
 
+	// adrenaline image
+	this->calculateAdrenalineVertices(this->vertices);
+	this->adrenalineModel = engine->create2DModelFromScratch(vertices, 4, rectangleIndices, 6, "resources/ui-adrenaline.dds", textures, true);
+	this->objectData.adrenalineObject = new RenderableStaticObject(ObjectTypes::UI, adrenalineModel);
+
 }
 
 UIData::~UIData() {}
+
+UIData::Objects *UIData::getData() {
+	return &(this->objectData);
+}
 
 float UIData::calculatePlayerVertices(Transmission::Vertex *vertices) {
 	float imgWidth, imgHeight, h_w_ratio, winRatio;
@@ -193,6 +202,31 @@ void UIData::calculateDeadVertices(Transmission::Vertex *vertices, float lastEdg
 	this->playerHeight = height;
 }
 
-UIData::Objects *UIData::getData() {
-	return &(this->objectData);
+void UIData::calculateAdrenalineVertices(Transmission::Vertex *vertices) {
+	float imgWidth, imgHeight, h_w_ratio, winRatio;
+	if (this->engine->getWindowWidth() == 0 || this->engine->getWindowHeight() == 0) {
+		winRatio = 800.0f / 600.0f;
+	} else {
+		winRatio = 1.0f * this->engine->getWindowWidth() / this->engine->getWindowHeight();
+	}
+
+	imgWidth = 2354;
+	imgHeight = 1586;
+	h_w_ratio = imgHeight / imgWidth;
+
+	float width = 0.15f;
+	float height = width * h_w_ratio * winRatio;
+
+	float edgeR = 1.0f - this->margin;
+	float edgeL = edgeR - width;
+
+	float edgeT = 1.0f - this->margin;
+	float edgeB = edgeT - height;
+
+	vertices[0] = { { edgeL, edgeT, 0.0f }, { 0, 0 }, { 0, 0, -1 }, {} };
+	vertices[1] = { { edgeR, edgeT, 0.0f }, { 1, 0 }, { 0, 0, -1 }, {} };
+	vertices[2] = { { edgeR, edgeB, 0.0f }, { 1, 1 }, { 0, 0, -1 }, {} };
+	vertices[3] = { { edgeL, edgeB, 0.0f }, { 0, 1 }, { 0, 0, -1 }, {} };
+
+	this->playerHeight = height;
 }

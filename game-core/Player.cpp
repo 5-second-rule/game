@@ -8,6 +8,7 @@ Player::Player(unsigned int guid, GameState* state) {
 	this->data.guid = guid;
 	this->data.selected = false;
 	this->data.deathCount = 0;
+	this->data.hasAdrenaline = false;
 	this->gameState = state;
 	for (int i = 0; i < 4; i++) {
 		if (!this->gameState->isToonUsed(i)) {
@@ -100,6 +101,10 @@ int Player::getSelection() {
 
 bool Player::isSelected() {
 	return this->data.selected;
+}
+
+bool Player::hasAdrenaline() {
+	return this->data.hasAdrenaline;
 }
 
 unsigned int Player::getGuid() {
