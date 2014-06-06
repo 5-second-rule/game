@@ -60,14 +60,16 @@ void GameState::update(float dt) {
 		for (size_t i = 0; i < this->players.size(); i++) {
 			playerObjs[i] = dynamic_cast<PlayerMovingObject*>(
 				this->world->get(this->players[i]->getMovingObject()));
-			
+
 
 			if (playerObjs[i] != nullptr) {
 				if (!this->players[i]->isDead() && playerObjs[i]->dead && this->players[i]->getDeathCount() < MAX_LIVES) {
 					this->players[i]->die();
 					
 					cout << "player #" << i << " has died" << endl;
-				} else if (this->players[i]->getDeathCount() >= MAX_LIVES) {
+				}
+				else if( this->players[i]->getDeathCount() >= MAX_LIVES )
+				{
 					this->players[i]->die();
 					this->placeInDeathOrder(i);
 					this->players[i]->spawnDeathCamera();
@@ -86,14 +88,19 @@ void GameState::update(float dt) {
 
 				int trackIndex = playerObjs[i]->getTrackIndex();
 
-				if (smallestPos == -1 || smallestPos > trackIndex) {
+				if( !playerObjs[i]->dead )
+				{
+					if( smallestPos == -1 || smallestPos > trackIndex )
+					{
 					smallestPos = trackIndex;
 				}
 
-				if (largestPos == -1 || largestPos < trackIndex) {
+					if( largestPos == -1 || largestPos < trackIndex )
+					{
 					largestPos = trackIndex;
 				}
 			}
+		}
 		}
 
 		bool midLapRollover = static_cast<size_t>(largestPos - smallestPos) > (track->nodes.size() / 2);
@@ -101,7 +108,7 @@ void GameState::update(float dt) {
 		
 		int positions[4];
 		for (size_t i = 0; i < this->players.size(); i++) {
-			if (playerObjs[i] != nullptr) {
+			if (playerObjs[i] != nullptr && !playerObjs[i]->dead) {
 				positions[i] = playerObjs[i]->getTrackIndex();
 				if (midLapRollover && positions[i] < dividingLine) {
 					positions[i] += track->nodes.size();
@@ -410,10 +417,10 @@ void GameState::sortDeathboard() {
 		}
 	}
 
-	if (this->players.size() > 1 && deathboard[1].deathOrder >= 0) {
-		deathboard[0].winner = true;
-	}
-}
+	//if (this->players.size() > 1 && deathboard[1].deathOrder >= 0) {
+		//deathboard[0].winner = true;
+		//	}
+		}
 
 void GameState::placeInDeathOrder(int player) {
 	int lastDeath = -1;

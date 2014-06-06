@@ -29,7 +29,9 @@ public:
 	virtual void update(float dt);
 	virtual bool handleEvent(Event* evt);
 
+	virtual bool collidesWith( const ICollidable* ) const;
 	virtual void handleCollision(std::shared_ptr<const Bounds>, float dt, int metadata);
+	virtual unsigned int getPriority() const;
 
 	virtual int getCollisionMetadata() const;
 	int getBoostCount();
