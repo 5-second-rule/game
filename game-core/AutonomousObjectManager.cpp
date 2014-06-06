@@ -59,7 +59,7 @@ void AutonomousObjectManager::setPursuitDefaultAI(AutonomousObject *obj){
 }
 
 void AutonomousObjectManager::setDefaultRedBlood(MovingObject *obj){
-	obj->setFollowTrack(false);
+	obj->setFollowTrack(true);
 	obj->setHasPropulsion(false);
 }
 
@@ -86,14 +86,19 @@ void AutonomousObjectManager::update(float dt){
 				group.white_blood.push_back(AutonomousEntity(aObj->getHandle(), false));
 			}
 			for (int i = 0; i < RED_PER_PLAYER; ++i){
-				AutonomousObject *aObj = new AutonomousObject(ObjectTypes::RedBlood);
+				MovingObject *aObj = new MovingObject(ObjectTypes::RedBlood, Game::getGlobalInstance());
 				theWorld.allocateHandle(aObj, HandleType::GLOBAL);
 				theWorld.insert(aObj);
+
+				aObj->setMass(0.01f);
+				
 				this->setDefaultRedBlood(aObj);
-				aObj->setOnSteeringBehavior(BehaviorType::wander);
+				
+				//aObj->setOnSteeringBehavior(BehaviorType::wander);
 				aObj->setTrackIndex((i * 300 + 1000) % this->path->nodes.size());
 				aObj->setPosition(pointNoise(this->path->nodes[(i * 300 + 1000) % this->path->nodes.size()].point));
 				group.red_blood.push_back(AutonomousEntity(aObj->getHandle(), false));
+				
 			}
 
 			group.atual_index = 0;
@@ -152,7 +157,7 @@ void AutonomousObjectManager::update(float dt){
 				}
 				else if (perc < 30){
 					AutonomousEntity entity = it->red_blood.front();
-					AutonomousObject *aObj = dynamic_cast<AutonomousObject*>(theWorld.get(entity.handle));
+					MovingObject *aObj = dynamic_cast<MovingObject*>(theWorld.get(entity.handle));
 					Vector4 dif = aObj->getPosition() - pray->getPosition();
 					int destiny_index = (it->atual_index + 500) % path->nodes.size();
 

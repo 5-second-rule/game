@@ -392,9 +392,9 @@ void MovingObject::handleCollision(std::shared_ptr<const Bounds> bounds, float d
 		Vector4 wallNormal = Vector4::normalize(trackPos);
 
 		float mag = this->velocity.dot(-wallNormal);
-		this->velocity += wallNormal * (1.7f * mag);
+		this->velocity += wallNormal * (2.0f * mag);
 
-		this->position = track->nodes[this->trackIndex].point - (wallNormal * (trackNode.radius - me->radius));
+		this->position = track->nodes[this->trackIndex].point - (wallNormal * (trackNode.radius - 2*me->radius));
 	}
 	
 }
@@ -405,7 +405,7 @@ std::shared_ptr<const Bounds> MovingObject::getBounds() const {
 	assert(bounds->type == BoundsType::Sphere);
 	bounds->position = this->position;
 	bounds->velocity = this->velocity;
-	bounds->radius = 5.0f;
+	bounds->radius = 7.0f;
 	bounds->mass = this->mass;
 
 	return shared_ptr<const Bounds>(bounds);

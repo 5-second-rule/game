@@ -11,7 +11,7 @@ RenderablePlayerMovingObject::RenderablePlayerMovingObject(int type, Transmissio
 	if (model != nullptr)
 	{
 		if (type == ObjectTypes::ChickenPox && model != nullptr) {
-			this->getMoveable()->setScale(4.5);
+			this->getMoveable()->setScale(1.5);
 		}
 		if (type == ObjectTypes::Ecoli && model != nullptr) {
 			this->getMoveable()->setScale(1.5);
@@ -20,7 +20,7 @@ RenderablePlayerMovingObject::RenderablePlayerMovingObject(int type, Transmissio
 			this->getMoveable()->setScale(1.5);
 		}
 		if (type == ObjectTypes::Syphillis && model != nullptr) {
-			this->getMoveable()->setScale(1.5);
+			this->getMoveable()->setScale(4.5);
 		}
 	}
 }
