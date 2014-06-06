@@ -65,16 +65,16 @@ void GameState::update(float dt) {
 			if (playerObjs[i] != nullptr) {
 				if (!this->players[i]->isDead() && playerObjs[i]->dead && this->players[i]->getDeathCount() < MAX_LIVES) {
 					this->players[i]->die();
-					
+
 					cout << "player #" << i << " has died" << endl;
 				}
-				else if( this->players[i]->getDeathCount() >= MAX_LIVES )
+				else if (this->players[i]->getDeathCount() >= MAX_LIVES)
 				{
 					this->players[i]->die();
 					this->placeInDeathOrder(i);
 					this->players[i]->spawnDeathCamera();
 
-					this->world->remove( &this->players[i]->getMovingObject() );
+					//this->world->remove(&this->players[i]->getMovingObject());
 					cout << "player #" << i << " is out of the game" << endl;
 				}
 				else {
@@ -88,19 +88,19 @@ void GameState::update(float dt) {
 
 				int trackIndex = playerObjs[i]->getTrackIndex();
 
-				if( !playerObjs[i]->dead )
+				if (!playerObjs[i]->dead)
 				{
-					if( smallestPos == -1 || smallestPos > trackIndex )
+					if (smallestPos == -1 || smallestPos > trackIndex)
 					{
-					smallestPos = trackIndex;
-				}
+						smallestPos = trackIndex;
+					}
 
-					if( largestPos == -1 || largestPos < trackIndex )
+					if (largestPos == -1 || largestPos < trackIndex)
 					{
-					largestPos = trackIndex;
+						largestPos = trackIndex;
+					}
 				}
 			}
-		}
 		}
 
 		bool midLapRollover = static_cast<size_t>(largestPos - smallestPos) > (track->nodes.size() / 2);
@@ -409,11 +409,11 @@ void GameState::sortDeathboard() {
 				DeathboardEntry tmp = deathboard[i];
 				deathboard[i] = deathboard[j];
 				deathboard[j] = tmp;
-			} else if (deathboard[j].deathOrder > -1 && deathboard[j].deathOrder > deathboard[i].deathOrder) {
+			} /*else if (deathboard[j].deathOrder > -1 && deathboard[j].deathOrder > deathboard[i].deathOrder) {
 				DeathboardEntry tmp = deathboard[i];
 				deathboard[i] = deathboard[j];
 				deathboard[j] = tmp;
-			}
+			}*/
 		}
 	}
 
