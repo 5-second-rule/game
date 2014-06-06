@@ -80,6 +80,7 @@ public:
 	void setHasPropulsion(bool);
 	void setFluidForce(float);
 	void setVelocity(const Vector4&);
+	void setMass(float);
 
 	void applyForce(const Vector4& force);
 

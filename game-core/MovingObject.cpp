@@ -123,6 +123,10 @@ void MovingObject::setPosition(const Vector4& pos) {
 	this->position = pos;
 }
 
+void MovingObject::setMass(float updateMass) {
+	this->mass = updateMass;
+}
+
 Vector4 MovingObject::getSideLeft() {
 	return this->sideLeft;
 }

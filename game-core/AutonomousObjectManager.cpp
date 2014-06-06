@@ -4,6 +4,9 @@
 #include "AutonomousObjectManager.h"
 #include "GameState.h"
 
+#define WHITE_PER_PLAYER 4
+#define RED_PER_PLAYER 10
+
 AutonomousEntity::AutonomousEntity(Handle p_handle, bool p_loop){
 	this->handle = p_handle;
 	this->loop = p_loop;
@@ -72,7 +75,7 @@ void AutonomousObjectManager::update(float dt){
 		MovingObject *mObj = dynamic_cast<MovingObject*>(theWorld.get(*it));
 		if (mObj != nullptr && find(this->players.begin(), this->players.end(), *it) == this->players.end()){
 			AutonomousGroup group(*it);
-			for (int i = 0; i < 10; ++i){
+			for (int i = 0; i < WHITE_PER_PLAYER; ++i){
 				AutonomousObject *aObj = new AutonomousObject(ObjectTypes::WhiteBlood);
 				theWorld.allocateHandle(aObj, HandleType::GLOBAL);
 				theWorld.insert(aObj);
@@ -82,7 +85,7 @@ void AutonomousObjectManager::update(float dt){
 				aObj->setPosition(pointNoise(this->path->nodes[(i * 300 + 1000) % this->path->nodes.size()].point));
 				group.white_blood.push_back(AutonomousEntity(aObj->getHandle(), false));
 			}
-			for (int i = 0; i < 10; ++i){
+			for (int i = 0; i < RED_PER_PLAYER; ++i){
 				AutonomousObject *aObj = new AutonomousObject(ObjectTypes::RedBlood);
 				theWorld.allocateHandle(aObj, HandleType::GLOBAL);
 				theWorld.insert(aObj);
