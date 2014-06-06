@@ -234,14 +234,14 @@ void MovingObject::update(float dt){
 
 	if (this->followTrack) {
 		float dist_sq = (track->nodes[this->trackIndex].point - this->position).lengthSquared();
-		Vector4 trackForce = track->nodes[this->trackIndex].normal * this->forceByDistSq(dist_sq, this->fluid_force);
+		Vector4 trackForce = track->nodes[this->trackIndex].normal*this->fluid_force;//this->forceByDistSq( dist_sq, this->fluid_force );
 		this->applyForce(trackForce + this->forceUp * 2 + this->forceRight * 2);
 	}
 
 	if (this->hasPropulsion) {
 		// propulsion in heading
 		Vector4 headingForce = Vector4::normalize(this->heading) * this->heading_force * propulsion;
-		this->applyForce(headingForce);
+		this->applyForce(headingForce*2);
 	}
 
 	this->force -= (this->velocity * this->friction);
@@ -400,6 +400,6 @@ unsigned int MovingObject::getPriority() const {
 }
 
 float MovingObject::forceByDistSq(float distance_sq, float maximum){
-	float force = (Game::getGlobalInstance()->tubeRadiusSq - distance_sq) / Game::getGlobalInstance()->tubeRadiusSq * maximum;
+	float force = maximum*( Game::getGlobalInstance()->tubeRadiusSq - distance_sq ) / Game::getGlobalInstance()->tubeRadiusSq;
 	return (force > 0 ? force : 0);
 }
