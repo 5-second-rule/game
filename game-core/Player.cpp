@@ -54,6 +54,10 @@ Handle Player::getRotateCameraObject() {
 	return this->data.rotateCameraObject;
 }
 
+void Player::addPowerup() {
+	this->data.hasAdrenaline = true;
+}
+
 void Player::respawn() {
 	int wwodPosition = Game::getGlobalInstance()->getWallOfDeath()->getTrackIndex();
 	int leaderIndex = this->gameState->getLeaderboard()[0].playerPosition;
