@@ -46,7 +46,7 @@ SelectionScreenData::SelectionScreenData(RenderableMovingObject *(&playerObjects
 		this->objectData.myPlayerBackgroundObjects[i] = new RenderableStaticObject(ObjectTypes::SelectionScreen, myPlayerBackgroundModels[i]);
 
 		// check marks for selection
-		this->calculatePlayerNameVertices(playerNameVertices, i, MARGIN, true);
+		this->calculateCheckVertices(playerNameVertices, i, MARGIN);
 		this->checkMarkModels[i] = engine->create2DModelFromScratch(playerNameVertices, 4, rectangleIndices, 6, "resources/select-check.dds", textures, true);
 		this->objectData.checkMarkObjects[i] = new RenderableStaticObject(i, checkMarkModels[i]);
 
@@ -150,6 +150,7 @@ float SelectionScreenData::calculatePlayerBackgroundVertices(Transmission::Verte
 	float edgeB = -0.7f;
 
 	float width = (2.0f - 5.0f * margin) / 4.0f;
+	this->rectangleWidth = width;
 
 	float edgeL = pos[playerIndex] * width + numMargins[playerIndex] * margin;
 	float edgeR = edgeL + width;
@@ -160,6 +161,35 @@ float SelectionScreenData::calculatePlayerBackgroundVertices(Transmission::Verte
 	vertices[3] = { { edgeL, edgeB, 0.0f }, { 0, 1 }, { 0, 0, -1 }, {} };
 
 	return edgeL + width / 2;
+}
+
+void SelectionScreenData::calculateCheckVertices(Transmission::Vertex *vertices, int playerIndex, float margin) {
+	float winRatio;
+	if (this->engine->getWindowWidth() == 0 || this->engine->getWindowHeight() == 0) {
+		winRatio = 800.0f / 600.0f;
+	} else {
+		winRatio = 1.0f * this->engine->getWindowWidth() / this->engine->getWindowHeight();
+	}
+
+	float imgWidth = 230;
+	float imgHeight = 250;
+	float h_w_ratio = imgHeight / imgWidth;
+
+	float numMargins[] = { -1.5f, -0.5f, 0.5f, 1.5f };
+	float pos[] = { -2, -1, 0, 1 };
+
+	float width = this->rectangleWidth / 3.0f;
+	float height = width * h_w_ratio * winRatio;
+
+	float edgeT = 0.5f;
+	float edgeB = edgeT - height;
+	float edgeL = pos[playerIndex] * this->rectangleWidth + numMargins[playerIndex] * margin;
+	float edgeR = edgeL + width;
+
+	vertices[0] = { { edgeL, edgeT, 0.0f }, { 0, 0 }, { 0, 0, -1 }, {} };
+	vertices[1] = { { edgeR, edgeT, 0.0f }, { 1, 0 }, { 0, 0, -1 }, {} };
+	vertices[2] = { { edgeR, edgeB, 0.0f }, { 1, 1 }, { 0, 0, -1 }, {} };
+	vertices[3] = { { edgeL, edgeB, 0.0f }, { 0, 1 }, { 0, 0, -1 }, {} };
 }
 
 SelectionScreenData::Objects *SelectionScreenData::getData() {

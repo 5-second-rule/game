@@ -24,6 +24,7 @@ public:
 private:
 	Objects objectData;
 	RenderingEngine *engine;
+	float rectangleWidth;
 
 	Transmission::Model *backgroundModel;
 	Transmission::Model *titleModel;
@@ -43,6 +44,7 @@ private:
 	std::vector<Transmission::Texture *>textures;
 	void calculateTitleVertices(Transmission::Vertex *vertices, float margin);
 	void calculatePlayerNameVertices(Transmission::Vertex *vertices, int playerIndex, float margin, bool isCheck);
+	void calculateCheckVertices(Transmission::Vertex *vertices, int playerIndex, float margin);
 
 	// returns center x screen coord of background
 	float calculatePlayerBackgroundVertices(Transmission::Vertex *vertices, int playerIndex, float margin);
