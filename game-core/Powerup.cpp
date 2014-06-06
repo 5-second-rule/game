@@ -119,7 +119,7 @@ std::shared_ptr<const Bounds> Powerup::getBounds() const {
 	assert(bounds->type == BoundsType::Sphere);
 	bounds->position = this->position;
 	bounds->velocity = Vector4();
-	bounds->radius = 30.0f;
+	bounds->radius = 10.0f;
 	bounds->mass = 0.0f;
 
 	return shared_ptr<const Bounds>(bounds);
