@@ -99,13 +99,14 @@
     <ClInclude Include="Leaderboard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-<<<<<<< HEAD
+    <ClInclude Include="Deathboard.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="AutonomousObjectManager.h">
       <Filter>Header Files\AI</Filter>
-=======
+    </ClInclude>
     <ClInclude Include="RotateCameraObject.h">
       <Filter>Header Files</Filter>
->>>>>>> master
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -139,9 +140,6 @@
     <ClCompile Include="Tube.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GameState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -166,13 +164,14 @@
     <ClCompile Include="SteeringBehavior.cpp">
       <Filter>Source Files\AI</Filter>
     </ClCompile>
-<<<<<<< HEAD
+    <ClCompile Include="Player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="AutonomousObjectManager.cpp">
       <Filter>Source Files\AI</Filter>
-=======
+    </ClCompile>
     <ClCompile Include="RotateCameraObject.cpp">
       <Filter>Source Files</Filter>
->>>>>>> master
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

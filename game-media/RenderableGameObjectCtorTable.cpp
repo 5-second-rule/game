@@ -2,11 +2,16 @@
 #include "game-core/ObjectTypes.h"
 
 #include "RenderableMovingObject.h"
+#include "RenderablePlayerMovingObject.h"
 #include "RenderableStaticObject.h"
 #include "RenderableWallOfDeath.h"
 #include "RenderablePowerup.h"
+#include "SelectionScreenData.h"
+#include "UIData.h"
+#include "SignallingGameState.h"
 
 #include "RenderableSelectionScreen.h"
+#include "RenderableUI.h"
 #include "RenderableGame.h"
 
 #ifdef _DEBUG
@@ -17,6 +22,7 @@
 #endif  // _DEBUG
 
 static SelectionScreenData *selectionScreenData;
+static UIData *uiData;
 
 RenderableGameObjectCtorTable::RenderableGameObjectCtorTable() {}
 
@@ -25,7 +31,7 @@ RenderableGameObjectCtorTable::~RenderableGameObjectCtorTable() {}
 static BaseObject * makeRenderableEcoli( ConstructorTable<BaseObject> *thisObj ) {
 	RenderableGameObjectCtorTable *table = (RenderableGameObjectCtorTable *)thisObj;
 
-	return new RenderableMovingObject(
+	return new RenderablePlayerMovingObject(
 		ObjectTypes::Ecoli,
 		RenderableGame::getGlobalInstance()
 		->getRenderingEngineInstance()
@@ -40,7 +46,7 @@ static BaseObject * makeRenderableEcoli( ConstructorTable<BaseObject> *thisObj )
 static BaseObject * makeRenderableChickenPox( ConstructorTable<BaseObject> *thisObj ) {
 	RenderableGameObjectCtorTable *table = (RenderableGameObjectCtorTable *)thisObj;
 
-	return new RenderableMovingObject(
+	return new RenderablePlayerMovingObject(
 		ObjectTypes::ChickenPox,
 		RenderableGame::getGlobalInstance()
 		->getRenderingEngineInstance()
@@ -55,7 +61,7 @@ static BaseObject * makeRenderableChickenPox( ConstructorTable<BaseObject> *this
 static BaseObject * makeRenderableSyphillis( ConstructorTable<BaseObject> *thisObj ) {
 	RenderableGameObjectCtorTable *table = (RenderableGameObjectCtorTable *)thisObj;
 
-	return new RenderableMovingObject(
+	return new RenderablePlayerMovingObject(
 		ObjectTypes::Syphillis,
 		RenderableGame::getGlobalInstance()
 		->getRenderingEngineInstance()
@@ -70,7 +76,7 @@ static BaseObject * makeRenderableSyphillis( ConstructorTable<BaseObject> *thisO
 static BaseObject * makeRenderableMalaria( ConstructorTable<BaseObject> *thisObj ) {
 	RenderableGameObjectCtorTable *table = (RenderableGameObjectCtorTable *)thisObj;
 
-	return new RenderableMovingObject(
+	return new RenderablePlayerMovingObject(
 		ObjectTypes::Malaria,
 		RenderableGame::getGlobalInstance()
 		->getRenderingEngineInstance()
@@ -150,8 +156,8 @@ static BaseObject * makeRenderableSelectionScreen(ConstructorTable<BaseObject> *
 }
 
 void RenderableGameObjectCtorTable::prepSelectionScreenData() {
-	RenderableMovingObject *playerObjects[4] = {
-		new RenderableMovingObject(
+	RenderablePlayerMovingObject *playerObjects[4] = {
+		new RenderablePlayerMovingObject(
 		ObjectTypes::Ecoli,
 		RenderableGame::getGlobalInstance()
 		->getRenderingEngineInstance()
@@ -161,7 +167,7 @@ void RenderableGameObjectCtorTable::prepSelectionScreenData() {
 		this->vertexShaderIndexes[ObjectTypes::Ecoli],
 		this->pixelShaderIndexes[ObjectTypes::Ecoli])
 		),
-		new RenderableMovingObject(
+		new RenderablePlayerMovingObject(
 		ObjectTypes::ChickenPox,
 		RenderableGame::getGlobalInstance()
 		->getRenderingEngineInstance()
@@ -171,7 +177,7 @@ void RenderableGameObjectCtorTable::prepSelectionScreenData() {
 		this->vertexShaderIndexes[ObjectTypes::ChickenPox],
 		this->pixelShaderIndexes[ObjectTypes::ChickenPox])
 		),
-		new RenderableMovingObject(
+		new RenderablePlayerMovingObject(
 		ObjectTypes::Syphillis,
 		RenderableGame::getGlobalInstance()
 		->getRenderingEngineInstance()
@@ -181,7 +187,7 @@ void RenderableGameObjectCtorTable::prepSelectionScreenData() {
 		this->vertexShaderIndexes[ObjectTypes::Syphillis],
 		this->pixelShaderIndexes[ObjectTypes::Syphillis])
 		),
-		new RenderableMovingObject(
+		new RenderablePlayerMovingObject(
 		ObjectTypes::Malaria,
 		RenderableGame::getGlobalInstance()
 		->getRenderingEngineInstance()
@@ -215,8 +221,18 @@ static BaseObject * makeRenderableWallOfDeath(ConstructorTable<BaseObject> *this
 		);
 }
 
+void RenderableGameObjectCtorTable::prepUIData() {
+	uiData = new UIData();
+}
+
+static BaseObject * makeRenderableUI(ConstructorTable<BaseObject> *thisObj) {
+	RenderableGameObjectCtorTable *table = (RenderableGameObjectCtorTable *)thisObj;
+	return new RenderableUI(uiData->getData());
+}
+
 static BaseObject * makeRotateCamera(ConstructorTable<BaseObject> * thisObj) {
 	return new RotateCameraObject();
+
 }
 
 void RenderableGameObjectCtorTable::initCtors() {
@@ -269,19 +285,22 @@ void RenderableGameObjectCtorTable::initCtors() {
 	this->textureIndexes[ObjectTypes::Adrenaline] = engine->loadTexture("resources/Wood.dds");
 
 	this->prepSelectionScreenData();
+	this->prepUIData();
 
 	this->setConstructor(ObjectTypes::Ecoli, makeRenderableEcoli);
-	this->setConstructor( ObjectTypes::ChickenPox, makeRenderableChickenPox );
-	this->setConstructor( ObjectTypes::Syphillis, makeRenderableSyphillis );
-	this->setConstructor( ObjectTypes::Malaria, makeRenderableMalaria );
-	this->setConstructor( ObjectTypes::WhiteBlood, makeRenderableWhiteBlood );
-	this->setConstructor( ObjectTypes::RedBlood, makeRenderableRedBlood );
+	this->setConstructor(ObjectTypes::ChickenPox, makeRenderableChickenPox);
+	this->setConstructor(ObjectTypes::Syphillis, makeRenderableSyphillis);
+	this->setConstructor(ObjectTypes::Malaria, makeRenderableMalaria);
+	this->setConstructor(ObjectTypes::WhiteBlood, makeRenderableWhiteBlood);
+	this->setConstructor(ObjectTypes::RedBlood, makeRenderableRedBlood);
 
-	this->setConstructor( ObjectTypes::Track, makeRenderableTrack );
-	this->setConstructor( ObjectTypes::SelectionScreen, makeRenderableSelectionScreen );
-	this->setConstructor( ObjectTypes::State, makeSignallingGameState );
-	this->setConstructor( ObjectTypes::Wwod, makeRenderableWallOfDeath );
+	this->setConstructor(ObjectTypes::Track, makeRenderableTrack);
+	this->setConstructor(ObjectTypes::SelectionScreen, makeRenderableSelectionScreen);
+	this->setConstructor(ObjectTypes::State, makeSignallingGameState);
+	this->setConstructor(ObjectTypes::Wwod, makeRenderableWallOfDeath);
 	this->setConstructor(ObjectTypes::Adrenaline, makeRenderableAdrenaline);
+
+	this->setConstructor(ObjectTypes::UI, makeRenderableUI);
 
 	this->setConstructor(ObjectTypes::RotateCamera, makeRotateCamera);
 }

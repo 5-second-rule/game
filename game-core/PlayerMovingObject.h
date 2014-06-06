@@ -3,6 +3,10 @@
 #include "game-core.h"
 #include "MovingObject.h"
 
+struct PlayerMovingObjectData {
+	bool dead;
+};
+
 class GAMECOREDLL PlayerMovingObject : public MovingObject
 {
 public:
@@ -16,5 +20,11 @@ public:
 	virtual void handleCollision(std::shared_ptr<const Bounds>, float dt, int metadata);
 
 	virtual int getCollisionMetadata() const;
+
+	// ISerializable Methods
+	virtual void reserveSize(IReserve&) const;
+	virtual void fillBuffer(IFill&) const;
+
+	virtual void deserialize(BufferReader& buffer);
 };
 

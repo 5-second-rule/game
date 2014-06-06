@@ -17,7 +17,7 @@ enum GAMECOREDLL ObjectTypes
 	State,
 	Wwod,
 	Adrenaline,
-	AIManager
+	AIManager,
 	RotateCamera
 };
 

@@ -1,7 +1,9 @@
 #include "SelectionScreenData.h"
-#include <stdio.h>
+#include <vector>
+#include "RenderableGame.h"
+#include "game-core/ObjectTypes.h"
 
-SelectionScreenData::SelectionScreenData(RenderableMovingObject *(&playerObjects)[4]) {
+SelectionScreenData::SelectionScreenData(RenderablePlayerMovingObject *(&playerObjects)[4]) {
 	this->engine = RenderableGame::getGlobalInstance()->getRenderingEngineInstance();
 
 	this->objectData.width = engine->getWindowWidth();

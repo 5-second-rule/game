@@ -1,4 +1,6 @@
 #include "RenderableSelectionScreen.h"
+#include "RenderableGame.h"
+#include "RenderingGameManager.h"
 
 using namespace Transmission;
 
@@ -13,7 +15,28 @@ RenderableSelectionScreen::RenderableSelectionScreen(SelectionScreenData::Object
 	}
 }
 
-RenderableSelectionScreen::~RenderableSelectionScreen() {}
+RenderableSelectionScreen::~RenderableSelectionScreen() {
+	//	delete this->objectData->backgroundObject;
+	//	delete this->objectData->titleObject;
+	//	this->objectData->backgroundObject = nullptr;
+	//	this->objectData->titleObject = nullptr;
+	//	for (int i = 0; i < 4; ++i) {
+	//		delete this->objectData->otherPlayerBackgroundObjects[i];
+	//		delete this->objectData->myPlayerBackgroundObjects[i];
+	//		delete this->objectData->checkMarkObjects[i];
+	//		delete this->objectData->playerObjects[i];
+	//		this->objectData->otherPlayerBackgroundObjects[i] = nullptr;
+	//		this->objectData->myPlayerBackgroundObjects[i] = nullptr;
+	//		this->objectData->checkMarkObjects[i] = nullptr;
+	//		this->objectData->playerObjects[i] = nullptr;
+	//	}
+	//	for (int i = 0; i < 16; ++i) {
+	//		delete this->objectData->otherPlayerNameObjects[i];
+	//		delete this->objectData->myPlayerNameObjects[i];
+	//		this->objectData->otherPlayerNameObjects[i] = nullptr;
+	//		this->objectData->myPlayerNameObjects[i] = nullptr;
+	//	}
+}
 
 void RenderableSelectionScreen::render() {
 	if (RenderableGame::getGlobalInstance()->getGameManager()->getGameState()->getState() == GameState::State::Selection) {

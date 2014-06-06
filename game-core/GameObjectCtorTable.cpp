@@ -60,6 +60,10 @@ static BaseObject * makeSelectionScreen(ConstructorTable<BaseObject> *thisObj) {
 	return new StaticObject(ObjectTypes::SelectionScreen);
 }
 
+static BaseObject * makeUI(ConstructorTable<BaseObject> *thisObj) {
+	return new StaticObject(ObjectTypes::UI);
+}
+
 static BaseObject * makeRotateCamera(ConstructorTable<BaseObject> * thisObj) {
 	return new RotateCameraObject();
 }
@@ -75,5 +79,6 @@ void GameObjectCtorTable::initCtors() {
 	this->setConstructor( ObjectTypes::SelectionScreen, makeSelectionScreen );
 	this->setConstructor( ObjectTypes::Wwod, makeWallOfDeath );
 	this->setConstructor(ObjectTypes::Adrenaline, makeAdrenaline);
+	this->setConstructor(ObjectTypes::UI, makeUI);
 	this->setConstructor(ObjectTypes::RotateCamera, makeRotateCamera);
 }

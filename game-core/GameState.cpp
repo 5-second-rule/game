@@ -9,7 +9,6 @@ GameState::GameState( ::Game* game ) : BaseObject( ObjectTypes::State ) {
 	this->engine = Game::getGlobalInstance()->getEngineInstance();
 	this->world = engine->getWorld();
 	this->objectCtors = engine->getObjCtors();
-
 	for (int i = 0; i < 4; ++i) {
 		this->toonUsed[i] = false;
 	}
@@ -57,11 +56,15 @@ void GameState::update(float dt) {
 				this->world->get(this->players[i]->cameraTarget()));
 
 			if (playerObjs[i] != nullptr) {
-				if (playerObjs[i]->dead) {
+				if (playerObjs[i]->dead && this->players[i]->getDeathCount() < MAX_LIVES) {
 					playerObjs[i]->dead = false;
 					this->players[i]->die();
 					this->players[i]->respawn();
+					
 					cout << "player #" << i << " has died" << endl;
+				} else if (this->players[i]->getDeathCount() >= MAX_LIVES) {
+					this->players[i]->die();
+					//this->players[i]->despawnMoveableObject();
 				}
 
 				int trackIndex = playerObjs[i]->getTrackIndex();
@@ -107,6 +110,7 @@ void GameState::update(float dt) {
 			}
 		}
 
+		this->sortDeathboard();
 		//todo if theres a winner, change state
 		break;
 	}
@@ -156,6 +160,10 @@ void GameState::setState(State state) {
 			this->world->allocateHandle( powerup, HandleType::GLOBAL );
 			this->world->insert( powerup );
 		}
+
+		obj = this->objectCtors->invoke(ObjectTypes::UI);
+		world->allocateHandle(obj, HandleType::GLOBAL);
+		world->insert(obj);
 
 		// tell each player to create a MovingObject they manage
 
@@ -265,6 +273,7 @@ PlayerDelegate * GameState::addPlayer(unsigned int playerGuid) {
 	default: break;
 	}
 
+	this->deathboard.push_back({ numPlayers, 0 });
 	this->leaderboard.push_back({ numPlayers, 0 });
 	this->players.push_back(player);
 
@@ -281,6 +290,10 @@ void GameState::reserveSize(IReserve& buffer) const {
 
 	for (unsigned int i = 0; i < players.size(); ++i) {
 		buffer.reserve(sizeof(LeaderboardEntry));
+	}
+
+	for (unsigned int i = 0; i < players.size(); ++i) {
+		buffer.reserve(sizeof(DeathboardEntry));
 	}
 }
 
@@ -299,6 +312,12 @@ void GameState::fillBuffer(IFill& buffer) const {
 		(*entry) = leaderboard[i];
 		buffer.filled();
 	}
+
+	for (unsigned int i = 0; i < players.size(); ++i) {
+		DeathboardEntry * entry = reinterpret_cast<DeathboardEntry*>(buffer.getPointer());
+		(*entry) = deathboard[i];
+		buffer.filled();
+	}
 }
 
 void GameState::deserialize(BufferReader& buffer) {
@@ -308,11 +327,13 @@ void GameState::deserialize(BufferReader& buffer) {
 	while (data->numPlayers > this->players.size()) {
 		this->players.push_back(new Player(this));
 		this->leaderboard.push_back(LeaderboardEntry());
+		this->deathboard.push_back(DeathboardEntry());
 	}
 
 	while (data->numPlayers < this->players.size()) {
 		this->players.pop_back();
 		this->leaderboard.pop_back();
+		this->deathboard.pop_back();
 	}
 
 	buffer.finished(sizeof(GameStateData));
@@ -326,6 +347,12 @@ void GameState::deserialize(BufferReader& buffer) {
 		leaderboard[i] = *entry;
 		buffer.finished(sizeof(LeaderboardEntry));
 	}
+
+	for (unsigned int i = 0; i < data->numPlayers; ++i) {
+		const DeathboardEntry *entry = reinterpret_cast<const DeathboardEntry*>(buffer.getPointer());
+		deathboard[i] = *entry;
+		buffer.finished(sizeof(DeathboardEntry));
+	}
 }
 
 bool GameState::handleEvent(Event* evt) {
@@ -338,6 +365,27 @@ std::string GameState::toString() {
 
 std::vector<LeaderboardEntry> GameState::getLeaderboard() {
 	return this->leaderboard;
+}
+
+void GameState::sortDeathboard() {
+	for (size_t i = 0; i < this->players.size(); i++) {
+		for (size_t j = i; j < this->players.size(); j++) {
+			DeathboardEntry iEntry = deathboard[i];
+			iEntry.numDeaths = this->players[iEntry.playerIndex]->getDeathCount();
+			deathboard[i] = iEntry;
+
+			DeathboardEntry jEntry = deathboard[j];
+			if (this->players[jEntry.playerIndex]->getDeathCount() < iEntry.numDeaths) {
+				DeathboardEntry tmp = deathboard[i];
+				deathboard[i] = deathboard[j];
+				deathboard[j] = tmp;
+			}
+		}
+	}
+}
+
+std::vector<DeathboardEntry> GameState::getDeathboard() {
+	return this->deathboard;
 }
 
 std::vector<Handle> GameState::getPlayersHandle(){

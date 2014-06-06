@@ -50,3 +50,27 @@ void PlayerMovingObject::handleCollision(std::shared_ptr<const Bounds> bounds, f
 int PlayerMovingObject::getCollisionMetadata() const {
 	return CollisionMetadata::PLAYER;
 }
+
+void PlayerMovingObject::reserveSize(IReserve& buffer) const {
+	MovingObject::reserveSize(buffer);
+	buffer.reserve(sizeof(PlayerMovingObjectData));
+}
+
+void PlayerMovingObject::fillBuffer(IFill& buffer) const {
+	MovingObject::fillBuffer(buffer);
+	PlayerMovingObjectData* data = reinterpret_cast<PlayerMovingObjectData*>(buffer.getPointer());
+
+	data->dead = this->dead;
+
+	buffer.filled();
+}
+
+void PlayerMovingObject::deserialize(BufferReader& reader) {
+	MovingObject::deserialize(reader);
+
+	const PlayerMovingObjectData* data = reinterpret_cast<const PlayerMovingObjectData*>(reader.getPointer());
+
+	this->dead = data->dead;
+
+	reader.finished(sizeof(PlayerMovingObjectData));
+}

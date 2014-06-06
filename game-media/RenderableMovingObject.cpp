@@ -1,5 +1,6 @@
 #define _USE_MATH_DEFINES
 #include "RenderableMovingObject.h"
+#include "game-core\ObjectTypes.h"
 
 #include <cmath>
 
@@ -7,6 +8,10 @@ RenderableMovingObject::RenderableMovingObject(int type, Transmission::Model* mo
 	: MovingObject(type, nullptr)
 	, RenderableObject(model)
 {
+
+	if (type == ObjectTypes::Syphillis && model != nullptr) {
+		this->getMoveable()->setScale(3);
+	}
 
 	if (type == ObjectTypes::RedBlood && model != nullptr) {
 		this->getMoveable()->setScale(3);

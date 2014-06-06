@@ -80,6 +80,8 @@
     <ClInclude Include="INotifyReady.h" />
     <ClInclude Include="RenderableGame.h" />
     <ClInclude Include="RenderableGameObjectCtorTable.h" />
+    <ClInclude Include="RenderablePlayerMovingObject.h" />
+    <ClInclude Include="RenderableUI.h" />
     <ClInclude Include="SelectionScreenInput.h" />
     <ClInclude Include="RenderableMovingObject.h" />
     <ClInclude Include="RenderablePowerup.h" />
@@ -91,11 +93,14 @@
     <ClInclude Include="SoundCtorTable.h" />
     <ClInclude Include="RenderableWallOfDeath.h" />
     <ClInclude Include="TrackingCameraHandler.h" />
+    <ClInclude Include="UIData.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameplayInput.cpp" />
     <ClCompile Include="RenderableGame.cpp" />
     <ClCompile Include="RenderableGameObjectCtorTable.cpp" />
+    <ClCompile Include="RenderablePlayerMovingObject.cpp" />
+    <ClCompile Include="RenderableUI.cpp" />
     <ClCompile Include="SelectionScreenInput.cpp" />
     <ClCompile Include="RenderableMovingObject.cpp" />
     <ClCompile Include="RenderableSelectionScreen.cpp" />
@@ -107,6 +112,7 @@
     <ClCompile Include="SoundCtorTable.cpp" />
     <ClCompile Include="RenderableWallOfDeath.cpp" />
     <ClCompile Include="TrackingCameraHandler.cpp" />
+    <ClCompile Include="UIData.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\ecoliii.fbx" />

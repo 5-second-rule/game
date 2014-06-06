@@ -6,6 +6,9 @@
 #include "game-core/Game.h"
 #include "Player.h"
 #include "Leaderboard.h"
+#include "Deathboard.h"
+
+#define MAX_LIVES 5
 
 class GAMECOREDLL GameState : public BaseObject, public IRegisterPlayers
 {
@@ -19,6 +22,7 @@ protected:
 	static State gameState;
 	std::vector<Player*> players;
 	std::vector<LeaderboardEntry> leaderboard;
+	std::vector<DeathboardEntry> deathboard;
 	bool toonUsed[4];
 	BaseObject * selScreen;
 	Engine *engine;
@@ -52,6 +56,9 @@ public:
 	virtual PlayerDelegate* addPlayer(unsigned int playerGuid);
 
 	std::vector<LeaderboardEntry> getLeaderboard();
+	std::vector<DeathboardEntry> getDeathboard();
+	void sortDeathboard();
+	bool destroySelectionScreen();
 	
 	// ISerialize Methods
 	virtual void reserveSize(IReserve& buffer) const;
