@@ -15,6 +15,8 @@ Player::Player(unsigned int guid, GameState* state) {
 			break;
 		}
 	}
+
+	this->data.dead = false;
 }
 
 Player::~Player() {
@@ -67,19 +69,42 @@ void Player::respawn() {
 
 	int newTrackIndex = ((leaderIndex + wwodPosition) / 2) % trackSize;
 
-	MovingObject* m = dynamic_cast<MovingObject*>(
+	PlayerMovingObject* m = dynamic_cast<PlayerMovingObject*>(
 		Game::getGlobalInstance()
 		->getEngineInstance()
 		->getWorld()
 		->get(this->data.movingObject)
 		);
 
+	m->dead = false;
+
 	m->setPosition(track->nodes[newTrackIndex].point);
 	m->setTrackIndex(newTrackIndex);
+
+	m->setFollowTrack(true);
+	m->setHasPropulsion(true);
 }
 
 void Player::die() {
 	this->data.deathCount++;
+	this->data.dead = true;
+	this->data.respawnTimer = 0.0f;
+
+	MovingObject* m = dynamic_cast<MovingObject*>(theWorld.get(this->data.movingObject));
+	if (m != nullptr) {
+		m->setHasPropulsion(false);
+		m->setFollowTrack(false);
+	}
+}
+
+void Player::update(float dt) {
+	if (this->data.dead) {
+		this->data.respawnTimer += dt;
+		if (this->data.respawnTimer >= 5.0f) {
+			this->data.dead = false;
+			this->respawn();
+		}
+	}
 }
 
 void Player::updateSelection(int tempSelection) {
@@ -88,6 +113,10 @@ void Player::updateSelection(int tempSelection) {
 
 int Player::getDeathCount() {
 	return this->data.deathCount;
+}
+
+bool Player::isDead() {
+	return this->data.dead;
 }
 
 int Player::getSelection() {

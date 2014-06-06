@@ -3,7 +3,7 @@
 #include "game-core/RotateCameraObject.h"
 #include "game-core/Game.h"
 
-#define CAMERABACKSCALE 150
+#define CAMERABACKSCALE 130
 #define POINTDISTANCESCALE 0.5
 
 TrackingCameraHandler::TrackingCameraHandler()
