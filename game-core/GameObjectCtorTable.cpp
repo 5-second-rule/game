@@ -7,6 +7,7 @@
 #include "Tube.h"
 #include "WallOfDeath.h"
 #include "Powerup.h"
+#include "RotateCameraObject.h"
 
 #ifdef _DEBUG
 #ifndef DBG_NEW
@@ -59,6 +60,10 @@ static BaseObject * makeSelectionScreen(ConstructorTable<BaseObject> *thisObj) {
 	return new StaticObject(ObjectTypes::SelectionScreen);
 }
 
+static BaseObject * makeRotateCamera(ConstructorTable<BaseObject> * thisObj) {
+	return new RotateCameraObject();
+}
+
 void GameObjectCtorTable::initCtors() {
 	this->setConstructor( ObjectTypes::Ecoli, makeEcoli );
 	this->setConstructor( ObjectTypes::ChickenPox, makeChickenPox );
@@ -70,4 +75,5 @@ void GameObjectCtorTable::initCtors() {
 	this->setConstructor( ObjectTypes::SelectionScreen, makeSelectionScreen );
 	this->setConstructor( ObjectTypes::Wwod, makeWallOfDeath );
 	this->setConstructor(ObjectTypes::Adrenaline, makeAdrenaline);
+	this->setConstructor(ObjectTypes::RotateCamera, makeRotateCamera);
 }

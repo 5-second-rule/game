@@ -20,18 +20,37 @@ Player::~Player() {
 }
 
 void Player::spawnMoveableObject() {
+
 	PlayerMovingObject* m = new PlayerMovingObject(this->getSelection(), Game::getGlobalInstance());
 
 	World* w = Game::getGlobalInstance()->getEngineInstance()->getWorld();
 	w->allocateHandle(m, HandleType::GLOBAL);
 	w->insert(m);
 
+	//bool movement = this->gameState->getState() == GameState::State::Game;
+	m->setFollowTrack(false);
+	m->setHasPropulsion(false);
+
 	this->data.movingObject = m->getHandle();
 }
 
+void Player::spawnRotateCameraObject() {
+	MovingObject* m = dynamic_cast<MovingObject*>(theWorld.get(this->data.movingObject));
+	RotateCameraObject* c = new RotateCameraObject(m->getPosition(), m->getHeading(), m->getUp());
+
+	World* w = Game::getGlobalInstance()->getEngineInstance()->getWorld();
+	w->allocateHandle(c, HandleType::GLOBAL);
+	w->insert(c);
+
+	this->data.rotateCameraObject = c->getHandle();
+}
 
 Handle Player::getMovingObject() {
 	return this->data.movingObject;
+}
+
+Handle Player::getRotateCameraObject() {
+	return this->data.rotateCameraObject;
 }
 
 void Player::respawn() {
@@ -128,7 +147,7 @@ void Player::handleEvent(ActionEvent *evt) {
 			break;
 
 		case SelectionEvent::Go:
-			this->gameState->setState(GameState::Game);
+			this->gameState->setState(GameState::Countdown);
 		}
 
 		break;
@@ -147,7 +166,10 @@ void Player::handleEvent(ActionEvent *evt) {
 }
 
 Handle Player::cameraTarget() {
-	if (this->gameState->getState() == GameState::Game)
+	if (this->gameState->getState() == GameState::Countdown)
+		return this->data.rotateCameraObject;
+		
+	else if(this->gameState->getState() == GameState::Game)
 		return this->data.movingObject;
 	else
 		return Handle();

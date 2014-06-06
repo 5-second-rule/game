@@ -215,6 +215,10 @@ static BaseObject * makeRenderableWallOfDeath(ConstructorTable<BaseObject> *this
 		);
 }
 
+static BaseObject * makeRotateCamera(ConstructorTable<BaseObject> * thisObj) {
+	return new RotateCameraObject();
+}
+
 void RenderableGameObjectCtorTable::initCtors() {
 	GameObjectCtorTable::initCtors();
 	RenderingEngine *engine =
@@ -278,4 +282,6 @@ void RenderableGameObjectCtorTable::initCtors() {
 	this->setConstructor( ObjectTypes::State, makeSignallingGameState );
 	this->setConstructor( ObjectTypes::Wwod, makeRenderableWallOfDeath );
 	this->setConstructor(ObjectTypes::Adrenaline, makeRenderableAdrenaline);
+
+	this->setConstructor(ObjectTypes::RotateCamera, makeRotateCamera);
 }

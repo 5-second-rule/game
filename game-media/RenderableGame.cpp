@@ -21,6 +21,10 @@ RenderableGame::RenderableGame(void *appHandle)
 
 void RenderableGame::init() {
 	Game::init();
+
+	//init SoundCtorTable to have clock sound ready
+	static_cast<SoundCtorTable*>(this->getRenderingEngineInstance()->soundCtors)->initCtors();
+
 	std::vector<Transmission::Texture *>textures;
 	Transmission::Index rectangleIndices[6] = { 0, 1, 2, 3, 0, 2 };
 
@@ -37,6 +41,7 @@ void RenderableGame::init() {
 	this->titleScreenHandle = static_cast<IHasHandle*>(titleScreen)->getHandle();
 	this->getRenderingEngineInstance()->getWorld()->allocateHandle( titleScreen, LOCAL );
 	this->getRenderingEngineInstance()->getWorld()->insert( titleScreen );
+
 
 	// init Sound Ctor and play title screen track
 	static_cast<SoundCtorTable*>(this->getRenderingEngineInstance()->soundCtors)->initCtors();

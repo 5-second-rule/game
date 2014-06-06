@@ -59,6 +59,8 @@ public:
 	Game* owner;
 
 
+	void setHeading(const Vector4& heading);
+
 	Vector4 getHeading(); // A normalized vector giving the direction the object is heading
 	float getSpeed();
 	float getMaxForce();
@@ -76,11 +78,16 @@ public:
 	void setDragCoeff(float);
 	void setMaxSpeed(float);
 	void setMaxForce(float);
-	void setFollowTrack(bool);
-	void setHasPropulsion(bool);
+
 	void setFluidForce(float);
 	void setVelocity(const Vector4&);
 	void setMass(float);
+
+	void setUp(const Vector4& up);
+
+	void setFollowTrack(bool state);
+	void setHasPropulsion(bool state);
+
 
 	void applyForce(const Vector4& force);
 

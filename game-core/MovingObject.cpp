@@ -25,7 +25,7 @@ MovingObject::MovingObject(int objectType, Game* owner, bool follow, bool propul
 	, owner(owner)
 {
 	this->up = Vector(0.0f, 1.0f, 0.0f);
-	this->heading = Vector(0.0f, 0.0f, 1.0f);
+	this->heading = Vector4::normalize(Vector(0.01f, 0.01f, 1.0f));
 	this->sideLeft = Vector(-1.0f, 0.0f, 0.0f);
 	this->forceUp = Vector(0.0f, 0.0f, 0.0f);
 	this->forceRight = Vector(0.0f, 0.0f, 0.0f);
@@ -66,6 +66,14 @@ MovingObject::MovingObject(int objectType, Game* owner)
 
 
 MovingObject::~MovingObject() {}
+
+void MovingObject::setHeading(const Vector4& heading) {
+	this->heading = heading;
+}
+
+Vector4 MovingObject::getHeading(){
+	return this->heading;
+}
 
 float MovingObject::getSpeed(){
 	return this->velocity.length();
@@ -123,8 +131,13 @@ void MovingObject::setPosition(const Vector4& pos) {
 	this->position = pos;
 }
 
+
 void MovingObject::setMass(float updateMass) {
 	this->mass = updateMass;
+}
+
+void MovingObject::setUp(const Vector4& up) {
+	this->up = Vector4::normalize(up);
 }
 
 Vector4 MovingObject::getSideLeft() {
@@ -151,8 +164,17 @@ void MovingObject::setTrackIndex(int position) {
 	this->trackIndex = position;
 }
 
+
 void MovingObject::setVelocity(const Vector4 &p_velocity){
 	this->velocity = p_velocity;
+}
+
+void MovingObject::setFollowTrack(bool state) {
+	this->followTrack = state;
+}
+
+void MovingObject::setHasPropulsion(bool state) {
+	this->hasPropulsion = state;
 }
 
 bool MovingObject::handleEvent(Event *evt){
@@ -235,6 +257,11 @@ void MovingObject::update(float dt){
 	// follow track
 	TrackPath *track = owner->getTrackPath();
 	this->trackIndex = track->locateIndex(this->position, this->trackIndex);
+
+	const float TRACK_FORCE = 15.0f;
+	const float HEADING_FORCE = 15.0f;
+
+	Vector4 trackForce = track->nodes[this->trackIndex].normal * TRACK_FORCE;
 
 	if (this->followTrack) {
 		float dist_sq = (track->nodes[this->trackIndex].point - this->position).lengthSquared();
@@ -375,14 +402,15 @@ void MovingObject::handleCollision(std::shared_ptr<const Bounds> bounds, float d
 	else {
 		TrackPath *track = Game::getGlobalInstance()->getTrackPath();
 
-		Vector4 trackPos = track->nodes[this->trackIndex].point - this->position;
+		//Interpolation done to smooth the collisions	
+		PathNode trackNode = track->interpolateNode(this->position, this->trackIndex);
+		Vector4 trackPos = trackNode.point - this->position;
 		Vector4 wallNormal = Vector4::normalize(trackPos);
 
 		float mag = this->velocity.dot(-wallNormal);
 		this->velocity += wallNormal * (1.7f * mag);
 
-		//TODO: replace 100 with track radius
-		this->position = track->nodes[this->trackIndex].point - (wallNormal * (100.0f - me->radius));
+		this->position = track->nodes[this->trackIndex].point - (wallNormal * (trackNode.radius - me->radius));
 	}
 	
 }
