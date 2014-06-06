@@ -24,7 +24,7 @@ void RenderableUI::render() {
 	float xScalar = winRatio / origRatio * 5.5f;
 	std::vector<DeathboardEntry>::iterator it;
 	std::vector<DeathboardEntry>::iterator end = this->deathboard.end();
-	RenderableMovingObject *playerObject;
+	RenderableStaticObject *playerObject;
 	bool itsMe = false;
 	int i;
 	
@@ -43,17 +43,17 @@ void RenderableUI::render() {
 		}
 
 		Common::Vector4 pos = Common::Vector4(x, y, 0, 1);
-		playerObject->setPosition(pos);
+		playerObject->getMoveable()->setPosition(pos);
 		playerObject->render();
 
 		if (numLives > 0) {	
-			this->objectData->xObject->setPosition(pos);
+			this->objectData->xObject->getMoveable()->setPosition(pos);
 			this->objectData->xObject->render();
-			this->objectData->numberObjects[numLives]->setPosition(pos);
+			this->objectData->numberObjects[numLives]->getMoveable()->setPosition(pos);
 			this->objectData->numberObjects[numLives]->render();
 		}
 		else {
-			this->objectData->deadObject->setPosition(pos);
+			this->objectData->deadObject->getMoveable()->setPosition(pos);
 			this->objectData->deadObject->render();
 		}
 	}

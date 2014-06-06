@@ -1,15 +1,16 @@
 #pragma once
 #include "RenderableStaticObject.h"
 #include "RenderableMovingObject.h"
+#include "RenderableStaticObject.h"
 
 class UIData {
 public:
 	struct Objects {	
-		RenderableMovingObject *playerObjects[4];
-		RenderableMovingObject *glowPlayerObjects[4];
-		RenderableMovingObject *numberObjects[10];
-		RenderableMovingObject *xObject;
-		RenderableMovingObject *deadObject;
+		RenderableStaticObject *playerObjects[4];
+		RenderableStaticObject *glowPlayerObjects[4];
+		RenderableStaticObject *numberObjects[10];
+		RenderableStaticObject *xObject;
+		RenderableStaticObject *deadObject;
 	};
 private:
 	Objects objectData;
