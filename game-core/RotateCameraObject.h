@@ -10,6 +10,7 @@
 using namespace Common;
 
 struct RotateCameraObjectData {
+	float up[3];
 	float heading[3];
 	float target[3];
 	double rotateAmt;
@@ -18,12 +19,13 @@ struct RotateCameraObjectData {
 class GAMECOREDLL RotateCameraObject : public BaseObject
 {
 protected:
-	const Vector4 up;
-	const Vector4 heading;
-	const Vector4 target;
+	Vector4 up;
+	Vector4 heading;
+	Vector4 target;
 	double rotateAmt;
 
 public:
+	RotateCameraObject();
 	RotateCameraObject(const Vector4& target, const Vector4& heading, const Vector4& up);
 	virtual ~RotateCameraObject();
 
@@ -33,5 +35,10 @@ public:
 
 	virtual bool handleEvent(Event* evt);
 	virtual void update(float dt);
+
+	// ISerializable Methods
+	virtual void reserveSize(IReserve& buffer) const;
+	virtual void fillBuffer(IFill& buffer) const;
+	virtual void deserialize(BufferReader& buffer);
 };
 

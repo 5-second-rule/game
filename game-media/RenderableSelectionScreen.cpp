@@ -12,42 +12,45 @@ RenderableSelectionScreen::RenderableSelectionScreen(SelectionScreenData::Object
 RenderableSelectionScreen::~RenderableSelectionScreen() {}
 
 void RenderableSelectionScreen::render() {
-	this->objectData->backgroundObject->render();
-	this->objectData->titleObject->render();
-	unsigned int myGuid = RenderableGame::getGlobalInstance()->getEngineInstance()->getLocalPlayerGuid(0);
-	size_t i;
-	for (i = 0; i < 4; ++i) {
-		if (i < this->players.size() && this->players[i]->getGuid() == myGuid) {
-			this->objectData->myPlayerBackgroundObjects[i]->render();
-		} else {
-			this->objectData->otherPlayerBackgroundObjects[i]->render();
+	if (RenderableGame::getGlobalInstance()->getGameManager()->getGameState()->getState() == GameState::State::Selection) {
+		this->objectData->backgroundObject->render();
+		this->objectData->titleObject->render();
+		unsigned int myGuid = RenderableGame::getGlobalInstance()->getEngineInstance()->getLocalPlayerGuid(0);
+		size_t i;
+		for (i = 0; i < 4; ++i) {
+			if (i < this->players.size() && this->players[i]->getGuid() == myGuid) {
+				this->objectData->myPlayerBackgroundObjects[i]->render();
+			}
+			else {
+				this->objectData->otherPlayerBackgroundObjects[i]->render();
+			}
+		}
+
+		for (size_t i = 0; i < this->players.size(); ++i) {
+			Common::Vector4 pos = Common::Vector4(this->objectData->playerCenters[i], 0, 0, 1);
+			int selection = this->players[i]->getSelection();
+			//bool inUse = false;
+
+			//for (size_t j = 0; j < this->players.size(); ++j) {
+			//	if (this->players[j]->getSelection() == selection && this->players[j]->isSelected()) {
+			//		inUse = true;
+			//		break;
+			//	}
+			//}
+			//// TODO: temporary. change.
+			if (this->players[i]->isSelected())
+				pos[1] += 1.0f;
+
+			int nameIndex = i * 4 + selection;
+			if (this->players[i]->getGuid() == myGuid) {
+				this->objectData->myPlayerNameObjects[nameIndex]->render();
+			}
+			else {
+				this->objectData->otherPlayerNameObjects[nameIndex]->render();
+			}
+			this->objectData->playerObjects[selection]->setPosition(pos);
+			this->objectData->playerObjects[selection]->render();
+			// if (inUse) draw something on top of it.
 		}
 	}
-
-	for (size_t i = 0; i < this->players.size(); ++i) {
-		Common::Vector4 pos = Common::Vector4(this->objectData->playerCenters[i], 0, 0, 1);
-		int selection = this->players[i]->getSelection();
-		//bool inUse = false;
-
-		//for (size_t j = 0; j < this->players.size(); ++j) {
-		//	if (this->players[j]->getSelection() == selection && this->players[j]->isSelected()) {
-		//		inUse = true;
-		//		break;
-		//	}
-		//}
-		//// TODO: temporary. change.
-		if (this->players[i]->isSelected())
-			pos[1] += 1.0f;
-
-		int nameIndex = i * 4 + selection;
-		if (this->players[i]->getGuid() == myGuid) {
-			this->objectData->myPlayerNameObjects[nameIndex]->render();
-		} else {
-			this->objectData->otherPlayerNameObjects[nameIndex]->render();
-		}
-		this->objectData->playerObjects[selection]->setPosition(pos);
-		this->objectData->playerObjects[selection]->render();
-		// if (inUse) draw something on top of it.
-	}
-
 };

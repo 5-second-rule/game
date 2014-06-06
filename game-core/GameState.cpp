@@ -33,7 +33,7 @@ void GameState::update(float dt) {
 	}
 	case Countdown: {
 		//TODO Countdown logic
-		this->setState(Game);
+		//this->setState(Game);
 		break;
 	}
 	case Game:
@@ -119,6 +119,10 @@ void GameState::setState(State state) {
 	}
 	case (Countdown) :
 	{
+		// remove selection screen from world
+		world->remove(&this->selScreen->getHandle());
+		this->selScreen = nullptr;
+
 		obj = this->objectCtors->invoke( ObjectTypes::Track );
 		world->allocateHandle( obj, HandleType::GLOBAL );
 		world->insert( obj );

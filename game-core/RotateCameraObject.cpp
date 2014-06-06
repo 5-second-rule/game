@@ -15,6 +15,10 @@
 
 #define ROTATE_INC 0.1
 
+RotateCameraObject::RotateCameraObject()
+	: RotateCameraObject(Vector(0,0,0), Vector(0,0,0), Point(0,0,0))
+{}
+
 RotateCameraObject::RotateCameraObject(const Vector4& target, const Vector4& heading, const Vector4& up)
 	: BaseObject(ObjectTypes::RotateCamera)
 	, target(target)
@@ -45,3 +49,35 @@ void RotateCameraObject::update(float dt) {
 bool RotateCameraObject::handleEvent(Event *evt){
 	return false;
 }
+
+void RotateCameraObject::reserveSize(IReserve& buffer) const{
+	BaseObject::reserveSize(buffer);
+
+	buffer.reserve(sizeof(RotateCameraObjectData));
+}
+
+void RotateCameraObject::fillBuffer(IFill& buffer) const {
+	BaseObject::fillBuffer(buffer);
+
+	RotateCameraObjectData* data = reinterpret_cast<RotateCameraObjectData*>(buffer.getPointer());
+
+	memcpy(data->up, this->up.getPointer(), sizeof(float[3]));
+	memcpy(data->heading, this->heading.getPointer(), sizeof(float[3]));
+	memcpy(data->target, this->target.getPointer(), sizeof(float[3]));
+	data->rotateAmt = this->rotateAmt;
+
+	buffer.filled();
+}
+void RotateCameraObject::deserialize(BufferReader& buffer) {
+	BaseObject::deserialize(buffer);
+
+	const RotateCameraObjectData* data = reinterpret_cast<const RotateCameraObjectData*>(buffer.getPointer());
+	
+	this->up.set(data->up[0], data->up[1], data->up[2], 0.0f);
+	this->heading.set(data->heading[0], data->heading[1], data->heading[2], 0.0f);
+	this->target.set(data->target[0], data->target[1], data->target[2], 1.0f);
+	this->rotateAmt = data->rotateAmt;
+
+	buffer.finished(sizeof(RotateCameraObjectData));
+
+};
