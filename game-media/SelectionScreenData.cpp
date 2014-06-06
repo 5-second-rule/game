@@ -92,22 +92,29 @@ SelectionScreenData::~SelectionScreenData() {
 }
 
 void SelectionScreenData::calculateTitleVertices(Transmission::Vertex *vertices, float margin) {
-	float imgWidth, imgHeight, h_w_ratio;
-	imgWidth = 1100;
-	imgHeight = 221;
+	float imgWidth, imgHeight, h_w_ratio, winRatio;
+	if (this->engine->getWindowWidth() == 0 || this->engine->getWindowHeight() == 0) {
+		winRatio = 800.0f / 600.0f;
+	} else {
+		winRatio = 1.0f * this->engine->getWindowWidth() / this->engine->getWindowHeight();
+	}
+	
+	imgWidth = 1111;
+	imgHeight = 365;
 	h_w_ratio = imgHeight / imgWidth;
 
-	float l = -1.0f + margin,
-		r = 1.0f - margin,
-		t = 1.0f - margin,
-		b = t - h_w_ratio * 2;
+	float width = 1.0;
+	float height = width * h_w_ratio * winRatio;
 
-	vertices[0] = { { l, t, 0.0f }, { 0, 0 }, { 0, 0, -1 }, {} };
-	vertices[1] = { { r, t, 0.0f }, { 1, 0 }, { 0, 0, -1 }, {} };
-	vertices[2] = { { r, b, 0.0f }, { 1, 1 }, { 0, 0, -1 }, {} };
-	vertices[3] = { { l, b, 0.0f }, { 0, 1 }, { 0, 0, -1 }, {} };
+	float edgeT = 1.0f - margin;
+	float edgeB = edgeT - height;
+	float edgeL = -width / 2.0f;
+	float edgeR = width / 2.0f;
 
-	// don't think these calculations are right but I can't think
+	vertices[0] = { { edgeL, edgeT, 0.0f }, { 0, 0 }, { 0, 0, -1 }, {} };
+	vertices[1] = { { edgeR, edgeT, 0.0f }, { 1, 0 }, { 0, 0, -1 }, {} };
+	vertices[2] = { { edgeR, edgeB, 0.0f }, { 1, 1 }, { 0, 0, -1 }, {} };
+	vertices[3] = { { edgeL, edgeB, 0.0f }, { 0, 1 }, { 0, 0, -1 }, {} };
 }
 
 void SelectionScreenData::calculatePlayerNameVertices(Transmission::Vertex *vertices, int playerIndex, float margin, bool isCheck) {
@@ -146,7 +153,7 @@ float SelectionScreenData::calculatePlayerBackgroundVertices(Transmission::Verte
 	float numMargins[] = { -1.5f, -0.5f, 0.5f, 1.5f };
 	float pos[] = { -2, -1, 0, 1 };
 
-	float edgeT = 0.5f;
+	float edgeT = 0.45f;
 	float edgeB = -0.7f;
 
 	float width = (2.0f - 5.0f * margin) / 4.0f;
@@ -181,7 +188,7 @@ void SelectionScreenData::calculateCheckVertices(Transmission::Vertex *vertices,
 	float width = this->rectangleWidth / 3.0f;
 	float height = width * h_w_ratio * winRatio;
 
-	float edgeT = 0.5f;
+	float edgeT = 0.45f;
 	float edgeB = edgeT - height;
 	float edgeL = pos[playerIndex] * this->rectangleWidth + numMargins[playerIndex] * margin;
 	float edgeR = edgeL + width;
