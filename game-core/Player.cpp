@@ -51,6 +51,7 @@ void Player::spawnRotateCameraObject() {
 }
 
 void Player::spawnDeathCamera() {
+	/*
 	DeathCamera* c = new DeathCamera(this->gameState->getHandle());
 
 	World* w = Game::getGlobalInstance()->getEngineInstance()->getWorld();
@@ -58,6 +59,7 @@ void Player::spawnDeathCamera() {
 	w->insert(c);
 
 	this->data.deathCamera = c->getHandle();
+	*/
 }
 
 Handle Player::getMovingObject() {
@@ -234,7 +236,7 @@ void Player::handleEvent(ActionEvent *evt) {
 
 Handle Player::cameraTarget() {
 	if (this->data.deathCount >= MAX_LIVES)
-		return this->data.deathCamera;
+		return Handle();
 
 	else if (this->gameState->getState() == GameState::Countdown)
 		return this->data.rotateCameraObject;
