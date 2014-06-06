@@ -43,6 +43,7 @@ void TrackingCameraHandler::updateFor(IHasHandle *playerObject) {
 			//PathNode cameraTrackPos = track->nodes[track->locateIndex(this->position, gameObject->getTrackIndex())];
 			this->position = this->position + moveVec * 0.75;
 
+
 			PathNode cameraTrackPos = track->interpolateNode(this->position, track->locateIndex(this->position, gameObject->getTrackIndex()));
 
 			Common::Vector4 changeVec = cameraTrackPos.point - this->position;
