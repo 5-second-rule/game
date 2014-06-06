@@ -91,21 +91,28 @@ static BaseObject * makeRenderableWhiteBlood( ConstructorTable<BaseObject> *this
 		->getRenderingEngineInstance()
 		->createModelFromIndex(
 		table->modelIndexes[ObjectTypes::WhiteBlood],
-		table->textureIndexes[ObjectTypes::WhiteBlood] )
+		table->textureIndexes[ObjectTypes::WhiteBlood],
+		table->vertexShaderIndexes[ObjectTypes::WhiteBlood],
+		table->pixelShaderIndexes[ObjectTypes::WhiteBlood])
 		);
 }
 
 static BaseObject * makeRenderableRedBlood( ConstructorTable<BaseObject> *thisObj ) {
 	RenderableGameObjectCtorTable *table = (RenderableGameObjectCtorTable *)thisObj;
 
-	return new RenderableMovingObject(
+	RenderableMovingObject* redObj = new RenderableMovingObject(
 		ObjectTypes::RedBlood,
 		RenderableGame::getGlobalInstance()
 		->getRenderingEngineInstance()
 		->createModelFromIndex(
 		table->modelIndexes[ObjectTypes::RedBlood],
-		table->textureIndexes[ObjectTypes::RedBlood] )
+		table->textureIndexes[ObjectTypes::RedBlood],
+		table->vertexShaderIndexes[ObjectTypes::RedBlood],
+		table->pixelShaderIndexes[ObjectTypes::RedBlood])
 		);
+
+	redObj->setMass(0.01);
+	return redObj;
 }
 
 static BaseObject * makeRenderableTrack( ConstructorTable<BaseObject> *thisObj ) {
@@ -243,8 +250,8 @@ void RenderableGameObjectCtorTable::initCtors() {
 	this->pixelShaderIndexes[ObjectTypes::WhiteBlood] = engine->loadPixelShader( "resources/pixel.cso" );
 
 	this->modelIndexes[ObjectTypes::RedBlood] = engine->loadModel( "resources/bloodCell.fbx" );
-	this->textureIndexes[ObjectTypes::RedBlood] = engine->loadTexture( "resources/bloodCell_TXTR.dds" );
-	this->vertexShaderIndexes[ObjectTypes::RedBlood] = engine->loadVertexShader( "resources/vertexRipple.cso" );
+	this->textureIndexes[ObjectTypes::RedBlood] = engine->loadTexture( "resources/redblood_TXTR.dds" );
+	this->vertexShaderIndexes[ObjectTypes::RedBlood] = engine->loadVertexShader( "resources/vertexAdvance.cso" );
 	this->pixelShaderIndexes[ObjectTypes::RedBlood] = engine->loadPixelShader( "resources/pixel.cso" );
 
 	this->modelIndexes[ObjectTypes::Track] = engine->loadModel( "resources/track.trk", false );

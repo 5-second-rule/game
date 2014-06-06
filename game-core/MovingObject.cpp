@@ -1,4 +1,7 @@
+#include "engine-core/ConfigSettings.h"
+
 #include "MovingObject.h"
+#include "AutonomousObject.h"
 
 #include <chrono>
 
@@ -17,12 +20,6 @@
 #endif
 #endif  // _DEBUG
 
-#define MAX_SPEED 75
-#define MAX_FORCE 100
-
-const float MovingObject::max_speed = MAX_SPEED;
-const float MovingObject::max_force = MAX_FORCE;
-
 MovingObject::MovingObject(int objectType, Game* owner, bool follow, bool propulse)
 	: BaseObject(objectType)
 	, owner(owner)
@@ -34,14 +31,34 @@ MovingObject::MovingObject(int objectType, Game* owner, bool follow, bool propul
 	this->forceRight = Vector(0.0f, 0.0f, 0.0f);
 	this->velocity = Vector(0.0f, 0.0f, 0.0f);
 	this->force = Vector(0.0f, 0.0f, 0.0f);
-	this->mass = .1f;
-	this->propulsion = 1.0f;
-	this->friction = .2f;
 	this->trackIndex = 0;
-	this->trackVelocity = 1000;
-
+	this->position = Game::getGlobalInstance()->getTrackPath()->nodes[this->trackIndex].point;
 	this->followTrack = follow;
 	this->hasPropulsion = propulse;
+	this->initDefaultConfiguration();
+}
+
+void MovingObject::initDefaultConfiguration(){
+	bool read_file = true;
+	read_file = read_file && ConfigSettings::config.getValueOrDefault("default_mass", this->mass, .1f);
+	read_file = read_file && ConfigSettings::config.getValueOrDefault("default_friction", this->friction, .1f);
+	read_file = read_file && ConfigSettings::config.getValueOrDefault("default_max_speed", this->max_speed, 50.f);
+	read_file = read_file && ConfigSettings::config.getValueOrDefault("default_max_force", this->max_force, 10.f);
+	read_file = read_file && ConfigSettings::config.getValueOrDefault("fluid_force", this->fluid_force, 20.f);
+	read_file = read_file && ConfigSettings::config.getValueOrDefault("default_propulsion", this->propulsion, 1.0f);
+	read_file = read_file && ConfigSettings::config.getValueOrDefault("default_heading_force", this->heading_force, 5.f);
+
+	/* DEBUG
+	assert(ConfigSettings::config.getValueOrDefault("default_mass", this->mass, .1f));
+	assert(ConfigSettings::config.getValueOrDefault("default_friction", this->friction, .1f));
+	assert(ConfigSettings::config.getValueOrDefault("default_max_speed", this->max_speed, 50.f));
+	assert(ConfigSettings::config.getValueOrDefault("default_max_force", this->max_force, 10.f));
+	assert(ConfigSettings::config.getValueOrDefault("fluid_force", this->fluid_force, 20.f));
+	assert(ConfigSettings::config.getValueOrDefault("default_propulsion", this->propulsion, 1.0f));
+	*/
+
+	if (!read_file)
+		cout << "Fail to read default configurations at MovingObject::initDefaultConfiguration()!";
 }
 
 MovingObject::MovingObject(int objectType, Game* owner)
@@ -70,8 +87,53 @@ Vector4 MovingObject::getUp() {
 	return this->up;
 }
 
+Vector4 MovingObject::getHeading(){
+	return this->headingVector;
+}
+
+Vector4 MovingObject::getPosition(){
+	return position;
+}
+
+float MovingObject::getMaxForce(){
+	return max_force;
+}
+
+float MovingObject::getMaxSpeed(){
+	return max_speed;
+}
+
+void MovingObject::setDragCoeff(float p_friction){
+	friction = p_friction;
+}
+
+void MovingObject::setMaxSpeed(float p_max_speed){
+	max_speed = p_max_speed;
+}
+
+void MovingObject::setMaxForce(float p_max_force){
+	max_force = p_max_force;
+}
+
+void MovingObject::setFollowTrack(bool value){
+	this->followTrack = value;
+}
+
+void MovingObject::setHasPropulsion(bool value){
+	this->hasPropulsion = value;
+}
+
+void MovingObject::setFluidForce(float f){
+	this->fluid_force = f;
+}
+
 void MovingObject::setPosition(const Vector4& pos) {
 	this->position = pos;
+}
+
+
+void MovingObject::setMass(float updateMass) {
+	this->mass = updateMass;
 }
 
 void MovingObject::setUp(const Vector4& up) {
@@ -100,6 +162,11 @@ int MovingObject::getTrackIndex() {
 
 void MovingObject::setTrackIndex(int position) {
 	this->trackIndex = position;
+}
+
+
+void MovingObject::setVelocity(const Vector4 &p_velocity){
+	this->velocity = p_velocity;
 }
 
 void MovingObject::setFollowTrack(bool state) {
@@ -140,7 +207,7 @@ bool MovingObject::handleEvent(Event *evt){
 
 			this->heading = track->nodes[this->trackIndex].normal;
 			this->heading.normalize();
-			this->heading.set(3,0);
+			this->heading.set(3, 0);
 
 			this->sideLeft = Vector4::cross(up, heading);
 			this->sideLeft.normalize();
@@ -151,15 +218,15 @@ bool MovingObject::handleEvent(Event *evt){
 			this->forceUp = this->up * (moveEvent->direction.y * UP_SCALE);
 
 			// rotate around heading
-		this->up = Matrix4::rotate(this->heading, moveEvent->direction.w * ROT_SCALE) * this->up;
+			this->up = Matrix4::rotate(this->heading, moveEvent->direction.w * ROT_SCALE) * this->up;
 
-		//rotate sideways
-		this->heading = Matrix4::rotate(this->up, -moveEvent->direction.x * ROT_SCALE) * this->heading;
+			//rotate sideways
+			this->heading = Matrix4::rotate(this->up, -moveEvent->direction.x * ROT_SCALE) * this->heading;
 
-		//rotate up and down
+			//rotate up and down
 			Matrix4 rot = Matrix4::rotate(this->sideLeft, moveEvent->direction.y * ROT_SCALE);
-		this->heading = rot * heading;
-		this->up = rot * up;
+			this->heading = rot * heading;
+			this->up = rot * up;
 		}
 		else
 		{
@@ -175,7 +242,7 @@ bool MovingObject::handleEvent(Event *evt){
 		break;
 	}
 	case ActionType::SHOOT:
-		owner->getEngineInstance()->sendEvent( new SoundEvent( static_cast<int>(Sounds::SHOOT), false, false, position ) );
+		owner->getEngineInstance()->sendEvent(new SoundEvent(static_cast<int>(Sounds::SHOOT), false, false, position));
 		//TODO: create projectile and set it in motion
 		break;
 	default:
@@ -187,13 +254,6 @@ bool MovingObject::handleEvent(Event *evt){
 void MovingObject::update(float dt){
 	BaseObject::update(dt);
 
-	this->position += this->velocity * dt;
-
-	Vector4 acceleration = this->force * (1 / this->mass);
-	this->force = -(this->velocity * this->friction);
-
-	this->velocity += acceleration*dt;
-
 	// follow track
 	TrackPath *track = owner->getTrackPath();
 	this->trackIndex = track->locateIndex(this->position, this->trackIndex);
@@ -204,30 +264,39 @@ void MovingObject::update(float dt){
 	Vector4 trackForce = track->nodes[this->trackIndex].normal * TRACK_FORCE;
 
 	if (this->followTrack) {
-		Vector4 trackForce = track->nodes[this->trackIndex].normal * TRACK_FORCE;
-		this->applyForce(trackForce);
+		float dist_sq = (track->nodes[this->trackIndex].point - this->position).lengthSquared();
+		Vector4 trackForce = track->nodes[this->trackIndex].normal*this->fluid_force;//this->forceByDistSq( dist_sq, this->fluid_force );
+		this->applyForce(trackForce + this->forceUp * 2 + this->forceRight * 2);
 	}
 
 	if (this->hasPropulsion) {
 		// propulsion in heading
-		Vector4 headingForce = Vector4::normalize(this->heading) * HEADING_FORCE * propulsion;
-		this->applyForce(headingForce);
+		Vector4 headingForce = Vector4::normalize(this->heading) * this->heading_force * propulsion;
+		this->applyForce(headingForce*2);
 	}
 
-	this->applyForce(this->forceUp + this->forceRight);
+	this->force -= (this->velocity * this->friction);
+	Vector4 acceleration = this->force * (1 / this->mass);
+	this->velocity += acceleration*dt;
+	this->position += this->velocity * dt;
+
+	if (this->velocity.lengthSquared() > 0.000001){
+		this->headingVector = Vector4::normalize(this->velocity);
+	}
 
 	// reset propulsion
 	this->propulsion = 1.0f;
+	this->force = Vector4(0, 0, 0, 0);
 }
 
-std::string MovingObject::toString() {
-	return	BaseObject::toString() + "\r\nType: " + std::to_string( this->getType() ) +
+std::string MovingObject::toString() const {
+	return	BaseObject::toString() + "\r\nType: " + std::to_string(this->getType()) +
 					"\r\nUp: " + this->up.toString() +
 					"Heading: " + this->heading.toString() +
 					"Postion: " + this->position.toString() +
 					"Velocity: " + this->velocity.toString() +
 					"Force: " + this->force.toString() + 
-					std::string( "End Object\r\n" );
+		std::string("End Object\r\n");
 }
 
 void MovingObject::reserveSize(IReserve& buffer) const {
@@ -259,7 +328,7 @@ void MovingObject::fillBuffer(IFill& buffer) const {
 	data->force[1] = this->force[1];
 	data->force[2] = this->force[2];
 
-	data->friction = friction;
+	data->friction = this->friction;
 	data->mass = mass;
 
 	data->trackIndex = this->trackIndex;
@@ -287,10 +356,6 @@ void MovingObject::deserialize(BufferReader& reader) {
 	reader.finished(sizeof(MovingObjectData));
 }
 
-Vector4 MovingObject::getPosition() {
-	return this->position;
-}
-
 Vector4 MovingObject::getGroupingParameter() const {
 	return Vector(0.0f, 0.0f, (float)this->trackIndex);
 }
@@ -299,9 +364,6 @@ bool MovingObject::collidesWith(const ICollidable* target) const {
 	std::shared_ptr<const Bounds> bounds = target->getBounds();
 
 	if (bounds->type == BoundsType::Sphere) {
-		if( owner->getEngineInstance()->getDebugLevel() > 0 ) {
-			std::cout << "Wall Check" << std::endl;
-		}
 		std::shared_ptr<const BoundingSphere> bs = std::static_pointer_cast<const BoundingSphere>(bounds);
 		std::shared_ptr<const BoundingSphere> me = std::static_pointer_cast<const BoundingSphere>(this->getBounds());
 
@@ -336,7 +398,8 @@ void MovingObject::handleCollision(std::shared_ptr<const Bounds> bounds, float d
 		float denominator = me->mass + bs->mass;
 
 		this->velocity = numerator * (1.0f / denominator);
-	} else {
+	}
+	else {
 		TrackPath *track = Game::getGlobalInstance()->getTrackPath();
 
 		//Interpolation done to smooth the collisions	
@@ -366,4 +429,9 @@ std::shared_ptr<const Bounds> MovingObject::getBounds() const {
 
 unsigned int MovingObject::getPriority() const {
 	return static_cast<unsigned int>(CollisionPriorities::Object);
+}
+
+float MovingObject::forceByDistSq(float distance_sq, float maximum){
+	float force = maximum*( Game::getGlobalInstance()->tubeRadiusSq - distance_sq ) / Game::getGlobalInstance()->tubeRadiusSq;
+	return (force > 0 ? force : 0);
 }

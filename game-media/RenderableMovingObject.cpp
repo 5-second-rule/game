@@ -7,6 +7,10 @@ RenderableMovingObject::RenderableMovingObject(int type, Transmission::Model* mo
 	: MovingObject(type, nullptr)
 	, RenderableObject(model)
 {
+
+	if (type == ObjectTypes::RedBlood && model != nullptr) {
+		this->getMoveable()->setScale(3);
+	}
 }
 
 

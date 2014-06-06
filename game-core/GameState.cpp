@@ -339,3 +339,11 @@ std::string GameState::toString() {
 std::vector<LeaderboardEntry> GameState::getLeaderboard() {
 	return this->leaderboard;
 }
+
+std::vector<Handle> GameState::getPlayersHandle(){
+	std::vector<Handle> players;
+	for (std::vector<Player*>::iterator it = this->players.begin(); it != this->players.end(); ++it){
+		players.push_back((*it)->getMovingObject());
+	}
+	return players;
+}
