@@ -46,7 +46,9 @@ void RenderableUI::render() {
 			itsMe = true;
 			playerObject = this->objectData->glowPlayerObjects[selection];
 			if (this->players[it->playerIndex]->hasAdrenaline()) {
-				this->objectData->adrenalineObject->render();
+				playerObject = this->objectData->adrenalineObject;
+				playerObject->getMoveable()->setPosition(-0.2, 0, 0);
+				playerObject->render();
 			}
 		} else {
 			itsMe = false;

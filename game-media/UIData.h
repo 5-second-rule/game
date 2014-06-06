@@ -46,7 +46,7 @@ private:
 	void calculateDeadVertices(Transmission::Vertex *vertices, float lastEdge);
 	float calculateBoostVertices(Transmission::Vertex *vertices);
 	void calculateBoostTileVertices(Transmission::Vertex *vertices, float lastEdge);
-	void calculateAdrenalineVertices(Transmission::Vertex *vertices);
+	void calculateAdrenalineVertices(Transmission::Vertex *vertices, float lastEdge);
 	void calculateWinnerVertices(Transmission::Vertex *vertices);
 
 public:
