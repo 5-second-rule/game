@@ -18,5 +18,6 @@ void RenderableWallOfDeath::render() {
 	TrackPath *track = Game::getGlobalInstance()->getTrackPath();
 	PathNode node = track->nodes[this->getTrackIndex()];
 	this->getMoveable()->setPosition(node.point);
+	this->getMoveable()->setScale(node.radius / 6.0f);
 	RenderableObject::render();
 }
