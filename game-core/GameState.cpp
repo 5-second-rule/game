@@ -410,12 +410,10 @@ void GameState::placeInDeathOrder(int player) {
 			lastDeath = deathboard[i].deathOrder;
 		}
 	}
-	std::cout << "deathcount = " << lastDeath;
 
 	for (size_t i = 0; i < this->players.size(); i++) {
 		if (deathboard[i].playerIndex == player) {
-			std::cout << " .. index = " << i << std::endl;
-			deathboard[i].deathOrder = lastDeath + 1;
+			deathboard[deathboard[i].playerIndex].deathOrder = lastDeath + 1;
 			return;
 		}
 	}

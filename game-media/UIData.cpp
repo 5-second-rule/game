@@ -99,7 +99,7 @@ UIData::UIData() {
 	this->objectData.boostMeterEmptyObject = new RenderableStaticObject(ObjectTypes::UI, boostMeterEmptyModel);
 
 	// adrenaline image
-	this->calculateAdrenalineVertices(this->vertices, this->rightEdge);
+	this->calculateAdrenalineVertices(this->vertices, this->leftEdge);
 	this->adrenalineModel = engine->create2DModelFromScratch(vertices, 4, rectangleIndices, 6, "resources/ui-adrenaline.dds", textures, true);
 	this->objectData.adrenalineObject = new RenderableStaticObject(ObjectTypes::UI, adrenalineModel);
 
@@ -265,6 +265,7 @@ float UIData::calculateBoostVertices(Transmission::Vertex *vertices) {
 
 	this->boostHeight = height;
 	this->rightEdge = edgeR;
+	this->leftEdge = edgeL;
 	return edgeB;
 }
 
@@ -289,6 +290,11 @@ void UIData::calculateBoostTileVertices(Transmission::Vertex *vertices, float la
 
 	float edgeR = this->rightEdge;
 	float edgeL = edgeR - width;
+
+	vertices[0] = { { edgeL, edgeT, 0.0f }, { 0, 0 }, { 0, 0, -1 }, {} };
+	vertices[1] = { { edgeR, edgeT, 0.0f }, { 1, 0 }, { 0, 0, -1 }, {} };
+	vertices[2] = { { edgeR, edgeB, 0.0f }, { 1, 1 }, { 0, 0, -1 }, {} };
+	vertices[3] = { { edgeL, edgeB, 0.0f }, { 0, 1 }, { 0, 0, -1 }, {} };
 
 	return;
 }

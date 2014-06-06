@@ -44,12 +44,12 @@ void RenderableUI::render() {
 		y -= i*0.22f;
 		if (this->players[it->playerIndex]->getGuid() == this->playerGuid) {
 			itsMe = true;
-			playerObject = this->objectData->glowPlayerObjects[selection];
 			if (this->players[it->playerIndex]->hasAdrenaline()) {
 				playerObject = this->objectData->adrenalineObject;
-				playerObject->getMoveable()->setPosition(-0.2, 0, 0);
+				//playerObject->getMoveable()->setPosition(-0.2, 0, 0);
 				playerObject->render();
 			}
+			playerObject = this->objectData->glowPlayerObjects[selection];
 		} else {
 			itsMe = false;
 			playerObject = this->objectData->playerObjects[selection];
@@ -73,6 +73,7 @@ void RenderableUI::render() {
 
 	Common::Vector4 boostPos = Common::Vector4(0, 0, 0, 1);
 	playerObject = this->objectData->boostObject;
+	playerObject->getMoveable()->setPosition(boostPos);
 	playerObject->render();
 
 	std::vector<Player*> playerVec;
