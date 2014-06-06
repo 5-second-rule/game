@@ -45,6 +45,7 @@ void RenderableUI::render() {
 			playerObject = this->objectData->glowPlayerObjects[selection];
 			if (this->players[it->playerIndex]->hasAdrenaline()) {
 				this->objectData->adrenalineObject->render();
+				return;
 			}
 		} else {
 			itsMe = false;
