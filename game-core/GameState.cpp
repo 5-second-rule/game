@@ -63,7 +63,8 @@ void GameState::update(float dt) {
 					cout << "player #" << i << " has died" << endl;
 				} else if (this->players[i]->getDeathCount() >= MAX_LIVES) {
 					this->players[i]->die();
-					//this->players[i]->despawnMoveableObject();
+					this->players[i]->spawnDeathCamera();
+
 					this->world->remove( &this->players[i]->getMovingObject() );
 					cout << "player #" << i << " is out of the game" << endl;
 				}

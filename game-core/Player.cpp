@@ -1,6 +1,7 @@
 #include "Player.h"
 
 #include "GameState.h"
+#include "DeathCamera.h"
 
 Player::Player(GameState* state) : Player(-1, state) {}
 
@@ -46,6 +47,16 @@ void Player::spawnRotateCameraObject() {
 	w->insert(c);
 
 	this->data.rotateCameraObject = c->getHandle();
+}
+
+void Player::spawnDeathCamera() {
+	DeathCamera* c = new DeathCamera(this->gameState->getHandle());
+
+	World* w = Game::getGlobalInstance()->getEngineInstance()->getWorld();
+	w->allocateHandle(c, HandleType::GLOBAL);
+	w->insert(c);
+
+	this->data.deathCamera = c->getHandle();
 }
 
 Handle Player::getMovingObject() {
@@ -196,7 +207,10 @@ void Player::handleEvent(ActionEvent *evt) {
 }
 
 Handle Player::cameraTarget() {
-	if (this->gameState->getState() == GameState::Countdown)
+	if (this->data.deathCount >= MAX_LIVES)
+		return this->data.deathCamera;
+
+	else if (this->gameState->getState() == GameState::Countdown)
 		return this->data.rotateCameraObject;
 		
 	else if(this->gameState->getState() == GameState::Game)

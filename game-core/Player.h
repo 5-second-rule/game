@@ -18,6 +18,7 @@ private:
 		bool selected;
 		Handle movingObject;
 		Handle rotateCameraObject;
+		Handle deathCamera;
 
 		bool dead;
 		float respawnTimer;
@@ -39,6 +40,7 @@ public:
 	void spawnMoveableObject();
 
 	void spawnRotateCameraObject();
+	void spawnDeathCamera();
 
 	Handle getMovingObject();
 	Handle getRotateCameraObject();
