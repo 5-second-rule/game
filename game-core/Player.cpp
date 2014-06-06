@@ -157,6 +157,22 @@ void Player::handleEvent(ActionEvent *evt) {
 
 		break;
 	}
+	case ActionType::SHOOT:
+		if (this->data.hasAdrenaline) {
+			this->data.hasAdrenaline = false;
+
+			PlayerMovingObject* m = dynamic_cast<PlayerMovingObject*>(
+				Game::getGlobalInstance()
+				->getEngineInstance()
+				->getWorld()
+				->get(this->data.movingObject)
+			);
+
+			const float ADRENALINE_FORCE = 500.0f;
+			Vector4 adrenalineForce = m->getHeading() * ADRENALINE_FORCE;
+			m->applyForce(adrenalineForce);
+		}
+		break;
 	default:
 		MovingObject* m = dynamic_cast<MovingObject*>(
 			Game::getGlobalInstance()

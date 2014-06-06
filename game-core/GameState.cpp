@@ -69,6 +69,7 @@ void GameState::update(float dt) {
 
 				if (playerObjs[i]->hasNewPowerup) {
 					this->players[i]->addPowerup();
+					playerObjs[i]->hasNewPowerup = false;
 				}
 
 				int trackIndex = playerObjs[i]->getTrackIndex();
