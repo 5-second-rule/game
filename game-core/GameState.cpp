@@ -65,6 +65,8 @@ void GameState::update(float dt) {
 				} else if (this->players[i]->getDeathCount() >= MAX_LIVES) {
 					this->players[i]->die();
 					//this->players[i]->despawnMoveableObject();
+					this->world->remove( &this->players[i]->getMovingObject() );
+					cout << "player #" << i << " is out of the game" << endl;
 				}
 
 				int trackIndex = playerObjs[i]->getTrackIndex();
