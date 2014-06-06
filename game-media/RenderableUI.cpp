@@ -10,8 +10,13 @@ RenderableUI::RenderableUI(UIData::Objects *objectData)
 	this->objectData = objectData;
 
 	RenderableGame *game = RenderableGame::getGlobalInstance();
+	this->gamestate = game->getGameManager()->getGameState();
 	this->engine = game->getRenderingEngineInstance();
-	this->players = game->getGameManager()->getPlayers();
+
+	this->playerGuid = this->engine->getLocalPlayerGuid(0);
+	this->players = this->gamestate->getPlayers();
+	this->deathboard = this->gamestate->getDeathboard();
+
 	this->deathboard = game->getGameManager()->getGameState()->getDeathboard();
 	this->playerGuid = game->getRenderingEngineInstance()->getLocalPlayerGuid(0);
 
@@ -30,7 +35,7 @@ void RenderableUI::render() {
 	bool itsMe = false;
 	int i;
 
-	
+
 	for (it = this->deathboard.begin(), i = 0; it != end; ++it, ++i) {
 		float x = 0, y = 0;
 		int selection = this->players[it->playerIndex]->getSelection();
@@ -70,6 +75,12 @@ void RenderableUI::render() {
 			this->objectData->deadObject->render();
 		}
 	}
+
+	int flag = this->gamestate->getCountdownFlag();
+	if (flag >= 0) {
+		this->objectData->countdownObjects[flag]->render();
+	}
+
 
 	Common::Vector4 boostPos = Common::Vector4(0, 0, 0, 1);
 	playerObject = this->objectData->boostObject;

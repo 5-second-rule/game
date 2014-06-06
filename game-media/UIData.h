@@ -15,6 +15,7 @@ public:
 		RenderableStaticObject *boostMeterFullObject;
 		RenderableStaticObject *boostMeterEmptyObject;
 		RenderableStaticObject *adrenalineObject;
+		RenderableStaticObject *countdownObjects[4];
 		RenderableStaticObject *winnerObjects[4];
 	};
 private:
@@ -35,6 +36,7 @@ private:
 	Transmission::Model *boostMeterFullModel;
 	Transmission::Model *boostMeterEmptyModel;
 	Transmission::Model *adrenalineModel;
+	Transmission::Model *countdownModels[4];
 	Transmission::Model *winnerModels[4];
 
 	Transmission::Vertex vertices[4];
@@ -44,6 +46,8 @@ private:
 	float calculateXVertices(Transmission::Vertex *vertices, float lastEdge);
 	float calculateNumberVertices(Transmission::Vertex *vertices, float lastEdge);
 	void calculateDeadVertices(Transmission::Vertex *vertices, float lastEdge);
+	void calculateAdrenalineVertices(Transmission::Vertex *vertices);
+	void calculateCountdownVertices(Transmission::Vertex *vertices, bool isGo);
 	float calculateBoostVertices(Transmission::Vertex *vertices);
 	void calculateBoostTileVertices(Transmission::Vertex *vertices, float lastEdge);
 	void calculateAdrenalineVertices(Transmission::Vertex *vertices, float lastEdge);
