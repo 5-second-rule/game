@@ -8,6 +8,7 @@ UIData::UIData() {
 	this->engine = RenderableGame::getGlobalInstance()->getRenderingEngineInstance();
 
 	const int MAX_PLAYERS = 4;
+	const int BOOST_BARS = 4;
 	this->margin = 0.02f;
 	float scale = (2.0f - 5 * this->margin) / 8;
 	Transmission::Index rectangleIndices[6] = { 0, 1, 2, 3, 0, 2 };
@@ -36,6 +37,13 @@ UIData::UIData() {
 		"resources/ui-number-7.dds",
 		"resources/ui-number-8.dds",
 		"resources/ui-number-9.dds"
+	};
+
+	char *boostTexture = "resources/boost.dds";
+
+	char *boostColorTextures[2] = {
+		"resources/blueBoost.dds",
+		"resources/whiteBoost.dds"
 	};
 
 	float lastEdge;
@@ -70,6 +78,18 @@ UIData::UIData() {
 	this->deadModel = engine->create2DModelFromScratch(vertices, 4, rectangleIndices, 6, "resources/ui-dead.dds", textures, true);
 	this->objectData.deadObject = new RenderableStaticObject(ObjectTypes::UI, deadModel);
 
+	// boost text
+	lastEdge = this->calculateBoostVertices(this->vertices);
+	this->boostModel = engine->create2DModelFromScratch(vertices, 4, rectangleIndices, 6, "resources/boost.dds", textures, true);
+	this->objectData.boostObject = new RenderableStaticObject(ObjectTypes::UI, boostModel);
+
+	// boost bars
+	this->calculateBoostTileVertices(this->vertices, lastEdge);
+	this->boostMeterFullModel = engine->create2DModelFromScratch(vertices, 4, rectangleIndices, 6, boostColorTextures[0], textures, true);
+	this->objectData.boostMeterFullObject = new RenderableStaticObject(ObjectTypes::UI, boostMeterFullModel);
+	
+	this->boostMeterEmptyModel = engine->create2DModelFromScratch(vertices, 4, rectangleIndices, 6, boostColorTextures[1], textures, true);
+	this->objectData.boostMeterEmptyObject = new RenderableStaticObject(ObjectTypes::UI, boostMeterEmptyModel);
 }
 
 UIData::~UIData() {}
@@ -191,6 +211,68 @@ void UIData::calculateDeadVertices(Transmission::Vertex *vertices, float lastEdg
 	vertices[3] = { { edgeL, edgeB, 0.0f }, { 0, 1 }, { 0, 0, -1 }, {} };
 
 	this->playerHeight = height;
+}
+
+float UIData::calculateBoostVertices(Transmission::Vertex *vertices) {
+	float imgWidth, imgHeight, h_w_ratio, winRatio;
+	if (this->engine->getWindowWidth() == 0 || this->engine->getWindowHeight() == 0) {
+		winRatio = 800.0f / 600.0f;
+	}
+	else {
+		winRatio = 1.0f * this->engine->getWindowWidth() / this->engine->getWindowHeight();
+	}
+
+	imgWidth = 770;
+	imgHeight = 231;
+	h_w_ratio = imgHeight / imgWidth;
+
+	float width = 0.2f;
+	float height = width * h_w_ratio * winRatio;
+
+	float edgeT = 1.0f - this->margin;
+	float edgeB = edgeT - height;
+
+	float edgeR = 1.0f - this->margin;
+	float edgeL = edgeR - width;
+
+	vertices[0] = { { edgeL, edgeT, 0.0f }, { 0, 0 }, { 0, 0, -1 }, {} };
+	vertices[1] = { { edgeR, edgeT, 0.0f }, { 1, 0 }, { 0, 0, -1 }, {} };
+	vertices[2] = { { edgeR, edgeB, 0.0f }, { 1, 1 }, { 0, 0, -1 }, {} };
+	vertices[3] = { { edgeL, edgeB, 0.0f }, { 0, 1 }, { 0, 0, -1 }, {} };
+
+	this->boostHeight = height;
+	this->rightEdge = edgeR;
+	return edgeB;
+}
+
+void UIData::calculateBoostTileVertices(Transmission::Vertex *vertices, float lastEdge) {
+	float imgWidth, imgHeight, h_w_ratio, winRatio;
+	if (this->engine->getWindowWidth() == 0 || this->engine->getWindowHeight() == 0) {
+		winRatio = 800.0f / 600.0f;
+	}
+	else {
+		winRatio = 1.0f * this->engine->getWindowWidth() / this->engine->getWindowHeight();
+	}
+
+	imgWidth = 213;
+	imgHeight = 207;
+	h_w_ratio = imgHeight / imgWidth;
+
+	float width = 0.05f;// 0.024f;
+	float height = width * h_w_ratio * winRatio;
+
+	float edgeT = (lastEdge - this->margin);
+	float edgeB = edgeT - height;
+
+	float edgeR = this->rightEdge;
+	float edgeL = edgeR - width;
+
+	vertices[0] = { { edgeL, edgeT, 0.0f }, { 0, 0 }, { 0, 0, -1 }, {} };
+	vertices[1] = { { edgeR, edgeT, 0.0f }, { 1, 0 }, { 0, 0, -1 }, {} };
+	vertices[2] = { { edgeR, edgeB, 0.0f }, { 1, 1 }, { 0, 0, -1 }, {} };
+	vertices[3] = { { edgeL, edgeB, 0.0f }, { 0, 1 }, { 0, 0, -1 }, {} };
+
+	return;
 }
 
 UIData::Objects *UIData::getData() {

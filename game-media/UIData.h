@@ -11,19 +11,27 @@ public:
 		RenderableStaticObject *numberObjects[10];
 		RenderableStaticObject *xObject;
 		RenderableStaticObject *deadObject;
+		RenderableStaticObject *boostObject;
+		RenderableStaticObject *boostMeterFullObject;
+		RenderableStaticObject *boostMeterEmptyObject;
 	};
 private:
 	Objects objectData;
 	RenderingEngine *engine;
 	float playerHeight;
+	float boostHeight;
 	float margin;
 	float leftEdge;
+	float rightEdge;
 
 	Transmission::Model *playerModels[4];
 	Transmission::Model *glowPlayerModels[4];
 	Transmission::Model *numberModels[10];
 	Transmission::Model *xModel;
 	Transmission::Model *deadModel;
+	Transmission::Model *boostModel;
+	Transmission::Model *boostMeterFullModel;
+	Transmission::Model *boostMeterEmptyModel;
 
 	Transmission::Vertex vertices[4];
 	std::vector<Transmission::Texture *>textures;
@@ -32,6 +40,8 @@ private:
 	float calculateXVertices(Transmission::Vertex *vertices, float lastEdge);
 	float calculateNumberVertices(Transmission::Vertex *vertices, float lastEdge);
 	void calculateDeadVertices(Transmission::Vertex *vertices, float lastEdge);
+	float calculateBoostVertices(Transmission::Vertex *vertices);
+	void calculateBoostTileVertices(Transmission::Vertex *vertices, float lastEdge);
 
 public:
 	UIData();
