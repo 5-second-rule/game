@@ -39,10 +39,10 @@ UIData::UIData() {
 	};
 
 	char *countdownTextures[4] = {
-		"resources/countdown-3.dds",
-		"resources/countdown-2.dds",
+		"resources/countdown-go.dds",
 		"resources/countdown-1.dds",
-		"resources/countdown-go.dds"
+		"resources/countdown-2.dds",
+		"resources/countdown-3.dds"
 	};
 
 	float lastEdge;
@@ -79,10 +79,11 @@ UIData::UIData() {
 
 
 	// Countdown images
-	this->calculateCountdownVertices(this->vertices, false);
 	for (int i = 0; i < 4; ++i) {
-		if (i == 3) {
+		if (i == 0) {
 			this->calculateCountdownVertices(this->vertices, true);
+		} else {
+			this->calculateCountdownVertices(this->vertices, false);
 		}
 		this->countdownModels[i] = engine->create2DModelFromScratch(vertices, 4, rectangleIndices, 6, countdownTextures[i], textures, true);
 		this->objectData.countdownObjects[i] = new RenderableStaticObject(ObjectTypes::UI, countdownModels[i]);
@@ -225,20 +226,20 @@ void UIData::calculateCountdownVertices(Transmission::Vertex *vertices, bool isG
 	if (isGo) {
 		imgWidth = 625;
 		imgHeight = 321;
-		width = 0.4;
+		width = 0.4f;
 	} else {
 		imgWidth = 200;
 		imgHeight = 300;
-		width = 0.2;
+		width = 0.2f;
 	}
 	
 	float h_w_ratio = imgHeight / imgWidth;
 	float height = width * h_w_ratio * winRatio;
 
-	float edgeT = 0.8;
+	float edgeT = 0.8f;
 	float edgeB = edgeT - height;
 
-	float edgeL = -width/2.0f;
+	float edgeL = -width / 2.0f;
 	float edgeR = width / 2.0f;
 
 	vertices[0] = { { edgeL, edgeT, 0.0f }, { 0, 0 }, { 0, 0, -1 }, {} };

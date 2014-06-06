@@ -9,6 +9,7 @@ GameState::GameState( ::Game* game ) : BaseObject( ObjectTypes::State ) {
 	this->engine = Game::getGlobalInstance()->getEngineInstance();
 	this->world = engine->getWorld();
 	this->objectCtors = engine->getObjCtors();
+	this->countdownFlag = false;
 	for (int i = 0; i < 4; ++i) {
 		this->toonUsed[i] = false;
 	}
@@ -32,15 +33,16 @@ void GameState::update(float dt) {
 	case Countdown: {
 		//TODO Countdown logic
 		this->counter -= dt;
+		
 		if (this->counter <= 0.0f) {
 			this->setState(Game);
-		}
-		else if (this->counter <= 3.0f && !countdownSound){
+		} else if (this->counter <= 3.0f && !countdownSound){
 			//TODO play sound once
 			float dummyLocation[3] = { 0, 0, 0 };
 			this->game->getEngineInstance()->sendEvent(new SoundEvent(static_cast<int>(Sounds::COUNTDOWN), true, false, dummyLocation));
 			countdownSound = true;
 		}
+
 		break;
 	}
 	case Game:
@@ -161,9 +163,11 @@ void GameState::setState(State state) {
 			this->world->insert( powerup );
 		}
 
+		this->countdownFlag = true;
 		obj = this->objectCtors->invoke(ObjectTypes::UI);
 		world->allocateHandle(obj, HandleType::GLOBAL);
 		world->insert(obj);
+		
 
 		// tell each player to create a MovingObject they manage
 
@@ -194,6 +198,7 @@ void GameState::setState(State state) {
 		break;
 	}
 	case (Game) :
+		this->countdownFlag = false;
 		for (auto it = players.begin(); it != players.end(); ++it) {
 			PlayerMovingObject* m = dynamic_cast<PlayerMovingObject*>(theWorld.get((*it)->getMovingObject()));
 			if (m != nullptr) {
@@ -280,6 +285,9 @@ PlayerDelegate * GameState::addPlayer(unsigned int playerGuid) {
 	return player;
 }
 
+bool GameState::getCountdownFlag() {
+	return this->countdownFlag;
+}
 
 void GameState::reserveSize(IReserve& buffer) const {
 	BaseObject::reserveSize(buffer);

@@ -10,10 +10,11 @@ RenderableUI::RenderableUI(UIData::Objects *objectData)
 	this->objectData = objectData;
 
 	RenderableGame *game = RenderableGame::getGlobalInstance();
+	this->gamestate = game->getGameManager()->getGameState();
 	this->engine = game->getRenderingEngineInstance();
-	this->players = game->getGameManager()->getPlayers();
-	this->deathboard = game->getGameManager()->getGameState()->getDeathboard();
-	this->playerGuid = game->getRenderingEngineInstance()->getLocalPlayerGuid(0);
+	this->playerGuid = this->engine->getLocalPlayerGuid(0);
+	this->players = this->gamestate->getPlayers();
+	this->deathboard = this->gamestate->getDeathboard();
 }
 
 RenderableUI::~RenderableUI() {}
@@ -27,7 +28,7 @@ void RenderableUI::render() {
 	RenderableStaticObject *playerObject;
 	bool itsMe = false;
 	int i;
-	
+
 	for (it = this->deathboard.begin(), i = 0; it != end; ++it, ++i) {
 		float x = 0, y = 0;
 		int selection = this->players[it->playerIndex]->getSelection();
@@ -57,5 +58,7 @@ void RenderableUI::render() {
 			this->objectData->deadObject->render();
 		}
 	}
-
+	// 0 == go, 1 == 1, etc. Just wanted to see it, since all my attempts at calling it failed.
+	if (this->gamestate->getCountdownFlag())
+		this->objectData->countdownObjects[0]->render();
 };
