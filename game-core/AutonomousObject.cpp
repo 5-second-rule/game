@@ -14,7 +14,9 @@ AutonomousObject::AutonomousObject(ObjectTypes objectType, Game *owner) : Moving
 AutonomousObject::~AutonomousObject() {}
 
 void AutonomousObject::update(float dt){
-	this->applyForce(this->steering_behavior->calculate());
+	Common::Vector4 steerVec = this->steering_behavior->calculate();
+	this->applyForce(steerVec);
+	this->setHeading(steerVec);
 	MovingObject::update(dt);
 }
 
