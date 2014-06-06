@@ -212,10 +212,11 @@ void Player::handleEvent(ActionEvent *evt) {
 				->getWorld()
 				->get(this->data.movingObject)
 			);
-
-			const float ADRENALINE_FORCE = 500.0f;
-			Vector4 adrenalineForce = m->getHeading() * ADRENALINE_FORCE;
-			m->applyForce(adrenalineForce);
+			if (m != nullptr) {
+				const float ADRENALINE_FORCE = 500.0f;
+				Vector4 adrenalineForce = m->getHeading() * ADRENALINE_FORCE;
+				m->applyForce(adrenalineForce);
+			}
 		}
 		break;
 	default:

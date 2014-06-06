@@ -53,8 +53,8 @@ void GameState::update(float dt) {
 
 		for (size_t i = 0; i < this->players.size(); i++) {
 			playerObjs[i] = dynamic_cast<PlayerMovingObject*>(
-				this->world->get(this->players[i]->cameraTarget()));
-
+				this->world->get(this->players[i]->getMovingObject()));
+			
 
 			if (playerObjs[i] != nullptr) {
 				if (!this->players[i]->isDead() && playerObjs[i]->dead && this->players[i]->getDeathCount() < MAX_LIVES) {
@@ -63,8 +63,7 @@ void GameState::update(float dt) {
 					cout << "player #" << i << " has died" << endl;
 				} else if (this->players[i]->getDeathCount() >= MAX_LIVES) {
 					this->players[i]->die();
-					this->placeInDeathOrder(i);
-					//this->players[i]->despawnMoveableObject();
+					this->placeInDeathOrder(i;
 					this->players[i]->spawnDeathCamera();
 
 					this->world->remove( &this->players[i]->getMovingObject() );
