@@ -184,7 +184,6 @@ void AutonomousObjectManager::update(float dt){
 			}
 		}
 		else {
-			cout << "Removing Tube entity!";
 			this->players.remove(*it);
 			it = this->players.begin();
 		}
