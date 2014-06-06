@@ -7,5 +7,6 @@ enum class Sounds {
 	ACCEL,
 	COLLIDE,
 	POWERUP,
+	CLOCK,
 	COUNT
 };
