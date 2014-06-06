@@ -39,6 +39,13 @@ UIData::UIData() {
 		"resources/ui-number-9.dds"
 	};
 
+	char *countdownTextures[4] = {
+		"resources/countdown-go.dds",
+		"resources/countdown-1.dds",
+		"resources/countdown-2.dds",
+		"resources/countdown-3.dds"
+	};
+
 	char *boostTexture = "resources/boost.dds";
 
 	char *boostColorTextures[2] = {
@@ -102,6 +109,18 @@ UIData::UIData() {
 	this->calculateAdrenalineVertices(this->vertices, this->leftEdge);
 	this->adrenalineModel = engine->create2DModelFromScratch(vertices, 4, rectangleIndices, 6, "resources/ui-adrenaline.dds", textures, true);
 	this->objectData.adrenalineObject = new RenderableStaticObject(ObjectTypes::UI, adrenalineModel);
+
+	// Countdown images
+	for (int i = 0; i < 4; ++i) {
+		if (i == 0) {
+			this->calculateCountdownVertices(this->vertices, true);
+		}
+		else {
+			this->calculateCountdownVertices(this->vertices, false);
+		}
+		this->countdownModels[i] = engine->create2DModelFromScratch(vertices, 4, rectangleIndices, 6, countdownTextures[i], textures, true);
+		this->objectData.countdownObjects[i] = new RenderableStaticObject(ObjectTypes::UI, countdownModels[i]);
+	}
 
 	// winner images
 	this->calculateWinnerVertices(this->vertices);
@@ -328,6 +347,40 @@ void UIData::calculateAdrenalineVertices(Transmission::Vertex *vertices, float l
 	this->playerHeight = height;
 }
 
+void UIData::calculateCountdownVertices(Transmission::Vertex *vertices, bool isGo) {
+	float imgWidth, imgHeight, width, winRatio;
+	if (this->engine->getWindowWidth() == 0 || this->engine->getWindowHeight() == 0) {
+		winRatio = 800.0f / 600.0f;
+	}
+	else {
+		winRatio = 1.0f * this->engine->getWindowWidth() / this->engine->getWindowHeight();
+	}
+
+	if (isGo) {
+		imgWidth = 625;
+		imgHeight = 321;
+		width = 0.4f;
+	}
+	else {
+		imgWidth = 200;
+		imgHeight = 300;
+		width = 0.2f;
+	}
+
+	float h_w_ratio = imgHeight / imgWidth;
+	float height = width * h_w_ratio * winRatio;
+
+	float edgeT = 0.8f;
+	float edgeB = edgeT - height;
+
+	float edgeL = -width / 2.0f;
+	float edgeR = width / 2.0f;
+
+	vertices[0] = { { edgeL, edgeT, 0.0f }, { 0, 0 }, { 0, 0, -1 }, {} };
+	vertices[1] = { { edgeR, edgeT, 0.0f }, { 1, 0 }, { 0, 0, -1 }, {} };
+	vertices[2] = { { edgeR, edgeB, 0.0f }, { 1, 1 }, { 0, 0, -1 }, {} };
+	vertices[3] = { { edgeL, edgeB, 0.0f }, { 0, 1 }, { 0, 0, -1 }, {} };
+}
 
 void UIData::calculateWinnerVertices(Transmission::Vertex *vertices) {
 	vertices[0] = { { -1.0f, 1.0f, 0.0f }, { 0, 0 }, { 0, 0, -1 }, {} };

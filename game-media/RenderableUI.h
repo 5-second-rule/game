@@ -10,6 +10,7 @@ private:
 	UIData::Objects *objectData;
 	std::vector<DeathboardEntry> deathboard;
 	unsigned int playerGuid;
+	GameState *gamestate;
 
 public:
 	RenderableUI(UIData::Objects *objectData);
