@@ -52,6 +52,9 @@ public:
 	int getSelection();
 	bool isSelected();
 
+	// powerup
+	bool hasAdrenaline();
+
 	// ISerializable methods
 	virtual void reserveSize(IReserve& buffer) const;
 	virtual void fillBuffer(IFill& buffer) const;
