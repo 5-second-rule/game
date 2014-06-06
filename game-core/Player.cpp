@@ -220,7 +220,7 @@ void Player::handleEvent(ActionEvent *evt) {
 		}
 		break;
 	default:
-		MovingObject* m = dynamic_cast<MovingObject*>(
+		PlayerMovingObject* m = dynamic_cast<PlayerMovingObject*>(
 			Game::getGlobalInstance()
 			->getEngineInstance()
 			->getWorld()
