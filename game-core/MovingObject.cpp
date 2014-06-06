@@ -87,10 +87,6 @@ Vector4 MovingObject::getUp() {
 	return this->up;
 }
 
-Vector4 MovingObject::getHeading(){
-	return this->headingVector;
-}
-
 Vector4 MovingObject::getPosition(){
 	return position;
 }
@@ -167,14 +163,6 @@ void MovingObject::setTrackIndex(int position) {
 
 void MovingObject::setVelocity(const Vector4 &p_velocity){
 	this->velocity = p_velocity;
-}
-
-void MovingObject::setFollowTrack(bool state) {
-	this->followTrack = state;
-}
-
-void MovingObject::setHasPropulsion(bool state) {
-	this->hasPropulsion = state;
 }
 
 bool MovingObject::handleEvent(Event *evt){
@@ -279,10 +267,6 @@ void MovingObject::update(float dt){
 	Vector4 acceleration = this->force * (1 / this->mass);
 	this->velocity += acceleration*dt;
 	this->position += this->velocity * dt;
-
-	if (this->velocity.lengthSquared() > 0.000001){
-		this->headingVector = Vector4::normalize(this->velocity);
-	}
 
 	// reset propulsion
 	this->propulsion = 1.0f;
