@@ -9,6 +9,7 @@ Player::Player(unsigned int guid, GameState* state) {
 	this->data.guid = guid;
 	this->data.selected = false;
 	this->data.deathCount = 0;
+	this->data.hasAdrenaline = false;
 	this->gameState = state;
 	for (int i = 0; i < 4; i++) {
 		if (!this->gameState->isToonUsed(i)) {
@@ -65,6 +66,10 @@ Handle Player::getMovingObject() {
 
 Handle Player::getRotateCameraObject() {
 	return this->data.rotateCameraObject;
+}
+
+void Player::addPowerup() {
+	this->data.hasAdrenaline = true;
 }
 
 void Player::respawn() {
@@ -138,6 +143,10 @@ bool Player::isSelected() {
 	return this->data.selected;
 }
 
+bool Player::hasAdrenaline() {
+	return this->data.hasAdrenaline;
+}
+
 unsigned int Player::getGuid() {
 	return this->data.guid;
 }
@@ -193,6 +202,22 @@ void Player::handleEvent(ActionEvent *evt) {
 
 		break;
 	}
+	case ActionType::SHOOT:
+		if (this->data.hasAdrenaline) {
+			this->data.hasAdrenaline = false;
+
+			PlayerMovingObject* m = dynamic_cast<PlayerMovingObject*>(
+				Game::getGlobalInstance()
+				->getEngineInstance()
+				->getWorld()
+				->get(this->data.movingObject)
+			);
+
+			const float ADRENALINE_FORCE = 500.0f;
+			Vector4 adrenalineForce = m->getHeading() * ADRENALINE_FORCE;
+			m->applyForce(adrenalineForce);
+		}
+		break;
 	default:
 		MovingObject* m = dynamic_cast<MovingObject*>(
 			Game::getGlobalInstance()

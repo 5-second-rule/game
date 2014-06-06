@@ -72,6 +72,11 @@ void GameState::update(float dt) {
 					this->players[i]->update(dt);
 				}
 
+				if (playerObjs[i]->hasNewPowerup) {
+					this->players[i]->addPowerup();
+					playerObjs[i]->hasNewPowerup = false;
+				}
+
 				int trackIndex = playerObjs[i]->getTrackIndex();
 
 				if (smallestPos == -1 || smallestPos > trackIndex) {
@@ -155,7 +160,7 @@ void GameState::setState(State state) {
 		this->game->wallOfDeath->reset();
 		this->game->wallOfDeath->setLeaderboard(&this->leaderboard);
 
-		int numberOfPowerups = 12;
+		int numberOfPowerups = 20;
 		int range = this->game->getTrackPath()->nodes.size();
 
 		for( int i = 1; i < numberOfPowerups; i++ ) {

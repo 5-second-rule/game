@@ -22,6 +22,7 @@ private:
 
 		bool dead;
 		float respawnTimer;
+		bool hasAdrenaline;
 	};
 
 	GameState* gameState;
@@ -51,12 +52,17 @@ public:
 	int getDeathCount();
 
 	bool isDead();
+
+	void addPowerup();
 	
 	// selection
 	void updateSelection(int tempSelection);
 	
 	int getSelection();
 	bool isSelected();
+
+	// powerup
+	bool hasAdrenaline();
 
 	// ISerializable methods
 	virtual void reserveSize(IReserve& buffer) const;
