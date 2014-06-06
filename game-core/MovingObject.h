@@ -71,6 +71,7 @@ public:
 	Vector4 getForceRight();
 
 	void setPosition(const Vector4& position);
+	void setUp(const Vector4& up);
 
 	void setFollowTrack(bool state);
 	void setHasPropulsion(bool state);

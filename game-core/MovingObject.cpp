@@ -74,6 +74,10 @@ void MovingObject::setPosition(const Vector4& pos) {
 	this->position = pos;
 }
 
+void MovingObject::setUp(const Vector4& up) {
+	this->up = Vector4::normalize(up);
+}
+
 Vector4 MovingObject::getSideLeft() {
 	return this->sideLeft;
 }

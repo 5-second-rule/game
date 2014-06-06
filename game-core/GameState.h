@@ -13,6 +13,7 @@ public:
 	enum State { Load, Title, Selection, Countdown, Game, Score, None = -1 };
 
 protected:
+	bool countdownSound;
 	float counter;
 
 	static State gameState;

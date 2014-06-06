@@ -48,6 +48,13 @@ static SoundObject * makeClockSound( ConstructorTable<SoundObject> *thisObj ) {
 		table->soundIndices[static_cast<int>(Sounds::CLOCK)] ) ); 
 }
 
+static SoundObject * makeCountdownSound(ConstructorTable<SoundObject> *thisObj) {
+	SoundCtorTable *table = (SoundCtorTable *)thisObj;
+
+	return new SoundObject(RenderableGame::getGlobalInstance()->getRenderingEngineInstance()->createSoundFromIndex(
+		table->soundIndices[static_cast<int>(Sounds::COUNTDOWN)]));
+}
+
 void SoundCtorTable::initCtors()
 {
 	RenderingEngine *engine = RenderableGame::getGlobalInstance()->getRenderingEngineInstance();
@@ -58,8 +65,10 @@ void SoundCtorTable::initCtors()
 	this->soundIndices[static_cast<int>(Sounds::SHOOT)] = engine->loadSound( "resources/shoot.wav" );	
 	this->soundIndices[static_cast<int>(Sounds::COLLIDE)] = engine->loadSound( "resources/collide.wav" );	
 	this->soundIndices[static_cast<int>(Sounds::CLOCK)] = engine->loadSound("resources/clock.wav");	
+	this->soundIndices[static_cast<int>(Sounds::COUNTDOWN)] = engine->loadSound("resources/countdown.wav");
 	this->setConstructor( static_cast<int>(Sounds::SOUNDTRACK), makeSoundtrack );	
 	this->setConstructor( static_cast<int>(Sounds::SHOOT), makeShootSound );	
 	this->setConstructor( static_cast<int>(Sounds::COLLIDE), makeCollideSound );	
 	this->setConstructor(static_cast<int>(Sounds::CLOCK), makeClockSound);
+	this->setConstructor(static_cast<int>(Sounds::COUNTDOWN), makeCountdownSound);
 }

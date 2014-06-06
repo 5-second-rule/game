@@ -15,8 +15,7 @@ GameState::GameState( ::Game* game ) : BaseObject( ObjectTypes::State ) {
 	}
 }
 
-GameState::~GameState() {
-}
+GameState::~GameState() {}
 
 void GameState::update(float dt) {
 	switch (this->getState()) {
@@ -37,17 +36,11 @@ void GameState::update(float dt) {
 		if (this->counter <= 0.0f) {
 			this->setState(Game);
 		}
-		else if (this->counter <= 1.0f){
-			//TODO draw 1
-		}
-		else if (this->counter <= 2.0f) {
-			//TODO draw 2
-		}
-		else if (this->counter <= 3.0f) {
-			//TODO draw 3
-		}
-		else {
-			// No draw.
+		else if (this->counter <= 3.0f && !countdownSound){
+			//TODO play sound once
+			float dummyLocation[3] = { 0, 0, 0 };
+			this->game->getEngineInstance()->sendEvent(new SoundEvent(static_cast<int>(Sounds::COUNTDOWN), true, false, dummyLocation));
+			countdownSound = true;
 		}
 		break;
 	}
@@ -165,14 +158,30 @@ void GameState::setState(State state) {
 		}
 
 		// tell each player to create a MovingObject they manage
-		for (auto it = players.begin(); it != players.end(); ++it) {
-			(*it)->spawnMoveableObject();
-			(*it)->spawnRotateCameraObject();
+
+		Vector4 positions[4] = {
+			Point(1.0f, 0.01f, 0.01f) * 30,
+			Point(0.01f, 1.0f, 0.01f) * 30,
+			Point(-1.0f, 0.01f, 0.01f) * 30,
+			Point(0.01f, -1.0f, 0.01f) * 30
+		};
+
+		for (size_t i = 0; i < players.size(); ++i) {
+			players[i]->spawnMoveableObject();
+
+			MovingObject* m = dynamic_cast<MovingObject*>(theWorld.get(players[i]->getMovingObject()));
+			if (m != nullptr) {
+				m->setPosition(positions[i]);
+				m->setUp(positions[i]);
+			}
+
+			players[i]->spawnRotateCameraObject();
 		}
 
 		float dummyLocation[3] = { 0, 0, 0 };
 		this->game->getEngineInstance()->sendEvent(new SoundEvent(static_cast<int>(Sounds::SOUNDTRACK), true, false, dummyLocation));
 
+		this->countdownSound = true;
 		this->counter = 5.0f;
 		break;
 	}
