@@ -44,31 +44,31 @@ UIData::UIData() {
 	lastEdge = this->calculatePlayerVertices(this->vertices);
 	for (int i = 0; i < MAX_PLAYERS; ++i) {
 		this->playerModels[i] = engine->create2DModelFromScratch(vertices, 4, rectangleIndices, 6, playerTextures[i], textures, true);
-		this->objectData.playerObjects[i] = new RenderableMovingObject(ObjectTypes::UI, playerModels[i]);
+		this->objectData.playerObjects[i] = new RenderableStaticObject(ObjectTypes::UI, playerModels[i]);
 	}
 
 	// glow toon images
 	for (int i = 0; i < MAX_PLAYERS; ++i) {
 		this->glowPlayerModels[i] = engine->create2DModelFromScratch(vertices, 4, rectangleIndices, 6, glowPlayerTextures[i], textures, true);
-		this->objectData.glowPlayerObjects[i] = new RenderableMovingObject(ObjectTypes::UI, glowPlayerModels[i]);
+		this->objectData.glowPlayerObjects[i] = new RenderableStaticObject(ObjectTypes::UI, glowPlayerModels[i]);
 	}
 
 	// x image
 	lastEdge = this->calculateXVertices(this->vertices, lastEdge);
 	this->xModel = engine->create2DModelFromScratch(vertices, 4, rectangleIndices, 6, "resources/ui-x.dds", textures, true);
-	this->objectData.xObject = new RenderableMovingObject(ObjectTypes::UI, xModel);
+	this->objectData.xObject = new RenderableStaticObject(ObjectTypes::UI, xModel);
 
 	// number images
 	lastEdge = this->calculateNumberVertices(this->vertices, lastEdge);
 	for (int i = 0; i < 10; ++i) {
 		this->numberModels[i] = engine->create2DModelFromScratch(vertices, 4, rectangleIndices, 6, numberTextures[i], textures, true);
-		this->objectData.numberObjects[i] = new RenderableMovingObject(ObjectTypes::UI, numberModels[i]);
+		this->objectData.numberObjects[i] = new RenderableStaticObject(ObjectTypes::UI, numberModels[i]);
 	}
 
 	// dead image
 	this->calculateDeadVertices(this->vertices, lastEdge);
 	this->deadModel = engine->create2DModelFromScratch(vertices, 4, rectangleIndices, 6, "resources/ui-dead.dds", textures, true);
-	this->objectData.deadObject = new RenderableMovingObject(ObjectTypes::UI, deadModel);
+	this->objectData.deadObject = new RenderableStaticObject(ObjectTypes::UI, deadModel);
 
 }
 
