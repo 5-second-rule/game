@@ -247,6 +247,8 @@ void UIData::calculateAdrenalineVertices(Transmission::Vertex *vertices) {
 	vertices[3] = { { edgeL, edgeB, 0.0f }, { 0, 1 }, { 0, 0, -1 }, {} };
 
 	this->playerHeight = height;
+}
+
 void UIData::calculateCountdownVertices(Transmission::Vertex *vertices, bool isGo) {
 	float imgWidth, imgHeight, width, winRatio;
 	if (this->engine->getWindowWidth() == 0 || this->engine->getWindowHeight() == 0) {
