@@ -65,6 +65,7 @@ PathNode TrackPath::interpolateNode(Vector4 realPosition, int closestIndex) {
 	PathNode finalNode;
 	finalNode.point.set(closestNode.point.x() + pV.x()*inc, closestNode.point.y() + pV.y()*inc, closestNode.point.z() + pV.z()*inc, 1.0f);
 	finalNode.normal = closestNode.normal;
+	finalNode.radius = closestNode.radius;
 
 	return finalNode;
 }
@@ -86,12 +87,13 @@ TrackPath * TrackPath::fromFile(char *file) {
 		if (input == 'v') {
 			fin.get(input);
 			if (input == ' ') {
-				float x, y, z;
-				fin >> x >> y >> z;
+				float x, y, z, r;
+				fin >> x >> y >> z >> r;
 
 				PathNode node;
 				node.point = Common::Vector4(x, y, z, 1.0f);
 				node.normal = Common::Vector4();
+				node.radius = r;
 				result->nodes.push_back(node);
 			}
 		}
