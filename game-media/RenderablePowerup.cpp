@@ -1,10 +1,14 @@
 #include "RenderablePowerup.h"
 
+#include "game-core\ObjectTypes.h"
 
 RenderablePowerup::RenderablePowerup(int type, Transmission::Model* model)
 	: Powerup(type)
 	, RenderableObject(model)
 {
+	if (type == ObjectTypes::Adrenaline && model != nullptr) {
+		this->getMoveable()->setScale(4);
+	}
 }
 
 RenderablePowerup::~RenderablePowerup()

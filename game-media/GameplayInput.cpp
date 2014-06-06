@@ -132,7 +132,7 @@ std::vector<Event *>  GameplayInput::inputTranslator(InputAdapter *inputAdapter)
 	}
 
 	//if (dir.x != 0 || dir.y != 0 || dir.z != 0 || dir.w != 0) {
-	inputEventVector.emplace_back( new MoveEvent( this->renderingEngine->getLocalPlayerGuid( 0 ), dir ) );
+	inputEventVector.push_back( new MoveEvent(this->renderingEngine->getLocalPlayerGuid(0), dir));
 	//}
 	return inputEventVector;
 }

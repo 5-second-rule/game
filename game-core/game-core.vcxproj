@@ -83,6 +83,7 @@
     <ClInclude Include="AutonomousObject.h" />
     <ClInclude Include="BehaviorType.h" />
     <ClInclude Include="Deathboard.h" />
+    <ClInclude Include="DeathCamera.h" />
     <ClInclude Include="game-core.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObjectCtorTable.h" />
@@ -110,6 +111,7 @@
     <ClCompile Include="AIPath.cpp" />
     <ClCompile Include="AutonomousObject.cpp" />
     <ClCompile Include="AutonomousObjectManager.cpp" />
+    <ClCompile Include="DeathCamera.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObjectCtorTable.cpp" />
     <ClCompile Include="GameState.cpp" />

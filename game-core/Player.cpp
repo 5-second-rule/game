@@ -1,6 +1,7 @@
 #include "Player.h"
 
 #include "GameState.h"
+#include "DeathCamera.h"
 
 Player::Player(GameState* state) : Player(-1, state) {}
 
@@ -8,6 +9,7 @@ Player::Player(unsigned int guid, GameState* state) {
 	this->data.guid = guid;
 	this->data.selected = false;
 	this->data.deathCount = 0;
+	this->data.hasAdrenaline = false;
 	this->gameState = state;
 	for (int i = 0; i < 4; i++) {
 		if (!this->gameState->isToonUsed(i)) {
@@ -15,6 +17,8 @@ Player::Player(unsigned int guid, GameState* state) {
 			break;
 		}
 	}
+
+	this->data.dead = false;
 }
 
 Player::~Player() {
@@ -46,6 +50,16 @@ void Player::spawnRotateCameraObject() {
 	this->data.rotateCameraObject = c->getHandle();
 }
 
+void Player::spawnDeathCamera() {
+	DeathCamera* c = new DeathCamera(this->gameState->getHandle());
+
+	World* w = Game::getGlobalInstance()->getEngineInstance()->getWorld();
+	w->allocateHandle(c, HandleType::GLOBAL);
+	w->insert(c);
+
+	this->data.deathCamera = c->getHandle();
+}
+
 Handle Player::getMovingObject() {
 	return this->data.movingObject;
 }
@@ -54,9 +68,8 @@ Handle Player::getRotateCameraObject() {
 	return this->data.rotateCameraObject;
 }
 
-bool Player::isReallyReallyDead()
-{
-	return this->data.deathCount >= 5;
+void Player::addPowerup() {
+	this->data.hasAdrenaline = true;
 }
 
 void Player::respawn() {
@@ -72,19 +85,42 @@ void Player::respawn() {
 
 	int newTrackIndex = ((leaderIndex + wwodPosition) / 2) % trackSize;
 
-	MovingObject* m = dynamic_cast<MovingObject*>(
+	PlayerMovingObject* m = dynamic_cast<PlayerMovingObject*>(
 		Game::getGlobalInstance()
 		->getEngineInstance()
 		->getWorld()
 		->get(this->data.movingObject)
 		);
 
+	m->dead = false;
+
 	m->setPosition(track->nodes[newTrackIndex].point);
 	m->setTrackIndex(newTrackIndex);
+
+	m->setFollowTrack(true);
+	m->setHasPropulsion(true);
 }
 
 void Player::die() {
 	this->data.deathCount++;
+	this->data.dead = true;
+	this->data.respawnTimer = 0.0f;
+
+	MovingObject* m = dynamic_cast<MovingObject*>(theWorld.get(this->data.movingObject));
+	if (m != nullptr) {
+		m->setHasPropulsion(false);
+		m->setFollowTrack(false);
+	}
+}
+
+void Player::update(float dt) {
+	if (this->data.dead) {
+		this->data.respawnTimer += dt;
+		if (this->data.respawnTimer >= 5.0f) {
+			this->data.dead = false;
+			this->respawn();
+		}
+	}
 }
 
 void Player::updateSelection(int tempSelection) {
@@ -95,12 +131,20 @@ int Player::getDeathCount() {
 	return this->data.deathCount;
 }
 
+bool Player::isDead() {
+	return this->data.dead;
+}
+
 int Player::getSelection() {
 	return this->data.selection;
 }
 
 bool Player::isSelected() {
 	return this->data.selected;
+}
+
+bool Player::hasAdrenaline() {
+	return this->data.hasAdrenaline;
 }
 
 unsigned int Player::getGuid() {
@@ -158,8 +202,25 @@ void Player::handleEvent(ActionEvent *evt) {
 
 		break;
 	}
+	case ActionType::SHOOT:
+		if (this->data.hasAdrenaline) {
+			this->data.hasAdrenaline = false;
+
+			PlayerMovingObject* m = dynamic_cast<PlayerMovingObject*>(
+				Game::getGlobalInstance()
+				->getEngineInstance()
+				->getWorld()
+				->get(this->data.movingObject)
+			);
+			if (m != nullptr) {
+				const float ADRENALINE_FORCE = 500.0f;
+				Vector4 adrenalineForce = m->getHeading() * ADRENALINE_FORCE;
+				m->applyForce(adrenalineForce);
+			}
+		}
+		break;
 	default:
-		MovingObject* m = dynamic_cast<MovingObject*>(
+		PlayerMovingObject* m = dynamic_cast<PlayerMovingObject*>(
 			Game::getGlobalInstance()
 			->getEngineInstance()
 			->getWorld()
@@ -172,7 +233,10 @@ void Player::handleEvent(ActionEvent *evt) {
 }
 
 Handle Player::cameraTarget() {
-	if (this->gameState->getState() == GameState::Countdown)
+	if (this->data.deathCount >= MAX_LIVES)
+		return this->data.deathCamera;
+
+	else if (this->gameState->getState() == GameState::Countdown)
 		return this->data.rotateCameraObject;
 		
 	else if(this->gameState->getState() == GameState::Game)

@@ -18,7 +18,8 @@ enum GAMECOREDLL ObjectTypes
 	Wwod,
 	Adrenaline,
 	AIManager,
-	RotateCamera
+	RotateCamera,
+	DeathCam
 };
 
 enum class GAMECOREDLL CollisionPriorities {

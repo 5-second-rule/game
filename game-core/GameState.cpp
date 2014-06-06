@@ -53,26 +53,31 @@ void GameState::update(float dt) {
 
 		for (size_t i = 0; i < this->players.size(); i++) {
 			playerObjs[i] = dynamic_cast<PlayerMovingObject*>(
-				this->world->get(this->players[i]->cameraTarget()));
-
-			if( playerObjs[i] != nullptr )
-			{
+				this->world->get(this->players[i]->getMovingObject()));
 
 
-				if( playerObjs[i]->dead && this->players[i]->getDeathCount() < MAX_LIVES )
-				{
-					playerObjs[i]->dead = false;
+			if (playerObjs[i] != nullptr) {
+				if (!this->players[i]->isDead() && playerObjs[i]->dead && this->players[i]->getDeathCount() < MAX_LIVES) {
 					this->players[i]->die();
-					this->players[i]->respawn();
-
+					
 					cout << "player #" << i << " has died" << endl;
 				}
 				else if( this->players[i]->getDeathCount() >= MAX_LIVES )
 				{
 					this->players[i]->die();
-					//this->players[i]->despawnMoveableObject();
-					//this->world->remove( &this->players[i]->getMovingObject() );
+					this->placeInDeathOrder(i);
+					this->players[i]->spawnDeathCamera();
+
+					this->world->remove( &this->players[i]->getMovingObject() );
 					cout << "player #" << i << " is out of the game" << endl;
+				}
+				else {
+					this->players[i]->update(dt);
+				}
+
+				if (playerObjs[i]->hasNewPowerup) {
+					this->players[i]->addPowerup();
+					playerObjs[i]->hasNewPowerup = false;
 				}
 
 				int trackIndex = playerObjs[i]->getTrackIndex();
@@ -81,15 +86,15 @@ void GameState::update(float dt) {
 				{
 					if( smallestPos == -1 || smallestPos > trackIndex )
 					{
-						smallestPos = trackIndex;
-					}
+					smallestPos = trackIndex;
+				}
 
 					if( largestPos == -1 || largestPos < trackIndex )
 					{
-						largestPos = trackIndex;
-					}
+					largestPos = trackIndex;
 				}
 			}
+		}
 		}
 
 		bool midLapRollover = static_cast<size_t>(largestPos - smallestPos) > (track->nodes.size() / 2);
@@ -163,7 +168,7 @@ void GameState::setState(State state) {
 		this->game->wallOfDeath->reset();
 		this->game->wallOfDeath->setLeaderboard(&this->leaderboard);
 
-		int numberOfPowerups = 12;
+		int numberOfPowerups = 20;
 		int range = this->game->getTrackPath()->nodes.size();
 
 		for( int i = 1; i < numberOfPowerups; i++ ) {
@@ -286,7 +291,7 @@ PlayerDelegate * GameState::addPlayer(unsigned int playerGuid) {
 	default: break;
 	}
 
-	this->deathboard.push_back({ numPlayers, 0 });
+	this->deathboard.push_back({ numPlayers, 0, -1, false });
 	this->leaderboard.push_back({ numPlayers, 0 });
 	this->players.push_back(player);
 
@@ -392,7 +397,31 @@ void GameState::sortDeathboard() {
 				DeathboardEntry tmp = deathboard[i];
 				deathboard[i] = deathboard[j];
 				deathboard[j] = tmp;
+			} else if (deathboard[j].deathOrder > -1 && deathboard[j].deathOrder > deathboard[i].deathOrder) {
+				DeathboardEntry tmp = deathboard[i];
+				deathboard[i] = deathboard[j];
+				deathboard[j] = tmp;
 			}
+		}
+	}
+
+	if (this->players.size() > 1 && deathboard[1].deathOrder >= 0) {
+		deathboard[0].winner = true;
+			}
+		}
+
+void GameState::placeInDeathOrder(int player) {
+	int lastDeath = -1;
+	for (size_t i = 0; i < this->players.size(); i++) {
+		if (deathboard[i].deathOrder > lastDeath) {
+			lastDeath = deathboard[i].deathOrder;
+		}
+	}
+
+	for (size_t i = 0; i < this->players.size(); i++) {
+		if (deathboard[i].playerIndex == player) {
+			deathboard[deathboard[i].playerIndex].deathOrder = lastDeath + 1;
+			return;
 		}
 	}
 }

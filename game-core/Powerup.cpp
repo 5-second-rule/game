@@ -66,6 +66,8 @@ void Powerup::fillBuffer(IFill& buffer) const {
 
 	data->trackIndex = this->trackIndex;
 
+	data->timeToLive = this->timeToLiveAgain;
+
 	buffer.filled();
 }
 
@@ -77,6 +79,8 @@ void Powerup::deserialize(BufferReader& reader) {
 	this->position = Common::Point(data->position[0], data->position[1], data->position[2]);
 	this->rotation = Common::Point(data->rotation[0], data->rotation[1], data->rotation[2]);
 	this->trackIndex = data->trackIndex;
+
+	this->timeToLiveAgain = data->timeToLive;
 
 	reader.finished(sizeof(PowerupData));
 }
@@ -115,7 +119,7 @@ std::shared_ptr<const Bounds> Powerup::getBounds() const {
 	assert(bounds->type == BoundsType::Sphere);
 	bounds->position = this->position;
 	bounds->velocity = Vector4();
-	bounds->radius = 5.0f;
+	bounds->radius = 10.0f;
 	bounds->mass = 0.0f;
 
 	return shared_ptr<const Bounds>(bounds);
