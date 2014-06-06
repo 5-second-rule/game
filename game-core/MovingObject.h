@@ -102,8 +102,8 @@ public:
 
 	// ICollidable Methods
 	Common::Vector4 getGroupingParameter() const;
-	bool collidesWith(const ICollidable*) const;
+	virtual bool collidesWith(const ICollidable*) const;
 	virtual void handleCollision(std::shared_ptr<const Bounds>, float dt, int metadata);
 	std::shared_ptr<const Bounds> getBounds() const;
-	unsigned int getPriority() const;
+	virtual unsigned int getPriority() const;
 };

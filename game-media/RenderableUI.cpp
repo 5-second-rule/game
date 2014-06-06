@@ -88,7 +88,10 @@ void RenderableUI::render() {
 		if (this->engine->getLocalPlayerGuid(0) == playerVec[i]->getGuid())
 		{
 			PlayerMovingObject* playObj = dynamic_cast<PlayerMovingObject*> (theWorld.get(playerVec[i]->getMovingObject()));
-			boostVal = playObj->getBoostCount();
+			if( playObj != nullptr )
+			{
+				boostVal = playObj->getBoostCount();
+			}
 		}
 	}
 

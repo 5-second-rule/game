@@ -24,5 +24,6 @@ enum GAMECOREDLL ObjectTypes
 
 enum class GAMECOREDLL CollisionPriorities {
 	Track,
+	Player,
 	Object
 };

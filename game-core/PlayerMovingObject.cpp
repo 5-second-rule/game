@@ -186,6 +186,21 @@ bool PlayerMovingObject::handleEvent(Event *evt){
 }
 
 
+bool PlayerMovingObject::collidesWith( const ICollidable* target ) const
+{
+	if( this->dead )
+	{
+		return false;
+	}
+
+	return MovingObject::collidesWith( target );
+}
+
+unsigned int PlayerMovingObject::getPriority() const
+{
+	return static_cast<unsigned int>(CollisionPriorities::Player);
+}
+
 void PlayerMovingObject::reserveSize(IReserve& buffer) const {
 	MovingObject::reserveSize(buffer);
 	buffer.reserve(sizeof(PlayerMovingObjectData));

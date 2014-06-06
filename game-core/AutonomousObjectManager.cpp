@@ -73,7 +73,7 @@ void AutonomousObjectManager::update(float dt){
 	vector<Handle> players = this->gameState->getPlayersHandle();
 	for (vector<Handle>::iterator it = players.begin(); it != players.end(); ++it){
 		MovingObject *mObj = dynamic_cast<MovingObject*>(theWorld.get(*it));
-		if (mObj != nullptr && find(this->players.begin(), this->players.end(), *it) == this->players.end()){
+		if (mObj != nullptr && !mObj->getHandle().gc && find(this->players.begin(), this->players.end(), *it) == this->players.end()){
 			AutonomousGroup group(*it);
 			for (int i = 0; i < WHITE_PER_PLAYER; ++i){
 				AutonomousObject *aObj = new AutonomousObject(ObjectTypes::WhiteBlood);
