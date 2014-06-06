@@ -6,6 +6,8 @@
 #include "MoveEvent.h"
 #include "ObjectTypes.h"
 
+#include "engine-core/ConfigSettings.h"
+
 #ifdef _DEBUG
 #ifndef DBG_NEW
 #define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
@@ -18,6 +20,8 @@ Game * Game::globalInstance;
 Game::Game() {
 	this->initialized = false;
 	this->engineInstance = nullptr;
+	ConfigSettings::config.getValueOrDefault("tube_radius", this->tubeRadius, 100.0f);
+	this->tubeRadiusSq = this->tubeRadius * this->tubeRadius;
 }
 
 Game::~Game() {
@@ -47,8 +51,8 @@ void Game::init() {
 }
 
 void Game::stop() {
-	if( !this->initialized ) {
-		throw std::runtime_error( "Need to call init() first." );
+	if (!this->initialized) {
+		throw std::runtime_error("Need to call init() first.");
 	}
 
 	this->engineInstance->stop();

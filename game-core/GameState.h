@@ -37,6 +37,7 @@ public:
 
 	void setState(State state);
 	int getState();
+	std::vector<Handle> getPlayersHandle();
 	bool isToonUsed(int toon);
 	void useToon(int toon);
 	void unuseToon(int toon);

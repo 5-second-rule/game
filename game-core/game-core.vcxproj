@@ -77,6 +77,7 @@
   <ItemGroup>
     <ClInclude Include="ActionEventCtorTable.h" />
     <ClInclude Include="ActionType.h" />
+    <ClInclude Include="AutonomousObjectManager.h" />
     <ClInclude Include="CollisionMetadata.h" />
     <ClInclude Include="AIPath.h" />
     <ClInclude Include="AutonomousObject.h" />
@@ -106,6 +107,7 @@
     <ClCompile Include="ActionEventCtorTable.cpp" />
     <ClCompile Include="AIPath.cpp" />
     <ClCompile Include="AutonomousObject.cpp" />
+    <ClCompile Include="AutonomousObjectManager.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObjectCtorTable.cpp" />
     <ClCompile Include="GameState.cpp" />
@@ -124,6 +126,8 @@
     <ClCompile Include="WallOfDeath.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="resources\Config.ini" />
+    <None Include="resources\ConfigTemplate.ini" />
     <None Include="resources\track.path" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
