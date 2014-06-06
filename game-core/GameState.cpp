@@ -55,28 +55,39 @@ void GameState::update(float dt) {
 			playerObjs[i] = dynamic_cast<PlayerMovingObject*>(
 				this->world->get(this->players[i]->cameraTarget()));
 
-			if (playerObjs[i] != nullptr) {
-				if (playerObjs[i]->dead && this->players[i]->getDeathCount() < MAX_LIVES) {
+			if( playerObjs[i] != nullptr )
+			{
+
+
+				if( playerObjs[i]->dead && this->players[i]->getDeathCount() < MAX_LIVES )
+				{
 					playerObjs[i]->dead = false;
 					this->players[i]->die();
 					this->players[i]->respawn();
-					
+
 					cout << "player #" << i << " has died" << endl;
-				} else if (this->players[i]->getDeathCount() >= MAX_LIVES) {
+				}
+				else if( this->players[i]->getDeathCount() >= MAX_LIVES )
+				{
 					this->players[i]->die();
 					//this->players[i]->despawnMoveableObject();
-					this->world->remove( &this->players[i]->getMovingObject() );
+					//this->world->remove( &this->players[i]->getMovingObject() );
 					cout << "player #" << i << " is out of the game" << endl;
 				}
 
 				int trackIndex = playerObjs[i]->getTrackIndex();
 
-				if (smallestPos == -1 || smallestPos > trackIndex) {
-					smallestPos = trackIndex;
-				}
+				if( !playerObjs[i]->dead )
+				{
+					if( smallestPos == -1 || smallestPos > trackIndex )
+					{
+						smallestPos = trackIndex;
+					}
 
-				if (largestPos == -1 || largestPos < trackIndex) {
-					largestPos = trackIndex;
+					if( largestPos == -1 || largestPos < trackIndex )
+					{
+						largestPos = trackIndex;
+					}
 				}
 			}
 		}
@@ -86,7 +97,7 @@ void GameState::update(float dt) {
 		
 		int positions[4];
 		for (size_t i = 0; i < this->players.size(); i++) {
-			if (playerObjs[i] != nullptr) {
+			if (playerObjs[i] != nullptr && !playerObjs[i]->dead) {
 				positions[i] = playerObjs[i]->getTrackIndex();
 				if (midLapRollover && positions[i] < dividingLine) {
 					positions[i] += track->nodes.size();

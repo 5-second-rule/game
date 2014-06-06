@@ -57,5 +57,7 @@ public:
 	// PlayerDelegate methods
 	void handleEvent(ActionEvent* evt);
 	Handle cameraTarget();
+
+	bool isReallyReallyDead();
 };
 

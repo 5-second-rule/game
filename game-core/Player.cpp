@@ -54,6 +54,11 @@ Handle Player::getRotateCameraObject() {
 	return this->data.rotateCameraObject;
 }
 
+bool Player::isReallyReallyDead()
+{
+	return this->data.deathCount >= 5;
+}
+
 void Player::respawn() {
 	int wwodPosition = Game::getGlobalInstance()->getWallOfDeath()->getTrackIndex();
 	int leaderIndex = this->gameState->getLeaderboard()[0].playerPosition;
