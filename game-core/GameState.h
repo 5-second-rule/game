@@ -61,6 +61,7 @@ public:
 	std::vector<LeaderboardEntry> getLeaderboard();
 	std::vector<DeathboardEntry> getDeathboard();
 	void sortDeathboard();
+	void placeInDeathOrder(int i);
 	bool destroySelectionScreen();
 	
 	// ISerialize Methods
