@@ -1,5 +1,6 @@
 #pragma once
 #include "RenderableMovingObject.h"
+#include "RenderablePlayerMovingObject.h"
 #include "RenderableStaticObject.h"
 #include "renderer/Model.h"
 
@@ -16,7 +17,7 @@ public:
 		RenderableStaticObject *otherPlayerNameObjects[16];
 		RenderableStaticObject *myPlayerNameObjects[16];
 		RenderableStaticObject *checkMarkObjects[4];
-		RenderableMovingObject *playerObjects[4];
+		RenderablePlayerMovingObject *playerObjects[4];
 	};
 private:
 	Objects objectData;
@@ -45,7 +46,7 @@ private:
 	float calculatePlayerBackgroundVertices(Transmission::Vertex *vertices, int playerIndex, float margin);
 
 public:
-	SelectionScreenData(RenderableMovingObject *(&playerObjects)[4]);
+	SelectionScreenData(RenderablePlayerMovingObject *(&playerObjects)[4]);
 	~SelectionScreenData();
 	Objects *getData();
 };

@@ -80,6 +80,7 @@
     <ClInclude Include="INotifyReady.h" />
     <ClInclude Include="RenderableGame.h" />
     <ClInclude Include="RenderableGameObjectCtorTable.h" />
+    <ClInclude Include="RenderablePlayerMovingObject.h" />
     <ClInclude Include="RenderableUI.h" />
     <ClInclude Include="SelectionScreenInput.h" />
     <ClInclude Include="RenderableMovingObject.h" />
@@ -98,6 +99,7 @@
     <ClCompile Include="GameplayInput.cpp" />
     <ClCompile Include="RenderableGame.cpp" />
     <ClCompile Include="RenderableGameObjectCtorTable.cpp" />
+    <ClCompile Include="RenderablePlayerMovingObject.cpp" />
     <ClCompile Include="RenderableUI.cpp" />
     <ClCompile Include="SelectionScreenInput.cpp" />
     <ClCompile Include="RenderableMovingObject.cpp" />

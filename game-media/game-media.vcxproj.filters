@@ -69,6 +69,9 @@
     <ClInclude Include="RenderableUI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="RenderablePlayerMovingObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RenderableGameObjectCtorTable.cpp">
@@ -117,6 +120,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="RenderableUI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderablePlayerMovingObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -2,6 +2,7 @@
 #include "game-core/ObjectTypes.h"
 
 #include "RenderableMovingObject.h"
+#include "RenderablePlayerMovingObject.h"
 #include "RenderableStaticObject.h"
 #include "RenderableWallOfDeath.h"
 #include "RenderablePowerup.h"
@@ -30,7 +31,7 @@ RenderableGameObjectCtorTable::~RenderableGameObjectCtorTable() {}
 static BaseObject * makeRenderableEcoli( ConstructorTable<BaseObject> *thisObj ) {
 	RenderableGameObjectCtorTable *table = (RenderableGameObjectCtorTable *)thisObj;
 
-	return new RenderableMovingObject(
+	return new RenderablePlayerMovingObject(
 		ObjectTypes::Ecoli,
 		RenderableGame::getGlobalInstance()
 		->getRenderingEngineInstance()
@@ -45,7 +46,7 @@ static BaseObject * makeRenderableEcoli( ConstructorTable<BaseObject> *thisObj )
 static BaseObject * makeRenderableChickenPox( ConstructorTable<BaseObject> *thisObj ) {
 	RenderableGameObjectCtorTable *table = (RenderableGameObjectCtorTable *)thisObj;
 
-	return new RenderableMovingObject(
+	return new RenderablePlayerMovingObject(
 		ObjectTypes::ChickenPox,
 		RenderableGame::getGlobalInstance()
 		->getRenderingEngineInstance()
@@ -60,7 +61,7 @@ static BaseObject * makeRenderableChickenPox( ConstructorTable<BaseObject> *this
 static BaseObject * makeRenderableSyphillis( ConstructorTable<BaseObject> *thisObj ) {
 	RenderableGameObjectCtorTable *table = (RenderableGameObjectCtorTable *)thisObj;
 
-	return new RenderableMovingObject(
+	return new RenderablePlayerMovingObject(
 		ObjectTypes::Syphillis,
 		RenderableGame::getGlobalInstance()
 		->getRenderingEngineInstance()
@@ -75,7 +76,7 @@ static BaseObject * makeRenderableSyphillis( ConstructorTable<BaseObject> *thisO
 static BaseObject * makeRenderableMalaria( ConstructorTable<BaseObject> *thisObj ) {
 	RenderableGameObjectCtorTable *table = (RenderableGameObjectCtorTable *)thisObj;
 
-	return new RenderableMovingObject(
+	return new RenderablePlayerMovingObject(
 		ObjectTypes::Malaria,
 		RenderableGame::getGlobalInstance()
 		->getRenderingEngineInstance()
@@ -148,8 +149,8 @@ static BaseObject * makeRenderableSelectionScreen(ConstructorTable<BaseObject> *
 }
 
 void RenderableGameObjectCtorTable::prepSelectionScreenData() {
-	RenderableMovingObject *playerObjects[4] = {
-		new RenderableMovingObject(
+	RenderablePlayerMovingObject *playerObjects[4] = {
+		new RenderablePlayerMovingObject(
 		ObjectTypes::Ecoli,
 		RenderableGame::getGlobalInstance()
 		->getRenderingEngineInstance()
@@ -159,7 +160,7 @@ void RenderableGameObjectCtorTable::prepSelectionScreenData() {
 		this->vertexShaderIndexes[ObjectTypes::Ecoli],
 		this->pixelShaderIndexes[ObjectTypes::Ecoli])
 		),
-		new RenderableMovingObject(
+		new RenderablePlayerMovingObject(
 		ObjectTypes::ChickenPox,
 		RenderableGame::getGlobalInstance()
 		->getRenderingEngineInstance()
@@ -169,7 +170,7 @@ void RenderableGameObjectCtorTable::prepSelectionScreenData() {
 		this->vertexShaderIndexes[ObjectTypes::ChickenPox],
 		this->pixelShaderIndexes[ObjectTypes::ChickenPox])
 		),
-		new RenderableMovingObject(
+		new RenderablePlayerMovingObject(
 		ObjectTypes::Syphillis,
 		RenderableGame::getGlobalInstance()
 		->getRenderingEngineInstance()
@@ -179,7 +180,7 @@ void RenderableGameObjectCtorTable::prepSelectionScreenData() {
 		this->vertexShaderIndexes[ObjectTypes::Syphillis],
 		this->pixelShaderIndexes[ObjectTypes::Syphillis])
 		),
-		new RenderableMovingObject(
+		new RenderablePlayerMovingObject(
 		ObjectTypes::Malaria,
 		RenderableGame::getGlobalInstance()
 		->getRenderingEngineInstance()

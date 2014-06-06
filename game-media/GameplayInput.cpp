@@ -116,6 +116,21 @@ std::vector<Event *>  GameplayInput::inputTranslator(InputAdapter *inputAdapter)
 		RenderableGame::getGlobalInstance()->getRenderingEngineInstance()->changeLightness(0.005f);
 	}
 
+	if (inputAdapter->getKeyState(Transmission::Input::Key::B) == down) {
+		std::vector<Player*> playerVec;
+		playerVec = RenderableGame::getGlobalInstance()->getGameManager()->getPlayers();
+
+		//loop over that vector until you find one that matchines local guid 0
+		for (int i = 0; i < playerVec.size(); i++)
+		{
+			if (this->renderingEngine->getLocalPlayerGuid(0) == playerVec[i]->getGuid())
+			{
+				PlayerMovingObject* playObj = dynamic_cast<PlayerMovingObject*> (theWorld.get(playerVec[i]->getMovingObject()));
+				playObj->dead = true;
+			}
+		}
+	}
+
 	//if (dir.x != 0 || dir.y != 0 || dir.z != 0 || dir.w != 0) {
 	inputEventVector.emplace_back( new MoveEvent( this->renderingEngine->getLocalPlayerGuid( 0 ), dir ) );
 	//}
