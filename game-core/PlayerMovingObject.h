@@ -21,6 +21,8 @@ public:
 	bool underTwentyFive;
 	int releaseCount;
 
+	bool hasNewPowerup;
+
 	PlayerMovingObject(int objectType, Game* owner);
 	virtual ~PlayerMovingObject();
 

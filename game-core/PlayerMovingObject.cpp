@@ -13,6 +13,8 @@ PlayerMovingObject::PlayerMovingObject(int objectType, Game* owner)
 	this->boostCount = 100;
 	this->underTwentyFive = false;
 	this->releaseCount = 0;
+
+	this->hasNewPowerup = false;
 }
 
 
@@ -47,10 +49,7 @@ void PlayerMovingObject::handleCollision(std::shared_ptr<const Bounds> bounds, f
 			cout << ">>>>>>>>>>>> power up" << endl;
 		}
 
-		const float TRACK_FORCE = 3000.0f;
-		TrackPath *track = Game::getGlobalInstance()->getTrackPath();
-		Vector4 trackForce = track->nodes[this->trackIndex].normal * TRACK_FORCE;
-		this->applyForce(trackForce);
+		this->hasNewPowerup = true;
 	}
 }
 

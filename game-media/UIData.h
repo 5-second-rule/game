@@ -14,6 +14,8 @@ public:
 		RenderableStaticObject *boostObject;
 		RenderableStaticObject *boostMeterFullObject;
 		RenderableStaticObject *boostMeterEmptyObject;
+		RenderableStaticObject *adrenalineObject;
+		RenderableStaticObject *winnerObjects[4];
 	};
 private:
 	Objects objectData;
@@ -32,6 +34,8 @@ private:
 	Transmission::Model *boostModel;
 	Transmission::Model *boostMeterFullModel;
 	Transmission::Model *boostMeterEmptyModel;
+	Transmission::Model *adrenalineModel;
+	Transmission::Model *winnerModels[4];
 
 	Transmission::Vertex vertices[4];
 	std::vector<Transmission::Texture *>textures;
@@ -42,6 +46,8 @@ private:
 	void calculateDeadVertices(Transmission::Vertex *vertices, float lastEdge);
 	float calculateBoostVertices(Transmission::Vertex *vertices);
 	void calculateBoostTileVertices(Transmission::Vertex *vertices, float lastEdge);
+	void calculateAdrenalineVertices(Transmission::Vertex *vertices);
+	void calculateWinnerVertices(Transmission::Vertex *vertices);
 
 public:
 	UIData();

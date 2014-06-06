@@ -29,16 +29,25 @@ void RenderableUI::render() {
 	RenderableStaticObject *playerObject;
 	bool itsMe = false;
 	int i;
+
 	
 	for (it = this->deathboard.begin(), i = 0; it != end; ++it, ++i) {
 		float x = 0, y = 0;
 		int selection = this->players[it->playerIndex]->getSelection();
 		int numLives = MAX_LIVES - it->numDeaths;
+
+		if (it->winner) {
+			this->objectData->winnerObjects[selection]->render();
+			break;
+		}
 		
 		y -= i*0.22f;
 		if (this->players[it->playerIndex]->getGuid() == this->playerGuid) {
 			itsMe = true;
 			playerObject = this->objectData->glowPlayerObjects[selection];
+			if (this->players[it->playerIndex]->hasAdrenaline()) {
+				this->objectData->adrenalineObject->render();
+			}
 		} else {
 			itsMe = false;
 			playerObject = this->objectData->playerObjects[selection];

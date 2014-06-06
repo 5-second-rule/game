@@ -146,7 +146,9 @@ static BaseObject * makeRenderableAdrenaline(ConstructorTable<BaseObject> *thisO
 		->getRenderingEngineInstance()
 		->createModelFromIndex(
 		table->modelIndexes[ObjectTypes::Adrenaline],
-		table->textureIndexes[ObjectTypes::Adrenaline])
+		table->textureIndexes[ObjectTypes::Adrenaline],
+		table->vertexShaderIndexes[ObjectTypes::Adrenaline],
+		table->pixelShaderIndexes[ObjectTypes::Adrenaline])
 		);
 }
 
@@ -283,6 +285,8 @@ void RenderableGameObjectCtorTable::initCtors() {
 
 	this->modelIndexes[ObjectTypes::Adrenaline] = engine->loadModel("resources/adrenaline.obj");
 	this->textureIndexes[ObjectTypes::Adrenaline] = engine->loadTexture("resources/Wood.dds");
+	this->vertexShaderIndexes[ObjectTypes::Adrenaline] = this->vertexShaderIndexes[ObjectTypes::RedBlood];
+	this->pixelShaderIndexes[ObjectTypes::Adrenaline] = this->pixelShaderIndexes[ObjectTypes::RedBlood];
 
 	this->prepSelectionScreenData();
 	this->prepUIData();
