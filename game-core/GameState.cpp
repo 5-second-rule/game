@@ -405,9 +405,9 @@ void GameState::sortDeathboard() {
 		}
 	}
 
-	if (this->players.size() > 1 && deathboard[1].deathOrder >= 0) {
-		deathboard[0].winner = true;
-			}
+	//if (this->players.size() > 1 && deathboard[1].deathOrder >= 0) {
+		//deathboard[0].winner = true;
+		//	}
 		}
 
 void GameState::placeInDeathOrder(int player) {
