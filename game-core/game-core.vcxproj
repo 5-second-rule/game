@@ -81,6 +81,7 @@
     <ClInclude Include="AIPath.h" />
     <ClInclude Include="AutonomousObject.h" />
     <ClInclude Include="BehaviorType.h" />
+    <ClInclude Include="Deathboard.h" />
     <ClInclude Include="game-core.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObjectCtorTable.h" />

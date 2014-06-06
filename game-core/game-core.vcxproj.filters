@@ -99,6 +99,9 @@
     <ClInclude Include="Leaderboard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Deathboard.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MovingObject.cpp">
