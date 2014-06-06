@@ -8,11 +8,22 @@
 #include "AutonomousObject.h"
 #include "GameState.h"
 
+class GAMECOREDLL AutonomousEntity {
+	friend class AutonomousGroup;
+	friend class AutonomousObjectManager;
+public:
+	Handle handle;
+	bool loop;
+
+	AutonomousEntity(Handle);
+	AutonomousEntity(Handle, bool);
+};
+
 class GAMECOREDLL AutonomousGroup {
 	friend class AutonomousObjectManager;
 private:
-	std::list< Handle > autonomous_list;
-	std::list< Handle > red_blood;
+	std::list<AutonomousEntity> white_blood;
+	std::list<AutonomousEntity> red_blood;
 	Handle owner;
 	int atual_index;
 

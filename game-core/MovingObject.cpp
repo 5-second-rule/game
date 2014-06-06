@@ -32,6 +32,7 @@ MovingObject::MovingObject(int objectType, Game* owner, bool follow, bool propul
 	this->velocity = Vector(0.0f, 0.0f, 0.0f);
 	this->force = Vector(0.0f, 0.0f, 0.0f);
 	this->trackIndex = 0;
+	this->position = Game::getGlobalInstance()->getTrackPath()->nodes[this->trackIndex].point;
 	this->followTrack = follow;
 	this->hasPropulsion = propulse;
 	this->initDefaultConfiguration();
@@ -144,6 +145,10 @@ int MovingObject::getTrackIndex() {
 
 void MovingObject::setTrackIndex(int position) {
 	this->trackIndex = position;
+}
+
+void MovingObject::setVelocity(const Vector4 &p_velocity){
+	this->velocity = p_velocity;
 }
 
 bool MovingObject::handleEvent(Event *evt){

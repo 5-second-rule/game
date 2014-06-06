@@ -36,7 +36,6 @@ protected:
 	Vector4 position;
 	Vector4 velocity;
 	Vector4 force;
-	float trackVelocity;
 
 	float propulsion;
 
@@ -80,6 +79,7 @@ public:
 	void setFollowTrack(bool);
 	void setHasPropulsion(bool);
 	void setFluidForce(float);
+	void setVelocity(const Vector4&);
 
 	void applyForce(const Vector4& force);
 

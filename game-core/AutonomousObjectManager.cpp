@@ -4,6 +4,13 @@
 #include "AutonomousObjectManager.h"
 #include "GameState.h"
 
+AutonomousEntity::AutonomousEntity(Handle p_handle, bool p_loop){
+	this->handle = p_handle;
+	this->loop = p_loop;
+}
+
+AutonomousEntity::AutonomousEntity(Handle p_handle) : AutonomousEntity(p_handle, false) {}
+
 AutonomousGroup::AutonomousGroup(Handle handle){
 	MovingObject *obj = dynamic_cast<MovingObject*>(theWorld.get(handle));
 	if (obj == nullptr)
@@ -44,8 +51,8 @@ void AutonomousObjectManager::setOffsetPursuitDefaultAI(AutonomousObject *obj){
 void AutonomousObjectManager::setPursuitDefaultAI(AutonomousObject *obj){
 	obj->setFollowTrack(false);
 	obj->setHasPropulsion(false);
-	obj->setMaxSpeed(100.0f);
-	obj->setMaxForce(80.0f);
+	obj->setMaxSpeed(90.f);
+	obj->setMaxForce(70.0f);
 }
 
 void AutonomousObjectManager::setDefaultRedBlood(MovingObject *obj){
@@ -53,33 +60,37 @@ void AutonomousObjectManager::setDefaultRedBlood(MovingObject *obj){
 	obj->setHasPropulsion(false);
 }
 
+static Vector4 pointNoise(Vector4 &point){
+	static float radius = 60.0f;
+	return Vector4(point.x() + radius * (rand() % 100), point.y() + radius * (rand() % 100), point.z() + radius * (rand() % 100));
+}
+
 void AutonomousObjectManager::update(float dt){
 	BaseObject::update(dt);
-	AutonomousObject *aObj;
-	MovingObject *mObj;
-	static bool offset = false;
 	vector<Handle> players = this->gameState->getPlayersHandle();
 	for (vector<Handle>::iterator it = players.begin(); it != players.end(); ++it){
-		mObj = dynamic_cast<MovingObject*>(theWorld.get(*it));
+		MovingObject *mObj = dynamic_cast<MovingObject*>(theWorld.get(*it));
 		if (mObj != nullptr && find(this->players.begin(), this->players.end(), *it) == this->players.end()){
 			AutonomousGroup group(*it);
 			for (int i = 0; i < 20; ++i){
-				aObj = new AutonomousObject(ObjectTypes::WhiteBlood);
+				AutonomousObject *aObj = new AutonomousObject(ObjectTypes::WhiteBlood);
 				theWorld.allocateHandle(aObj, HandleType::GLOBAL);
 				theWorld.insert(aObj);
 				this->setPursuitDefaultAI(aObj);
 				aObj->setPursuit(mObj->getHandle());
-				aObj->setPosition(this->path->nodes[i * 300 + 1000].point);
-				group.autonomous_list.push_back(aObj->getHandle());
+				aObj->setTrackIndex((i * 300 + 1000) % this->path->nodes.size());
+				aObj->setPosition(pointNoise(this->path->nodes[(i * 300 + 1000) % this->path->nodes.size()].point));
+				group.white_blood.push_back(AutonomousEntity(aObj->getHandle(), false));
 			}
 			for (int i = 0; i < 20; ++i){
-				aObj = new AutonomousObject(ObjectTypes::RedBlood, Game::getGlobalInstance());
+				AutonomousObject *aObj = new AutonomousObject(ObjectTypes::RedBlood);
 				theWorld.allocateHandle(aObj, HandleType::GLOBAL);
 				theWorld.insert(aObj);
 				this->setDefaultRedBlood(aObj);
 				aObj->setOnSteeringBehavior(BehaviorType::wander);
-				aObj->setPosition(this->path->nodes[i * 300 + 1000].point);
-				group.red_blood.push_back(aObj->getHandle());
+				aObj->setTrackIndex((i * 300 + 1000) % this->path->nodes.size());
+				aObj->setPosition(pointNoise(this->path->nodes[(i * 300 + 1000) % this->path->nodes.size()].point));
+				group.red_blood.push_back(AutonomousEntity(aObj->getHandle(), false));
 			}
 
 			group.atual_index = 0;
@@ -92,72 +103,76 @@ void AutonomousObjectManager::update(float dt){
 
 		if (pray != nullptr){
 			if (pray->getTrackIndex() != it->atual_index){
-				int perc = rand() % 101;
+				if (it->atual_index > pray->getTrackIndex()){
+					for (std::list<AutonomousEntity>::iterator entity_it = it->white_blood.begin();
+						entity_it != it->white_blood.end();
+						++entity_it)
+					{
+						entity_it->loop = false;
+					}
+
+					for (std::list<AutonomousEntity>::iterator entity_it = it->red_blood.begin();
+						entity_it != it->red_blood.end();
+						++entity_it)
+					{
+						entity_it->loop = false;
+					}
+				}
 				it->atual_index = pray->getTrackIndex();
-				if (perc < 10){
-					Handle handle = it->autonomous_list.front();
-					AutonomousObject *aObj = dynamic_cast<AutonomousObject*>(theWorld.get(handle));
+				int perc = rand() % 101;
+				if (perc < 15){
+					AutonomousEntity entity = it->white_blood.front();
+					AutonomousObject *aObj = dynamic_cast<AutonomousObject*>(theWorld.get(entity.handle));
 					Vector4 dif = aObj->getPosition() - pray->getPosition();
-					// Avoid change the position of an object that is in front of the object doing a dot product check
-					if ((dif.dot(path->nodes[it->atual_index].normal) < 0 && dif.lengthSquared() > 10000.0f)||
-						dif.lengthSquared() > 250000){
-						it->autonomous_list.pop_front();
-						//cout << "move: " << it->atual_index << endl;
-						//cout << "pray: " << pray->getPosition().toString();
-						//cout << "track: " << path->nodes[pray->getTrackIndex()].point.toString();
-						//cout << pray->getTrackIndex() << endl;
-						aObj->setPosition(path->nodes[(pray->getTrackIndex() + 2000) % path->nodes.size()].point);
-						//aObj->setPosition(pray->getPosition() + pray->getHeading() * 10);
-						//cout << "ai: " << aObj->toString();
-						//aObj->setOnSteeringBehavior(BehaviorType::wander);
+					int destiny_index = (it->atual_index + 2000) % path->nodes.size();
 
-						it->autonomous_list.push_back(handle);
+					// Avoid change the position of an object that is in front of the object doing a dot product check
+					if ((!entity.loop) &&
+						(aObj->getTrackIndex() < pray->getTrackIndex()) &&
+						(dif.dot(path->nodes[it->atual_index].normal) < 0 && dif.lengthSquared() > 10000.0f) ||
+						(dif.lengthSquared() > 1000000.0f))
+					{
+						it->white_blood.pop_front();
+						aObj->setPosition(pointNoise(path->nodes[destiny_index].point));
+						aObj->setTrackIndex(destiny_index);
+						aObj->setVelocity(Vector4(0, 0, 0));
+
+						if (destiny_index < it->atual_index)
+							entity.loop = true;
+
+						it->white_blood.push_back(entity);
+					}
+					else {
+						it->white_blood.pop_front();
+						it->white_blood.push_back(entity.handle);
 					}
 				}
-
-				else if (perc < 20){
-					Handle handle = it->red_blood.front();
-					AutonomousObject *aObj = dynamic_cast<AutonomousObject*>(theWorld.get(handle));
+				else if (perc < 30){
+					AutonomousEntity entity = it->red_blood.front();
+					AutonomousObject *aObj = dynamic_cast<AutonomousObject*>(theWorld.get(entity.handle));
 					Vector4 dif = aObj->getPosition() - pray->getPosition();
+					int destiny_index = (it->atual_index + 500) % path->nodes.size();
 
 					// Avoid change the position of an object that is in front of the object doing a dot product check
-					if ((dif.dot(path->nodes[it->atual_index].normal) < 0 && dif.lengthSquared() > 10000.0f) ||
-						dif.lengthSquared() > 250000){
+					if ((!entity.loop) &&
+						(aObj->getTrackIndex() < pray->getTrackIndex()) &&
+						(dif.dot(path->nodes[it->atual_index].normal) < 0 && dif.lengthSquared() > 10000.0f) ||
+						(dif.lengthSquared() > 1000000.0f))
+					{
 						it->red_blood.pop_front();
+						aObj->setPosition(pointNoise(path->nodes[destiny_index].point));
+						aObj->setTrackIndex(destiny_index);
 
-						aObj->setPosition(path->nodes[(pray->getTrackIndex() + 2000) % path->nodes.size()].point);
+						if (destiny_index < it->atual_index)
+							entity.loop = true;
 
-						it->red_blood.push_back(handle);
+						it->red_blood.push_back(entity);
+					}
+					else {
+						it->red_blood.pop_front();
+						it->red_blood.push_back(entity.handle);
 					}
 				}
-
-				/*else if (perc < 6 && !offset){
-				cout << "chupa";
-				Vector4 p = path->nodes[(pray->getTrackIndex() + 2000) % path->nodes.size()].point;
-				AutonomousObject *aObj1 = new AutonomousObject(ObjectTypes::Ecoli);
-				AutonomousObject *aObj2 = new AutonomousObject(ObjectTypes::Ecoli);
-				AutonomousObject *aObj3 = new AutonomousObject(ObjectTypes::Ecoli);
-				AutonomousObject *aObj4 = new AutonomousObject(ObjectTypes::Ecoli);
-				AutonomousObject *aObj5 = new AutonomousObject(ObjectTypes::Ecoli);
-				this->setOffset(aObj1);
-				this->setOffset(aObj2);
-				this->setOffset(aObj3);
-				this->setOffset(aObj4);
-				this->setOffset(aObj5);
-				aObj1->setPos(Vector4(p.x() + cos(rand()) * 5, p.y() + cos(rand()) * 5, p.z() + cos(rand()) * 5));
-				aObj2->setPos(Vector4(p.x() + cos(rand()) * 5, p.y() + cos(rand()) * 5, p.z() + cos(rand()) * 5));
-				aObj3->setPos(Vector4(p.x() + cos(rand()) * 5, p.y() + cos(rand()) * 5, p.z() + cos(rand()) * 5));
-				aObj4->setPos(Vector4(p.x() + cos(rand()) * 5, p.y() + cos(rand()) * 5, p.z() + cos(rand()) * 5));
-				aObj5->setPos(Vector4(p.x() + cos(rand()) * 5, p.y() + cos(rand()) * 5, p.z() + cos(rand()) * 5));
-				aObj1->setOffsetPursuit(pray->getHandle(), Vector4(0, 0, 5));
-				aObj2->setOffsetPursuit(pray->getHandle(), Vector4(0, 0, -5));
-				aObj3->setOffsetPursuit(pray->getHandle(), Vector4(5, 0, 0));
-				aObj4->setOffsetPursuit(pray->getHandle(), Vector4(-5, 0, 0));
-				aObj5->setOffsetPursuit(pray->getHandle(), Vector4(0, 5, 0));
-				offset = true;
-				}*/
-
-				
 			}
 		}
 		else {
