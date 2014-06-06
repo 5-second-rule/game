@@ -11,6 +11,7 @@ public:
 		RenderableStaticObject *numberObjects[10];
 		RenderableStaticObject *xObject;
 		RenderableStaticObject *deadObject;
+		RenderableStaticObject *adrenalineObject;
 		RenderableStaticObject *countdownObjects[4];
 	};
 private:
@@ -25,6 +26,7 @@ private:
 	Transmission::Model *numberModels[10];
 	Transmission::Model *xModel;
 	Transmission::Model *deadModel;
+	Transmission::Model *adrenalineModel;
 	Transmission::Model *countdownModels[4];
 
 	Transmission::Vertex vertices[4];
@@ -34,6 +36,7 @@ private:
 	float calculateXVertices(Transmission::Vertex *vertices, float lastEdge);
 	float calculateNumberVertices(Transmission::Vertex *vertices, float lastEdge);
 	void calculateDeadVertices(Transmission::Vertex *vertices, float lastEdge);
+	void calculateAdrenalineVertices(Transmission::Vertex *vertices);
 	void calculateCountdownVertices(Transmission::Vertex *vertices, bool isGo);
 
 public:

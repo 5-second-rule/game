@@ -38,7 +38,7 @@ const Vector4& RotateCameraObject::getTarget() {
 }
 
 Vector4 RotateCameraObject::getDelta() {
-	Vector4 delta = Vector4::normalize((Matrix4::rotate(up, rotateAmt) * heading) * (cos(rotateAmt) * 0.5 + 0.5));
+	Vector4 delta = Vector4::normalize((Matrix4::rotate(up, rotateAmt) * heading)) * (cos(rotateAmt) * 0.5 + 0.5);
 	delta[3] = 0;
 	return delta;
 }

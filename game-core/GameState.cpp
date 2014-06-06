@@ -60,17 +60,27 @@ void GameState::update(float dt) {
 		for (size_t i = 0; i < this->players.size(); i++) {
 			playerObjs[i] = dynamic_cast<PlayerMovingObject*>(
 				this->world->get(this->players[i]->cameraTarget()));
+			
 
 			if (playerObjs[i] != nullptr) {
-				if (playerObjs[i]->dead && this->players[i]->getDeathCount() < MAX_LIVES) {
-					playerObjs[i]->dead = false;
+				if (!this->players[i]->isDead() && playerObjs[i]->dead && this->players[i]->getDeathCount() < MAX_LIVES) {
 					this->players[i]->die();
-					this->players[i]->respawn();
 					
 					cout << "player #" << i << " has died" << endl;
 				} else if (this->players[i]->getDeathCount() >= MAX_LIVES) {
 					this->players[i]->die();
-					//this->players[i]->despawnMoveableObject();
+					this->players[i]->spawnDeathCamera();
+
+					this->world->remove( &this->players[i]->getMovingObject() );
+					cout << "player #" << i << " is out of the game" << endl;
+				}
+				else {
+					this->players[i]->update(dt);
+				}
+
+				if (playerObjs[i]->hasNewPowerup) {
+					this->players[i]->addPowerup();
+					playerObjs[i]->hasNewPowerup = false;
 				}
 
 				int trackIndex = playerObjs[i]->getTrackIndex();
@@ -156,7 +166,7 @@ void GameState::setState(State state) {
 		this->game->wallOfDeath->reset();
 		this->game->wallOfDeath->setLeaderboard(&this->leaderboard);
 
-		int numberOfPowerups = 12;
+		int numberOfPowerups = 20;
 		int range = this->game->getTrackPath()->nodes.size();
 
 		for( int i = 1; i < numberOfPowerups; i++ ) {
