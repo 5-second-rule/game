@@ -328,8 +328,7 @@ void MovingObject::handleCollision(std::shared_ptr<const Bounds> bounds, float d
 	} else {
 		TrackPath *track = Game::getGlobalInstance()->getTrackPath();
 
-		//Possible interpolation here to smooth out
-	
+		//Interpolation done to smooth the collisions	
 		PathNode trackNode = track->interpolateNode(this->position, this->trackIndex);
 		Vector4 trackPos = trackNode.point - this->position;
 		Vector4 wallNormal = Vector4::normalize(trackPos);
