@@ -8,7 +8,7 @@ class GAMECOREDLL StaticObject : public BaseObject {
 public:
 	StaticObject(int objectType);
 	virtual ~StaticObject();
-	virtual std::string toString();
+	virtual std::string toString() const;
 
 	virtual bool handleEvent(Event* evt);
 

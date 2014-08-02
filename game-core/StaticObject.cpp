@@ -6,7 +6,7 @@ StaticObject::StaticObject(int objectType) : BaseObject(objectType) {}
 
 StaticObject::~StaticObject() {}
 
-std::string StaticObject::toString() {
+std::string StaticObject::toString() const {
 	return	BaseObject::toString() + "\r\nType: " + std::to_string(this->getType());
 }
 

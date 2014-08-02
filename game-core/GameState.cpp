@@ -74,7 +74,7 @@ void GameState::update(float dt) {
 					this->placeInDeathOrder(i);
 					this->players[i]->spawnDeathCamera();
 
-					//this->world->remove(&this->players[i]->getMovingObject());
+					this->world->remove(&this->players[i]->getMovingObject());
 					cout << "player #" << i << " is out of the game" << endl;
 				}
 				else {
@@ -389,7 +389,7 @@ bool GameState::handleEvent(Event* evt) {
 	return false;
 }
 
-std::string GameState::toString() {
+std::string GameState::toString() const {
 	return	BaseObject::toString() + "\r\nType: GameState";
 }
 
